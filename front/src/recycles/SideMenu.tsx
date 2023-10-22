@@ -3,27 +3,28 @@ import { useNavigation } from "@react-navigation/native";
 
 import SideMenuIcon from "./SideMenuIcon";
 import SideMenuLayout from "../styles/sideMenuLayout";
-import LoginStore from "../stores/LoginStore";
-import Login from "../screens/Login";
+// import LoginStore from "../stores/LoginStore";
+// import Login from "../screens/Login";
 
-import CloseIcon from "../../assets/images/close-icon.png";
-import NftCardIcon from "../../assets/images/line-nft-card-icon.png";
-import AdoptionIcon from "../../assets/images/line-adoption-icon.png";
-import PhotoAlbumIcon from "../../assets/images/line-photo-album-icon.png";
-import MedicalIcon from "../../assets/images/line-medical-icon.png";
-import WalkRootIcon from "../../assets/images/line-walk-root-icon.png";
-import TribeIcon from "../../assets/images/line-tribe-icon.png";
+// import CloseIcon from "../../assets/images/close-icon.png";
+// import NftCardIcon from "../../assets/images/line-nft-card-icon.png";
+// import AdoptionIcon from "../../assets/images/line-adoption-icon.png";
+// import PhotoAlbumIcon from "../../assets/images/line-photo-album-icon.png";
+// import MedicalIcon from "../../assets/images/line-medical-icon.png";
+// import WalkRootIcon from "../../assets/images/line-walk-root-icon.png";
+// import TribeIcon from "../../assets/images/line-tribe-icon.png";
 
 const SideMenu = (props: any) => {
 	const navigation = useNavigation();
 
-	const authMoveMypage = () => {
-		if (LoginStore.isLogged) {
-			navigation.navigate("MyPage");
-		} else {
-			alert("로그인 후 이용하실 수 있는 서비스입니다.");
-		}
-	};
+	// const authMoveMypage = () => {
+	// 	if (LoginStore.isLogged) {
+	// 		navigation.navigate("MyPage");
+	// 	} else {
+	// 		alert("로그인 후 이용하실 수 있는 서비스입니다.");
+	// 	}
+	// };
+
 	return (
 		<>
 			<View style={SideMenuLayout.sideMenuWrap}>
@@ -33,7 +34,7 @@ const SideMenu = (props: any) => {
 						activeOpacity={0.7}
 						onPress={() => props.updateActiveSideMenu(false)}
 					>
-						<Image source={CloseIcon} />
+						{/* <Image source={CloseIcon} /> */}
 					</TouchableOpacity>
 				</View>
 				<View style={SideMenuLayout.navWrap}>
@@ -46,12 +47,12 @@ const SideMenu = (props: any) => {
 					<View style={SideMenuLayout.navFlex}>
 						<SideMenuIcon
 							title="프로필 등록"
-							imageIcon={NftCardIcon}
+							// imageIcon={NftCardIcon}
 							movePage="Profile"
 						></SideMenuIcon>
 						<SideMenuIcon
 							title="반려견 입양"
-							imageIcon={AdoptionIcon}
+							// imageIcon={AdoptionIcon}
 							movePage="Adoption"
 						></SideMenuIcon>
 					</View>
@@ -63,28 +64,28 @@ const SideMenu = (props: any) => {
 					<View style={SideMenuLayout.navFlex}>
 						<SideMenuIcon
 							title="포토앨범"
-							imageIcon={PhotoAlbumIcon}
+							// imageIcon={PhotoAlbumIcon}
 							movePage="Album"
 						></SideMenuIcon>
 						{/* <SideMenuIcon title="진료일정등록" imageIcon={MedicalIcon}></SideMenuIcon> */}
 						<SideMenuIcon
 							title="산책기록"
-							imageIcon={WalkRootIcon}
+							// imageIcon={WalkRootIcon}
 							movePage="Walk"
 						></SideMenuIcon>
 						<SideMenuIcon
 							title="하늘공원"
-							imageIcon={TribeIcon}
+							// imageIcon={TribeIcon}
 							movePage="Three"
 						></SideMenuIcon>
 					</View>
 				</View>
 				<View style={SideMenuLayout.authButtonWrap}>
-					<Login />
+					{/* <Login /> */}
 					<TouchableOpacity
 						activeOpacity={0.7}
 						style={SideMenuLayout.moveMypageButton}
-						onPress={authMoveMypage}
+						// onPress={authMoveMypage}
 					>
 						<Text style={SideMenuLayout.moveMypageButtonText}>마이페이지</Text>
 					</TouchableOpacity>
