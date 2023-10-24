@@ -27,14 +27,9 @@ const SideMenu = (props: any) => {
 					</Text>
 					<View style={SideMenuLayout.navFlex}>
 						<SideMenuIcon
-							title="프로필 등록"
+							title="나의 프로필"
 							imageIcon={templogo}
 							movePage="Profile"
-						></SideMenuIcon>
-						<SideMenuIcon
-							title="반려견 입양"
-							imageIcon={templogo}
-							movePage="Adoption"
 						></SideMenuIcon>
 					</View>
 					<View style={{ marginTop: 25 }}></View>

@@ -1,4 +1,4 @@
-import { Text, View, Image } from "react-native";
+import { Text, View, Image, Alert } from "react-native";
 import CommonLayout from "../recycles/CommonLayout";
 import MainHeader from "../recycles/MainHeader";
 import {
@@ -8,8 +8,16 @@ import {
 import MainCount from "../components/MainCount";
 import MainLayout from "../styles/mainLayout";
 import Page from "../../assets/images/mainPage.png";
+import CustomButton from "../recycles/CustomBtn";
 
-const Main = () => {
+const Main = ({ navigation }: any) => {
+	const authHandling = (pageName: string) => {
+		// if (LoginStore.isLogged) {
+		Alert.alert("로그인 후 이용 가능합니다.");
+		// } else {
+		// alert("해당 서비스는 로그인 후 이용가능합니다.");
+		// }
+	};
 	return (
 		<>
 			<></>
@@ -18,8 +26,8 @@ const Main = () => {
 				<View style={MainLayout.walkMainWrap}>
 					<MainCount />
 					<Text style={MainLayout.walkMainTitle}>
-						<Text style={MainLayout.walkBoldText}>댕댕레인저</Text>
-						와 함께 {"\n"}
+						<Text style={MainLayout.walkBoldText}>댕댕레인저</Text>와 함께{" "}
+						{"\n"}
 						반려견과 지역의 안전을 위해{"\n"}
 						순찰해보세요
 					</Text>
@@ -32,6 +40,10 @@ const Main = () => {
 				<View style={MainLayout.containerImg}>
 					<Image source={Page} style={MainLayout.mainImg} />
 				</View>
+				<CustomButton
+					text="지역 순찰하기"
+					onPress={() => authHandling("Walk")}
+				/>
 			</CommonLayout>
 		</>
 	);

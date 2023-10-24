@@ -11,18 +11,14 @@ const SideMenuIcon = ({ title, imageIcon, movePage }: any) => {
 	// const { LoginStore } = IndexStore();
 
 	const authHandling = () => {
-		// if (LoginStore.isLogged) {
-		// 	navigation.navigate(movePage);
-		// } else {
-		// 	alert("로그인 후 이용하실 수 있는 서비스입니다.");
-		// }
-		parseInt(movePage);
+		navigation.navigate(movePage);
+		console.log(movePage);
 	};
 	return (
 		<>
 			<TouchableOpacity
 				activeOpacity={0.7}
-				// onPress={authHandling}
+				onPress={authHandling}
 			>
 				<View style={styles.iconWrap}>
 					<Image source={imageIcon} style={styles.sideMenuIcon} />

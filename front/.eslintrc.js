@@ -3,7 +3,8 @@ module.exports = {
 	extends: [
 		"@react-native-community",
 		"prettier",
-		"plugin:@typescript-eslint/recommended",
+		"prettier/react",
+		// "plugin:@typescript-eslint/recommended",
 	],
 	plugins: ["prettier", "@typescript-eslint"],
 	parser: "@typescript-eslint/parser",
