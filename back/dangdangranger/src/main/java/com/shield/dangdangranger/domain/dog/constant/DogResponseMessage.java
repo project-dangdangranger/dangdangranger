@@ -1,5 +1,8 @@
 package com.shield.dangdangranger.domain.dog.constant;
 
+import lombok.Getter;
+
+@Getter
 public enum DogResponseMessage {
 
     DOG_REGIST_SUCCESS("강아지 등록 성공"),
@@ -11,5 +14,4 @@ public enum DogResponseMessage {
 
     DogResponseMessage(String message){this.message = message; }
 
-    public String getMessage() {return this.message; }
 }
