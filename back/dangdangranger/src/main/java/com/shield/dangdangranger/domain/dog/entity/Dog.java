@@ -1,12 +1,10 @@
 package com.shield.dangdangranger.domain.dog.entity;
 
 
+import com.shield.dangdangranger.domain.dog.dto.DogRequestDto.*;
 import com.shield.dangdangranger.domain.user.entity.User;
 import com.shield.dangdangranger.global.entity.BaseEntity;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -48,4 +46,16 @@ public class Dog extends BaseEntity {
 
     @Column(name = "dog_hash")
     private String dogHash;
+
+    @Builder
+    public Dog(DogRegistRequestDto dogRegistRequestDto, Integer userNo){
+        this.dogName = dogRegistRequestDto.getDogName();
+        this.userNo = userNo;
+        this.dogBreed = dogRegistRequestDto.getDogBreed();
+        this.dogSex = dogRegistRequestDto.getDogSex();
+        this.dogBirth = dogRegistRequestDto.getDogBirth();
+        this.dogNosePrint = dogRegistRequestDto.getDogNosePrint();
+        this.dogImg = dogRegistRequestDto.getDogImg();
+        this.dogHash = dogRegistRequestDto.getDogHash();
+    }
 }
