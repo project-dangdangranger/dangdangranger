@@ -18,19 +18,19 @@ import java.util.stream.Collectors;
 public class BadgeServiceImpl implements BadgeService {
     private final BadgeRepository badgeRepository;
     @Override
-    public List<userBadgeListResponseDto> getUserBadgeList(Integer userNo) {
+    public List<UserBadgeListResponseDto> getUserBadgeList(Integer userNo) {
         List<UserBadge> userBadgeList = badgeRepository.findAllByUserNoAndCanceled(userNo, BaseConstant.NOTCANCELED);
         return userBadgeList.stream()
-                .map(userBadgeListResponseDto::new)
+                .map(UserBadgeListResponseDto::new)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public userBadgeInfoResponseDto getUserBadgeInfo(Integer userBadgeNo) {
+    public UserBadgeInfoResponseDto getUserBadgeInfo(Integer userBadgeNo) {
         UserBadge userBadge = badgeRepository.findUserBadgeByUserBadgeNoAndCanceled(userBadgeNo, BaseConstant.NOTCANCELED)
                 .orElseThrow(() -> new NotFoundException(BadgeResponseMessage.BADGE_INFO_READ_FAIL.getMessage()));
         Badge badge = userBadge.getBadge();
-        return userBadgeInfoResponseDto.builder()
+        return UserBadgeInfoResponseDto.builder()
                 .userBadgeNo(userBadge.getUserBadgeNo())
                 .userBadgeName(badge.getBadgeName())
                 .userBadgeDesc(badge.getBadgeDesc())

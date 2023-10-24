@@ -13,12 +13,12 @@ public class BadgeResponseDto {
     @Getter
     @AllArgsConstructor
     @Builder
-    public static class userBadgeListResponseDto{
+    public static class UserBadgeListResponseDto{
         private Integer userBadgeNo;
         private String userBadgeName;
         private String userBadgeImage;
 
-        public userBadgeListResponseDto(UserBadge userBadge){
+        public UserBadgeListResponseDto(UserBadge userBadge){
             Badge badge = userBadge.getBadge();
             this.userBadgeNo = userBadge.getUserBadgeNo();
             this.userBadgeName = badge.getBadgeName();
@@ -31,7 +31,7 @@ public class BadgeResponseDto {
     @Getter
     @AllArgsConstructor
     @Builder
-    public static class userBadgeInfoResponseDto{
+    public static class UserBadgeInfoResponseDto{
         private Integer userBadgeNo;
         private String userBadgeName;
         private String userBadgeDesc;
