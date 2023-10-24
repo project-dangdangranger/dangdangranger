@@ -3,40 +3,21 @@ import { useNavigation } from "@react-navigation/native";
 
 import SideMenuIcon from "./SideMenuIcon";
 import SideMenuLayout from "../styles/sideMenuLayout";
-// import LoginStore from "../stores/LoginStore";
-// import Login from "../screens/Login";
-
-// import CloseIcon from "../../assets/images/close-icon.png";
-// import NftCardIcon from "../../assets/images/line-nft-card-icon.png";
-// import AdoptionIcon from "../../assets/images/line-adoption-icon.png";
-// import PhotoAlbumIcon from "../../assets/images/line-photo-album-icon.png";
-// import MedicalIcon from "../../assets/images/line-medical-icon.png";
-// import WalkRootIcon from "../../assets/images/line-walk-root-icon.png";
-// import TribeIcon from "../../assets/images/line-tribe-icon.png";
+import templogo from "../../assets/images/templogo.png";
 
 const SideMenu = (props: any) => {
 	const navigation = useNavigation();
-
-	// const authMoveMypage = () => {
-	// 	if (LoginStore.isLogged) {
-	// 		navigation.navigate("MyPage");
-	// 	} else {
-	// 		alert("로그인 후 이용하실 수 있는 서비스입니다.");
-	// 	}
-	// };
-
+	console.log(props.clickX);
 	return (
 		<>
 			<View style={SideMenuLayout.sideMenuWrap}>
 				<View style={SideMenuLayout.sideMenuHeader}>
-					<Text style={SideMenuLayout.sideMenuLogo}>IDOG</Text>
-					<TouchableOpacity
-						activeOpacity={0.7}
-						onPress={() => props.updateActiveSideMenu(false)}
-					>
-						{/* <Image source={CloseIcon} /> */}
+					<Text style={SideMenuLayout.sideMenuLogo}>댕댕레인저</Text>
+					<TouchableOpacity activeOpacity={0.7} onPress={props.clickX}>
+						<Image source={templogo} />
 					</TouchableOpacity>
 				</View>
+
 				<View style={SideMenuLayout.navWrap}>
 					<Text style={SideMenuLayout.navTitle}>
 						반려견 <Text style={SideMenuLayout.boldNavTitle}>소유증명</Text>
@@ -47,12 +28,12 @@ const SideMenu = (props: any) => {
 					<View style={SideMenuLayout.navFlex}>
 						<SideMenuIcon
 							title="프로필 등록"
-							// imageIcon={NftCardIcon}
+							imageIcon={templogo}
 							movePage="Profile"
 						></SideMenuIcon>
 						<SideMenuIcon
 							title="반려견 입양"
-							// imageIcon={AdoptionIcon}
+							imageIcon={templogo}
 							movePage="Adoption"
 						></SideMenuIcon>
 					</View>
@@ -64,24 +45,27 @@ const SideMenu = (props: any) => {
 					<View style={SideMenuLayout.navFlex}>
 						<SideMenuIcon
 							title="포토앨범"
-							// imageIcon={PhotoAlbumIcon}
+							imageIcon={templogo}
 							movePage="Album"
 						></SideMenuIcon>
-						{/* <SideMenuIcon title="진료일정등록" imageIcon={MedicalIcon}></SideMenuIcon> */}
+						<SideMenuIcon
+							title="진료일정등록"
+							imageIcon={templogo}
+						></SideMenuIcon>
 						<SideMenuIcon
 							title="산책기록"
-							// imageIcon={WalkRootIcon}
+							imageIcon={templogo}
 							movePage="Walk"
 						></SideMenuIcon>
 						<SideMenuIcon
 							title="하늘공원"
-							// imageIcon={TribeIcon}
+							imageIcon={templogo}
 							movePage="Three"
 						></SideMenuIcon>
 					</View>
 				</View>
+
 				<View style={SideMenuLayout.authButtonWrap}>
-					{/* <Login /> */}
 					<TouchableOpacity
 						activeOpacity={0.7}
 						style={SideMenuLayout.moveMypageButton}

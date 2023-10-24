@@ -1,20 +1,50 @@
-import { StyleSheet, View, Text, Image, TouchableOpacity } from "react-native";
+import {
+	StyleSheet,
+	View,
+	Text,
+	Image,
+	TouchableOpacity,
+	Animated,
+} from "react-native";
 import { useState } from "react";
-import DDRangers from "../../assets/images/DDrangers-logo.png";
-import HamburgerMenu from "../../assets/images/hamburger-menu-icon.png";
-// import SideMenu from "./SideMenu";
+import DDRangers from "../../assets/images/DDR_logo.png";
+import HamburgerMenu from "../../assets/images/hamburger_menu_icon.png";
+import SideMenu from "./SideMenu";
+import {
+	responsiveWidth,
+	responsiveHeight,
+} from "react-native-responsive-dimensions";
 
 const MainHeader = () => {
 	const [activeSideMenu, setActiveSideMenu] = useState<Boolean>(false);
+	const sideMenuPosition = useState(
+		new Animated.Value(-responsiveWidth(100)),
+	)[0];
+
 	const clickHamburger = () => {
-		switch (activeSideMenu) {
-			case true:
-				setActiveSideMenu(false);
-				break;
-			case false:
-				setActiveSideMenu(true);
-				break;
+		if (activeSideMenu) {
+			Animated.timing(sideMenuPosition, {
+				toValue: responsiveWidth(-100),
+				duration: 300,
+				useNativeDriver: false,
+			}).start(() => setActiveSideMenu(false));
+		} else {
+			setActiveSideMenu(true);
+			Animated.timing(sideMenuPosition, {
+				toValue: responsiveWidth(0),
+				duration: 300,
+				useNativeDriver: false,
+			}).start();
+			setActiveSideMenu(!activeSideMenu);
 		}
+	};
+
+	const clickX = () => {
+		Animated.timing(sideMenuPosition, {
+			toValue: responsiveWidth(-100),
+			duration: 300,
+			useNativeDriver: false,
+		}).start(() => setActiveSideMenu(false));
 	};
 
 	const updateActiveSideMenu = (status: Boolean) => {
@@ -23,6 +53,14 @@ const MainHeader = () => {
 
 	return (
 		<>
+			<View style={styles.sideMenu}>
+				<Animated.View
+					style={{ transform: [{ translateX: sideMenuPosition }] }}
+				>
+					<SideMenu clickX={clickX} />
+					<View style={{ height: responsiveHeight(70) }}></View>
+				</Animated.View>
+			</View>
 			<View style={styles.header}>
 				<View style={styles.headermargin}>
 					<Image source={DDRangers} style={styles.ddrangerslogo} />
@@ -33,11 +71,6 @@ const MainHeader = () => {
 					<Image source={HamburgerMenu} style={styles.menuIcon} />
 				</TouchableOpacity>
 			</View>
-			{/* {activeSideMenu ? (
-				<SideMenu updateActiveSideMenu={updateActiveSideMenu} />
-			) : (
-				<></>
-			)} */}
 		</>
 	);
 };
@@ -49,6 +82,7 @@ const styles = StyleSheet.create({
 		flexDirection: "row",
 		justifyContent: "space-between",
 		alignItems: "center",
+		zIndex: -1,
 	},
 	logo: {
 		marginLeft: 0,
@@ -68,6 +102,15 @@ const styles = StyleSheet.create({
 	},
 	headermargin: {
 		marginLeft: 25,
+	},
+	sideMenu: {
+		// width: responsiveWidth(70),
+		height: "100%",
+		position: "absolute",
+		top: 0,
+		left: 0,
+		// backgroundColor: "#FFFFFF",
+		zIndex: 999,
 	},
 });
 

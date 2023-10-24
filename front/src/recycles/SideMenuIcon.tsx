@@ -4,22 +4,26 @@ import {
 	responsiveHeight,
 } from "react-native-responsive-dimensions";
 import { useNavigation } from "@react-navigation/native";
-import IndexStore from "../stores/IndexStore";
+// import IndexStore from "../stores/IndexStore";
 
 const SideMenuIcon = ({ title, imageIcon, movePage }: any) => {
 	const navigation = useNavigation();
-	const { LoginStore } = IndexStore();
+	// const { LoginStore } = IndexStore();
 
 	const authHandling = () => {
-		if (LoginStore.isLogged) {
-			navigation.navigate(movePage);
-		} else {
-			alert("로그인 후 이용하실 수 있는 서비스입니다.");
-		}
+		// if (LoginStore.isLogged) {
+		// 	navigation.navigate(movePage);
+		// } else {
+		// 	alert("로그인 후 이용하실 수 있는 서비스입니다.");
+		// }
+		parseInt(movePage);
 	};
 	return (
 		<>
-			<TouchableOpacity activeOpacity={0.7} onPress={authHandling}>
+			<TouchableOpacity
+				activeOpacity={0.7}
+				// onPress={authHandling}
+			>
 				<View style={styles.iconWrap}>
 					<Image source={imageIcon} style={styles.sideMenuIcon} />
 					<Text style={styles.text}>{title}</Text>
