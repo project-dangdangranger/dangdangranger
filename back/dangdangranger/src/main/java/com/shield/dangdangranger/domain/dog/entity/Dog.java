@@ -2,6 +2,7 @@ package com.shield.dangdangranger.domain.dog.entity;
 
 
 import com.shield.dangdangranger.domain.user.entity.User;
+import com.shield.dangdangranger.global.entity.BaseEntity;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -15,7 +16,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "dogs")
-public class Dog {
+public class Dog extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "dog_no")
