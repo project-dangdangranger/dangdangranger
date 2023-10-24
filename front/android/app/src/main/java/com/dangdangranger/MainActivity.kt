@@ -11,7 +11,7 @@ class MainActivity : ReactActivity() {
      * rendering of the component.
      */
     override fun getMainComponentName(): String? {
-        return "TempProject"
+        return "댕댕레인저"
     }
 
     /**
