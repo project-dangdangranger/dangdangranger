@@ -1,5 +1,7 @@
 package com.shield.dangdangranger.domain.patrol.service;
 
-public interface PatrolLogService {
+import com.shield.dangdangranger.domain.patrol.dto.PatrolRequestDto.PatrolLogRequestDto;
 
+public interface PatrolLogService {
+    void createPatrolLog(Integer userNo, PatrolLogRequestDto patrolLogRequestDto);
 }
