@@ -15,6 +15,7 @@ import com.shield.dangdangranger.domain.user.entity.User;
 import com.shield.dangdangranger.domain.user.repo.UserRepository;
 import com.shield.dangdangranger.global.error.NotFoundException;
 import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -32,7 +33,7 @@ public class PatrolLogServiceImpl implements PatrolLogService {
     public void createPatrolLog(Integer userNo, PatrolLogSaveRequestDto patrolLogSaveRequestDto) {
         User user = userRepository.findUserByUserNoAndCanceled(userNo, NOTCANCELED)
             .orElseThrow(() -> new NotFoundException(USER_NOT_FOUND_EXCEPTION.message()));
-        Dong dong = dongRepository.findDongByDongCodeAndCanceled(patrolLogSaveRequestDto.getDong(), NOTCANCELED)
+        Dong dong = dongRepository.findDongByDongCode(patrolLogSaveRequestDto.getDong())
             .orElseThrow(() -> new NotFoundException(DONG_NOT_FOUND_EXCEPTION.message()));
 
         patrolLogRepository.save(PatrolLog.builder()
@@ -50,6 +51,7 @@ public class PatrolLogServiceImpl implements PatrolLogService {
 
     @Override
     public List<PatrolLogRoughInfoResponseDto> readAllPatrolLog() {
-        return null;
+        return patrolLogRepository.findAllByCanceledOrderByCreateDateDesc(NOTCANCELED)
+            .stream().map(PatrolLogRoughInfoResponseDto::new).collect(Collectors.toList());
     }
 }
