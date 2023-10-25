@@ -1,15 +1,18 @@
 package com.shield.dangdangranger.domain.patrol.controller;
 
 import static com.shield.dangdangranger.domain.patrol.constant.PatrolLogResponseMessage.CREATE_PATROL_LOG_SUCCESS;
+import static com.shield.dangdangranger.domain.patrol.constant.PatrolLogResponseMessage.READ_ALL_PATROL_LOG_SUCCESS;
 
-import com.shield.dangdangranger.domain.patrol.dto.PatrolRequestDto.PatrolLogRequestDto;
+import com.shield.dangdangranger.domain.patrol.dto.PatrolLogRequestDto.PatrolLogSaveRequestDto;
+import com.shield.dangdangranger.domain.patrol.dto.PatrolLogResponseDto.PatrolLogRoughInfoResponseDto;
 import com.shield.dangdangranger.domain.patrol.service.PatrolLogService;
 import com.shield.dangdangranger.global.dto.ResponseDto;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -27,9 +30,16 @@ public class PatrolLogController {
     @PostMapping
     public ResponseEntity<ResponseDto<String>> createPatrolLog(
         @RequestAttribute("user_no") Integer userNo,
-        @RequestBody PatrolLogRequestDto patrolLogRequestDto) {
-        patrolLogService.createPatrolLog(userNo, patrolLogRequestDto);
+        @RequestBody PatrolLogSaveRequestDto patrolLogSaveRequestDto) {
+        patrolLogService.createPatrolLog(userNo, patrolLogSaveRequestDto);
         return ResponseEntity.status(HttpStatus.CREATED)
             .body(ResponseDto.create(CREATE_PATROL_LOG_SUCCESS.message()));
+    }
+
+    @GetMapping()
+    public ResponseEntity<ResponseDto<List<PatrolLogRoughInfoResponseDto>>> readAllPatrolLog(
+        @RequestAttribute("user_no") Integer userNo) {
+        return ResponseEntity.status(HttpStatus.OK)
+            .body(ResponseDto.create(READ_ALL_PATROL_LOG_SUCCESS.message(), patrolLogService.readAllPatrolLog()));
     }
 }

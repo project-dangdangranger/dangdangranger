@@ -26,7 +26,7 @@ public class PatrolReportResponseDto {
         private final Dong dong;
         private final LocalDateTime patrolLogDate;
         private final Double patrolLogTotalDistance;
-        private final Integer patrolRecordTotalTime;
+        private final Integer patrolLogTotalTime;
         private final Double patrolLogLat;
         private final Double patrolLogLng;
         private final String patrolLogImageUrl;
@@ -45,7 +45,7 @@ public class PatrolReportResponseDto {
             this.dong = patrolLog.getDong();
             this.patrolLogDate = patrolLog.getPatrolLogDate();
             this.patrolLogTotalDistance = patrolLog.getPatrolLogTotalDistance();
-            this.patrolRecordTotalTime = patrolLog.getPatrolRecordTotalTime();
+            this.patrolLogTotalTime = patrolLog.getPatrolLogTotalTime();
             this.patrolLogLat = patrolLog.getPatrolLogLat();
             this.patrolLogLng = patrolLog.getPatrolLogLng();
             this.patrolLogImageUrl = patrolLog.getPatrolLogImageUrl();

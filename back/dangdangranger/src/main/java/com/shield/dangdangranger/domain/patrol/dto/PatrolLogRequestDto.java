@@ -1,19 +1,18 @@
 package com.shield.dangdangranger.domain.patrol.dto;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-public class PatrolRequestDto {
+public class PatrolLogRequestDto {
     @Data
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class PatrolLogRequestDto {
-        private String dongCode;
+    public static class PatrolLogSaveRequestDto {
+        private String dong;
         private LocalDateTime patrolLogDate;
         private Double patrolLogTotalDistance;
         private Integer patrolLogTotalTime;

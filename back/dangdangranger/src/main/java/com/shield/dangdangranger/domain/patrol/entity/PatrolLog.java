@@ -39,7 +39,7 @@ public class PatrolLog extends BaseEntity {
 
     private LocalDateTime patrolLogDate;
     private Double patrolLogTotalDistance;
-    private Integer patrolRecordTotalTime;
+    private Integer patrolLogTotalTime;
     private Double patrolLogLat;
     private Double patrolLogLng;
     private String patrolLogImageUrl;
@@ -47,14 +47,14 @@ public class PatrolLog extends BaseEntity {
 
     @Builder
     public PatrolLog(Integer patrolLogNo, User user, Dong dong, LocalDateTime patrolLogDate,
-        Double patrolLogTotalDistance, Integer patrolRecordTotalTime, Integer patrolWritten,
+        Double patrolLogTotalDistance, Integer patrolLogTotalTime, Integer patrolWritten,
         Double patrolLogLat, Double patrolLogLng, String patrolLogImageUrl) {
         this.patrolLogNo = patrolLogNo;
         this.user = user;
         this.dong = dong;
         this.patrolLogDate = patrolLogDate;
         this.patrolLogTotalDistance = patrolLogTotalDistance;
-        this.patrolRecordTotalTime = patrolRecordTotalTime;
+        this.patrolLogTotalTime = patrolLogTotalTime;
         this.patrolWritten = patrolWritten;
         this.patrolLogLat = patrolLogLat;
         this.patrolLogLng = patrolLogLng;
