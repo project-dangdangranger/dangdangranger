@@ -5,5 +5,5 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface DongRepository extends JpaRepository<Dong, String> {
-    Optional<Dong> findDongByDongCodeAndCanceled(String dongCode, Integer canceled);
+    Optional<Dong> findDongByDongCode(String dongCode);
 }
