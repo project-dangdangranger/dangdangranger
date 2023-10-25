@@ -21,7 +21,7 @@ public class PatrolReportController {
 
     @PostMapping
     public ResponseEntity<ResponseDto<String>> createPatrolReport(
-            @RequestAttribute("user_no") Integer userNo, @RequestBody PatrolReportSaveRequestDto patrolReportSaveRequestDto) {
+            @RequestAttribute("userNo") Integer userNo, @RequestBody PatrolReportSaveRequestDto patrolReportSaveRequestDto) {
 
         patrolReportService.registPatrolReport(userNo, patrolReportSaveRequestDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(ResponseDto.create(CREATE_PATROL_REPORT_SUCCESS.message()));

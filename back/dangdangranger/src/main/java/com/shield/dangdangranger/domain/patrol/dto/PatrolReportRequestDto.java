@@ -14,7 +14,7 @@ public class PatrolReportRequestDto {
     @NoArgsConstructor
     @Builder
     public static class PatrolReportSaveRequestDto {
-        private Integer patrolReportNo;
+        private Integer userNo;
         private Integer patrolLogNo;
         private String patrolReportTitle;
         private String patrolReportContent;
