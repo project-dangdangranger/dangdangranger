@@ -1,5 +1,6 @@
 package com.shield.dangdangranger.domain.patrol.entity;
 
+import com.shield.dangdangranger.domain.region.entity.Dong;
 import com.shield.dangdangranger.domain.user.entity.User;
 import com.shield.dangdangranger.global.entity.BaseEntity;
 import java.time.LocalDateTime;
@@ -34,7 +35,7 @@ public class PatrolLog extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "dong_code")
-    private DongCode dongCode;
+    private Dong dong;
 
     private LocalDateTime patrolLogDate;
     private Double patrolLogTotalDistance;
@@ -45,12 +46,12 @@ public class PatrolLog extends BaseEntity {
     private Integer patrolWritten;
 
     @Builder
-    public PatrolLog(Integer patrolLogNo, User user, DongCode dongCode, LocalDateTime patrolLogDate,
+    public PatrolLog(Integer patrolLogNo, User user, Dong dong, LocalDateTime patrolLogDate,
         Double patrolLogTotalDistance, Integer patrolRecordTotalTime, Integer patrolWritten,
         Double patrolLogLat, Double patrolLogLng, String patrolLogImageUrl) {
         this.patrolLogNo = patrolLogNo;
         this.user = user;
-        this.dongCode = dongCode;
+        this.dong = dong;
         this.patrolLogDate = patrolLogDate;
         this.patrolLogTotalDistance = patrolLogTotalDistance;
         this.patrolRecordTotalTime = patrolRecordTotalTime;

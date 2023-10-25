@@ -2,6 +2,7 @@ package com.shield.dangdangranger.domain.patrol.dto;
 
 import com.shield.dangdangranger.domain.patrol.entity.PatrolLog;
 import com.shield.dangdangranger.domain.patrol.entity.PatrolReport;
+import com.shield.dangdangranger.domain.region.entity.Dong;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -22,7 +23,7 @@ public class PatrolReportResponseDto {
         private final Integer userNo;
         //순찰로그 정보
         private final Integer patrolLogNo;
-        private final DongCode dongCode;
+        private final Dong dong;
         private final LocalDateTime patrolLogDate;
         private final Double patrolLogTotalDistance;
         private final Integer patrolRecordTotalTime;
@@ -41,7 +42,7 @@ public class PatrolReportResponseDto {
             //순찰로그 정보
             PatrolLog patrolLog = patrolReport.getPatrolLog();
             this.patrolLogNo = patrolLog.getPatrolLogNo();
-            this.dongCode = patrolLog.getDongCode();
+            this.dong = patrolLog.getDong();
             this.patrolLogDate = patrolLog.getPatrolLogDate();
             this.patrolLogTotalDistance = patrolLog.getPatrolLogTotalDistance();
             this.patrolRecordTotalTime = patrolLog.getPatrolRecordTotalTime();
