@@ -1,6 +1,6 @@
 package com.shield.dangdangranger.global.error.mmlog;
 
-import com.haru.ppobbi.global.error.mmlog.MatterMostMessageDto.*;
+import com.shield.dangdangranger.global.error.mmlog.MatterMostMessageDto.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
