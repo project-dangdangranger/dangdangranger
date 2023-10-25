@@ -15,11 +15,17 @@ const FourBtn = ({ navigation }: any) => {
 				<Text style={styles.containerSubTitle}>나의 프로필</Text>
 				<Text style={styles.containerTitle}>프로필 관리</Text>
 				<View style={styles.fourbtncontainer}>
-					<TouchableOpacity style={styles.btn}>
+					<TouchableOpacity
+						style={styles.btn}
+						onPress={() => navigation.navigate("DogProfile")}
+					>
 						<Image source={Btn1} style={styles.btnImg} />
 						<Text style={styles.btnText1}>강아지 관리</Text>
 					</TouchableOpacity>
-					<TouchableOpacity style={styles.btn}>
+					<TouchableOpacity
+						style={styles.btn}
+						onPress={() => navigation.navigate("EditProfile")}
+					>
 						<Image source={Btn2} style={styles.btnImg} />
 						<Text style={styles.btnText2}>프로필 관리</Text>
 					</TouchableOpacity>
@@ -32,7 +38,10 @@ const FourBtn = ({ navigation }: any) => {
 						<Image source={Btn3} style={styles.btnImg} />
 						<Text style={styles.btnText3}>지갑 주소</Text>
 					</TouchableOpacity>
-					<TouchableOpacity style={styles.btn}>
+					<TouchableOpacity
+						style={styles.btn}
+						onPress={() => navigation.navigate("MyWrite")}
+					>
 						<Image source={Btn4} style={styles.btnImg} />
 						<Text style={styles.btnText4}>내가 쓴 글</Text>
 					</TouchableOpacity>

@@ -26,7 +26,7 @@ const Profile = ({ navigation }: any) => {
 	return (
 		<>
 			<CommonLayout>
-				<ColorHeader title="주소 관리" />
+				<ColorHeader title="내가 쓴 글" />
 				<View>
 					<View style={AlbumLayout.profileWrap}>
 						<Image

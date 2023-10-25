@@ -108,10 +108,12 @@ const MainLayout = StyleSheet.create({
 	},
 
 	tribeWrap: {
-		marginTop: 69,
+		marginTop: responsiveHeight(15),
 	},
 	tribeMainImg: {
 		width: "100%",
+		height: responsiveHeight(30),
+		resizeMode: "cover",
 	},
 
 	tribeInfoWrap: {

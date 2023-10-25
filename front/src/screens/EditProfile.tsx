@@ -26,7 +26,7 @@ const Profile = ({ navigation }: any) => {
 	return (
 		<>
 			<CommonLayout>
-				<ColorHeader title="주소 관리" />
+				<ColorHeader title="프로필 수정" />
 				<View>
 					<View style={AlbumLayout.profileWrap}>
 						<Image
@@ -66,7 +66,7 @@ const Profile = ({ navigation }: any) => {
 						</View>
 					</View>
 				</View>
-				<FourBtn />
+				<FourBtn navigation={navigation} />
 				<Footer />
 			</CommonLayout>
 			<AbsoluteVar />

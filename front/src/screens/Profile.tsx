@@ -17,7 +17,7 @@ import AlbumLayout from "../styles/albumLayout";
 import TempProfileImg from "../../assets/images/dog1.jpg";
 import WhitePenIcon from "../../assets/images/pen-icon.png";
 import FourBtn from "../recycles/FourBtn";
-import AbsoluteVar from "../recycles/AbsoluteVar";
+import AbsoluteVar from "../recycles/FooterBar";
 
 const Profile = ({ navigation }: any) => {
 	const flipView = useRef<any>();
