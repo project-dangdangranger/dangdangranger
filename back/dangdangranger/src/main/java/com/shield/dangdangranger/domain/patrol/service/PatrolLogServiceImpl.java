@@ -4,7 +4,6 @@ import static com.shield.dangdangranger.domain.patrol.constant.PatrolWritten.NOT
 import static com.shield.dangdangranger.domain.user.constant.UserExceptionMessage.USER_NOT_FOUND_EXCEPTION;
 import static com.shield.dangdangranger.global.constant.BaseConstant.NOTCANCELED;
 
-import com.shield.dangdangranger.domain.common.DongCode;
 import com.shield.dangdangranger.domain.patrol.dto.PatrolRequestDto.PatrolLogRequestDto;
 import com.shield.dangdangranger.domain.patrol.entity.PatrolLog;
 import com.shield.dangdangranger.domain.patrol.repo.PatrolLogRepository;

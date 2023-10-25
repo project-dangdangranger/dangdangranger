@@ -12,7 +12,7 @@ public interface PatrolReportRepository extends JpaRepository<PatrolReport, Inte
 
     public Optional<PatrolReport> findPatrolReportByPatrolReportNoAndCanceled(Integer patrolReportNo, Integer isCanceled);
 
-    public List<PatrolReport> findAllByUserNoAndCanceledOrOrderByCreateDateDesc(Integer userNo, Integer isCanceled);
+    public List<PatrolReport> findAllByUserNoAndCanceledOrderByCreateDateDesc(Integer userNo, Integer isCanceled);
 
 
 
