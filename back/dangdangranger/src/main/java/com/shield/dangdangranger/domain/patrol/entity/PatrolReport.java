@@ -19,9 +19,6 @@ public class PatrolReport extends BaseEntity {
     @Column(name = "user_no")
     private Integer userNo;
 
-    @Column(name = "partrol_log_no")
-    private Integer patrolLogNo;
-
     @Column(name = "partrol_report_title")
     private String patrolReportTitle;
 
@@ -31,17 +28,17 @@ public class PatrolReport extends BaseEntity {
     @Column(name = "partrol_report_hit")
     private Integer patrolReportHit;
 
-//    @OneToOne(fetch = FetchType.EAGER)
-//    @JoinColumn(name = "patrol_log_no")
-//    private PatrolLog patrolLog;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "patrol_log_no")
+    private PatrolLog patrolLog;
 
     @Builder
-    public PatrolReport(Integer userNo, Integer patrolLogNo, String patrolReportTitle, String patrolReportContent,Integer patrolReportHit  ) {
+    public PatrolReport(Integer userNo, String patrolReportTitle, String patrolReportContent, Integer patrolReportHit, PatrolLog patrolLog  ) {
         this.userNo = userNo;
-        this.patrolLogNo = patrolLogNo;
         this.patrolReportTitle = patrolReportTitle;
         this.patrolReportContent = patrolReportContent;
         this.patrolReportHit = patrolReportHit;
+        this.patrolLog = patrolLog;
     }
 
 
