@@ -107,6 +107,13 @@ const MainLayout = StyleSheet.create({
 		color: "#FFFFFF",
 	},
 
+	mainTextWrap: {
+		flex: 1,
+		justifyContent: 'center',
+		alignItems: 'center',
+		marginTop: -35,
+	},
+
 	tribeWrap: {
 		marginTop: responsiveHeight(15),
 	},

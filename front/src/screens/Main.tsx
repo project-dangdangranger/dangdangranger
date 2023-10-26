@@ -52,6 +52,17 @@ const Main = ({ navigation }: any) => {
 					text="지역 순찰하기"
 					onPress={() => authHandling("Walk")}
 				/>
+				{LoginStore.isLogged ?
+				null :
+				<View style={MainLayout.mainTextWrap}>
+					<TouchableOpacity onPress={() => authHandling("Login연결해줘")}>
+						<Text style={MainLayout.walkBoldText}>
+							회원이 아니신가요?
+						</Text>
+					</TouchableOpacity>
+				</View>}
+				
+				
 
 				<View style={MainLayout.randingButtonWrap}>
 					<View style={MainLayout.traceWrap}>
