@@ -65,9 +65,8 @@ public class UserServiceImpl implements UserService {
             log.debug("[UserService] Get user info from redis !!");
             UserInfo userInfo = userRedisService.readUserInfoFromRedis(userNo);
             return UserInfoResponseDto.builder()
-                .userId(userInfo.getUserId())
+                .userEmail(userInfo.getUserEmail())
                 .userName(userInfo.getUserName())
-                .userMessage(userInfo.getUserMessage())
                 .userProfileImg(userInfo.getUserProfileImg())
                 .build();
         } catch (NotFoundException e) {
@@ -80,7 +79,7 @@ public class UserServiceImpl implements UserService {
             userRedisService.insertUserInfoToRedis(user);
 
             return UserInfoResponseDto.builder()
-                .userId(user.getUserEmail())
+                .userEmail(user.getUserEmail())
                 .userName(user.getUserName())
                 .userProfileImg(user.getUserProfileImg())
                 .build();

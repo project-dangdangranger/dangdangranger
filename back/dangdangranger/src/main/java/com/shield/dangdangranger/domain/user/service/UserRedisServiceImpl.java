@@ -28,7 +28,7 @@ public class UserRedisServiceImpl implements UserRedisService {
         log.debug("[userRedisService - insert] key : {}", key);
         userRedisRepository.save(UserInfo.builder()
             .userNo(user.getUserNo())
-            .userId(user.getUserEmail())
+            .userEmail(user.getUserEmail())
             .userName(user.getUserName())
             .userProfileImg(user.getUserProfileImg())
             .ttl(USER_INFO_TTL)
@@ -53,14 +53,33 @@ public class UserRedisServiceImpl implements UserRedisService {
         Optional<UserInfo> userInfoOptional = userRedisRepository.findById(user.getUserNo());
         if (userInfoOptional.isPresent()) {
             UserInfo userInfo = userInfoOptional.get();
-            userInfo.updateUserNameMessage(user.getUserName());
+            userInfo.updateUserName(user.getUserName());
             userRedisRepository.save(userInfo);
         } else {
             userRedisRepository.save(UserInfo.builder()
                 .userNo(user.getUserNo())
-                .userId(user.getUserEmail())
+                .userEmail(user.getUserEmail())
                 .userName(user.getUserName())
                 .userProfileImg(user.getUserProfileImg())
+                .build()
+            );
+        }
+    }
+
+    @Override
+    public void updateUserAddressToRedis(User user) {
+        Optional<UserInfo> userInfoOptional = userRedisRepository.findById(user.getUserNo());
+        if (userInfoOptional.isPresent()) {
+            UserInfo userInfo = userInfoOptional.get();
+            userInfo.updateUserAddress(user.getDong().getAddress());
+            userRedisRepository.save(userInfo);
+        } else {
+            userRedisRepository.save(UserInfo.builder()
+                .userNo(user.getUserNo())
+                .userEmail(user.getUserEmail())
+                .userName(user.getUserName())
+                .userProfileImg(user.getUserProfileImg())
+                .userAddress(user.getDong().getAddress())
                 .build()
             );
         }

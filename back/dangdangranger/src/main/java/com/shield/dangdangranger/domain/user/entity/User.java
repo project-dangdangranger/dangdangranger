@@ -45,15 +45,13 @@ public class User extends BaseEntity {
     @JoinColumn(name = "dong_code")
     private Dong dong;
 
-    private String userAddress;
-
     private String userWalletAddress;
 
     private String userWalletPw;
 
     @Builder
     public User(Integer userNo, String userEmail, String userName,
-        String userProfileImg, UserRole userRole, Dong dong, String userAddress,
+        String userProfileImg, UserRole userRole, Dong dong,
         String userWalletAddress, String userWalletPw) {
         this.userNo = userNo;
         this.userEmail = userEmail;
@@ -61,7 +59,6 @@ public class User extends BaseEntity {
         this.userProfileImg = userProfileImg;
         this.userRole = userRole;
         this.dong = dong;
-        this.userAddress = userAddress;
         this.userWalletAddress = userWalletAddress;
         this.userWalletPw = userWalletPw;
     }

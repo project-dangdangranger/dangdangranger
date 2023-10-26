@@ -17,31 +17,34 @@ public class UserInfo {
     @Id
     private Integer userNo;
 
-    private String userId;
+    private String userEmail;
     private String userName;
-    private String userMessage;
     private String userProfileImg;
+    private String userAddress;
 
     @TimeToLive(unit = TimeUnit.MILLISECONDS)
     private Long ttl;
 
     @Builder
-    UserInfo(Integer userNo, String userId, String userName, String userMessage,
-        String userProfileImg, Long ttl) {
+    UserInfo(Integer userNo, String userEmail, String userName,
+        String userProfileImg, Long ttl, String userAddress) {
         this.userNo = userNo;
-        this.userId = userId;
+        this.userEmail = userEmail;
         this.userName = userName;
-        this.userMessage = userMessage;
         this.userProfileImg = userProfileImg;
+        this.userAddress = userAddress;
         this.ttl = ttl;
     }
 
-    public void updateUserInfoMessage(String userMessage) {
-        this.userMessage = userMessage;
-    }
-
-    public void updateUserNameMessage(String userName) {
+    public void updateUserName(String userName) {
         this.userName = userName;
     }
 
+    public void updateUserAddress(String userAddress) {
+        this.userAddress = userAddress;
+    }
+
+    public void updateUserProfileImg(String userProfileImg) {
+        this.userProfileImg = userProfileImg;
+    }
 }
