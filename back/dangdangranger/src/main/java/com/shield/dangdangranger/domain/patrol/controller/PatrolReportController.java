@@ -43,6 +43,13 @@ public class PatrolReportController {
         return ResponseEntity.status(HttpStatus.OK).body(ResponseDto.create(READ_MY_PATROL_REPORT.message(), patrolReportInfoList));
     }
 
+    @GetMapping("/{patrolNo}")
+    public ResponseEntity<ResponseDto<PatrolReportInfoResponseDto>> selectOnePatrolReport(
+            @PathVariable Integer patrolNo){
+        PatrolReportInfoResponseDto patrolInfo = patrolReportService.selectOnePatrolReport(patrolNo);
+        return ResponseEntity.status(HttpStatus.OK).body(ResponseDto.create(READ_ONE_PATROL_REPORT.message(), patrolInfo));
+    }
+
 
 
 }

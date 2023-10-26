@@ -14,6 +14,8 @@ public interface PatrolReportService {
 
     public List<PatrolReportInfoResponseDto> selectMyAll(Integer userNo);
 
+    public PatrolReportInfoResponseDto selectOnePatrolReport(Integer patrolNo);
+
 
 
 
