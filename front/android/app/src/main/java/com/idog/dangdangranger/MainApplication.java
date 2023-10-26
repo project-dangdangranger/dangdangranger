@@ -59,8 +59,9 @@ public class MainApplication extends Application implements ReactApplication {
             DefaultNewArchitectureEntryPoint.load();
         }
         ReactNativeFlipper.initializeFlipper(this, getReactNativeHost().getReactInstanceManager());
-        TestKotlin testKotlin = new TestKotlin();
-        testKotlin.printMessage();
 
+        // 호출 KeyHashUtil의 getAppKeyHash 메서드
+        KeyHashUtil.INSTANCE.getAppKeyHash(this);
     }
+
 }
