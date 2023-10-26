@@ -9,10 +9,6 @@ import EditProfile from "./src/screens/EditProfile";
 import MakeWallet1 from "./src/screens/MakeWallet1";
 import MakeWallet2 from "./src/screens/MakeWallet2";
 import MakeWallet3 from "./src/screens/MakeWallet3";
-import MakeWallet4 from "./src/screens/MakeWallet4";
-import MakeWallet5 from "./src/screens/MakeWallet5";
-import MakeWallet6 from "./src/screens/MakeWallet6";
-import CreateDog from "./src/screens/CreateDog";
 
 const App = () => {
 	const Stack = createNativeStackNavigator();
@@ -36,10 +32,6 @@ const App = () => {
 					<Stack.Screen name="MakeWallet1" component={MakeWallet1} />
 					<Stack.Screen name="MakeWallet2" component={MakeWallet2} />
 					<Stack.Screen name="MakeWallet3" component={MakeWallet3} />
-					<Stack.Screen name="MakeWallet4" component={MakeWallet4} />
-					<Stack.Screen name="MakeWallet5" component={MakeWallet5} />
-					<Stack.Screen name="MakeWallet6" component={MakeWallet6} />
-					<Stack.Screen name="CreateDog" component={CreateDog} />
 				</Stack.Navigator>
 			</NavigationContainer>
 		</>
