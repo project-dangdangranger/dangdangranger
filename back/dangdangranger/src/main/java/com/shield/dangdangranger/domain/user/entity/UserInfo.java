@@ -36,8 +36,10 @@ public class UserInfo {
         this.ttl = ttl;
     }
 
-    public void updateUserName(String userName) {
-        this.userName = userName;
+    public void updateUserInfo(User user) {
+        this.userName = user.getUserName();
+        this.userAddress = user.getDong().getAddress();
+        this.userProfileImg = user.getUserProfileImg();
     }
 
     public void updateUserAddress(String userAddress) {

@@ -5,9 +5,10 @@ import static com.shield.dangdangranger.domain.user.constant.UserExceptionMessag
 import static com.shield.dangdangranger.global.constant.BaseConstant.CANCELED;
 import static com.shield.dangdangranger.global.constant.BaseConstant.NOTCANCELED;
 
+import com.shield.dangdangranger.domain.region.entity.Dong;
+import com.shield.dangdangranger.domain.region.repo.DongRepository;
 import com.shield.dangdangranger.domain.user.dto.TokenInfo;
 import com.shield.dangdangranger.domain.user.dto.UserRequestDto.UpdateUserInfoRequestDto;
-import com.shield.dangdangranger.domain.user.dto.UserRequestDto.UpdateUserMessageRequestDto;
 import com.shield.dangdangranger.domain.user.dto.UserRequestDto.UserInfoRequestDto;
 import com.shield.dangdangranger.domain.user.dto.UserResponseDto.AccessTokenResponseDto;
 import com.shield.dangdangranger.domain.user.dto.UserResponseDto.UserInfoResponseDto;
@@ -31,6 +32,7 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final JwtTokenHandler jwtTokenHandler;
     private final UserRedisService userRedisService;
+    private final DongRepository dongRepository;
 
 
     @Override
@@ -49,7 +51,8 @@ public class UserServiceImpl implements UserService {
         log.debug("### [DEBUG/UserService] 회원가입 user : {}", user);
 
         // DB에 정보 없을 경우 회원가입, 있을 경우 프로필 사진/이름 업데이트
-        Optional<User> optionalUser = userRepository.findUserByUserEmailAndCanceled(user.getUserEmail(),
+        Optional<User> optionalUser = userRepository.findUserByUserEmailAndCanceled(
+            user.getUserEmail(),
             NOTCANCELED);
         if (optionalUser.isEmpty()) {
             userRepository.save(user);
@@ -65,23 +68,27 @@ public class UserServiceImpl implements UserService {
             log.debug("[UserService] Get user info from redis !!");
             UserInfo userInfo = userRedisService.readUserInfoFromRedis(userNo);
             return UserInfoResponseDto.builder()
+                .userNo(userInfo.getUserNo())
                 .userEmail(userInfo.getUserEmail())
                 .userName(userInfo.getUserName())
                 .userProfileImg(userInfo.getUserProfileImg())
+                .userAddress(userInfo.getUserAddress())
                 .build();
         } catch (NotFoundException e) {
             // 없으면 DB 검색
             log.debug("[UserService] Get user info from DB !!");
             User user = userRepository.findUserByUserNoAndCanceled(userNo, NOTCANCELED)
                 .orElseThrow(() -> new NotFoundException(USER_NOT_FOUND_EXCEPTION.message()));
-            
+
             // redis 에 저장
             userRedisService.insertUserInfoToRedis(user);
 
             return UserInfoResponseDto.builder()
+                .userNo(user.getUserNo())
                 .userEmail(user.getUserEmail())
                 .userName(user.getUserName())
                 .userProfileImg(user.getUserProfileImg())
+                .userAddress(user.getDong().getAddress())
                 .build();
         }
     }
@@ -91,7 +98,7 @@ public class UserServiceImpl implements UserService {
     public void deleteUser(Integer userNo) {
         // Redis 에서 삭제
         userRedisService.deleteUserInfoFromRedis(userNo);
-        
+
         // DB 에서 삭제
         User user = userRepository.findUserByUserNoAndCanceled(userNo, NOTCANCELED)
             .orElseThrow(() -> new NotFoundException(USER_NOT_FOUND_EXCEPTION.message()));
@@ -111,16 +118,19 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void updateUserName(Integer userNo, UpdateUserInfoRequestDto updateUserInfoRequestDto) {
+    public void updateUserInfo(Integer userNo, UpdateUserInfoRequestDto updateUserInfoRequestDto) {
         User user = userRepository.findUserByUserNoAndCanceled(userNo, NOTCANCELED)
             .orElseThrow(() -> new NotFoundException(USER_NOT_FOUND_EXCEPTION.message()));
-        log.debug("[userService/updateUserName] update user name : {}",
+        log.debug("[userService/updateUserName] update user info : {}",
             updateUserInfoRequestDto.getUserName());
 
-        user.updateUserName(updateUserInfoRequestDto.getUserName());
+        Dong dong = dongRepository.findDongByDongCode(updateUserInfoRequestDto.getUserDong()).get();
+        // TODO : 파라미터 리팩토링 가능하면 할 것
+        user.updateUserInfo(updateUserInfoRequestDto.getUserName(),
+            dong, updateUserInfoRequestDto.getUserProfileImg());
         userRepository.save(user);
 
         // redis 에 적용
-        userRedisService.updateUserNameToRedis(user);
+        userRedisService.updateUserInfoToRedis(user);
     }
 }

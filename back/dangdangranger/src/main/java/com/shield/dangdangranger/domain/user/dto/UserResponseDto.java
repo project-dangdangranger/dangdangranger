@@ -19,9 +19,10 @@ public class UserResponseDto {
     @Builder
     public static class UserInfoResponseDto {
 
+        private Integer userNo;
         private String userEmail;
         private String userName;
-        private String userMessage;
         private String userProfileImg;
+        private String userAddress;
     }
 }

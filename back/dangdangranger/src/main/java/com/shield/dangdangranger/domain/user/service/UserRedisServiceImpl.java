@@ -49,29 +49,11 @@ public class UserRedisServiceImpl implements UserRedisService {
     }
 
     @Override
-    public void updateUserNameToRedis(User user) {
+    public void updateUserInfoToRedis(User user) {
         Optional<UserInfo> userInfoOptional = userRedisRepository.findById(user.getUserNo());
         if (userInfoOptional.isPresent()) {
             UserInfo userInfo = userInfoOptional.get();
-            userInfo.updateUserName(user.getUserName());
-            userRedisRepository.save(userInfo);
-        } else {
-            userRedisRepository.save(UserInfo.builder()
-                .userNo(user.getUserNo())
-                .userEmail(user.getUserEmail())
-                .userName(user.getUserName())
-                .userProfileImg(user.getUserProfileImg())
-                .build()
-            );
-        }
-    }
-
-    @Override
-    public void updateUserAddressToRedis(User user) {
-        Optional<UserInfo> userInfoOptional = userRedisRepository.findById(user.getUserNo());
-        if (userInfoOptional.isPresent()) {
-            UserInfo userInfo = userInfoOptional.get();
-            userInfo.updateUserAddress(user.getDong().getAddress());
+            userInfo.updateUserInfo(user);
             userRedisRepository.save(userInfo);
         } else {
             userRedisRepository.save(UserInfo.builder()
