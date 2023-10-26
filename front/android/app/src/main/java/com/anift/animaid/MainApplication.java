@@ -1,4 +1,4 @@
-package com.animaid;
+package com.anift.animaid;
 
 import android.app.Application;
 import com.facebook.react.PackageList;
