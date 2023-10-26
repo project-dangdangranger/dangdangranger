@@ -19,6 +19,7 @@ public class PatrolLogResponseDto {
         private Double patrolLogTotalDistance;
         private Integer patrolLogTotalTime;
 
+        @Builder
         public PatrolLogDetailInfoResponseDto(PatrolLog patrolLog) {
             this.patrolLogNo = patrolLog.getPatrolLogNo();
             this.patrolLogAddress = patrolLog.getDong().getDongName();
