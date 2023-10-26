@@ -13,6 +13,8 @@ import templogo from "../../assets/images/templogo.png";
 import IconButton from "../recycles/IconButton";
 import Footer from "../recycles/Footer";
 import Dog1 from "../../assets/images/yoonNft01.jpg";
+import FooterBar from "../recycles/FooterBar";
+import { useEffect } from "react";
 
 const Main = ({ navigation }: any) => {
 	const LoginStore = {
@@ -155,6 +157,7 @@ const Main = ({ navigation }: any) => {
 				</View>
 				<Footer />
 			</CommonLayout>
+			<FooterBar />
 		</>
 	);
 };
