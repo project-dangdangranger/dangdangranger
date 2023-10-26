@@ -12,6 +12,8 @@ public interface PatrolReportService {
 
     public List<PatrolReportInfoResponseDto> selectAll();
 
+    public List<PatrolReportInfoResponseDto> selectMyAll(Integer userNo);
+
 
 
 

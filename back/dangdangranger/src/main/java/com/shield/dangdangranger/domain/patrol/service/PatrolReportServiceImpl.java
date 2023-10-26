@@ -53,4 +53,13 @@ public class PatrolReportServiceImpl implements PatrolReportService{
                 .map(PatrolReportInfoResponseDto::new)
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public List<PatrolReportInfoResponseDto> selectMyAll(Integer userNo) {
+        List<PatrolReport> reportList = patrolReportRepository.findAllByUserNoAndCanceledOrderByCreateDateDesc(userNo, BaseConstant.NOTCANCELED);
+
+        return reportList.stream()
+                .map(PatrolReportInfoResponseDto::new)
+                .collect(Collectors.toList());
+    }
 }
