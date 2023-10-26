@@ -16,6 +16,7 @@ import CustomText from "../recycles/CustomText";
 import PetrolImg from "../../assets/images/Patrol-license.png";
 import { responsiveHeight } from "react-native-responsive-dimensions";
 import CustomSubButton from "../recycles/CustomSubBtn";
+import CustomBadge from "../components/CustomBadge";
 
 const Profile = ({ navigation }: any) => {
 	const flipView = useRef<any>();
@@ -38,9 +39,13 @@ const Profile = ({ navigation }: any) => {
 					<Image source={PetrolImg} />
 				</View>
 
+				<View>
+					<CustomBadge text="우리 동네 1등 방범 대원" />
+				</View>
+
 				<CustomSubButton
 					text={"NFT 반려대원 발급하기"}
-					onPress={() => navigation.navigate("MakeDogProfile")}
+					onPress={() => navigation.navigate("CreateDog")}
 					color={"#70C8EE"}
 				/>
 			</CommonLayout>
@@ -55,6 +60,6 @@ const styles = StyleSheet.create({
 	imgcontainer: {
 		justifyContent: "center",
 		alignItems: "center",
-		marginVertical: responsiveHeight(10),
+		marginTop: responsiveHeight(5),
 	},
 });
