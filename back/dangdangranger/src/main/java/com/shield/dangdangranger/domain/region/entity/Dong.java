@@ -31,9 +31,12 @@ public class Dong {
 
     private String dongName;
 
+    private String address;
+
     @Builder
-    public Dong(Gugun gugunCode, String dongName) {
+    public Dong(Gugun gugunCode, String dongName, String address) {
         this.gugunCode = gugunCode;
         this.dongName = dongName;
+        this.address = address;
     }
 }

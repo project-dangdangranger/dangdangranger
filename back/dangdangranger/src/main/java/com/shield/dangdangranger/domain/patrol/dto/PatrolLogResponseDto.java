@@ -19,9 +19,10 @@ public class PatrolLogResponseDto {
         private Double patrolLogTotalDistance;
         private Integer patrolLogTotalTime;
 
+        @Builder
         public PatrolLogDetailInfoResponseDto(PatrolLog patrolLog) {
             this.patrolLogNo = patrolLog.getPatrolLogNo();
-            this.patrolLogAddress = patrolLog.getDong().getDongName();
+            this.patrolLogAddress = patrolLog.getDong().getAddress();
             this.patrolLogImageUrl = patrolLog.getPatrolLogImageUrl();
             this.patrolLogDate = patrolLog.getPatrolLogDate();
             this.patrolLogTotalDistance = patrolLog.getPatrolLogTotalDistance();
@@ -40,7 +41,7 @@ public class PatrolLogResponseDto {
 
         public PatrolLogRoughInfoResponseDto(PatrolLog patrolLog) {
             this.patrolLogNo = patrolLog.getPatrolLogNo();
-            this.patrolLogAddress = patrolLog.getDong().getDongName();
+            this.patrolLogAddress = patrolLog.getDong().getAddress();
             this.patrolLogImageUrl = patrolLog.getPatrolLogImageUrl();
             this.patrolLogDate = patrolLog.getPatrolLogDate();
         }
