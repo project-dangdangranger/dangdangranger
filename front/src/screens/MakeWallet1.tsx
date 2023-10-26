@@ -30,24 +30,11 @@ const Profile = ({ navigation }: any) => {
 		<>
 			<CommonLayout>
 				<ColorHeader title="주소 관리" />
-				<View>
-					<View style={MainLayout.walkMainWrap}>
-						<Text style={MainLayout.walkMainTitle}>
-							지갑이 없습니다.{"\n"}
-							<Text style={MainLayout.walkBoldText}>지갑</Text>을 만들어주세요{" "}
-							{"\n"}
-						</Text>
-					</View>
-				</View>
-
-				<View>
-					<Image source={NFTImg} />
-				</View>
+				<Text>지갑만들어주세요1</Text>
 				<CustomButton
-					text="지갑 발급하기"
-					onPress={() => navigation.navigate("MakeWallet1")}
+					text="월렛2페이지 이동"
+					onPress={() => navigation.navigate("MakeWallet2")}
 				/>
-				<Footer />
 			</CommonLayout>
 			<AbsoluteVar />
 		</>
