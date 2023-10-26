@@ -1,4 +1,4 @@
-package com.anift.animaid;
+package com.idog.dangdangranger;
 
 import android.app.Application;
 import com.facebook.react.PackageList;

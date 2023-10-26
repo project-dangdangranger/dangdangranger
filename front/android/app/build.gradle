@@ -73,9 +73,9 @@ android {
 
     compileSdkVersion rootProject.ext.compileSdkVersion
 
-    namespace "com.anift.animaid"
+    namespace "com.idog.dangdangranger"
     defaultConfig {
-        applicationId "com.anift.animaid"
+        applicationId "com.idog.dangdangranger"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
