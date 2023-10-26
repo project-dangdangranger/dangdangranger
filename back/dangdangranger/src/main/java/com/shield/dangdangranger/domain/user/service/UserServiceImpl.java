@@ -1,6 +1,8 @@
 package com.shield.dangdangranger.domain.user.service;
 
 
+import static com.shield.dangdangranger.domain.user.constant.SignInUp.SIGN_IN;
+import static com.shield.dangdangranger.domain.user.constant.SignInUp.SIGN_UP;
 import static com.shield.dangdangranger.domain.user.constant.UserExceptionMessage.USER_NOT_FOUND_EXCEPTION;
 import static com.shield.dangdangranger.global.constant.BaseConstant.CANCELED;
 import static com.shield.dangdangranger.global.constant.BaseConstant.NOTCANCELED;
@@ -11,6 +13,7 @@ import com.shield.dangdangranger.domain.user.dto.TokenInfo;
 import com.shield.dangdangranger.domain.user.dto.UserRequestDto.UpdateUserInfoRequestDto;
 import com.shield.dangdangranger.domain.user.dto.UserRequestDto.UserInfoRequestDto;
 import com.shield.dangdangranger.domain.user.dto.UserResponseDto.AccessTokenResponseDto;
+import com.shield.dangdangranger.domain.user.dto.UserResponseDto.SignResponseDto;
 import com.shield.dangdangranger.domain.user.dto.UserResponseDto.UserInfoResponseDto;
 import com.shield.dangdangranger.domain.user.entity.User;
 import com.shield.dangdangranger.domain.user.entity.UserInfo;
@@ -36,14 +39,22 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public TokenInfo signUpOrIn(UserInfoRequestDto userInfoRequestDto) {
+    public SignResponseDto signUpOrIn(UserInfoRequestDto userInfoRequestDto) {
         User user = insertUser(userInfoRequestDto.toUser());
         log.debug("[userServiceImpl - signUpOrIn] User : {}", user);
 
-        userRedisService.insertUserInfoToRedis(user);
+//        userRedisService.insertUserInfoToRedis(user);
 
         // 토큰 발급 후, 정보 반환
-        return jwtTokenHandler.generateToken(user.getUserNo());
+        TokenInfo tokenInfo = jwtTokenHandler.generateToken(user.getUserNo());
+        String signInUp = SIGN_UP.message();
+        if(user.getDong() != null) {
+            signInUp = SIGN_IN.message();
+        }
+        return SignResponseDto.builder()
+            .tokenInfo(tokenInfo)
+            .signInUp(signInUp)
+            .build();
     }
 
     @Transactional

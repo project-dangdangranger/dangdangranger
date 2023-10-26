@@ -25,4 +25,13 @@ public class UserResponseDto {
         private String userProfileImg;
         private String userAddress;
     }
+
+    @Getter
+    @AllArgsConstructor
+    @Builder
+    public static class SignResponseDto {
+
+        private TokenInfo tokenInfo;
+        private String signInUp;
+    }
 }

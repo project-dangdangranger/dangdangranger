@@ -6,10 +6,10 @@ import static com.shield.dangdangranger.domain.user.constant.UserResponseMessage
 import static com.shield.dangdangranger.domain.user.constant.UserResponseMessage.SIGN_IN_SUCCESS;
 import static com.shield.dangdangranger.domain.user.constant.UserResponseMessage.UPDATE_USER_NAME_SUCCESS;
 
-import com.shield.dangdangranger.domain.user.dto.TokenInfo;
 import com.shield.dangdangranger.domain.user.dto.UserRequestDto.UpdateUserInfoRequestDto;
 import com.shield.dangdangranger.domain.user.dto.UserRequestDto.UserInfoRequestDto;
 import com.shield.dangdangranger.domain.user.dto.UserResponseDto.AccessTokenResponseDto;
+import com.shield.dangdangranger.domain.user.dto.UserResponseDto.SignResponseDto;
 import com.shield.dangdangranger.domain.user.dto.UserResponseDto.UserInfoResponseDto;
 import com.shield.dangdangranger.domain.user.service.UserService;
 import com.shield.dangdangranger.global.dto.ResponseDto;
@@ -35,47 +35,38 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("")
-    public ResponseEntity<ResponseDto<TokenInfo>> signUpOrIn(
-        @RequestAttribute("userInfo") UserInfoRequestDto userInfoRequestDto) {
+    public ResponseEntity<ResponseDto<SignResponseDto>> signUpOrIn(@RequestAttribute("userInfo") UserInfoRequestDto userInfoRequestDto) {
         return ResponseEntity.status(HttpStatus.OK).body(
-            ResponseDto.create(SIGN_IN_SUCCESS.message(),
-                userService.signUpOrIn(userInfoRequestDto))
+            ResponseDto.create(SIGN_IN_SUCCESS.message(), userService.signUpOrIn(userInfoRequestDto))
         );
     }
 
     @GetMapping("")
-    public ResponseEntity<ResponseDto<UserInfoResponseDto>> getUserInfo(
-        @RequestAttribute("userNo") Integer userNo) {
+    public ResponseEntity<ResponseDto<UserInfoResponseDto>> getUserInfo(@RequestAttribute("userNo") Integer userNo) {
         return ResponseEntity.status(HttpStatus.OK).body(
-            ResponseDto.create(GET_USER_INFO_SUCCESS.message(),
-                userService.getUserInfo(userNo))
+            ResponseDto.create(GET_USER_INFO_SUCCESS.message(), userService.getUserInfo(userNo))
         );
     }
 
     @DeleteMapping("")
-    public ResponseEntity<ResponseDto<String>> deleteUser(
-        @RequestAttribute("userNo") Integer userNo) {
+    public ResponseEntity<ResponseDto<String>> deleteUser(@RequestAttribute("userNo") Integer userNo) {
         userService.deleteUser(userNo);
-        return ResponseEntity.status(HttpStatus.OK).body(
-            ResponseDto.create(DELETE_USER_SUCCESS.message())
+        return ResponseEntity.status(HttpStatus.OK).body(ResponseDto.create(DELETE_USER_SUCCESS.message())
         );
     }
 
     @PostMapping("/token")
-    public ResponseEntity<ResponseDto<AccessTokenResponseDto>> reissueAccessToken(
-        @RequestAttribute("userNo") Integer userNo) {
+    public ResponseEntity<ResponseDto<AccessTokenResponseDto>> reissueAccessToken(@RequestAttribute("userNo") Integer userNo) {
         return ResponseEntity.status(HttpStatus.CREATED).body(
-            ResponseDto.create(REISSUE_ACCESS_TOKEN__SUCCESS.message(),
-                userService.reissueAccessToken(userNo))
+            ResponseDto.create(REISSUE_ACCESS_TOKEN__SUCCESS.message(), userService.reissueAccessToken(userNo))
         );
     }
 
-    @PutMapping("/name")
-    public ResponseEntity<ResponseDto<String>> updateUserInfo(
-        @RequestAttribute("userNo") Integer userNo, @RequestBody UpdateUserInfoRequestDto updateUserInfoRequestDto) {
+    @PutMapping("")
+    public ResponseEntity<ResponseDto<String>> updateUserInfo(@RequestAttribute("userNo") Integer userNo,
+        @RequestBody UpdateUserInfoRequestDto updateUserInfoRequestDto) {
         userService.updateUserInfo(userNo, updateUserInfoRequestDto);
-        return ResponseEntity.status(HttpStatus.OK).body(
-            ResponseDto.create(UPDATE_USER_NAME_SUCCESS.message())
+        return ResponseEntity.status(HttpStatus.OK).body(ResponseDto.create(UPDATE_USER_NAME_SUCCESS.message())
         );
     }
 }
