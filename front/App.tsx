@@ -9,9 +9,6 @@ import EditProfile from "./src/screens/EditProfile";
 import MakeWallet1 from "./src/screens/MakeWallet1";
 import MakeWallet2 from "./src/screens/MakeWallet2";
 import MakeWallet3 from "./src/screens/MakeWallet3";
-import MakeWallet4 from "./src/screens/MakeWallet4";
-import MakeWallet5 from "./src/screens/MakeWallet5";
-import MakeWallet6 from "./src/screens/MakeWallet6";
 
 const App = () => {
 	const Stack = createNativeStackNavigator();

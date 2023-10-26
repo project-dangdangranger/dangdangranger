@@ -1,6 +1,13 @@
 import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
 import { responsiveWidth } from "react-native-responsive-dimensions";
-import TempPng from "../../assets/images/templogo.png";
+
+import HomePng from "../../assets/images/Home.png";
+import HomeFillPng from "../../assets/images/Home_fill.png";
+import MingcuteSearchPng from "../../assets/images/mingcute_search.png";
+import MingcuteSearchFillPng from "../../assets/images/mingcute_search_fill.png";
+import TempPng from "../../assets/images/Home.png";
+import ProfilePng from "../../assets/images/Profile.png";
+import ProfileFillPng from "../../assets/images/Profile_fill.png";
 
 const AbsoluteVar = () => {
 	return (
@@ -8,13 +15,13 @@ const AbsoluteVar = () => {
 			<View style={styles.container}>
 				<View>
 					<TouchableOpacity style={styles.btnCenter}>
-						<Image source={TempPng} style={styles.btnImg} />
+						<Image source={HomePng} style={styles.btnImg} />
 						<Text>Home</Text>
 					</TouchableOpacity>
 				</View>
 				<View>
 					<TouchableOpacity>
-						<Image source={TempPng} style={styles.btnImg} />
+						<Image source={MingcuteSearchPng} style={styles.btnImg} />
 						<Text>순찰</Text>
 					</TouchableOpacity>
 				</View>
@@ -26,7 +33,7 @@ const AbsoluteVar = () => {
 				</View>
 				<View>
 					<TouchableOpacity>
-						<Image source={TempPng} style={styles.btnImg} />
+						<Image source={ProfilePng} style={styles.btnImg} />
 						<Text>프로필</Text>
 					</TouchableOpacity>
 				</View>
@@ -39,7 +46,7 @@ export default AbsoluteVar;
 
 const styles = StyleSheet.create({
 	container: {
-		backgroundColor: "#ffff00",
+		backgroundColor: "#FCFCFC",
 		display: "flex",
 		flexDirection: "row",
 		justifyContent: "space-between",
