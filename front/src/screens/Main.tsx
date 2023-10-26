@@ -17,6 +17,7 @@ import NFTSubImg from "../../assets/images/main-NFT.png";
 import PatrolSubImg from "../../assets/images/main-patrol.png";
 import MissingSubImg from "../../assets/images/main-missing.png";
 import ChatBotSubImg from "../../assets/images/main-chatbot.png";
+import FooterBar from "../recycles/FooterBar";
 
 const Main = ({ navigation }: any) => {
 	const LoginStore = {
@@ -38,8 +39,8 @@ const Main = ({ navigation }: any) => {
 				<View style={MainLayout.walkMainWrap}>
 					<MainCount />
 					<Text style={MainLayout.walkMainTitle}>
-						<Text style={MainLayout.walkBoldText}>댕댕레인저</Text>
-						와 함께 {"\n"}
+						<Text style={MainLayout.walkBoldText}>댕댕레인저</Text>와 함께{" "}
+						{"\n"}
 						반려견과 지역의 안전을 위해{"\n"}
 						순찰해보세요
 					</Text>
@@ -58,12 +59,8 @@ const Main = ({ navigation }: any) => {
 				/>
 				{LoginStore.isLogged ? null : (
 					<View style={MainLayout.mainTextWrap}>
-						<TouchableOpacity
-							onPress={() => authHandling("Login연결해줘")}
-						>
-							<Text style={MainLayout.walkBoldText}>
-								회원이 아니신가요?
-							</Text>
+						<TouchableOpacity onPress={() => authHandling("Login연결해줘")}>
+							<Text style={MainLayout.walkBoldText}>회원이 아니신가요?</Text>
 						</TouchableOpacity>
 					</View>
 				)}
@@ -71,25 +68,18 @@ const Main = ({ navigation }: any) => {
 				<View style={MainLayout.randingButtonWrap}>
 					<View style={MainLayout.traceWrap}>
 						<View>
-							<Image
-								source={templogo}
-								style={MainLayout.traceMainImg}
-							/>
+							<Image source={templogo} style={MainLayout.traceMainImg} />
 						</View>
 						<View style={MainLayout.traceInfo}>
 							<Text style={MainLayout.traceTitle}>
-								<Text style={MainLayout.boldTraceInfo}>
-									반려견 순찰증
-								</Text>
+								<Text style={MainLayout.boldTraceInfo}>반려견 순찰증</Text>
 								{"\n"}
 								반려견을 요원으로{"\n"}
 								등록해보세요.
 							</Text>
 							<Text style={MainLayout.traceDesc}>
 								내 반려견{"\n"}
-								<Text style={MainLayout.boldTraceDesc}>
-									방범대원증 등록
-								</Text>
+								<Text style={MainLayout.boldTraceDesc}>방범대원증 등록</Text>
 								하셨나요?
 							</Text>
 							<TouchableOpacity
@@ -97,11 +87,7 @@ const Main = ({ navigation }: any) => {
 								onPress={() => authHandling("Profile")}
 							>
 								<View style={MainLayout.createProfileButton}>
-									<Text
-										style={
-											MainLayout.createProfileButtonText
-										}
-									>
+									<Text style={MainLayout.createProfileButtonText}>
 										대원 등록하기
 									</Text>
 								</View>
@@ -110,10 +96,7 @@ const Main = ({ navigation }: any) => {
 					</View>
 
 					<View style={MainLayout.tribeWrap}>
-						<Image
-							source={MissingDogImg}
-							style={MainLayout.tribeMainImg}
-						/>
+						<Image source={MissingDogImg} style={MainLayout.tribeMainImg} />
 					</View>
 
 					<View style={MainLayout.missingWrap}>
@@ -123,17 +106,15 @@ const Main = ({ navigation }: any) => {
 							</Text>
 							{"\n"}
 							우리 동네 사랑스러운 강아지를 찾아주세요.{"\n"}
-							견주가 애타게 찾고 있습니다. 여러분의 선의로 실종견
-							찾기에 참여해주세요.
+							견주가 애타게 찾고 있습니다. 여러분의 선의로 실종견 찾기에
+							참여해주세요.
 						</Text>
 						<TouchableOpacity
 							activeOpacity={0.7}
 							onPress={() => authHandling("Profile")}
 						>
 							<View style={MainLayout.findMissingDogButton}>
-								<Text
-									style={MainLayout.findMissingDogButtonText}
-								>
+								<Text style={MainLayout.findMissingDogButtonText}>
 									우리동네 실종견 찾기
 								</Text>
 							</View>
@@ -142,10 +123,8 @@ const Main = ({ navigation }: any) => {
 
 					<View style={MainLayout.serviceWrap}>
 						<Text>
-							<Text style={MainLayout.boldServiceText}>
-								김싸피
-							</Text>{" "}
-							님을 위한 댕댕레인저 서비스
+							<Text style={MainLayout.boldServiceText}>김싸피</Text> 님을 위한
+							댕댕레인저 서비스
 						</Text>
 					</View>
 
