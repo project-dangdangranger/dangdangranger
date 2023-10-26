@@ -4,7 +4,7 @@ import static com.shield.dangdangranger.domain.user.constant.UserResponseMessage
 import static com.shield.dangdangranger.domain.user.constant.UserResponseMessage.GET_USER_INFO_SUCCESS;
 import static com.shield.dangdangranger.domain.user.constant.UserResponseMessage.REISSUE_ACCESS_TOKEN__SUCCESS;
 import static com.shield.dangdangranger.domain.user.constant.UserResponseMessage.SIGN_IN_SUCCESS;
-import static com.shield.dangdangranger.domain.user.constant.UserResponseMessage.UPDATE_USER_NAME_SUCCESS;
+import static com.shield.dangdangranger.domain.user.constant.UserResponseMessage.UPDATE_USER_INFO_SUCCESS;
 
 import com.shield.dangdangranger.domain.user.dto.UserRequestDto.UpdateUserInfoRequestDto;
 import com.shield.dangdangranger.domain.user.dto.UserRequestDto.UserInfoRequestDto;
@@ -66,7 +66,7 @@ public class UserController {
     public ResponseEntity<ResponseDto<String>> updateUserInfo(@RequestAttribute("userNo") Integer userNo,
         @RequestBody UpdateUserInfoRequestDto updateUserInfoRequestDto) {
         userService.updateUserInfo(userNo, updateUserInfoRequestDto);
-        return ResponseEntity.status(HttpStatus.OK).body(ResponseDto.create(UPDATE_USER_NAME_SUCCESS.message())
+        return ResponseEntity.status(HttpStatus.OK).body(ResponseDto.create(UPDATE_USER_INFO_SUCCESS.message())
         );
     }
 }
