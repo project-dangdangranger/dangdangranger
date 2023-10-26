@@ -60,8 +60,6 @@ public class MainApplication extends Application implements ReactApplication {
         }
         ReactNativeFlipper.initializeFlipper(this, getReactNativeHost().getReactInstanceManager());
 
-        // 호출 KeyHashUtil의 getAppKeyHash 메서드
-        KeyHashUtil.INSTANCE.getAppKeyHash(this);
     }
 
 }
