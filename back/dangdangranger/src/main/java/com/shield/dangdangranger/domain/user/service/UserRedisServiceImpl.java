@@ -28,9 +28,8 @@ public class UserRedisServiceImpl implements UserRedisService {
         log.debug("[userRedisService - insert] key : {}", key);
         userRedisRepository.save(UserInfo.builder()
             .userNo(user.getUserNo())
-            .userId(user.getUserId())
+            .userId(user.getUserEmail())
             .userName(user.getUserName())
-            .userMessage(user.getUserMessage())
             .userProfileImg(user.getUserProfileImg())
             .ttl(USER_INFO_TTL)
             .build()
@@ -42,25 +41,6 @@ public class UserRedisServiceImpl implements UserRedisService {
         return userRedisRepository.findById(userNo).orElseThrow(
             () -> new NotFoundException(USER_NOT_FOUND_EXCEPTION.message())
         );
-    }
-
-    @Override
-    public void updateUserMessageToRedis(User user) {
-        Optional<UserInfo> userInfoOptional = userRedisRepository.findById(user.getUserNo());
-        if (userInfoOptional.isPresent()) {
-            UserInfo userInfo = userInfoOptional.get();
-            userInfo.updateUserInfoMessage(user.getUserMessage());
-            userRedisRepository.save(userInfo);
-        } else {
-            userRedisRepository.save(UserInfo.builder()
-                .userNo(user.getUserNo())
-                .userId(user.getUserId())
-                .userName(user.getUserName())
-                .userMessage(user.getUserMessage())
-                .userProfileImg(user.getUserProfileImg())
-                .build()
-            );
-        }
     }
 
     @Override
@@ -78,9 +58,8 @@ public class UserRedisServiceImpl implements UserRedisService {
         } else {
             userRedisRepository.save(UserInfo.builder()
                 .userNo(user.getUserNo())
-                .userId(user.getUserId())
+                .userId(user.getUserEmail())
                 .userName(user.getUserName())
-                .userMessage(user.getUserMessage())
                 .userProfileImg(user.getUserProfileImg())
                 .build()
             );

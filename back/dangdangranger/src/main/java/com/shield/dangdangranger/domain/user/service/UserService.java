@@ -15,9 +15,6 @@ public interface UserService {
 
     void deleteUser(Integer userNo);
 
-    void updateUserMessage(Integer userNo,
-        UpdateUserMessageRequestDto updateUserMessageRequestDto);
-
     AccessTokenResponseDto reissueAccessToken(Integer userNo);
 
     void updateUserName(Integer userNo, UpdateUserInfoRequestDto updateUserInfoRequestDto);

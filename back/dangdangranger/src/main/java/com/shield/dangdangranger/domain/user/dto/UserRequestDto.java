@@ -15,14 +15,14 @@ public class UserRequestDto {
     @AllArgsConstructor
     public static class UserInfoRequestDto {
 
-        private String userId;
+        private String userEmail;
         private String userName;
         private String userProfileImg;
         private UserRole userRole;
 
         public User toUser() {
             return User.builder()
-                .userId(userId)
+                .userEmail(userEmail)
                 .userName(userName)
                 .userProfileImg(userProfileImg)
                 .userRole(userRole)

@@ -49,12 +49,12 @@ public class UserServiceImpl implements UserService {
         log.debug("### [DEBUG/UserService] 회원가입 user : {}", user);
 
         // DB에 정보 없을 경우 회원가입, 있을 경우 프로필 사진/이름 업데이트
-        Optional<User> optionalUser = userRepository.findUserByUserIdAndCanceled(user.getUserId(),
+        Optional<User> optionalUser = userRepository.findUserByUserEmailAndCanceled(user.getUserEmail(),
             NOTCANCELED);
         if (optionalUser.isEmpty()) {
             userRepository.save(user);
         }
-        return userRepository.findUserByUserIdAndCanceled(user.getUserId(),
+        return userRepository.findUserByUserEmailAndCanceled(user.getUserEmail(),
             NOTCANCELED).get();
     }
 
@@ -80,9 +80,8 @@ public class UserServiceImpl implements UserService {
             userRedisService.insertUserInfoToRedis(user);
 
             return UserInfoResponseDto.builder()
-                .userId(user.getUserId())
+                .userId(user.getUserEmail())
                 .userName(user.getUserName())
-                .userMessage(user.getUserMessage())
                 .userProfileImg(user.getUserProfileImg())
                 .build();
         }
@@ -100,20 +99,6 @@ public class UserServiceImpl implements UserService {
 
         user.setCanceled(CANCELED);
         userRepository.save(user);
-    }
-
-    @Override
-    @Transactional
-    public void updateUserMessage(Integer userNo,
-        UpdateUserMessageRequestDto updateUserMessageRequestDto) {
-        User user = userRepository.findUserByUserNoAndCanceled(userNo, NOTCANCELED)
-            .orElseThrow(() -> new NotFoundException(USER_NOT_FOUND_EXCEPTION.message()));
-
-        user.updateUserMessage(updateUserMessageRequestDto.getUserMessage());
-        userRepository.save(user);
-
-        // redis 에 적용
-        userRedisService.updateUserMessageToRedis(user);
     }
 
     @Override

@@ -63,16 +63,6 @@ public class UserController {
         );
     }
 
-    @PutMapping("/message")
-    public ResponseEntity<ResponseDto<String>> updateUserMessage(
-        @RequestAttribute("userNo") Integer userNo,
-        @RequestBody UpdateUserMessageRequestDto updateUserMessageRequestDto) {
-        userService.updateUserMessage(userNo, updateUserMessageRequestDto);
-        return ResponseEntity.status(HttpStatus.OK).body(
-            ResponseDto.create(UPDATE_USER_MESSAGE_SUCCESS.message())
-        );
-    }
-
     @PostMapping("/token")
     public ResponseEntity<ResponseDto<AccessTokenResponseDto>> reissueAccessToken(
         @RequestAttribute("userNo") Integer userNo) {
@@ -90,5 +80,4 @@ public class UserController {
             ResponseDto.create(UPDATE_USER_NAME_SUCCESS.message())
         );
     }
-
 }
