@@ -1,14 +1,31 @@
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
+import {
+	responsiveWidth,
+	responsiveHeight,
+} from "react-native-responsive-dimensions";
 
-const CustomTextComponent = ({ mainText, emphasizedText, emphasizedColor }) => {
+type CustomTextComponentProps = {
+	mainText: string;
+	emphasizedText: string;
+	emphasizedColor: string;
+	finalText: string;
+};
+
+const CustomTextComponent: React.FC<CustomTextComponentProps> = ({
+	mainText,
+	emphasizedText,
+	emphasizedColor,
+	finalText,
+}) => {
 	return (
 		<View style={styles.mainWrap}>
 			<Text style={styles.mainTitle}>
-				{mainText}
+				{mainText} {`\n`}
 				<Text style={{ ...styles.boldText, color: emphasizedColor }}>
 					{emphasizedText}
 				</Text>
+				{finalText}
 			</Text>
 		</View>
 	);
@@ -16,13 +33,18 @@ const CustomTextComponent = ({ mainText, emphasizedText, emphasizedColor }) => {
 
 const styles = StyleSheet.create({
 	mainWrap: {
-		// 기존의 MainLayout.walkMainWrap 스타일 속성
+		marginHorizontal: responsiveWidth(5),
 	},
 	mainTitle: {
-		// 기존의 MainLayout.walkMainTitle 스타일 속성
+		marginTop: responsiveHeight(3),
+		fontSize: 24,
+		fontWeight: "700",
+		color: "#616166",
+		paddingHorizontal: responsiveWidth(5),
 	},
 	boldText: {
-		// 기존의 MainLayout.walkBoldText 스타일 속성
+		fontWeight: "700",
+		color: "#3E6DCA",
 	},
 });
 
