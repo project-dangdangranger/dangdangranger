@@ -6,7 +6,7 @@ import {
 	TouchableOpacity,
 	Animated,
 } from "react-native";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import DDRangers from "../../assets/images/DDR_logo.png";
 import HamburgerMenu from "../../assets/images/hamburger_menu_icon.png";
 import SideMenu from "./SideMenu";
@@ -16,18 +16,18 @@ import {
 } from "react-native-responsive-dimensions";
 
 const MainHeader = () => {
-	const [activeSideMenu, setActiveSideMenu] = useState<Boolean>(false);
+	const [activeSideMenu, setActiveSideMenu] = useState(false);
 	const sideMenuPosition = useState(
 		new Animated.Value(-responsiveWidth(100)),
 	)[0];
-
 	const clickHamburger = () => {
 		if (activeSideMenu) {
+			setActiveSideMenu(false);
 			Animated.timing(sideMenuPosition, {
 				toValue: responsiveWidth(-100),
 				duration: 300,
 				useNativeDriver: false,
-			}).start(() => setActiveSideMenu(false));
+			}).start();
 		} else {
 			setActiveSideMenu(true);
 			Animated.timing(sideMenuPosition, {
@@ -35,7 +35,6 @@ const MainHeader = () => {
 				duration: 300,
 				useNativeDriver: false,
 			}).start();
-			setActiveSideMenu(!activeSideMenu);
 		}
 	};
 
@@ -45,10 +44,6 @@ const MainHeader = () => {
 			duration: 300,
 			useNativeDriver: false,
 		}).start(() => setActiveSideMenu(false));
-	};
-
-	const updateActiveSideMenu = (status: Boolean) => {
-		setActiveSideMenu(status);
 	};
 
 	return (

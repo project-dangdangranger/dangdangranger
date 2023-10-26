@@ -18,6 +18,9 @@ import TempProfileImg from "../../assets/images/dog1.jpg";
 import WhitePenIcon from "../../assets/images/pen-icon.png";
 import FourBtn from "../recycles/FourBtn";
 import AbsoluteVar from "../recycles/FooterBar";
+import MainLayout from "../styles/mainLayout";
+import CustomButton from "../recycles/CustomBtn";
+import NFTImg from "../../assets/images/NFTImg.png";
 
 const Profile = ({ navigation }: any) => {
 	const flipView = useRef<any>();
@@ -28,45 +31,22 @@ const Profile = ({ navigation }: any) => {
 			<CommonLayout>
 				<ColorHeader title="주소 관리" />
 				<View>
-					<View style={AlbumLayout.profileWrap}>
-						<Image
-							// source={{ uri: myProfileImg }}
-							source={TempProfileImg}
-							style={AlbumLayout.userPhoto}
-						/>
-						<TouchableOpacity
-							activeOpacity={0.7}
-							style={AlbumLayout.changeImageWrap}
-						>
-							<View>
-								<Image
-									source={WhitePenIcon}
-									style={AlbumLayout.changeImageIcon}
-								/>
-							</View>
-						</TouchableOpacity>
-					</View>
-					<View style={AlbumLayout.userColcontainer}>
-						<View style={AlbumLayout.userContainer}>
-							<Text style={AlbumLayout.userContainerText}>
-								"{"사용자의 닉네임"}" 님,
-							</Text>
-							<TouchableOpacity style={AlbumLayout.btnCSS1}>
-								<Text style={AlbumLayout.userContainerText1}>정보 검색</Text>
-							</TouchableOpacity>
-						</View>
-						<View style={AlbumLayout.userContainer}>
-							<Text style={AlbumLayout.userContainerText2}>
-								width: responsiveWidth(70), height: responsiveHeight(6), 최대
-								30글자
-							</Text>
-						</View>
-						<View style={AlbumLayout.DividSection}>
-							<View style={AlbumLayout.userSectionDivid}></View>
-						</View>
+					<View style={MainLayout.walkMainWrap}>
+						<Text style={MainLayout.walkMainTitle}>
+							지갑이 없습니다.{"\n"}
+							<Text style={MainLayout.walkBoldText}>지갑</Text>을 만들어주세요{" "}
+							{"\n"}
+						</Text>
 					</View>
 				</View>
-				<FourBtn />
+
+				<View>
+					<Image source={NFTImg} />
+				</View>
+				<CustomButton
+					text="지갑 발급하기"
+					onPress={() => navigation.navigate("MakeWallet1")}
+				/>
 				<Footer />
 			</CommonLayout>
 			<AbsoluteVar />

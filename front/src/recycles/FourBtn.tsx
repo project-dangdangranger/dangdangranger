@@ -7,8 +7,10 @@ import Btn1 from "../../assets/images/btn1.png";
 import Btn2 from "../../assets/images/btn2.png";
 import Btn3 from "../../assets/images/btn3.png";
 import Btn4 from "../../assets/images/btn4.png";
+import { useNavigation } from "@react-navigation/native";
 
-const FourBtn = ({ navigation }: any) => {
+const FourBtn = () => {
+	const navigation = useNavigation();
 	return (
 		<>
 			<View style={styles.container}>

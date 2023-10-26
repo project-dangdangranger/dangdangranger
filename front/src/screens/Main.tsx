@@ -180,6 +180,7 @@ const Main = ({ navigation }: any) => {
 				</View>
 				<Footer />
 			</CommonLayout>
+			<FooterBar />
 		</>
 	);
 };
