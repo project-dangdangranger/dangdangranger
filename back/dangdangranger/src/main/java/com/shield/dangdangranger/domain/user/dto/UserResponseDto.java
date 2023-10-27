@@ -19,9 +19,19 @@ public class UserResponseDto {
     @Builder
     public static class UserInfoResponseDto {
 
-        private String userId;
+        private Integer userNo;
+        private String userEmail;
         private String userName;
-        private String userMessage;
         private String userProfileImg;
+        private String userAddress;
+    }
+
+    @Getter
+    @AllArgsConstructor
+    @Builder
+    public static class SignResponseDto {
+
+        private TokenInfo tokenInfo;
+        private String signInUp;
     }
 }
