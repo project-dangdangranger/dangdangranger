@@ -21,7 +21,10 @@ const FourBtn = () => {
 				<Text style={styles.containerSubTitle}>PETROL Service</Text>
 				<Text style={styles.containerTitle}>순찰 관리</Text>
 				<View style={styles.fourbtncontainer}>
-					<TouchableOpacity style={styles.btn} onPress={() => navigate("")}>
+					<TouchableOpacity
+						style={styles.btn}
+						onPress={() => navigate("PatrolGo")}
+					>
 						<Image source={Btn1} style={styles.btnImg} />
 						<Text style={styles.btnText1}>순찰</Text>
 					</TouchableOpacity>

@@ -10,6 +10,7 @@ import MakeWallet1 from "./src/screens/MakeWallet1";
 import MakeWallet2 from "./src/screens/MakeWallet2";
 import MakeWallet3 from "./src/screens/MakeWallet3";
 import PatrolMain from "./src/screens/PatrolMain";
+import PatrolGo from "./src/screens/PatrolGo";
 
 const App = () => {
 	const Stack = createNativeStackNavigator();
@@ -34,6 +35,7 @@ const App = () => {
 					<Stack.Screen name="MakeWallet2" component={MakeWallet2} />
 					<Stack.Screen name="MakeWallet3" component={MakeWallet3} />
 					<Stack.Screen name="PatrolMain" component={PatrolMain} />
+					<Stack.Screen name="PatrolGo" component={PatrolGo} />
 				</Stack.Navigator>
 			</NavigationContainer>
 		</>
