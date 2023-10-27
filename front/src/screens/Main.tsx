@@ -15,6 +15,9 @@ import Footer from "../recycles/Footer";
 import Dog1 from "../../assets/images/yoonNft01.jpg";
 import FooterBar from "../recycles/FooterBar";
 import { useEffect } from "react";
+import { NativeModules } from "react-native";
+
+const { KakaoMapModule } = NativeModules;
 
 const Main = ({ navigation }: any) => {
 	const LoginStore = {
@@ -52,7 +55,7 @@ const Main = ({ navigation }: any) => {
 				</View>
 				<CustomButton
 					text="지역 순찰하기"
-					onPress={() => authHandling("Walk")}
+					onPress={() => KakaoMapModule.showHelloWorld()}
 				/>
 
 				<View style={MainLayout.randingButtonWrap}>
