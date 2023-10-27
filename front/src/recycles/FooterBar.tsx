@@ -8,8 +8,15 @@ import MingcuteSearchFillPng from "../../assets/images/mingcute_search_fill.png"
 import TempPng from "../../assets/images/Home.png";
 import ProfilePng from "../../assets/images/Profile.png";
 import ProfileFillPng from "../../assets/images/Profile_fill.png";
+import { useNavigation } from "@react-navigation/native";
+import { StackNavigation } from "../../App";
 
 const AbsoluteVar = () => {
+	const { navigate } = useNavigation<StackNavigation>();
+	const authHandling = (pageName: string) => {
+		navigate(pageName);
+	};
+
 	return (
 		<>
 			<View style={styles.container}>
@@ -20,7 +27,7 @@ const AbsoluteVar = () => {
 					</TouchableOpacity>
 				</View>
 				<View>
-					<TouchableOpacity>
+					<TouchableOpacity onPress={() => authHandling("PatrolMain")}>
 						<Image source={MingcuteSearchPng} style={styles.btnImg} />
 						<Text>순찰</Text>
 					</TouchableOpacity>

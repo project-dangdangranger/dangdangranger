@@ -1,5 +1,5 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { NavigationContainer } from "@react-navigation/native";
+import { NavigationContainer, NavigationProp } from "@react-navigation/native";
 import Main from "./src/screens/Main";
 import Profile from "./src/screens/Profile";
 import Wallet from "./src/screens/Wallet";
@@ -9,6 +9,7 @@ import EditProfile from "./src/screens/EditProfile";
 import MakeWallet1 from "./src/screens/MakeWallet1";
 import MakeWallet2 from "./src/screens/MakeWallet2";
 import MakeWallet3 from "./src/screens/MakeWallet3";
+import PatrolMain from "./src/screens/PatrolMain";
 
 const App = () => {
 	const Stack = createNativeStackNavigator();
@@ -32,6 +33,7 @@ const App = () => {
 					<Stack.Screen name="MakeWallet1" component={MakeWallet1} />
 					<Stack.Screen name="MakeWallet2" component={MakeWallet2} />
 					<Stack.Screen name="MakeWallet3" component={MakeWallet3} />
+					<Stack.Screen name="PatrolMain" component={PatrolMain} />
 				</Stack.Navigator>
 			</NavigationContainer>
 		</>
@@ -39,3 +41,6 @@ const App = () => {
 };
 
 export default App;
+
+export type RootStateParamList = Record<string, undefined>;
+export type StackNavigation = NavigationProp<RootStateParamList>;
