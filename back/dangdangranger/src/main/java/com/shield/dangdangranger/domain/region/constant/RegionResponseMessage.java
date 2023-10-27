@@ -1,7 +1,9 @@
 package com.shield.dangdangranger.domain.region.constant;
 
 public enum RegionResponseMessage {
-    READ_REGION_SUCCESS("지역 조회 완료")
+    READ_SIDO_SUCCESS("시/도 조회 완료"),
+    READ_GUGUN_SUCCESS("구/군 조회 완료"),
+    READ_DONG_SUCCESS("동 조회 완료")
     ;
 
     String message;
