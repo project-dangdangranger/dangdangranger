@@ -1,5 +1,5 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { NavigationContainer } from "@react-navigation/native";
+import { NavigationContainer, NavigationProp } from "@react-navigation/native";
 import Main from "./src/screens/Main";
 import Profile from "./src/screens/Profile";
 import Wallet from "./src/screens/Wallet";
@@ -13,6 +13,8 @@ import DogList from "./src/screens/DogList";
 import DogDetail from "./src/screens/DogDetail";
 import Report from "./src/screens/Report";
 import ReportDorList from "./src/screens/ReportDorList";
+import PatrolMain from "./src/screens/PatrolMain";
+import PatrolGo from "./src/screens/PatrolGo";
 
 const App = () => {
 	const Stack = createNativeStackNavigator();
@@ -40,6 +42,8 @@ const App = () => {
 					<Stack.Screen name="DogDetail" component={DogDetail} />
 					<Stack.Screen name="Report" component={Report} />
 					<Stack.Screen name="ReportDorList" component={ReportDorList} />
+					<Stack.Screen name="PatrolMain" component={PatrolMain} />
+					<Stack.Screen name="PatrolGo" component={PatrolGo} />
 				</Stack.Navigator>
 			</NavigationContainer>
 		</>
@@ -47,3 +51,6 @@ const App = () => {
 };
 
 export default App;
+
+export type RootStateParamList = Record<string, undefined>;
+export type StackNavigation = NavigationProp<RootStateParamList>;
