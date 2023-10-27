@@ -52,9 +52,10 @@ public class PatrolReportServiceImpl implements PatrolReportService {
     public List<PatrolReportInfoResponseDto> selectAll() {
         List<PatrolReport> reportList = patrolReportRepository.findAllByCanceledOrderByCreateDateDesc(NOTCANCELED);
 
-        return reportList.stream()
-                .map(PatrolReportInfoResponseDto::new)
-                .collect(Collectors.toList());
+//        return reportList.stream()
+//                .map(PatrolReportInfoResponseDto::new)
+//                .collect(Collectors.toList());
+        return null;
     }
 
     @Override
@@ -62,9 +63,10 @@ public class PatrolReportServiceImpl implements PatrolReportService {
         List<PatrolReport> reportList = patrolReportRepository
                 .findAllByUserNoAndCanceledOrderByCreateDateDesc(userNo, NOTCANCELED);
 
-        return reportList.stream()
-                .map(PatrolReportInfoResponseDto::new)
-                .collect(Collectors.toList());
+//        return reportList.stream()
+//                .map(PatrolReportInfoResponseDto::new)
+//                .collect(Collectors.toList());
+        return null;
     }
 
     @Override
@@ -75,21 +77,22 @@ public class PatrolReportServiceImpl implements PatrolReportService {
 
         PatrolLog patrolLog = infoResponseDto.getPatrolLog();
 
-        return PatrolReportInfoResponseDto.builder()
-                .patrolReportNo(infoResponseDto.getPatrolReportNo())
-                .patrolReportTitle(infoResponseDto.getPatrolReportTitle())
-                .patrolReportContent(infoResponseDto.getPatrolReportContent())
-                .patrolReportHit(infoResponseDto.getPatrolReportHit())
-                .userNo(infoResponseDto.getUserNo())
-                .patrolLogNo(patrolLog.getPatrolLogNo())
-                .dong(patrolLog.getDong())
-                .patrolLogDate(patrolLog.getPatrolLogDate())
-                .patrolLogTotalDistance(patrolLog.getPatrolLogTotalDistance())
-                .patrolLogTotalTime(patrolLog.getPatrolLogTotalTime())
-                .patrolLogLat(patrolLog.getPatrolLogLat())
-                .patrolLogLng(patrolLog.getPatrolLogLng())
-                .patrolLogImageUrl(patrolLog.getPatrolLogImageUrl())
-                .patrolWritten(patrolLog.getPatrolWritten())
-                .build();
+//        return PatrolReportInfoResponseDto.builder()
+//                .patrolReportNo(infoResponseDto.getPatrolReportNo())
+//                .patrolReportTitle(infoResponseDto.getPatrolReportTitle())
+//                .patrolReportContent(infoResponseDto.getPatrolReportContent())
+//                .patrolReportHit(infoResponseDto.getPatrolReportHit())
+//                .userNo(infoResponseDto.getUserNo())
+//                .patrolLogNo(patrolLog.getPatrolLogNo())
+//                .dong(patrolLog.getDong())
+//                .patrolLogDate(patrolLog.getPatrolLogDate())
+//                .patrolLogTotalDistance(patrolLog.getPatrolLogTotalDistance())
+//                .patrolLogTotalTime(patrolLog.getPatrolLogTotalTime())
+//                .patrolLogLat(patrolLog.getPatrolLogLat())
+//                .patrolLogLng(patrolLog.getPatrolLogLng())
+//                .patrolLogImageUrl(patrolLog.getPatrolLogImageUrl())
+//                .patrolWritten(patrolLog.getPatrolWritten())
+//                .build();
+        return null;
     }
 }
