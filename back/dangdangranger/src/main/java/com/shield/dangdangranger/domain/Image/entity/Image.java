@@ -16,8 +16,8 @@ public class Image extends BaseEntity {
     @Column(name = "image_no")
     private Integer imageNo;
 
-    @Column(name = "image_type_no")
-    private Integer imageTypeNo;
+    @Column(name = "image_type_code")
+    private String imageTypeCode;
 
     @Column(name = "parent_no")
     private Integer parentNo;
@@ -26,8 +26,8 @@ public class Image extends BaseEntity {
     private String imageUrl;
 
     @Builder
-    public Image(Integer imageTypeNo, Integer parentNo, String imageUrl) {
-        this.imageTypeNo = imageTypeNo;
+    public Image(String imageTypeCode, Integer parentNo, String imageUrl) {
+        this.imageTypeCode = imageTypeCode;
         this.parentNo = parentNo;
         this.imageUrl = imageUrl;
     }

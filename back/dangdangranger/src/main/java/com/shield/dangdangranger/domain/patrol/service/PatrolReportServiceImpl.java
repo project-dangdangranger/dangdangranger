@@ -1,5 +1,7 @@
 package com.shield.dangdangranger.domain.patrol.service;
 
+import com.shield.dangdangranger.domain.Image.entity.Image;
+import com.shield.dangdangranger.domain.Image.repo.ImageRepository;
 import com.shield.dangdangranger.domain.patrol.dto.PatrolReportRequestDto.*;
 import com.shield.dangdangranger.domain.patrol.dto.PatrolReportResponseDto.*;
 import com.shield.dangdangranger.domain.patrol.entity.PatrolLog;
@@ -28,6 +30,7 @@ public class PatrolReportServiceImpl implements PatrolReportService {
 
     private final PatrolReportRepository patrolReportRepository;
     private final PatrolLogRepository patrolLogRepository;
+    private final ImageRepository imageRepository;
 
     @Override
     public PatrolReport registPatrolReport(Integer userNo, PatrolReportSaveRequestDto patrolReportSaveRequestDto) {
@@ -35,15 +38,29 @@ public class PatrolReportServiceImpl implements PatrolReportService {
                 .findPatrolLogByPatrolLogNoAndCanceled(patrolReportSaveRequestDto.getPatrolLogNo(), NOTCANCELED)
                 .orElseThrow(() -> new NotFoundException(PATROL_LOG_NOT_FOUND_EXCEPTION.message()));
 
+        //순찰일지 insert
         PatrolReport patrolReport = PatrolReport.builder()
                 .userNo(userNo)
                 .patrolReportTitle(patrolReportSaveRequestDto.getPatrolReportTitle())
                 .patrolReportContent(patrolReportSaveRequestDto.getPatrolReportContent())
-                .patrolReportHit(patrolReportSaveRequestDto.getPatrolReportHit())
+                .patrolReportHit(0)
                 .patrolLog(patrolLog)
                 .build();
 
         patrolReportRepository.save(patrolReport);
+        //순찰일지 번호 받아오기
+        Integer nowPatrolReportNo = patrolReport.getPatrolReportNo();
+
+        //순찰일지 이미지 insert
+        List<String> patrolImageList = patrolReportSaveRequestDto.getPatrolReportImageList();
+        for (int i = 0; i < patrolImageList.size(); i++) {
+            Image image = Image.builder()
+                    .imageTypeCode("R")
+                    .parentNo(nowPatrolReportNo)
+                    .imageUrl(patrolImageList.get(i))
+                    .build();
+            imageRepository.save(image);
+        }
 
         return patrolReport;
     }
