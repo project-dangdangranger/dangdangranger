@@ -3,49 +3,44 @@ import {
 	responsiveHeight,
 	responsiveWidth,
 } from "react-native-responsive-dimensions";
-import Btn1 from "../../assets/images/btn1.png";
-import Btn2 from "../../assets/images/btn2.png";
-import Btn3 from "../../assets/images/btn3.png";
-import Btn4 from "../../assets/images/btn4.png";
+import Btn1 from "../../assets/images/4btn-patrol-icon.png";
+import Btn2 from "../../assets/images/4btn-graph-icon.png";
+import Btn3 from "../../assets/images/4btn-log-icon.png";
+import Btn4 from "../../assets/images/4btn-record-icon.png";
 import { useNavigation } from "@react-navigation/native";
+import { StackNavigation } from "../../App";
 
 const FourBtn = () => {
-	const navigation = useNavigation();
+	const { navigate } = useNavigation<StackNavigation>();
+	const authHandling = (pageName: string) => {
+		navigate(pageName);
+	};
 	return (
 		<>
 			<View style={styles.container}>
-				<Text style={styles.containerSubTitle}>나의 프로필</Text>
-				<Text style={styles.containerTitle}>프로필 관리</Text>
+				<Text style={styles.containerSubTitle}>PETROL Service</Text>
+				<Text style={styles.containerTitle}>순찰 관리</Text>
 				<View style={styles.fourbtncontainer}>
 					<TouchableOpacity
 						style={styles.btn}
-						onPress={() => navigation.navigate("DogProfile")}
+						onPress={() => navigate("PatrolGo")}
 					>
 						<Image source={Btn1} style={styles.btnImg} />
-						<Text style={styles.btnText1}>강아지 관리</Text>
+						<Text style={styles.btnText1}>순찰</Text>
 					</TouchableOpacity>
-					<TouchableOpacity
-						style={styles.btn}
-						onPress={() => navigation.navigate("EditProfile")}
-					>
+					<TouchableOpacity style={styles.btn} onPress={() => navigate("")}>
 						<Image source={Btn2} style={styles.btnImg} />
-						<Text style={styles.btnText2}>프로필 관리</Text>
+						<Text style={styles.btnText2}>순찰 통계</Text>
 					</TouchableOpacity>
 				</View>
 				<View style={styles.fourbtncontainer}>
-					<TouchableOpacity
-						style={styles.btn}
-						onPress={() => navigation.navigate("Wallet")}
-					>
+					<TouchableOpacity style={styles.btn} onPress={() => navigate("")}>
 						<Image source={Btn3} style={styles.btnImg} />
-						<Text style={styles.btnText3}>지갑 주소</Text>
+						<Text style={styles.btnText3}>순찰 로그</Text>
 					</TouchableOpacity>
-					<TouchableOpacity
-						style={styles.btn}
-						onPress={() => navigation.navigate("MyWrite")}
-					>
+					<TouchableOpacity style={styles.btn} onPress={() => navigate("")}>
 						<Image source={Btn4} style={styles.btnImg} />
-						<Text style={styles.btnText4}>내가 쓴 글</Text>
+						<Text style={styles.btnText4}>순찰 일지</Text>
 					</TouchableOpacity>
 				</View>
 			</View>
@@ -62,6 +57,7 @@ const styles = StyleSheet.create({
 		marginHorizontal: responsiveWidth(10),
 	},
 	containerSubTitle: {
+		marginTop: responsiveHeight(5),
 		fontWeight: "600",
 	},
 	containerTitle: {
@@ -70,7 +66,7 @@ const styles = StyleSheet.create({
 		color: "#000000",
 	},
 	fourbtncontainer: {
-		marginTop: responsiveHeight(4),
+		marginTop: responsiveHeight(2),
 		display: "flex",
 		flexDirection: "row",
 		justifyContent: "space-between",
