@@ -10,9 +10,9 @@ public interface PatrolReportService {
 
     public PatrolReport registPatrolReport(Integer userNo, PatrolReportSaveRequestDto patrolReportSaveRequestDto);
 
-    public List<PatrolReportInfoResponseDto> selectAll();
+    public List<PatrolListInfoResponseDto> selectRegionAll(Integer userNo);
 
-    public List<PatrolReportInfoResponseDto> selectMyAll(Integer userNo);
+    public List<PatrolListInfoResponseDto> selectMyAll(Integer userNo);
 
     public PatrolReportInfoResponseDto selectOnePatrolReport(Integer patrolNo);
 
