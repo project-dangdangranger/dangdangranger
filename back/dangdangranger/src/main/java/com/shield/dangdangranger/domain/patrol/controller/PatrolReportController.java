@@ -12,8 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static com.shield.dangdangranger.domain.patrol.constant.PatrolReportResponseMessage.CREATE_PATROL_REPORT_SUCCESS;
-import static com.shield.dangdangranger.domain.patrol.constant.PatrolReportResponseMessage.READ_ALL_PATROL_REPORT;
+import static com.shield.dangdangranger.domain.patrol.constant.PatrolReportResponseMessage.*;
 
 @RestController
 @RequestMapping("/api/patrol")
@@ -35,6 +34,20 @@ public class PatrolReportController {
     public ResponseEntity<ResponseDto<List<PatrolReportInfoResponseDto>>> selectAllPatrolReport () {
         List<PatrolReportInfoResponseDto> patrolReportInfoList = patrolReportService.selectAll();
         return ResponseEntity.status(HttpStatus.OK).body(ResponseDto.create(READ_ALL_PATROL_REPORT.message(), patrolReportInfoList));
+    }
+
+    @GetMapping("/mine")
+    public ResponseEntity<ResponseDto<List<PatrolReportInfoResponseDto>>> selectMyAllPatrolReport (
+            @RequestAttribute("userNo") Integer userNo) {
+        List<PatrolReportInfoResponseDto> patrolReportInfoList = patrolReportService.selectMyAll(userNo);
+        return ResponseEntity.status(HttpStatus.OK).body(ResponseDto.create(READ_MY_PATROL_REPORT.message(), patrolReportInfoList));
+    }
+
+    @GetMapping("/{patrolNo}")
+    public ResponseEntity<ResponseDto<PatrolReportInfoResponseDto>> selectOnePatrolReport(
+            @PathVariable Integer patrolNo){
+        PatrolReportInfoResponseDto patrolInfo = patrolReportService.selectOnePatrolReport(patrolNo);
+        return ResponseEntity.status(HttpStatus.OK).body(ResponseDto.create(READ_ONE_PATROL_REPORT.message(), patrolInfo));
     }
 
 
