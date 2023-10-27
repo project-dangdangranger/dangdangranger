@@ -13,6 +13,7 @@
 	"dependencies": {
 		"@react-navigation/native": "^6.1.9",
 		"@react-navigation/native-stack": "^6.9.16",
+		"@types/react-native-snap-carousel": "^3.8.7",
 		"eslint-plugin-jest": "^27.4.3",
 		"react": "18.2.0",
 		"react-native": "0.72.6",
