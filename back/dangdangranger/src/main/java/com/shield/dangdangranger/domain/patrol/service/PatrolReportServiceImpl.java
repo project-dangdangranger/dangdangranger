@@ -8,6 +8,8 @@ import com.shield.dangdangranger.domain.patrol.entity.PatrolLog;
 import com.shield.dangdangranger.domain.patrol.entity.PatrolReport;
 import com.shield.dangdangranger.domain.patrol.repo.PatrolLogRepository;
 import com.shield.dangdangranger.domain.patrol.repo.PatrolReportRepository;
+import com.shield.dangdangranger.domain.user.entity.User;
+import com.shield.dangdangranger.domain.user.repo.UserRepository;
 import com.shield.dangdangranger.global.constant.BaseConstant;
 import com.shield.dangdangranger.global.entity.BaseEntity;
 import com.shield.dangdangranger.global.error.NotFoundException;
@@ -19,8 +21,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.shield.dangdangranger.domain.Image.constant.ImageExceptionMessage.IMAGE_NOT_FOUND_EXCEPTION;
 import static com.shield.dangdangranger.domain.patrol.constant.PatrolLogResponseMessage.PATROL_LOG_NOT_FOUND_EXCEPTION;
 import static com.shield.dangdangranger.domain.patrol.constant.PatrolReportResponseMessage.PATROL_REPORT_NOT_FOUND_EXCEPTION;
+import static com.shield.dangdangranger.domain.user.constant.UserExceptionMessage.USER_NOT_FOUND_EXCEPTION;
 import static com.shield.dangdangranger.global.constant.BaseConstant.NOTCANCELED;
 
 @Service
@@ -31,6 +35,7 @@ public class PatrolReportServiceImpl implements PatrolReportService {
     private final PatrolReportRepository patrolReportRepository;
     private final PatrolLogRepository patrolLogRepository;
     private final ImageRepository imageRepository;
+    private final UserRepository userRepository;
 
     @Override
     public PatrolReport registPatrolReport(Integer userNo, PatrolReportSaveRequestDto patrolReportSaveRequestDto) {
@@ -66,24 +71,53 @@ public class PatrolReportServiceImpl implements PatrolReportService {
     }
 
     @Override
-    public List<PatrolReportInfoResponseDto> selectAll() {
+    public List<PatrolListInfoResponseDto> selectRegionAll(Integer userNo) {
         List<PatrolReport> reportList = patrolReportRepository.findAllByCanceledOrderByCreateDateDesc(NOTCANCELED);
+        List<PatrolListInfoResponseDto> list = new ArrayList<>();
 
-//        return reportList.stream()
-//                .map(PatrolReportInfoResponseDto::new)
-//                .collect(Collectors.toList());
-        return null;
+        for (int i = 0; i < reportList.size(); i++) {
+            PatrolReport patrolReport = reportList.get(i);
+            User user = userRepository.findUserByUserNoAndCanceled(patrolReport.getUserNo(), NOTCANCELED)
+                    .orElseThrow(() -> new NotFoundException(USER_NOT_FOUND_EXCEPTION.message()));
+            Image image = imageRepository.findFirstByImageTypeCodeAndParentNoAndCanceled("R", patrolReport.getPatrolReportNo(), NOTCANCELED)
+                    .orElseThrow(() -> new NotFoundException(IMAGE_NOT_FOUND_EXCEPTION.message()));
+
+            PatrolListInfoResponseDto patrolListInfo = PatrolListInfoResponseDto.builder()
+                    .patrolNo(patrolReport.getPatrolReportNo())
+                    .patrolTitle(patrolReport.getPatrolReportTitle())
+                    .patrolDate(patrolReport.getPatrolLog().getPatrolLogDate())
+                    .userName(user.getUserName())
+                    .patrolFirstImg(image.getImageUrl())
+                    .patrolHit(patrolReport.getPatrolReportHit())
+                    .build();
+
+            list.add(patrolListInfo);
+        }
+        return list;
     }
 
     @Override
-    public List<PatrolReportInfoResponseDto> selectMyAll(Integer userNo) {
+    public List<PatrolListInfoResponseDto> selectMyAll(Integer userNo) {
         List<PatrolReport> reportList = patrolReportRepository
                 .findAllByUserNoAndCanceledOrderByCreateDateDesc(userNo, NOTCANCELED);
+        List<PatrolListInfoResponseDto> list = new ArrayList<>();
 
-//        return reportList.stream()
-//                .map(PatrolReportInfoResponseDto::new)
-//                .collect(Collectors.toList());
-        return null;
+        for (int i = 0; i < reportList.size(); i++) {
+            PatrolReport patrolReport = reportList.get(i);
+            User user = userRepository.findUserByUserNoAndCanceled(userNo, NOTCANCELED)
+                    .orElseThrow(() -> new NotFoundException(USER_NOT_FOUND_EXCEPTION.message()));
+
+            PatrolListInfoResponseDto patrolListInfo = PatrolListInfoResponseDto.builder()
+                    .patrolNo(patrolReport.getPatrolReportNo())
+                    .patrolTitle(patrolReport.getPatrolReportTitle())
+                    .patrolDate(patrolReport.getPatrolLog().getPatrolLogDate())
+                    .userName(user.getUserName())
+                    .patrolHit(patrolReport.getPatrolReportHit())
+                    .build();
+
+            list.add(patrolListInfo);
+        }
+        return list;
     }
 
     @Override

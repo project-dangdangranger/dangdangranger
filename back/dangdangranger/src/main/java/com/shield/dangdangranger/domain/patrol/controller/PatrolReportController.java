@@ -22,7 +22,7 @@ public class PatrolReportController {
 
     private final PatrolReportService patrolReportService;
 
-    @PostMapping
+    @PostMapping()
     public ResponseEntity<ResponseDto<String>> createPatrolReport(
             @RequestAttribute("userNo") Integer userNo, @RequestBody PatrolReportSaveRequestDto patrolReportSaveRequestDto) {
 
@@ -30,16 +30,18 @@ public class PatrolReportController {
         return ResponseEntity.status(HttpStatus.CREATED).body(ResponseDto.create(CREATE_PATROL_REPORT_SUCCESS.message()));
     }
 
-    @GetMapping
-    public ResponseEntity<ResponseDto<List<PatrolReportInfoResponseDto>>> selectAllPatrolReport () {
-        List<PatrolReportInfoResponseDto> patrolReportInfoList = patrolReportService.selectAll();
+    @GetMapping()
+    public ResponseEntity<ResponseDto<List<PatrolListInfoResponseDto>>> selectAllPatrolReport (
+            @RequestAttribute("userNo") Integer userNo
+    ) {
+        List<PatrolListInfoResponseDto> patrolReportInfoList = patrolReportService.selectRegionAll(userNo);
         return ResponseEntity.status(HttpStatus.OK).body(ResponseDto.create(READ_ALL_PATROL_REPORT.message(), patrolReportInfoList));
     }
 
     @GetMapping("/mine")
-    public ResponseEntity<ResponseDto<List<PatrolReportInfoResponseDto>>> selectMyAllPatrolReport (
+    public ResponseEntity<ResponseDto<List<PatrolListInfoResponseDto>>> selectMyAllPatrolReport (
             @RequestAttribute("userNo") Integer userNo) {
-        List<PatrolReportInfoResponseDto> patrolReportInfoList = patrolReportService.selectMyAll(userNo);
+        List<PatrolListInfoResponseDto> patrolReportInfoList = patrolReportService.selectMyAll(userNo);
         return ResponseEntity.status(HttpStatus.OK).body(ResponseDto.create(READ_MY_PATROL_REPORT.message(), patrolReportInfoList));
     }
 

@@ -53,5 +53,18 @@ public class PatrolReportResponseDto {
         }
     }
 
+    @Getter
+    @AllArgsConstructor
+    @Builder
+    public static class PatrolListInfoResponseDto {
+        private Integer patrolNo;
+        private String patrolTitle;
+        private LocalDateTime patrolDate;
+        private String userName;
+        private String patrolFirstImg;
+        private Integer patrolHit;
+
+    }
+
 
 }
