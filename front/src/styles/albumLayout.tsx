@@ -34,77 +34,6 @@ const AlbumLayout = StyleSheet.create({
 		borderRadius: 100,
 		marginTop: 20,
 	},
-	newFeedWrap: {
-		position: "absolute",
-		top: "50%",
-		right: responsiveWidth(8),
-		display: "flex",
-		justifyContent: "center",
-		alignItems: "center",
-	},
-	newFeedFlexWrap: {
-		display: "flex",
-		justifyContent: "center",
-		alignItems: "center",
-	},
-	newFeedIconWrap: {
-		width: 36,
-		height: 36,
-		backgroundColor: "#EE8A72",
-		borderRadius: 50,
-		display: "flex",
-		justifyContent: "center",
-		alignItems: "center",
-	},
-
-	newFeedText: {
-		fontSize: 12,
-		fontWeight: "500",
-		color: "#C7C7C7",
-		marginTop: 4,
-	},
-
-	statusMessageWrap: {
-		marginTop: 32,
-		display: "flex",
-		flexDirection: "row",
-		justifyContent: "center",
-		alignItems: "center",
-	},
-	statusMessageText: {
-		fontSize: 14,
-		fontWeight: "500",
-		color: "#C7C7C7",
-		marginLeft: 7,
-	},
-	albumNav: {
-		display: "flex",
-		flexDirection: "row",
-		justifyContent: "space-evenly",
-		alignItems: "center",
-		marginTop: 26,
-		marginBottom: 19,
-	},
-	albumNavText: {
-		fontSize: 16,
-		fontWeight: "600",
-		color: "#BBBBBB",
-		paddingBottom: 6,
-	},
-	activeAlbumNav: {
-		fontWeight: "900",
-		color: "#797971",
-		borderBottomWidth: 4,
-		borderBottomColor: "#EE8A72",
-	},
-
-	photoList: {
-		display: "flex",
-		flexDirection: "row",
-		flexWrap: "wrap",
-		justifyContent: "center",
-		alignItems: "center",
-	},
 	photoItem: {
 		width: responsiveWidth(32),
 		height: responsiveWidth(32),
@@ -155,7 +84,7 @@ const AlbumLayout = StyleSheet.create({
 		flexDirection: "column",
 	},
 	DividSection: {
-		marginVertical: responsiveHeight(3),
+		marginVertical: responsiveHeight(1),
 		display: "flex",
 		justifyContent: "center",
 		alignItems: "center",

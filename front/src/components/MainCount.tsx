@@ -2,18 +2,19 @@ import { View, Text } from "react-native";
 import MainCountLayout from "../styles/mainCountLayout";
 import { useState } from "react";
 
-const MainCount = () => {
-	const [patrol, setPatrol] = useState(0);
-	const [missing, setMissing] = useState(0);
-
+const MainCount = ({
+	patrol,
+	missing,
+}: {
+	patrol: number;
+	missing: number;
+}) => {
 	return (
 		<>
 			<View style={MainCountLayout.MainContainer}>
 				<View style={MainCountLayout.MaincountContainer}>
 					<View style={MainCountLayout.CountContainer}>
-						<Text style={MainCountLayout.CountText}>
-							현재{"\n"}순찰중
-						</Text>
+						<Text style={MainCountLayout.CountText}>현재{"\n"}순찰중</Text>
 						<Text
 							style={[
 								MainCountLayout.CountNumber,
@@ -29,9 +30,7 @@ const MainCount = () => {
 				</View>
 				<View style={MainCountLayout.MaincountContainer}>
 					<View style={MainCountLayout.CountContainer}>
-						<Text style={MainCountLayout.CountText}>
-							실종견{"\n"}마리수
-						</Text>
+						<Text style={MainCountLayout.CountText}>실종견{"\n"}마리수</Text>
 						<Text
 							style={[
 								MainCountLayout.CountNumber,

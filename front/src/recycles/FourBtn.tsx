@@ -70,7 +70,7 @@ const styles = StyleSheet.create({
 		color: "#000000",
 	},
 	fourbtncontainer: {
-		marginTop: responsiveHeight(4),
+		marginTop: responsiveHeight(2),
 		display: "flex",
 		flexDirection: "row",
 		justifyContent: "space-between",
@@ -79,7 +79,7 @@ const styles = StyleSheet.create({
 		// height: responsiveWidth(60),
 	},
 	btn: {
-		width: responsiveWidth(37),
+		width: responsiveWidth(38),
 		height: responsiveWidth(30),
 		backgroundColor: "#fff",
 		borderRadius: 20,

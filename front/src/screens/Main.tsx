@@ -18,6 +18,7 @@ import PatrolSubImg from "../../assets/images/main-patrol.png";
 import MissingSubImg from "../../assets/images/main-missing.png";
 import ChatBotSubImg from "../../assets/images/main-chatbot.png";
 import FooterBar from "../recycles/FooterBar";
+import { useState } from "react";
 
 const Main = ({ navigation }: any) => {
 	const LoginStore = {
@@ -31,13 +32,17 @@ const Main = ({ navigation }: any) => {
 		// alert("해당 서비스는 로그인 후 이용가능합니다.");
 		// }
 	};
+
+	const [patrol, setPatrol] = useState(0);
+	const [missing, setMissing] = useState(0);
+
 	return (
 		<>
 			<></>
 			<CommonLayout>
 				<MainHeader></MainHeader>
 				<View style={MainLayout.walkMainWrap}>
-					<MainCount />
+					<MainCount patrol={patrol} missing={missing} />
 					<Text style={MainLayout.walkMainTitle}>
 						<Text style={MainLayout.walkBoldText}>댕댕레인저</Text>와 함께{" "}
 						{"\n"}

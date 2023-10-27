@@ -39,6 +39,14 @@ const Profile = ({ navigation }: any) => {
 					<Image source={PetrolImg} />
 				</View>
 
+				<View style={{ position: "absolute", top: 90 }}>
+					<CustomSubButton
+						text={"NFT 반려대원 발급하기"}
+						onPress={() => navigation.navigate("DogList")}
+						color={"#70C8EE"}
+					/>
+				</View>
+
 				<View>
 					<CustomBadge text="우리 동네 1등 방범 대원" />
 				</View>
