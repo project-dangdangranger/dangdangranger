@@ -23,7 +23,7 @@ const AbsoluteVar = () => {
 				<View>
 					<TouchableOpacity
 						style={styles.btnCenter}
-						onPress={() => Navigation.navigate("Main")}
+						onPress={() => navigate("Main")}
 					>
 						<Image source={HomePng} style={styles.btnImg} />
 						<Text>Home</Text>
@@ -44,7 +44,7 @@ const AbsoluteVar = () => {
 				<View>
 					<TouchableOpacity
 						style={styles.btnCenter}
-						onPress={() => Navigation.navigate("Profile")}
+						onPress={() => navigate("Profile")}
 					>
 						<Image source={ProfilePng} style={styles.btnImg} />
 						<Text>프로필</Text>
