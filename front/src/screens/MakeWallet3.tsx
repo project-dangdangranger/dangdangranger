@@ -16,7 +16,7 @@ import ColorHeader from "../recycles/ColorHeader";
 import AlbumLayout from "../styles/albumLayout";
 import TempProfileImg from "../../assets/images/dog1.jpg";
 import WhitePenIcon from "../../assets/images/pen-icon.png";
-import FourBtn from "../recycles/FourBtn";
+import FourBtn from "../recycles/PetrolBtn";
 import AbsoluteVar from "../recycles/FooterBar";
 import MainLayout from "../styles/mainLayout";
 import CustomButton from "../recycles/CustomBtn";
