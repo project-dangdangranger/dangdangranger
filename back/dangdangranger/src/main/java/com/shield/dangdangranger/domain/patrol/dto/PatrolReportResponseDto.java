@@ -8,6 +8,8 @@ import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 public class PatrolReportResponseDto {
 
@@ -23,14 +25,14 @@ public class PatrolReportResponseDto {
         private final String userName;
         //순찰로그 정보
 //        private final Integer patrolLogNo;
-        private final Dong dong;
+        private final String dongName;
         private final LocalDateTime patrolLogDate;
         private final Double patrolLogTotalDistance;
         private final Integer patrolLogTotalTime;
         private final Double patrolLogLat;
         private final Double patrolLogLng;
         private final String patrolLogImageUrl;
-        private final Integer patrolWritten;
+        private final List<String> patrolReportImages;
 
         public PatrolReportInfoResponseDto(PatrolReport patrolReport, String userName) {
             this.patrolReportNo = patrolReport.getPatrolReportNo();
@@ -42,14 +44,14 @@ public class PatrolReportResponseDto {
             //순찰로그 정보
             PatrolLog patrolLog = patrolReport.getPatrolLog();
             this.patrolLogDate = patrolLog.getPatrolLogDate();
-            this.dong = patrolLog.getDong();
+            this.dongName = patrolLog.getDong().getDongName();
             this.patrolLogTotalDistance = patrolLog.getPatrolLogTotalDistance();
             this.patrolLogTotalTime = patrolLog.getPatrolLogTotalTime();
             this.patrolLogLat = patrolLog.getPatrolLogLat();
             this.patrolLogLng = patrolLog.getPatrolLogLng();
             this.patrolLogImageUrl = patrolLog.getPatrolLogImageUrl();
-            this.patrolWritten = patrolLog.getPatrolWritten();
-
+            //순찰일지 이미지리스트 초기화
+            this.patrolReportImages = new ArrayList<>();
         }
     }
 

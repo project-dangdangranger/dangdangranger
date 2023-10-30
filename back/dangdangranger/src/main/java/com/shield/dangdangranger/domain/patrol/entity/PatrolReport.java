@@ -41,6 +41,11 @@ public class PatrolReport extends BaseEntity {
         this.patrolLog = patrolLog;
     }
 
+    public PatrolReport updateHit(Integer patrolReportHit){
+        this.patrolReportHit = patrolReportHit+1;
+        return this;
+    }
+
 
 
 

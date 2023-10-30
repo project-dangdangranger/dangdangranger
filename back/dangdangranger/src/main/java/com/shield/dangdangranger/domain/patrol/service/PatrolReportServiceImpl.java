@@ -72,7 +72,10 @@ public class PatrolReportServiceImpl implements PatrolReportService {
 
     @Override
     public List<PatrolListInfoResponseDto> selectRegionAll(Integer userNo) {
-        List<PatrolReport> reportList = patrolReportRepository.findAllByCanceledOrderByCreateDateDesc(NOTCANCELED);
+        User currentUser = userRepository.findUserByUserNoAndCanceled(userNo, NOTCANCELED)
+                .orElseThrow(()-> new NotFoundException(USER_NOT_FOUND_EXCEPTION.message()));
+        String userDong = currentUser.getDong().getDongCode();
+        List<PatrolReport> reportList = patrolReportRepository.findAllByUserDongCodeAndCanceld(userDong, NOTCANCELED);
         List<PatrolListInfoResponseDto> list = new ArrayList<>();
 
         for (int i = 0; i < reportList.size(); i++) {
@@ -122,28 +125,41 @@ public class PatrolReportServiceImpl implements PatrolReportService {
 
     @Override
     public PatrolReportInfoResponseDto selectOnePatrolReport(Integer patrolNo) {
+        //순찰일지 정보
         PatrolReport infoResponseDto = patrolReportRepository
                 .findPatrolReportByPatrolReportNoAndCanceled(patrolNo, NOTCANCELED)
                 .orElseThrow(() -> new NotFoundException(PATROL_REPORT_NOT_FOUND_EXCEPTION.message()));
 
+        //순찰로그 정보
         PatrolLog patrolLog = infoResponseDto.getPatrolLog();
+        //순찰일지 이미지리스트
+        List<Image> list = imageRepository.findAllByImageTypeCodeAndParentNoAndCanceled("R", patrolNo, NOTCANCELED );
+        List<String> imageList = new ArrayList<>();
+        for (int i = 0; i < imageList.size(); i++) {
+            imageList.add(list.get(i).getImageUrl());
+        }
+        //사용자 정보
+        User user = userRepository.findUserByUserNoAndCanceled(infoResponseDto.getUserNo(), NOTCANCELED)
+                .orElseThrow(() -> new NotFoundException(USER_NOT_FOUND_EXCEPTION.message()));
 
-//        return PatrolReportInfoResponseDto.builder()
-//                .patrolReportNo(infoResponseDto.getPatrolReportNo())
-//                .patrolReportTitle(infoResponseDto.getPatrolReportTitle())
-//                .patrolReportContent(infoResponseDto.getPatrolReportContent())
-//                .patrolReportHit(infoResponseDto.getPatrolReportHit())
-//                .userNo(infoResponseDto.getUserNo())
-//                .patrolLogNo(patrolLog.getPatrolLogNo())
-//                .dong(patrolLog.getDong())
-//                .patrolLogDate(patrolLog.getPatrolLogDate())
-//                .patrolLogTotalDistance(patrolLog.getPatrolLogTotalDistance())
-//                .patrolLogTotalTime(patrolLog.getPatrolLogTotalTime())
-//                .patrolLogLat(patrolLog.getPatrolLogLat())
-//                .patrolLogLng(patrolLog.getPatrolLogLng())
-//                .patrolLogImageUrl(patrolLog.getPatrolLogImageUrl())
-//                .patrolWritten(patrolLog.getPatrolWritten())
-//                .build();
-        return null;
+        //상세조회시 조회수 증가
+        infoResponseDto.updateHit(infoResponseDto.getPatrolReportHit());
+
+        return PatrolReportInfoResponseDto.builder()
+                .patrolReportNo(infoResponseDto.getPatrolReportNo())
+                .patrolReportTitle(infoResponseDto.getPatrolReportTitle())
+                .patrolReportContent(infoResponseDto.getPatrolReportContent())
+                .patrolReportHit(infoResponseDto.getPatrolReportHit())
+                .userName(user.getUserName())
+                .patrolLogDate(patrolLog.getPatrolLogDate())
+                .dongName(patrolLog.getDong().getDongName())
+                .patrolLogTotalDistance(patrolLog.getPatrolLogTotalDistance())
+                .patrolLogTotalTime(patrolLog.getPatrolLogTotalTime())
+                .patrolLogLat(patrolLog.getPatrolLogLat())
+                .patrolLogLng(patrolLog.getPatrolLogLng())
+                .patrolLogImageUrl(patrolLog.getPatrolLogImageUrl())
+                .patrolReportImages(imageList)
+                .build();
     }
+
 }
