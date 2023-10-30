@@ -28,17 +28,26 @@ const FourBtn = () => {
 						<Image source={Btn1} style={styles.btnImg} />
 						<Text style={styles.btnText1}>순찰</Text>
 					</TouchableOpacity>
-					<TouchableOpacity style={styles.btn} onPress={() => navigate("")}>
+					<TouchableOpacity
+						style={styles.btn}
+						onPress={() => navigate("PatrolMap")}
+					>
 						<Image source={Btn2} style={styles.btnImg} />
 						<Text style={styles.btnText2}>순찰 통계</Text>
 					</TouchableOpacity>
 				</View>
 				<View style={styles.fourbtncontainer}>
-					<TouchableOpacity style={styles.btn} onPress={() => navigate("")}>
+					<TouchableOpacity
+						style={styles.btn}
+						onPress={() => navigate("PatrolLog")}
+					>
 						<Image source={Btn3} style={styles.btnImg} />
 						<Text style={styles.btnText3}>순찰 로그</Text>
 					</TouchableOpacity>
-					<TouchableOpacity style={styles.btn} onPress={() => navigate("")}>
+					<TouchableOpacity
+						style={styles.btn}
+						onPress={() => navigate("PatrolDiary")}
+					>
 						<Image source={Btn4} style={styles.btnImg} />
 						<Text style={styles.btnText4}>순찰 일지</Text>
 					</TouchableOpacity>
