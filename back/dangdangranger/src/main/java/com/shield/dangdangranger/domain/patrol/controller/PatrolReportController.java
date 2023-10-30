@@ -52,6 +52,13 @@ public class PatrolReportController {
         return ResponseEntity.status(HttpStatus.OK).body(ResponseDto.create(READ_ONE_PATROL_REPORT.message(), patrolInfo));
     }
 
+    @PutMapping()
+    public ResponseEntity<ResponseDto<String>> updatePatrolReport (
+            @RequestBody PatrolReportUpdateRequestDto patrolReportUpdateRequestDto ) {
+        patrolReportService.updatePatrolReport(patrolReportUpdateRequestDto);
+        return ResponseEntity.status(HttpStatus.OK).body(ResponseDto.create(PATROL_REPORT_UPDATE_SUCCESS.message()));
+    }
+
 
 
 }

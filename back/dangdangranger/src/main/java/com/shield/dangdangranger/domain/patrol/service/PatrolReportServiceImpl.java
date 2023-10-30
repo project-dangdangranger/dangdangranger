@@ -18,6 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -72,10 +73,7 @@ public class PatrolReportServiceImpl implements PatrolReportService {
 
     @Override
     public List<PatrolListInfoResponseDto> selectRegionAll(Integer userNo) {
-        User currentUser = userRepository.findUserByUserNoAndCanceled(userNo, NOTCANCELED)
-                .orElseThrow(()-> new NotFoundException(USER_NOT_FOUND_EXCEPTION.message()));
-        String userDong = currentUser.getDong().getDongCode();
-        List<PatrolReport> reportList = patrolReportRepository.findAllByUserDongCodeAndCanceld(userDong, NOTCANCELED);
+        List<PatrolReport> reportList = patrolReportRepository.findAllByUserDongCodeAndCanceld(userNo, NOTCANCELED);
         List<PatrolListInfoResponseDto> list = new ArrayList<>();
 
         for (int i = 0; i < reportList.size(); i++) {
@@ -160,6 +158,59 @@ public class PatrolReportServiceImpl implements PatrolReportService {
                 .patrolLogImageUrl(patrolLog.getPatrolLogImageUrl())
                 .patrolReportImages(imageList)
                 .build();
+    }
+
+    @Override
+    public void updatePatrolReport(PatrolReportUpdateRequestDto updateRequestDto) {
+        Integer patrolNo = updateRequestDto.getPatrolNo();
+        PatrolReport patrolReport = patrolReportRepository.findPatrolReportByPatrolReportNoAndCanceled(patrolNo, NOTCANCELED)
+                .orElseThrow(() -> new NotFoundException(PATROL_REPORT_NOT_FOUND_EXCEPTION.message()));
+
+        //제목, 컨텐츠 수정
+        patrolReport.updatePatrolReport(updateRequestDto.getPatrolReportTitle(), updateRequestDto.getPatrolReportContent());
+
+        //순찰일지 이미지리스트
+        List<Image> list = imageRepository.findAllByImageTypeCodeAndParentNoAndCanceled("R", patrolNo, NOTCANCELED);
+        List<String> imageList = new ArrayList<>();
+        for (int i = 0; i < imageList.size(); i++) {
+            imageList.add(list.get(i).getImageUrl());
+        }
+        List<String> updateImageList = updateRequestDto.getPatrolReportImageList();
+
+        HashSet<String> imageOriginHash = new HashSet<>();
+        HashSet<String> imageNewHash = new HashSet<>();
+
+        for (int i = 0; i < imageList.size(); i++) { //원래 순찰일지 이미지리스트
+            imageOriginHash.add(imageList.get(i));
+        }
+
+        for (int i = 0; i < updateImageList.size(); i++) { //수정된 순찰일지 이미지리스트
+            imageNewHash.add(list.get(i).getImageUrl());
+        }
+
+        for (int i = 0; i < imageList.size(); i++) { //삭제된 이미지는 cancel 처리하기
+            if(!imageNewHash.contains(imageList.get(i))){
+                Image image = imageRepository.findImageByImageUrlAndCanceled(imageList.get(i), NOTCANCELED)
+                        .orElseThrow(()-> new NotFoundException(IMAGE_NOT_FOUND_EXCEPTION.message()));
+                image.setCanceled(1);
+                imageRepository.save(image);
+            }
+        }
+
+        for (int i = 0; i < updateImageList.size(); i++) { //추가된 순찰일지 insert하기
+            if(!imageOriginHash.contains(updateImageList.get(i))){
+                Image image = Image.builder()
+                        .imageTypeCode("R")
+                        .imageUrl(updateImageList.get(i))
+                        .parentNo(patrolNo)
+                        .build();
+                imageRepository.save(image);
+
+            }
+        }
+
+        patrolReportRepository.save(patrolReport);
+
     }
 
 }

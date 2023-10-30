@@ -22,4 +22,16 @@ public class PatrolReportRequestDto {
         private Integer patrolLogNo;
     }
 
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Builder
+    public static class PatrolReportUpdateRequestDto {
+        private Integer patrolNo;
+        private String patrolReportTitle;
+        private String patrolReportContent;
+        private List<String> patrolReportImageList;
+    }
+
+
 }
