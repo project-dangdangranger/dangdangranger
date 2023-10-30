@@ -21,18 +21,20 @@ public class UserInfo {
     private String userName;
     private String userProfileImg;
     private String userAddress;
+    private String dongCode;
 
     @TimeToLive(unit = TimeUnit.MILLISECONDS)
     private Long ttl;
 
     @Builder
     UserInfo(Integer userNo, String userEmail, String userName,
-        String userProfileImg, Long ttl, String userAddress) {
+        String userProfileImg, Long ttl, String userAddress, String dongCode) {
         this.userNo = userNo;
         this.userEmail = userEmail;
         this.userName = userName;
         this.userProfileImg = userProfileImg;
         this.userAddress = userAddress;
+        this.dongCode = dongCode;
         this.ttl = ttl;
     }
 
@@ -40,13 +42,6 @@ public class UserInfo {
         this.userName = user.getUserName();
         this.userAddress = user.getDong().getAddress();
         this.userProfileImg = user.getUserProfileImg();
-    }
-
-    public void updateUserAddress(String userAddress) {
-        this.userAddress = userAddress;
-    }
-
-    public void updateUserProfileImg(String userProfileImg) {
-        this.userProfileImg = userProfileImg;
+        this.dongCode = user.getDong().getDongCode();
     }
 }
