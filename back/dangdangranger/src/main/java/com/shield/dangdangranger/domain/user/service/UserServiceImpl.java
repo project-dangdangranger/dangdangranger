@@ -84,6 +84,7 @@ public class UserServiceImpl implements UserService {
                 .userName(userInfo.getUserName())
                 .userProfileImg(userInfo.getUserProfileImg())
                 .userAddress(userInfo.getUserAddress())
+                .userDongCode(userInfo.getDongCode())
                 .build();
         } catch (NotFoundException e) {
             // 없으면 DB 검색
@@ -100,6 +101,7 @@ public class UserServiceImpl implements UserService {
                 .userName(user.getUserName())
                 .userProfileImg(user.getUserProfileImg())
                 .userAddress(user.getDong().getAddress())
+                .userDongCode(user.getDong().getDongCode())
                 .build();
         }
     }

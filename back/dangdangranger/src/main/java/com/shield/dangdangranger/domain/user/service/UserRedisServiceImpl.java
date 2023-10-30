@@ -32,6 +32,8 @@ public class UserRedisServiceImpl implements UserRedisService {
             .userName(user.getUserName())
             .userProfileImg(user.getUserProfileImg())
             .ttl(USER_INFO_TTL)
+            .userAddress(user.getDong().getAddress())
+            .dongCode(user.getDong().getDongCode())
             .build()
         );
     }
@@ -62,6 +64,7 @@ public class UserRedisServiceImpl implements UserRedisService {
                 .userName(user.getUserName())
                 .userProfileImg(user.getUserProfileImg())
                 .userAddress(user.getDong().getAddress())
+                .dongCode(user.getDong().getDongCode())
                 .build()
             );
         }
