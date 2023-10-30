@@ -1,14 +1,8 @@
 import { useEffect, useRef, useState } from "react";
-import { View, Text, Image, TouchableOpacity, ScrollView } from "react-native";
-// import GestureFlipView from "../components/GestureFlipView";
+import { View, Text, Image, StyleSheet } from "react-native";
 import CommonLayout from "../recycles/CommonLayout";
-// import ProfileItem from "../components/ProfileItem";
-// import NftProfile from "../components/NftProfile";
 
 import WhiteHeader from "../recycles/WhiteHeader";
-// import SubMain from "../components/SubMain";
-// import SubMainImg from "../../assets/images/sub-main-bg.png";
-// import rightArrowIcon from "../../assets/images/right-arrow.png";
 import ProfileLayout from "../styles/profileLayout";
 import TempImg from "../../assets/images/templogo.png";
 import Footer from "../recycles/Footer";
@@ -18,6 +12,11 @@ import TempProfileImg from "../../assets/images/dog1.jpg";
 import WhitePenIcon from "../../assets/images/pen-icon.png";
 import FourBtn from "../recycles/FourBtn";
 import AbsoluteVar from "../recycles/FooterBar";
+import MainLayout from "../styles/mainLayout";
+import CustomButton from "../recycles/CustomBtn";
+import NFTImg from "../../assets/images/NFTImg.png";
+import CustomText from "../recycles/CustomText";
+import { responsiveHeight } from "react-native-responsive-dimensions";
 
 const Profile = ({ navigation }: any) => {
 	const flipView = useRef<any>();
@@ -27,47 +26,30 @@ const Profile = ({ navigation }: any) => {
 		<>
 			<CommonLayout>
 				<ColorHeader title="주소 관리" />
-				<View>
-					<View style={AlbumLayout.profileWrap}>
-						<Image
-							// source={{ uri: myProfileImg }}
-							source={TempProfileImg}
-							style={AlbumLayout.userPhoto}
-						/>
-						<TouchableOpacity
-							activeOpacity={0.7}
-							style={AlbumLayout.changeImageWrap}
-						>
-							<View>
-								<Image
-									source={WhitePenIcon}
-									style={AlbumLayout.changeImageIcon}
-								/>
-							</View>
-						</TouchableOpacity>
+				{/* <View>
+					<View style={MainLayout.walkMainWrap}>
+						<Text style={MainLayout.walkMainTitle}>
+							지갑이 없습니다.{"\n"}
+							<Text style={MainLayout.walkBoldText}>지갑</Text>을 만들어주세요{" "}
+							{"\n"}
+						</Text>
 					</View>
-					<View style={AlbumLayout.userColcontainer}>
-						<View style={AlbumLayout.userContainer}>
-							<Text style={AlbumLayout.userContainerText}>
-								"{"사용자의 닉네임"}" 님,
-							</Text>
-							<TouchableOpacity style={AlbumLayout.btnCSS1}>
-								<Text style={AlbumLayout.userContainerText1}>정보 검색</Text>
-							</TouchableOpacity>
-						</View>
-						<View style={AlbumLayout.userContainer}>
-							<Text style={AlbumLayout.userContainerText2}>
-								width: responsiveWidth(70), height: responsiveHeight(6), 최대
-								30글자
-							</Text>
-						</View>
-						<View style={AlbumLayout.DividSection}>
-							<View style={AlbumLayout.userSectionDivid}></View>
-						</View>
-					</View>
+				</View> */}
+
+				<CustomText
+					mainText="지갑이 없습니다."
+					emphasizedText="지갑"
+					emphasizedColor="#3E6DCA"
+					finalText="을 만들어주세요"
+				/>
+
+				<View style={styles.imgcontainer}>
+					<Image source={NFTImg} />
 				</View>
-				<FourBtn />
-				<Footer />
+				<CustomButton
+					text="지갑 발급하기"
+					onPress={() => navigation.navigate("MakeWallet1")}
+				/>
 			</CommonLayout>
 			<AbsoluteVar />
 		</>
@@ -75,3 +57,11 @@ const Profile = ({ navigation }: any) => {
 };
 
 export default Profile;
+
+const styles = StyleSheet.create({
+	imgcontainer: {
+		justifyContent: "center",
+		alignItems: "center",
+		marginVertical: responsiveHeight(12),
+	},
+});
