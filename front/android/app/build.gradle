@@ -66,6 +66,14 @@ def enableProguardInReleaseBuilds = false
  * give correct results when using with locales other than en-US. Note that
  * this variant is about 6MiB larger per architecture than default.
  */
+def localProperties = new Properties()
+def localPropertiesFile = rootProject.file('local.properties')
+if (localPropertiesFile.exists()) {
+    localProperties.load(new FileInputStream(localPropertiesFile))
+}
+
+def kakaoMapApiHashKey = localProperties['kakao.map.api.hash.key'] ?: ""
+def kakaoNativeAppKey = localProperties['kakao.native.app.key'] ?: ""
 def jscFlavor = 'org.webkit:android-jsc:+'
 
 android {
@@ -73,11 +81,13 @@ android {
 
     compileSdkVersion rootProject.ext.compileSdkVersion
 
-    namespace "com.anift.animaid"
+    namespace "com.idog.dangdangranger"
     defaultConfig {
-        applicationId "com.anift.animaid"
+        applicationId "com.idog.dangdangranger"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
+        buildConfigField "String", "KAKAO_MAP_API_HASH_KEY", "\"${kakaoMapApiHashKey}\""
+        manifestPlaceholders = [kakaoNativeAppKey: kakaoNativeAppKey]
         versionCode 1
         versionName "1.0"
     }
@@ -109,8 +119,11 @@ dependencies {
 
     debugImplementation("com.facebook.flipper:flipper:${FLIPPER_VERSION}")
     debugImplementation("com.facebook.flipper:flipper-network-plugin:${FLIPPER_VERSION}") {
-        exclude group:'com.squareup.okhttp3', module:'okhttp'
+        exclude group: 'com.squareup.okhttp3', module: 'okhttp'
     }
+//    kakao map
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation files('libs/libDaumMapAndroid.jar')
 
     debugImplementation("com.facebook.flipper:flipper-fresco-plugin:${FLIPPER_VERSION}")
     if (hermesEnabled.toBoolean()) {

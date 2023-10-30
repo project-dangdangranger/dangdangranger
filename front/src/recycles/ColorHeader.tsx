@@ -57,7 +57,7 @@ const ColorHeader = ({ title }: any) => {
 
 const styles = StyleSheet.create({
 	whiteHeaderWrap: {
-		height: 80,
+		height: responsiveHeight(8),
 		display: "flex",
 		flexDirection: "row",
 		justifyContent: "space-between",

@@ -8,9 +8,10 @@ import Btn2 from "../../assets/images/btn2.png";
 import Btn3 from "../../assets/images/btn3.png";
 import Btn4 from "../../assets/images/btn4.png";
 import { useNavigation } from "@react-navigation/native";
+import { StackNavigation } from "../../App";
 
 const FourBtn = () => {
-	const navigation = useNavigation();
+	const { navigate } = useNavigation<StackNavigation>();
 	return (
 		<>
 			<View style={styles.container}>
@@ -19,14 +20,14 @@ const FourBtn = () => {
 				<View style={styles.fourbtncontainer}>
 					<TouchableOpacity
 						style={styles.btn}
-						onPress={() => navigation.navigate("DogProfile")}
+						onPress={() => navigate("DogProfile")}
 					>
 						<Image source={Btn1} style={styles.btnImg} />
 						<Text style={styles.btnText1}>강아지 관리</Text>
 					</TouchableOpacity>
 					<TouchableOpacity
 						style={styles.btn}
-						onPress={() => navigation.navigate("EditProfile")}
+						onPress={() => navigate("EditProfile")}
 					>
 						<Image source={Btn2} style={styles.btnImg} />
 						<Text style={styles.btnText2}>프로필 관리</Text>
@@ -35,14 +36,14 @@ const FourBtn = () => {
 				<View style={styles.fourbtncontainer}>
 					<TouchableOpacity
 						style={styles.btn}
-						onPress={() => navigation.navigate("Wallet")}
+						onPress={() => navigate("Wallet")}
 					>
 						<Image source={Btn3} style={styles.btnImg} />
 						<Text style={styles.btnText3}>지갑 주소</Text>
 					</TouchableOpacity>
 					<TouchableOpacity
 						style={styles.btn}
-						onPress={() => navigation.navigate("MyWrite")}
+						onPress={() => navigate("MyWrite")}
 					>
 						<Image source={Btn4} style={styles.btnImg} />
 						<Text style={styles.btnText4}>내가 쓴 글</Text>

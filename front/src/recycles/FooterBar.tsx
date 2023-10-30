@@ -1,5 +1,8 @@
 import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
-import { responsiveWidth } from "react-native-responsive-dimensions";
+import {
+	responsiveHeight,
+	responsiveWidth,
+} from "react-native-responsive-dimensions";
 
 import HomePng from "../../assets/images/Home.png";
 import HomeFillPng from "../../assets/images/Home_fill.png";
@@ -11,7 +14,7 @@ import ProfileFillPng from "../../assets/images/Profile_fill.png";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigation } from "../../App";
 
-const AbsoluteVar = () => {
+const FooterBar = () => {
 	const { navigate } = useNavigation<StackNavigation>();
 	const authHandling = (pageName: string) => {
 		navigate(pageName);
@@ -55,7 +58,7 @@ const AbsoluteVar = () => {
 	);
 };
 
-export default AbsoluteVar;
+export default FooterBar;
 
 const styles = StyleSheet.create({
 	container: {
@@ -65,6 +68,7 @@ const styles = StyleSheet.create({
 		justifyContent: "space-between",
 		paddingHorizontal: responsiveWidth(10),
 		paddingVertical: responsiveWidth(2),
+		height: responsiveHeight(8),
 		// marginHorizontal: responsiveWidth(0),
 		alignItems: "center",
 	},
