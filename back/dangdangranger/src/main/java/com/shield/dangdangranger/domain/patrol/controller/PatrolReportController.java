@@ -59,6 +59,15 @@ public class PatrolReportController {
         return ResponseEntity.status(HttpStatus.OK).body(ResponseDto.create(PATROL_REPORT_UPDATE_SUCCESS.message()));
     }
 
+    @DeleteMapping("/{patrolNo}")
+    public ResponseEntity<ResponseDto<String>> deletePatrolReport(
+            @PathVariable Integer patrolNo ) {
+        patrolReportService.deletePatrolReport(patrolNo);
+        return ResponseEntity.status(HttpStatus.OK).body(ResponseDto.create(PATROL_REPORT_DELETE_SUCCESS.message()));
+    }
+
+
+
 
 
 }

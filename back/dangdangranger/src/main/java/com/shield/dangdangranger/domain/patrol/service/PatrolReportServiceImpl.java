@@ -26,6 +26,7 @@ import static com.shield.dangdangranger.domain.Image.constant.ImageExceptionMess
 import static com.shield.dangdangranger.domain.patrol.constant.PatrolLogResponseMessage.PATROL_LOG_NOT_FOUND_EXCEPTION;
 import static com.shield.dangdangranger.domain.patrol.constant.PatrolReportResponseMessage.PATROL_REPORT_NOT_FOUND_EXCEPTION;
 import static com.shield.dangdangranger.domain.user.constant.UserExceptionMessage.USER_NOT_FOUND_EXCEPTION;
+import static com.shield.dangdangranger.global.constant.BaseConstant.CANCELED;
 import static com.shield.dangdangranger.global.constant.BaseConstant.NOTCANCELED;
 
 @Service
@@ -192,7 +193,7 @@ public class PatrolReportServiceImpl implements PatrolReportService {
             if(!imageNewHash.contains(imageList.get(i))){
                 Image image = imageRepository.findImageByImageUrlAndCanceled(imageList.get(i), NOTCANCELED)
                         .orElseThrow(()-> new NotFoundException(IMAGE_NOT_FOUND_EXCEPTION.message()));
-                image.setCanceled(1);
+                image.setCanceled(CANCELED);
                 imageRepository.save(image);
             }
         }
@@ -211,6 +212,14 @@ public class PatrolReportServiceImpl implements PatrolReportService {
 
         patrolReportRepository.save(patrolReport);
 
+    }
+
+    @Override
+    public void deletePatrolReport(Integer patrolNo) {
+        PatrolReport patrolReport = patrolReportRepository.findPatrolReportByPatrolReportNoAndCanceled(patrolNo, NOTCANCELED)
+                .orElseThrow(() -> new NotFoundException(PATROL_REPORT_NOT_FOUND_EXCEPTION.message()));
+        patrolReport.setCanceled(CANCELED);
+        patrolReportRepository.save(patrolReport);
     }
 
 }

@@ -18,6 +18,8 @@ public interface PatrolReportService {
 
     public void updatePatrolReport(PatrolReportUpdateRequestDto patrolReportUpdateRequestDto);
 
+    public void deletePatrolReport(Integer patrolNo);
+
 
 
 
