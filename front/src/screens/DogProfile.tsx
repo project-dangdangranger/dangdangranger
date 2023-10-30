@@ -1,14 +1,8 @@
 import { useEffect, useRef, useState } from "react";
-import { View, Text, Image, TouchableOpacity, ScrollView } from "react-native";
+import { View, Text, Image, StyleSheet } from "react-native";
 // import GestureFlipView from "../components/GestureFlipView";
 import CommonLayout from "../recycles/CommonLayout";
-// import ProfileItem from "../components/ProfileItem";
-// import NftProfile from "../components/NftProfile";
-
 import WhiteHeader from "../recycles/WhiteHeader";
-// import SubMain from "../components/SubMain";
-// import SubMainImg from "../../assets/images/sub-main-bg.png";
-// import rightArrowIcon from "../../assets/images/right-arrow.png";
 import ProfileLayout from "../styles/profileLayout";
 import TempImg from "../../assets/images/templogo.png";
 import Footer from "../recycles/Footer";
@@ -18,6 +12,11 @@ import TempProfileImg from "../../assets/images/dog1.jpg";
 import WhitePenIcon from "../../assets/images/pen-icon.png";
 import FourBtn from "../recycles/FourBtn";
 import AbsoluteVar from "../recycles/FooterBar";
+import CustomText from "../recycles/CustomText";
+import PetrolImg from "../../assets/images/Patrol-license.png";
+import { responsiveHeight } from "react-native-responsive-dimensions";
+import CustomSubButton from "../recycles/CustomSubBtn";
+import CustomBadge from "../components/CustomBadge";
 
 const Profile = ({ navigation }: any) => {
 	const flipView = useRef<any>();
@@ -28,46 +27,35 @@ const Profile = ({ navigation }: any) => {
 			<CommonLayout>
 				<ColorHeader title="강아지 관리" />
 				<View>
-					<View style={AlbumLayout.profileWrap}>
-						<Image
-							// source={{ uri: myProfileImg }}
-							source={TempProfileImg}
-							style={AlbumLayout.userPhoto}
-						/>
-						<TouchableOpacity
-							activeOpacity={0.7}
-							style={AlbumLayout.changeImageWrap}
-						>
-							<View>
-								<Image
-									source={WhitePenIcon}
-									style={AlbumLayout.changeImageIcon}
-								/>
-							</View>
-						</TouchableOpacity>
-					</View>
-					<View style={AlbumLayout.userColcontainer}>
-						<View style={AlbumLayout.userContainer}>
-							<Text style={AlbumLayout.userContainerText}>
-								"{"사용자의 닉네임"}" 님,
-							</Text>
-							<TouchableOpacity style={AlbumLayout.btnCSS1}>
-								<Text style={AlbumLayout.userContainerText1}>정보 검색</Text>
-							</TouchableOpacity>
-						</View>
-						<View style={AlbumLayout.userContainer}>
-							<Text style={AlbumLayout.userContainerText2}>
-								width: responsiveWidth(70), height: responsiveHeight(6), 최대
-								30글자
-							</Text>
-						</View>
-						<View style={AlbumLayout.DividSection}>
-							<View style={AlbumLayout.userSectionDivid}></View>
-						</View>
-					</View>
+					<CustomText
+						mainText="나의 반려견을"
+						emphasizedText="방범대원"
+						emphasizedColor="#70C8EE"
+						finalText="으로 등록해보세요"
+					/>
 				</View>
-				<FourBtn />
-				<Footer />
+
+				<View style={styles.imgcontainer}>
+					<Image source={PetrolImg} />
+				</View>
+
+				<View style={{ position: "absolute", top: 90 }}>
+					<CustomSubButton
+						text={"NFT 반려대원 발급하기"}
+						onPress={() => navigation.navigate("DogList")}
+						color={"#70C8EE"}
+					/>
+				</View>
+
+				<View>
+					<CustomBadge text="우리 동네 1등 방범 대원" />
+				</View>
+
+				<CustomSubButton
+					text={"NFT 반려대원 발급하기"}
+					onPress={() => navigation.navigate("CreateDog")}
+					color={"#70C8EE"}
+				/>
 			</CommonLayout>
 			<AbsoluteVar />
 		</>
@@ -75,3 +63,11 @@ const Profile = ({ navigation }: any) => {
 };
 
 export default Profile;
+
+const styles = StyleSheet.create({
+	imgcontainer: {
+		justifyContent: "center",
+		alignItems: "center",
+		marginTop: responsiveHeight(5),
+	},
+});

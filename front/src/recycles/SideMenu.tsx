@@ -57,6 +57,11 @@ const SideMenu = (props: any) => {
 							imageIcon={templogo}
 							movePage="Three"
 						></SideMenuIcon>
+						<SideMenuIcon
+							title="신고하기"
+							imageIcon={templogo}
+							movePage="Report"
+						/>
 					</View>
 				</View>
 

@@ -1,5 +1,12 @@
 import { useState } from "react";
-import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
+import {
+	View,
+	Text,
+	Image,
+	StyleSheet,
+	TouchableOpacity,
+	Animated,
+} from "react-native";
 import {
 	responsiveWidth,
 	responsiveHeight,
@@ -12,17 +19,35 @@ import SideMenu from "./SideMenu";
 const WhiteHeader = ({ title }: any) => {
 	const navigation = useNavigation();
 	const [activeSideMenu, setActiveSideMenu] = useState<Boolean>(false);
+
+	const sideMenuPosition = useState(
+		new Animated.Value(-responsiveWidth(100)),
+	)[0];
 	const clickHamburger = () => {
-		switch (activeSideMenu) {
-			case true:
-				setActiveSideMenu(false);
-				break;
-			case false:
-				setActiveSideMenu(true);
-				break;
+		if (activeSideMenu) {
+			setActiveSideMenu(false);
+			Animated.timing(sideMenuPosition, {
+				toValue: responsiveWidth(-100),
+				duration: 300,
+				useNativeDriver: false,
+			}).start();
+		} else {
+			setActiveSideMenu(true);
+			Animated.timing(sideMenuPosition, {
+				toValue: responsiveWidth(0),
+				duration: 300,
+				useNativeDriver: false,
+			}).start();
 		}
 	};
 
+	const clickX = () => {
+		Animated.timing(sideMenuPosition, {
+			toValue: responsiveWidth(-100),
+			duration: 300,
+			useNativeDriver: false,
+		}).start(() => setActiveSideMenu(false));
+	};
 	const updateActiveSideMenu = (status: Boolean) => {
 		setActiveSideMenu(status);
 	};
@@ -30,6 +55,12 @@ const WhiteHeader = ({ title }: any) => {
 	return (
 		<>
 			<View style={styles.whiteHeaderWrap}>
+				<Animated.View
+					style={{ transform: [{ translateX: sideMenuPosition }] }}
+				>
+					<SideMenu clickX={clickX} />
+					<View style={{ height: responsiveHeight(70) }}></View>
+				</Animated.View>
 				<TouchableOpacity activeOpacity={0.7} onPress={() => navigation.pop()}>
 					<Image source={WhitePreview} />
 				</TouchableOpacity>
