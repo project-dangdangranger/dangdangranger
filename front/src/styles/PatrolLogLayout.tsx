@@ -47,6 +47,7 @@ const PatrolLogLayout = StyleSheet.create({
 	},
 
 	cardImg: {
+		position: "relative",
 		height: responsiveHeight(15),
 		width: responsiveWidth(35),
 		marginTop: responsiveHeight(1),
@@ -54,9 +55,13 @@ const PatrolLogLayout = StyleSheet.create({
 		resizeMode: "stretch",
 	},
 	cardTextDate: {
+		position: "relative",
+		bottom: responsiveHeight(2.5),
+		left: responsiveWidth(8),
 		fontSize: 15,
 		fontWeight: "900",
-		backgroundColor: "red",
+		backgroundColor: "rgba(255,255,255,0.5)",
+		borderRadius: 20,
 	},
 });
 
