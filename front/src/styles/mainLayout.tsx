@@ -75,7 +75,7 @@ const MainLayout = StyleSheet.create({
 		marginLeft: responsiveWidth(5),
 	},
 	traceTitle: {
-		fontSize: 18,
+		fontSize: 20,
 		fontWeight: "500",
 		color: "#373737",
 	},
@@ -83,28 +83,78 @@ const MainLayout = StyleSheet.create({
 		fontWeight: "900",
 	},
 	traceDesc: {
-		fontSize: 12,
+		fontSize: 15,
 		fontWeight: "400",
 		color: "#5C5C5C",
 		marginTop: 20,
 	},
 	boldTraceDesc: {
-		fontWeight: "500",
-		color: "#EE8A72",
+		fontWeight: "600",
+		color: "#3E6DCA",
 	},
 	createProfileButton: {
 		width: responsiveWidth(30),
 		height: responsiveHeight(5),
-		backgroundColor: "#EE8A72",
+		backgroundColor: "#3E6DCA",
 		display: "flex",
 		justifyContent: "center",
 		alignItems: "center",
-		marginTop: 22,
+		marginTop: 35,
 	},
 	createProfileButtonText: {
 		fontSize: 12,
 		fontWeight: "700",
 		color: "#FFFFFF",
+	},
+
+	findMissingDogButton: {
+		width: responsiveWidth(45),
+		height: responsiveHeight(5),
+		display: "flex",
+		justifyContent: "center",
+		alignItems: "center",
+		marginTop: 10,
+		marginBottom: 35,
+		borderColor: "#70C8EE",
+		borderWidth: 1,
+		borderRadius: 5,
+	},
+
+	findMissingDogButtonText: {
+		fontSize: 12,
+		fontWeight: "700",
+		color: "#70C8EE",
+	},
+
+	missingWrap: {
+		marginBottom: responsiveHeight(2),
+	},
+
+	missingTitle: {
+		fontSize: 15,
+		color: "#373737",
+		fontWeight: "normal",
+	},
+
+	boldMisiingInfo: {
+		fontSize: 33,
+		fontWeight: "900",
+	},
+
+	serviceWrap: {
+		marginLeft: responsiveWidth(4),
+		marginBottom: responsiveHeight(0.5),
+	},
+
+	boldServiceText: {
+		fontWeight: "700",
+	},
+
+	mainTextWrap: {
+		flex: 1,
+		justifyContent: "center",
+		alignItems: "center",
+		marginTop: -35,
 	},
 
 	tribeWrap: {

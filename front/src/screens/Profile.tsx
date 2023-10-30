@@ -67,7 +67,7 @@ const Profile = ({ navigation }: any) => {
 					</View>
 				</View>
 				<FourBtn />
-				<Footer />
+				{/* <Footer /> */}
 			</CommonLayout>
 			<AbsoluteVar />
 		</>
