@@ -16,6 +16,8 @@ public interface PatrolReportService {
 
     public PatrolReportInfoResponseDto selectOnePatrolReport(Integer patrolNo);
 
+    public void updatePatrolReport(PatrolReportUpdateRequestDto patrolReportUpdateRequestDto);
+
 
 
 

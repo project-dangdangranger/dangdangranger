@@ -6,5 +6,5 @@ import java.util.List;
 
 public interface PatrolReportRepositoryCustom {
 
-    List<PatrolReport> findAllByUserDongCodeAndCanceld(String userdong, Integer isCanceled);
+    List<PatrolReport> findAllByUserDongCodeAndCanceld(Integer userNo, Integer isCanceled);
 }
