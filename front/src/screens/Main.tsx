@@ -20,6 +20,7 @@ import ChatBotSubImg from "../../assets/images/main-chatbot.png";
 import FooterBar from "../recycles/FooterBar";
 import { useEffect, useState } from "react";
 import { NativeModules } from "react-native";
+import GoogleLogin from "../components/GoogleLogin";
 
 const { KakaoMapModule } = NativeModules;
 
@@ -44,6 +45,7 @@ const Main = ({ navigation }: any) => {
 			<></>
 			<CommonLayout>
 				<MainHeader></MainHeader>
+				<GoogleLogin />
 				<View style={MainLayout.walkMainWrap}>
 					<MainCount patrol={patrol} missing={missing} />
 					<Text style={MainLayout.walkMainTitle}>
