@@ -45,7 +45,6 @@ const Main = ({ navigation }: any) => {
 			<></>
 			<CommonLayout>
 				<MainHeader></MainHeader>
-				<GoogleLogin />
 				<View style={MainLayout.walkMainWrap}>
 					<MainCount patrol={patrol} missing={missing} />
 					<Text style={MainLayout.walkMainTitle}>

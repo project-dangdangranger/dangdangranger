@@ -38,11 +38,18 @@ const GoogleLogin = () => {
 				"refreshToken",
 				responseCheckUserInfo.data.data.tokenInfo.refreshToken,
 			);
-			// excryptedStorage에 저장된 토큰을 확인
+			// encryptedStorage에 저장된 토큰을 확인
 			const accessToken = await EncryptedStorage.getItem("accessToken");
 			const refreshToken = await EncryptedStorage.getItem("refreshToken");
 			console.log("accessToken: ", accessToken);
 			console.log("refreshToken: ", refreshToken);
+			if (responseCheckUserInfo.data.data.signInUp === "회원가입 성공") {
+				console.log("회원가입 성공했습니다. 추가정보를 입력해야합니다.");
+				// navigation.navigate("AddInfo"); 그에 대한 로직이 필요함
+			} else if (responseCheckUserInfo.data.data.signInUp === "로그인 성공") {
+				console.log("로그인 성공했습니다. 메인페이지로 이동합니다.");
+				// navigation.navigate("Main"); 그에 대한 로직이 필요함
+			}
 		} catch (error) {
 			console.error(error);
 		}
