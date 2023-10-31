@@ -1,0 +1,44 @@
+import { Image, StyleSheet, Text, TouchableOpacity } from "react-native";
+import icon from "../../assets/images/right-arrow-icon.png";
+import {
+	responsiveHeight,
+	responsiveWidth,
+} from "react-native-responsive-dimensions";
+
+const DetailBtn = () => {
+	return (
+		<>
+			<TouchableOpacity style={style.btnWrap}>
+				<Text style={style.btnText}>Detail</Text>
+				<Image source={icon} style={style.btnImg} />
+			</TouchableOpacity>
+		</>
+	);
+};
+
+export default DetailBtn;
+
+const style = StyleSheet.create({
+	btnWrap: {
+		backgroundColor: "black",
+		borderRadius: 80,
+		marginVertical: responsiveHeight(1),
+		height: responsiveHeight(3.8),
+		width: responsiveWidth(20),
+		flex: 1,
+		flexDirection: "row",
+		justifyContent: "space-between",
+		alignItems: "center",
+	},
+	btnText: {
+		color: "white",
+		fontSize: 17,
+		fontWeight: "900",
+		marginLeft: responsiveWidth(2),
+	},
+	btnImg: {
+		width: responsiveWidth(2),
+		height: responsiveHeight(2),
+		marginRight: responsiveWidth(3),
+	},
+});

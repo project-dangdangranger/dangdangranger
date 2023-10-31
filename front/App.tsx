@@ -15,6 +15,10 @@ import Report from "./src/screens/Report";
 import ReportDorList from "./src/screens/ReportDorList";
 import PatrolMain from "./src/screens/PatrolMain";
 import PatrolGo from "./src/screens/PatrolGo";
+import PatrolMap from "./src/screens/PatrolMap";
+import PatrolLog from "./src/screens/PatrolLog";
+import PatrolDiary from "./src/screens/PatrolDiary";
+import Login from "./src/screens/Login";
 
 const App = () => {
 	const Stack = createNativeStackNavigator();
@@ -44,6 +48,10 @@ const App = () => {
 					<Stack.Screen name="ReportDorList" component={ReportDorList} />
 					<Stack.Screen name="PatrolMain" component={PatrolMain} />
 					<Stack.Screen name="PatrolGo" component={PatrolGo} />
+					<Stack.Screen name="PatrolMap" component={PatrolMap} />
+					<Stack.Screen name="PatrolLog" component={PatrolLog} />
+					<Stack.Screen name="PatrolDiary" component={PatrolDiary} />
+					<Stack.Screen name="Login" component={Login} />
 				</Stack.Navigator>
 			</NavigationContainer>
 		</>
