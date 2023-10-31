@@ -3,7 +3,7 @@ import ColorHeader from "../recycles/ColorHeader";
 import CommonLayout from "../recycles/CommonLayout";
 import FooterBar from "../recycles/FooterBar";
 import LogMapImg from "../../assets/images/log-map-img.png";
-import PatrolLogLayout from "../styles/PatrolLogLayout";
+import PatrolLogLayout from "../styles/patrolLogLayout";
 import { responsiveWidth } from "react-native-responsive-dimensions";
 import img from "../../assets/images/debug-dog.png";
 import DetailBtn from "../components/DetailBtn";
