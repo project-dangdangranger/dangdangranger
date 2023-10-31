@@ -12,43 +12,38 @@ import MapView, { PROVIDER_GOOGLE, Marker } from "react-native-maps";
 import Geolocation from "react-native-geolocation-service";
 
 const GoogleMap = ({ navigation }: any) => {
-	const [location, setLocation] = useState();
+	const [location, setLocation] = useState(null as any);
 
 	useEffect(() => {
-		requeestPermission().then((result) => {
-			console.log("request permission : ", result);
-
-			if (result === "granted") {
-				Geolocation.getCurrentPosition(
-					(position) => {
-						console.log("현재 위치 : ", position);
-						setLocation(position.coords);
-					},
-					(error) => {
-						console.log("에러 발생!!", error);
-					},
-					{
-						enableHighAccuracy: true,
-						timeout: 3600,
-						maximumAge: 3600,
-					},
-				);
-			} else {
-				console.log("not granted");
-			}
-		});
+		requestPermission();
 	}, []);
 
-	console.log(location);
-	async function requeestPermission() {
+	const requestPermission = async () => {
 		try {
-			return await PermissionsAndroid.request(
+			const result = await PermissionsAndroid.request(
 				PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
 			);
+			if (result === PermissionsAndroid.RESULTS.GRANTED) {
+				Geolocation.getCurrentPosition(
+					(position) => {
+						console.log("position : ", position);
+						setLocation(position);
+					},
+					(error) => {
+						console.error("error.code : ", error.message);
+						console.log(error.code, error.message);
+					},
+					{ enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 },
+				);
+				console.log("ACCESS_FINE_LOCATION Permission granted");
+			} else {
+				console.log("ACCESS_FINE_LOCATION Permission denied");
+			}
+			console.log("RESULT : ", result);
 		} catch (e) {
 			console.log(e);
 		}
-	}
+	};
 
 	if (!location) {
 		return (
@@ -70,8 +65,8 @@ const GoogleMap = ({ navigation }: any) => {
 					style={{ flex: 1 }}
 					provider={PROVIDER_GOOGLE}
 					initialRegion={{
-						latitude: location.latitude,
-						longitude: location.longitude,
+						latitude: 37.78825,
+						longitude: -122.4324,
 						latitudeDelta: 0.0922,
 						longitudeDelta: 0.0421,
 					}}
