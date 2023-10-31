@@ -36,11 +36,9 @@ const PatrolLogLayout = StyleSheet.create({
 	},
 	cardWrap: {
 		alignItems: "center",
-		backgroundColor: "#F4F4F4",
-		borderStyle: "solid",
+		backgroundColor: "#FFFFFF",
 		borderRadius: 20,
-		borderWidth: 1,
-		borderColor: "black",
+		elevation: 5,
 		width: responsiveWidth(40),
 		marginHorizontal: responsiveWidth(5),
 		marginBottom: responsiveHeight(1),
@@ -48,8 +46,8 @@ const PatrolLogLayout = StyleSheet.create({
 
 	cardImg: {
 		position: "relative",
-		height: responsiveHeight(15),
-		width: responsiveWidth(35),
+		height: responsiveHeight(17),
+		width: responsiveWidth(33),
 		marginTop: responsiveHeight(1),
 		borderRadius: 20,
 		resizeMode: "stretch",
