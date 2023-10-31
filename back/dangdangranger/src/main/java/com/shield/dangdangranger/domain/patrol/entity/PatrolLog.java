@@ -26,7 +26,7 @@ public class PatrolLog extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "log")
+    @Column(name = "patrol_log_no")
     private Integer patrolLogNo;
 
     @ManyToOne(fetch = FetchType.LAZY)
