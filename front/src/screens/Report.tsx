@@ -10,7 +10,7 @@ import {
 	responsiveWidth,
 } from "react-native-responsive-dimensions";
 import CustomSubButton from "../recycles/CustomSubBtn";
-import Badges from "../Constants/Badges";
+import Badges from "../constants/Badges";
 import ProfileImg from "../../assets/images/profileImg.png";
 import DogItem from "../recycles/DogItem";
 import Report1 from "../../assets/images/Report1.png";

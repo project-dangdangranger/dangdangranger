@@ -63,16 +63,20 @@ const SideMenu = (props: any) => {
 							movePage="Report"
 						/>
 					</View>
-				</View>
 
-				<View style={SideMenuLayout.authButtonWrap}>
-					<TouchableOpacity
-						activeOpacity={0.7}
-						style={SideMenuLayout.moveMypageButton}
-						// onPress={authMoveMypage}
-					>
-						<Text style={SideMenuLayout.moveMypageButtonText}>마이페이지</Text>
-					</TouchableOpacity>
+					<View style={SideMenuLayout.authButtonWrap}>
+						<View style={SideMenuLayout.container}>
+							<TouchableOpacity
+								style={SideMenuLayout.btn}
+								activeOpacity={0.7}
+								onPress={() => navigation.navigate("Login")}
+							>
+								<View style={SideMenuLayout.button}>
+									<Text style={SideMenuLayout.text}>로그인</Text>
+								</View>
+							</TouchableOpacity>
+						</View>
+					</View>
 				</View>
 			</View>
 		</>
