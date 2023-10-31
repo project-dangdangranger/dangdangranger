@@ -1,5 +1,6 @@
 package com.shield.dangdangranger.domain.patrol.entity;
 
+import com.shield.dangdangranger.domain.patrol.dto.PatrolReportRequestDto.*;
 import com.shield.dangdangranger.global.entity.BaseEntity;
 import lombok.*;
 
@@ -39,6 +40,16 @@ public class PatrolReport extends BaseEntity {
         this.patrolReportContent = patrolReportContent;
         this.patrolReportHit = patrolReportHit;
         this.patrolLog = patrolLog;
+    }
+
+    public PatrolReport updateHit(Integer patrolReportHit){
+        this.patrolReportHit = patrolReportHit+1;
+        return this;
+    }
+
+    public void updatePatrolReport(String patrolReportTitle, String patrolReportContent){
+        this.patrolReportTitle = patrolReportTitle;
+        this.patrolReportContent = patrolReportContent;
     }
 
 

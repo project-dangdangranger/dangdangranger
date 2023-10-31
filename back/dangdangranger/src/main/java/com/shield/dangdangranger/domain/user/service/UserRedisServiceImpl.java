@@ -28,11 +28,12 @@ public class UserRedisServiceImpl implements UserRedisService {
         log.debug("[userRedisService - insert] key : {}", key);
         userRedisRepository.save(UserInfo.builder()
             .userNo(user.getUserNo())
-            .userId(user.getUserId())
+            .userEmail(user.getUserEmail())
             .userName(user.getUserName())
-            .userMessage(user.getUserMessage())
             .userProfileImg(user.getUserProfileImg())
             .ttl(USER_INFO_TTL)
+            .userAddress(user.getDong().getAddress())
+            .dongCode(user.getDong().getDongCode())
             .build()
         );
     }
@@ -45,43 +46,25 @@ public class UserRedisServiceImpl implements UserRedisService {
     }
 
     @Override
-    public void updateUserMessageToRedis(User user) {
-        Optional<UserInfo> userInfoOptional = userRedisRepository.findById(user.getUserNo());
-        if (userInfoOptional.isPresent()) {
-            UserInfo userInfo = userInfoOptional.get();
-            userInfo.updateUserInfoMessage(user.getUserMessage());
-            userRedisRepository.save(userInfo);
-        } else {
-            userRedisRepository.save(UserInfo.builder()
-                .userNo(user.getUserNo())
-                .userId(user.getUserId())
-                .userName(user.getUserName())
-                .userMessage(user.getUserMessage())
-                .userProfileImg(user.getUserProfileImg())
-                .build()
-            );
-        }
-    }
-
-    @Override
     public void deleteUserInfoFromRedis(Integer userNo) {
         userRedisRepository.deleteById(userNo);
     }
 
     @Override
-    public void updateUserNameToRedis(User user) {
+    public void updateUserInfoToRedis(User user) {
         Optional<UserInfo> userInfoOptional = userRedisRepository.findById(user.getUserNo());
         if (userInfoOptional.isPresent()) {
             UserInfo userInfo = userInfoOptional.get();
-            userInfo.updateUserNameMessage(user.getUserName());
+            userInfo.updateUserInfo(user);
             userRedisRepository.save(userInfo);
         } else {
             userRedisRepository.save(UserInfo.builder()
                 .userNo(user.getUserNo())
-                .userId(user.getUserId())
+                .userEmail(user.getUserEmail())
                 .userName(user.getUserName())
-                .userMessage(user.getUserMessage())
                 .userProfileImg(user.getUserProfileImg())
+                .userAddress(user.getDong().getAddress())
+                .dongCode(user.getDong().getDongCode())
                 .build()
             );
         }

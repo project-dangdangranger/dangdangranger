@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
+import java.time.LocalDateTime;
+import java.util.List;
 
 public class PatrolReportRequestDto {
 
@@ -14,11 +16,22 @@ public class PatrolReportRequestDto {
     @NoArgsConstructor
     @Builder
     public static class PatrolReportSaveRequestDto {
-        private Integer userNo;
-        private Integer patrolLogNo;
         private String patrolReportTitle;
         private String patrolReportContent;
-        private Integer patrolReportHit;
+        private List<String> patrolReportImageList;
+        private Integer patrolLogNo;
     }
+
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Builder
+    public static class PatrolReportUpdateRequestDto {
+        private Integer patrolNo;
+        private String patrolReportTitle;
+        private String patrolReportContent;
+        private List<String> patrolReportImageList;
+    }
+
 
 }

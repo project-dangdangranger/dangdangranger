@@ -15,14 +15,14 @@ public class UserRequestDto {
     @AllArgsConstructor
     public static class UserInfoRequestDto {
 
-        private String userId;
+        private String userEmail;
         private String userName;
         private String userProfileImg;
         private UserRole userRole;
 
         public User toUser() {
             return User.builder()
-                .userId(userId)
+                .userEmail(userEmail)
                 .userName(userName)
                 .userProfileImg(userProfileImg)
                 .userRole(userRole)
@@ -37,6 +37,8 @@ public class UserRequestDto {
     public static class UpdateUserInfoRequestDto {
 
         private String userName;
+        private String userDong;
+        private String userProfileImg;
     }
 
     @Data
@@ -47,23 +49,4 @@ public class UserRequestDto {
 
         private String refreshToken;
     }
-
-    @Data
-    @Builder
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public static class UpdateUserMessageRequestDto {
-
-        private String userMessage;
-    }
-
-    @Data
-    @Builder
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public static class UpdateUserNameRequestDto {
-
-        private String userName;
-    }
-
 }

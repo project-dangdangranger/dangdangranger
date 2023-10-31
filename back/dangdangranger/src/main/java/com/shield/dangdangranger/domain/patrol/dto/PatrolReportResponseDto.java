@@ -8,6 +8,8 @@ import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 public class PatrolReportResponseDto {
 
@@ -19,39 +21,51 @@ public class PatrolReportResponseDto {
         private final String patrolReportTitle;
         private final String patrolReportContent;
         private final Integer patrolReportHit;
-        //사용자 번호
-        private final Integer userNo;
+        //사용자 정보
+        private final String userName;
         //순찰로그 정보
-        private final Integer patrolLogNo;
-        private final Dong dong;
+//        private final Integer patrolLogNo;
+        private final String dongName;
         private final LocalDateTime patrolLogDate;
         private final Double patrolLogTotalDistance;
         private final Integer patrolLogTotalTime;
         private final Double patrolLogLat;
         private final Double patrolLogLng;
         private final String patrolLogImageUrl;
-        private final Integer patrolWritten;
+        private final List<String> patrolReportImages;
 
-        public PatrolReportInfoResponseDto(PatrolReport patrolReport) {
+        public PatrolReportInfoResponseDto(PatrolReport patrolReport, String userName) {
             this.patrolReportNo = patrolReport.getPatrolReportNo();
             this.patrolReportTitle = patrolReport.getPatrolReportTitle();
             this.patrolReportContent = patrolReport.getPatrolReportContent();
             this.patrolReportHit = patrolReport.getPatrolReportHit();
-            //사용자 번호
-            this.userNo = patrolReport.getUserNo();
+            //사용자 이름
+            this.userName = userName;
             //순찰로그 정보
             PatrolLog patrolLog = patrolReport.getPatrolLog();
-            this.patrolLogNo = patrolLog.getPatrolLogNo();
-            this.dong = patrolLog.getDong();
             this.patrolLogDate = patrolLog.getPatrolLogDate();
+            this.dongName = patrolLog.getDong().getDongName();
             this.patrolLogTotalDistance = patrolLog.getPatrolLogTotalDistance();
             this.patrolLogTotalTime = patrolLog.getPatrolLogTotalTime();
             this.patrolLogLat = patrolLog.getPatrolLogLat();
             this.patrolLogLng = patrolLog.getPatrolLogLng();
             this.patrolLogImageUrl = patrolLog.getPatrolLogImageUrl();
-            this.patrolWritten = patrolLog.getPatrolWritten();
-
+            //순찰일지 이미지리스트 초기화
+            this.patrolReportImages = new ArrayList<>();
         }
+    }
+
+    @Getter
+    @AllArgsConstructor
+    @Builder
+    public static class PatrolListInfoResponseDto {
+        private Integer patrolNo;
+        private String patrolTitle;
+        private LocalDateTime patrolDate;
+        private String userName;
+        private String patrolFirstImg;
+        private Integer patrolHit;
+
     }
 
 
