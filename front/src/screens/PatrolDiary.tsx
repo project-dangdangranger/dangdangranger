@@ -3,7 +3,7 @@ import ColorHeader from "../recycles/ColorHeader";
 import CommonLayout from "../recycles/CommonLayout";
 import FooterBar from "../recycles/FooterBar";
 import img from "../../assets/images/dog-hi.png";
-import PatrolDiaryLayout from "../styles/PatrolDiaryLayout";
+import PatrolDiaryLayout from "../styles/patrolDiaryLayout";
 
 const PatrolDiary = () => {
 	return (
