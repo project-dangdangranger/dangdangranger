@@ -1,13 +1,5 @@
-import { useEffect, useRef, useState } from "react";
-import {
-	Text,
-	View,
-	Image,
-	Alert,
-	TouchableOpacity,
-	PermissionsAndroid,
-} from "react-native";
-import CommonLayout from "../recycles/CommonLayout";
+import { useEffect, useState } from "react";
+import { Text, View, PermissionsAndroid } from "react-native";
 import MapView, { PROVIDER_GOOGLE, Marker } from "react-native-maps";
 import Geolocation from "react-native-geolocation-service";
 
@@ -27,7 +19,7 @@ const GoogleMap = ({ navigation }: any) => {
 				Geolocation.getCurrentPosition(
 					(position) => {
 						console.log("position : ", position);
-						setLocation(position);
+						setLocation(position.coords);
 					},
 					(error) => {
 						console.error("error.code : ", error.message);
@@ -54,26 +46,24 @@ const GoogleMap = ({ navigation }: any) => {
 	}
 
 	return (
-		<>
-			<View style={{ flex: 1 }}>
+		<View style={{ flex: 1 }}>
+			<MapView
+				style={{ flex: 1 }}
+				provider={PROVIDER_GOOGLE}
+				initialRegion={{
+					latitude: location.latitude,
+					longitude: location.longitude,
+					latitudeDelta: 0.0922,
+					longitudeDelta: 0.0421,
+				}}
+			>
 				<Marker
-					coordinate={{ latitude: 37.78825, longitude: -122.4324 }}
-					title="this is a marker"
-					description="this is a marker example"
+					coordinate={location}
+					title="My Location"
+					description="This is my current location"
 				/>
-				<MapView
-					style={{ flex: 1 }}
-					provider={PROVIDER_GOOGLE}
-					initialRegion={{
-						latitude: 37.78825,
-						longitude: -122.4324,
-						latitudeDelta: 0.0922,
-						longitudeDelta: 0.0421,
-					}}
-					// onUserLocationChange={}
-				/>
-			</View>
-		</>
+			</MapView>
+		</View>
 	);
 };
 
