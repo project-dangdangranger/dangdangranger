@@ -9,13 +9,13 @@ import lombok.ToString;
 @ToString
 public class OAuth2UserInfo {
 
-    private String userId;
+    private String userEmail;
     private String userName;
     private String userProfileImg;
 
     @Builder
     public OAuth2UserInfo(Map<String, Object> userAttribute) {
-        this.userId = (String) userAttribute.get("email");
+        this.userEmail = (String) userAttribute.get("email");
         this.userName = (String) userAttribute.get("name");
         this.userProfileImg = (String) userAttribute.get("picture");
     }
