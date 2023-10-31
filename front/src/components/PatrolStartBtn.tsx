@@ -1,4 +1,4 @@
-import { Image, StyleSheet, View } from "react-native";
+import { Image, StyleSheet, View, TouchableOpacity } from "react-native";
 import PatrolStartImg from "../../assets/images/patrol-start-btnImg.png";
 import { useState } from "react";
 import {
@@ -6,13 +6,16 @@ import {
 	responsiveWidth,
 } from "react-native-responsive-dimensions";
 import VibratingImage from "./VibratingImage";
+import { useNavigation } from "@react-navigation/native";
 
 const PatrolBtn = () => {
 	const [isPatrol, setIsPatrol] = useState(false);
 	return (
 		<>
 			<View style={styles.container}>
-				<VibratingImage source={PatrolStartImg}></VibratingImage>
+				<TouchableOpacity onPress={() => {}}>
+					<Image source={PatrolStartImg}></Image>
+				</TouchableOpacity>
 			</View>
 		</>
 	);

@@ -17,7 +17,7 @@ import AlbumLayout from "../styles/albumLayout";
 import TempProfileImg from "../../assets/images/dog1.jpg";
 import WhitePenIcon from "../../assets/images/pen-icon.png";
 import FourBtn from "../recycles/PetrolBtn";
-import AbsoluteVar from "../recycles/FooterBar";
+import AbsoluteBar from "../recycles/FooterBar";
 import Carousel from "../components/Carousel";
 
 const PatrolMain = () => {
@@ -33,7 +33,7 @@ const PatrolMain = () => {
 				<FourBtn />
 				<Footer />
 			</CommonLayout>
-			<AbsoluteVar />
+			<AbsoluteBar />
 		</>
 	);
 };
