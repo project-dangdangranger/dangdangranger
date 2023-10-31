@@ -39,7 +39,10 @@ const FooterBar = () => {
 					</TouchableOpacity>
 				</View>
 				<View>
-					<TouchableOpacity style={styles.btnCenter}>
+					<TouchableOpacity
+						style={styles.btnCenter}
+						onPress={() => navigate("MissingMain")}
+					>
 						<Image source={TempPng} style={styles.btnImg} />
 						<Text>실종견</Text>
 					</TouchableOpacity>
