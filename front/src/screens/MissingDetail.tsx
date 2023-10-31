@@ -7,26 +7,18 @@ import {
 	Platform,
 	TouchableOpacity,
 } from "react-native";
-// import GestureFlipView from "../components/GestureFlipView";
+import { useNavigation } from "@react-navigation/native";
 import CommonLayout from "../recycles/CommonLayout";
 import ColorHeader from "../recycles/ColorHeader";
 import AbsoluteVar from "../recycles/FooterBar";
-import CustomText from "../recycles/CustomText";
-import PetrolImg from "../../assets/images/Patrol-license.png";
 import {
 	responsiveHeight,
 	responsiveWidth,
 } from "react-native-responsive-dimensions";
 import CustomSubButton from "../recycles/CustomSubBtn";
-import Badge1 from "../../assets/images/badge-01.png";
-import Badge2 from "../../assets/images/badge-02.png";
-import Badge3 from "../../assets/images/badge-03.png";
-import Badges from "../constants/Badges";
-import CustomTwinButton from "../recycles/CustomTwinBtn";
 import ProfileImg from "../../assets/images/profileImg.png";
-import { useNavigation } from "@react-navigation/native";
 
-const Profile = ({ route }) => {
+const MissingDetail = ({ route }) => {
 	const navigation = useNavigation();
 	const [data, setDate] = useState(route.params);
 	useEffect(() => {
@@ -37,9 +29,9 @@ const Profile = ({ route }) => {
 	return (
 		<>
 			<CommonLayout>
-				<ColorHeader title="강아지 정보" />
+				<ColorHeader title="실종견 정보" />
 
-				<Image source={ProfileImg} style={styles.mainImg} />
+				{/* <Image source={ProfileImg} style={styles.mainImg} />
 
 				<View style={styles.mainTextContainer}>
 					<Text style={styles.mainText}>강아지 이름 </Text>
@@ -85,14 +77,14 @@ const Profile = ({ route }) => {
 						onPress={() => navigation.navigate("CreateDog")}
 						color={"#70C8EE"}
 					/>
-				</View>
+				</View> */}
 			</CommonLayout>
 			<AbsoluteVar />
 		</>
 	);
 };
 
-export default Profile;
+export default MissingDetail;
 
 const styles = StyleSheet.create({
 	mainImg: {

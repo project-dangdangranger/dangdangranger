@@ -7,12 +7,12 @@ import {
 const SideMenuLayout = StyleSheet.create({
 	sideMenuWrap: {
 		width: responsiveWidth(70),
-		height: 500,
 		position: "absolute",
 		top: 0,
 		left: 0,
 		backgroundColor: "#FFFFFF",
 		zIndex: 999,
+		borderRadius: 10,
 	},
 	sideMenuHeader: {
 		display: "flex",
@@ -70,7 +70,6 @@ const SideMenuLayout = StyleSheet.create({
 		color: "#FFFFFF",
 	},
 	moveMypageButton: {
-		width: responsiveWidth(62),
 		display: "flex",
 		justifyContent: "center",
 		alignItems: "center",
@@ -80,6 +79,27 @@ const SideMenuLayout = StyleSheet.create({
 		fontSize: 12,
 		fontWeight: "500",
 		color: "#3E6DCA",
+		marginBottom: responsiveHeight(4),
+	},
+
+	container: {
+		// justifyContent: "center",
+		alignItems: "center",
+		marginBottom: responsiveHeight(5),
+	},
+	button: {
+		width: responsiveWidth(65),
+		// backgroundColor: "#EE8A72",
+		height: 50,
+		display: "flex",
+		justifyContent: "center",
+		alignItems: "center",
+	},
+	btn: { backgroundColor: "#3E6DCA", borderRadius: 10 },
+	text: {
+		fontSize: 15,
+		fontWeight: "900",
+		color: "#FFFFFF",
 	},
 });
 
