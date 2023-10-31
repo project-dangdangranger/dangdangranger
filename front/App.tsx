@@ -18,6 +18,7 @@ import PatrolGo from "./src/screens/PatrolGo";
 import PatrolMap from "./src/screens/PatrolMap";
 import PatrolLog from "./src/screens/PatrolLog";
 import PatrolDiary from "./src/screens/PatrolDiary";
+import PatrolDiaryWrite from "./src/screens/PatrolDiaryWrite";
 import MissingMain from "./src/screens/MissingMain";
 import MissingFind from "./src/screens/MissingFind";
 import MissingRegist from "./src/screens/MissingRegist";
@@ -56,6 +57,7 @@ const App = () => {
 					<Stack.Screen name="PatrolMap" component={PatrolMap} />
 					<Stack.Screen name="PatrolLog" component={PatrolLog} />
 					<Stack.Screen name="PatrolDiary" component={PatrolDiary} />
+					<Stack.Screen name="PatrolDiaryWrite" component={PatrolDiaryWrite} />
 					<Stack.Screen name="MissingMain" component={MissingMain} />
 					<Stack.Screen name="MissingFind" component={MissingFind} />
 					<Stack.Screen name="MissingRegist" component={MissingRegist} />
