@@ -19,9 +19,9 @@ import MissingSubImg from "../../assets/images/main-missing.png";
 import ChatBotSubImg from "../../assets/images/main-chatbot.png";
 import FooterBar from "../recycles/FooterBar";
 import { useEffect, useState } from "react";
-import { NativeModules } from "react-native";
+// import { NativeModules } from "react-native";
 
-const { KakaoMapModule } = NativeModules;
+// const { KakaoMapModule } = NativeModules;
 
 const Main = ({ navigation }: any) => {
 	const LoginStore = {
@@ -63,7 +63,7 @@ const Main = ({ navigation }: any) => {
 				</View>
 				<CustomButton
 					text="지역 순찰하기"
-					onPress={() => KakaoMapModule.showHelloWorld()}
+					onPress={() => navigation.navigate("GoogleMap")}
 				/>
 				{LoginStore.isLogged ? null : (
 					<View style={MainLayout.mainTextWrap}>

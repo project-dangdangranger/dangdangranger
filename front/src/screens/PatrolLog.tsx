@@ -3,10 +3,11 @@ import ColorHeader from "../recycles/ColorHeader";
 import CommonLayout from "../recycles/CommonLayout";
 import FooterBar from "../recycles/FooterBar";
 import LogMapImg from "../../assets/images/log-map-img.png";
-import PatrolLogLayout from "../styles/PatrolLogLayout";
+import PatrolLogLayout from "../styles/patrolLogLayout";
 import { responsiveWidth } from "react-native-responsive-dimensions";
 import img from "../../assets/images/debug-dog.png";
 import DetailBtn from "../components/DetailBtn";
+import PatrolLogCarousel from "../recycles/PatrolLogCarousel";
 
 const PatrolLog = () => {
 	const logs = [
@@ -26,7 +27,7 @@ const PatrolLog = () => {
 					<Text style={PatrolLogLayout.textTitle}>내 순찰 기록</Text>
 					<Text style={PatrolLogLayout.textDate}>23.10.09 ~ 23.10.16</Text>
 				</View>
-				<View style={PatrolLogLayout.scrollWrap}>
+				{/*<View style={PatrolLogLayout.scrollWrap}>
 					<ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
 						{logs.map((log, index) => {
 							return (
@@ -38,7 +39,8 @@ const PatrolLog = () => {
 							);
 						})}
 					</ScrollView>
-				</View>
+					</View>*/}
+				<PatrolLogCarousel logs={logs} />
 			</CommonLayout>
 			<FooterBar />
 		</>

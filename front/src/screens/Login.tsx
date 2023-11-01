@@ -1,22 +1,71 @@
-import { Text, View, Image, Alert, TouchableOpacity } from "react-native";
+import {
+	Text,
+	View,
+	Image,
+	Alert,
+	TouchableOpacity,
+	Button,
+} from "react-native";
 import CommonLayout from "../recycles/CommonLayout";
 import MainHeader from "../recycles/MainHeader";
 import FooterBar from "../recycles/FooterBar";
 import LoginImg from "../../assets/images/LoginImg.png";
-import LoginLayout from "../styles/LoginLayout";
+import LoginLayout from "../styles/loginLayout";
 import GoogleImg from "../../assets/images/Google.png";
+import { GoogleSignin } from "@react-native-google-signin/google-signin";
+import { WEB_CLIENT_ID } from "@env";
+import axios from "axios";
+import EncryptedStorage from "react-native-encrypted-storage";
+import { BASE_URL, CONTENT_TYPE, TIMEOUT } from "../constants/constants";
+import React, { useEffect } from "react";
 
-const Main = ({ navigation }: any) => {
-	const LoginStore = {
-		isLogged: true,
-	};
-
-	const authHandling = (pageName: string) => {
-		// if (LoginStore.isLogged) {
-		Alert.alert("로그인 후 이용 가능합니다.");
-		// } else {
-		// alert("해당 서비스는 로그인 후 이용가능합니다.");
-		// }
+const Login = ({ navigation }: any) => {
+	useEffect(() => {
+		GoogleSignin.configure({
+			webClientId: WEB_CLIENT_ID,
+			offlineAccess: true,
+		});
+	}, []);
+	const handleGoogleLogin = async () => {
+		try {
+			await GoogleSignin.hasPlayServices();
+			const responseCheckSigninData = await GoogleSignin.signIn();
+			const url = `${BASE_URL}/user`;
+			const responseCheckUserInfo = await axios.post(url, null, {
+				headers: {
+					Authorization: `Bearer ${responseCheckSigninData.idToken}`,
+					"Content-Type": CONTENT_TYPE,
+				},
+				timeout: TIMEOUT,
+			});
+			console.log("responseCheckUserInfo.data: ", responseCheckUserInfo.data);
+			console.log(
+				"responseCheckUserInfo.data.data.signInUp: ",
+				responseCheckUserInfo.data.data.signInUp,
+			);
+			await EncryptedStorage.setItem(
+				"accessToken",
+				responseCheckUserInfo.data.data.tokenInfo.accessToken,
+			);
+			await EncryptedStorage.setItem(
+				"refreshToken",
+				responseCheckUserInfo.data.data.tokenInfo.refreshToken,
+			);
+			// encryptedStorage에 저장된 토큰을 확인
+			const accessToken = await EncryptedStorage.getItem("accessToken");
+			const refreshToken = await EncryptedStorage.getItem("refreshToken");
+			console.log("accessToken: ", accessToken);
+			console.log("refreshToken: ", refreshToken);
+			if (responseCheckUserInfo.data.data.signInUp === "회원가입 성공") {
+				console.log("회원가입 성공했습니다. 추가정보를 입력해야합니다.");
+				// navigation.navigate("AddInfo"); 그에 대한 로직이 필요함
+			} else if (responseCheckUserInfo.data.data.signInUp === "로그인 성공") {
+				console.log("로그인 성공했습니다. 메인페이지로 이동합니다.");
+				// navigation.navigate("Main"); 그에 대한 로직이 필요함
+			}
+		} catch (error) {
+			console.error(error);
+		}
 	};
 
 	return (
@@ -36,9 +85,10 @@ const Main = ({ navigation }: any) => {
 					<Image source={LoginImg} style={LoginLayout.Img1} />
 				</View>
 
+				<Button title="Google 로그아웃" onPress={GoogleSignin.signOut} />
 				<TouchableOpacity
 					style={LoginLayout.BtnContainer}
-					onPress={() => Alert.alert("로그인을 연결 부탁드릴께요")}
+					onPress={handleGoogleLogin}
 				>
 					<View style={LoginLayout.LoginBtn}>
 						<Image style={LoginLayout.btnImg} source={GoogleImg} />
@@ -61,4 +111,4 @@ const Main = ({ navigation }: any) => {
 	);
 };
 
-export default Main;
+export default Login;

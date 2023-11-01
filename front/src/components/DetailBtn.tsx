@@ -1,4 +1,4 @@
-import { Image, StyleSheet, Text, TouchableOpacity } from "react-native";
+import { Alert, Image, StyleSheet, Text, TouchableOpacity } from "react-native";
 import icon from "../../assets/images/right-arrow-icon.png";
 import {
 	responsiveHeight,
@@ -6,9 +6,12 @@ import {
 } from "react-native-responsive-dimensions";
 
 const DetailBtn = () => {
+	const press = () => {
+		Alert.alert("눌렀다!");
+	};
 	return (
 		<>
-			<TouchableOpacity style={style.btnWrap}>
+			<TouchableOpacity style={style.btnWrap} onPress={() => press()}>
 				<Text style={style.btnText}>Detail</Text>
 				<Image source={icon} style={style.btnImg} />
 			</TouchableOpacity>
@@ -22,9 +25,11 @@ const style = StyleSheet.create({
 	btnWrap: {
 		backgroundColor: "black",
 		borderRadius: 80,
-		marginVertical: responsiveHeight(1),
 		height: responsiveHeight(3.8),
-		width: responsiveWidth(20),
+		marginTop: -responsiveHeight(1),
+		marginBottom: responsiveHeight(0.5),
+		width: responsiveWidth(22),
+		paddingHorizontal: responsiveWidth(1),
 		flex: 1,
 		flexDirection: "row",
 		justifyContent: "space-between",
