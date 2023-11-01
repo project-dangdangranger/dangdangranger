@@ -16,6 +16,7 @@ import { StackNavigation } from "../../App";
 import CustomTextComponent from "../recycles/CustomText";
 import RadioBtn from "../recycles/RadioBtn";
 import { useState } from "react";
+import PatrolDiaryCard from "../components/PatrolDiaryCard";
 
 const PatrolDiary = () => {
 	const { navigate } = useNavigation<StackNavigation>();
@@ -72,6 +73,20 @@ const PatrolDiary = () => {
 							placeholder="실종견의 정보를 입력해주세요."
 						/>
 					</View>
+					<ScrollView>
+						<View style={PatrolDiaryLayout.patrolRowWrap}>
+							<PatrolDiaryCard imgSrc={img} />
+							<PatrolDiaryCard imgSrc={img} />
+						</View>
+						<View style={PatrolDiaryLayout.patrolRowWrap}>
+							<PatrolDiaryCard imgSrc={img} />
+							<PatrolDiaryCard imgSrc={img} />
+						</View>
+						<View style={PatrolDiaryLayout.patrolRowWrap}>
+							<PatrolDiaryCard imgSrc={img} />
+							<PatrolDiaryCard imgSrc={img} />
+						</View>
+					</ScrollView>
 				</View>
 				<TouchableOpacity onPress={() => navigate("PatrolDiaryWrite")}>
 					<Text>Hi</Text>
