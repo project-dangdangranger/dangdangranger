@@ -1,12 +1,21 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Text, View, PermissionsAndroid, Dimensions } from "react-native";
-import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
+import MapView, { PROVIDER_GOOGLE, Polyline } from "react-native-maps";
 import Geolocation from "react-native-geolocation-service";
-const GoogleMap = ({ navigation }: any) => {
+
+type Location = {
+	latitude: number;
+	longitude: number;
+	latitudeDelta: number;
+	longitudeDelta: number;
+};
+
+const GoogleMap = () => {
 	const mapWidth = Dimensions.get("window").width;
 	const mapHeight = Dimensions.get("window").height;
-	const [location, setLocation] = useState(null as any);
-	const [watchId, setWatchId] = useState(null as any);
+	const [location, setLocation] = useState<Location | null>(null);
+	const [positions, setPositions] = useState<Location[]>([]);
+	const [watchId, setWatchId] = useState<number | null>(null);
 
 	useEffect(() => {
 		requestPermission();
@@ -39,12 +48,14 @@ const GoogleMap = ({ navigation }: any) => {
 	const getCurrentLocation = () => {
 		Geolocation.getCurrentPosition(
 			(position) => {
-				setLocation({
+				const newLocation: Location = {
 					latitude: position.coords.latitude,
 					longitude: position.coords.longitude,
 					latitudeDelta: 0.009,
 					longitudeDelta: 0.009,
-				});
+				};
+				setLocation(newLocation);
+				setPositions([newLocation]);
 			},
 			(error) => {
 				console.log(error.code, error.message);
@@ -56,12 +67,14 @@ const GoogleMap = ({ navigation }: any) => {
 	const startWatchingLocation = () => {
 		return Geolocation.watchPosition(
 			(position) => {
-				setLocation({
+				const newLocation: Location = {
 					latitude: position.coords.latitude,
 					longitude: position.coords.longitude,
 					latitudeDelta: 0.009,
 					longitudeDelta: 0.009,
-				});
+				};
+				setLocation(newLocation);
+				setPositions((prev) => [...prev, newLocation]);
 			},
 			(error) => {
 				console.log(error.code, error.message);
@@ -88,7 +101,13 @@ const GoogleMap = ({ navigation }: any) => {
 				zoomEnabled={true}
 				rotateEnabled={true}
 				initialRegion={location}
-			></MapView>
+			>
+				<Polyline
+					coordinates={positions}
+					strokeColor="#000" // fallback for when `strokeColors` is not supported by the map-provider
+					strokeWidth={4}
+				/>
+			</MapView>
 		</View>
 	);
 };
