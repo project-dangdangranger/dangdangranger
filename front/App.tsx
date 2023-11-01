@@ -15,6 +15,7 @@ import Report from "./src/screens/Report";
 import ReportDorList from "./src/screens/ReportDorList";
 import PatrolMain from "./src/screens/PatrolMain";
 import PatrolGo from "./src/screens/PatrolGo";
+import GoogleMap from "./src/screens/GoogleMap";
 import PatrolMap from "./src/screens/PatrolMap";
 import PatrolLog from "./src/screens/PatrolLog";
 import PatrolDiary from "./src/screens/PatrolDiary";
@@ -25,6 +26,12 @@ import MissingRegist from "./src/screens/MissingRegist";
 import MissingDetail from "./src/screens/MissingDetail";
 import CreateMissingDog from "./src/screens/CreateMissingDog";
 import Login from "./src/screens/Login";
+import PatrolDiaryWrite from "./src/screens/PatrolDiaryWrite";
+import MissingMain from "./src/screens/MissingMain";
+import MissingFind from "./src/screens/MissingFind";
+import MissingRegist from "./src/screens/MissingRegist";
+import MissingDetail from "./src/screens/MissingDetail";
+import CreateMissingDog from "./src/screens/CreateMissingDog";
 
 const App = () => {
 	const Stack = createNativeStackNavigator();
@@ -54,6 +61,7 @@ const App = () => {
 					<Stack.Screen name="ReportDorList" component={ReportDorList} />
 					<Stack.Screen name="PatrolMain" component={PatrolMain} />
 					<Stack.Screen name="PatrolGo" component={PatrolGo} />
+					<Stack.Screen name="GoogleMap" component={GoogleMap} />
 					<Stack.Screen name="PatrolMap" component={PatrolMap} />
 					<Stack.Screen name="PatrolLog" component={PatrolLog} />
 					<Stack.Screen name="PatrolDiary" component={PatrolDiary} />
@@ -64,6 +72,12 @@ const App = () => {
 					<Stack.Screen name="MissingDetail" component={MissingDetail} />
 					<Stack.Screen name="CreateMissingDog" component={CreateMissingDog} />
 					<Stack.Screen name="Login" component={Login} />
+					<Stack.Screen name="PatrolDiaryWrite" component={PatrolDiaryWrite} />
+					<Stack.Screen name="MissingMain" component={MissingMain} />
+					<Stack.Screen name="MissingFind" component={MissingFind} />
+					<Stack.Screen name="MissingRegist" component={MissingRegist} />
+					<Stack.Screen name="MissingDetail" component={MissingDetail} />
+					<Stack.Screen name="CreateMissingDog" component={CreateMissingDog} />
 				</Stack.Navigator>
 			</NavigationContainer>
 		</>
