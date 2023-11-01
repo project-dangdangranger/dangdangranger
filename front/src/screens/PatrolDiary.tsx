@@ -18,6 +18,8 @@ import RadioBtn from "../recycles/RadioBtn";
 import { useState } from "react";
 import PatrolDiaryCard from "../components/PatrolDiaryCard";
 
+import dotIconImg from "../../assets/images/3-dot-icon.png";
+
 const PatrolDiary = () => {
 	const { navigate } = useNavigation<StackNavigation>();
 	const [selectedOption, setSelectedOption] = useState("최신순");
@@ -65,6 +67,12 @@ const PatrolDiary = () => {
 									selected={selectedOption === "내일지"}
 									onPress={() => setSelectedOption("내일지")}
 								/>
+								<TouchableOpacity onPress={() => navigate("PatrolDiaryWrite")}>
+									<Image
+										source={dotIconImg}
+										style={PatrolDiaryLayout.iconImg}
+									/>
+								</TouchableOpacity>
 							</View>
 						</View>
 						<TextInput

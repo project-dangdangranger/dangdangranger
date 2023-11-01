@@ -79,6 +79,11 @@ const PatrolDiaryLayout = StyleSheet.create({
 		marginTop: responsiveHeight(2),
 	},
 
+	iconImg: {
+		width: 30,
+		height: 30,
+	},
+
 	debug: {
 		borderWidth: 2,
 		backgroundColor: "red",
