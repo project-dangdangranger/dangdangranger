@@ -1,16 +1,11 @@
-import { Image, StyleSheet, TouchableOpacity, View, Text } from "react-native";
-import PatrolStopImg from "../../assets/images/PatrolStop.png";
+import { StyleSheet, View } from "react-native";
 import { useEffect, useState } from "react";
 import {
 	responsiveHeight,
 	responsiveWidth,
 } from "react-native-responsive-dimensions";
-import VibratingImage from "./VibratingImage";
-import stopImg from "../../assets/images/Stop.png";
-import startImg from "../../assets/images/Start.png";
-import endImg from "../../assets/images/End.png";
 import PatrolStartBtn from "./PatrolStartBtn";
-import Patroling from "../../assets/images/Patroling.png";
+import PatrolStopBtn from "./PatrolStopBtn";
 
 const PatrolBtn = () => {
 	const [start, setStart] = useState(true);
@@ -24,34 +19,11 @@ const PatrolBtn = () => {
 		<>
 			<View style={styles.container}>
 				{patrol ? (
-					<>
-						<VibratingImage
-							start={start}
-							source={PatrolStopImg}
-							style={styles.ImgContainer}
-						></VibratingImage>
-						<Image style={styles.Patroling} source={Patroling} />
-						<TouchableOpacity
-							style={styles.stopContainer}
-							onPress={() => {
-								setStart(!start);
-							}}
-						>
-							{start ? (
-								<Image style={styles.ImgStop} source={stopImg} />
-							) : (
-								<Image style={styles.ImgStart} source={startImg} />
-							)}
-						</TouchableOpacity>
-						<TouchableOpacity
-							style={styles.stopContainer}
-							onPress={() => {
-								setPatrol(false);
-							}}
-						>
-							<Image style={styles.ImgEnd} source={endImg} />
-						</TouchableOpacity>
-					</>
+					<PatrolStopBtn
+						start={start}
+						setStart={setStart}
+						setPatrol={setPatrol}
+					/>
 				) : (
 					<PatrolStartBtn setPatrol={setPatrol} />
 				)}
