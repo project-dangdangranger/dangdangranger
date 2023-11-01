@@ -40,8 +40,7 @@ public class PatrolLogController {
     }
 
     @GetMapping()
-    public ResponseEntity<ResponseDto<List<PatrolLogRoughInfoResponseDto>>> readAllPatrolLog(
-        @RequestAttribute("userNo") Integer userNo) {
+    public ResponseEntity<ResponseDto<List<PatrolLogRoughInfoResponseDto>>> readAllPatrolLog() {
         return ResponseEntity.status(HttpStatus.OK)
             .body(ResponseDto.create(READ_ALL_PATROL_LOG_SUCCESS.message(), patrolLogService.readAllPatrolLog()));
     }

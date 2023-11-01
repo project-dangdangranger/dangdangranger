@@ -43,6 +43,8 @@ public class PatrolLogServiceImpl implements PatrolLogService {
         Dong dong = dongRepository.findDongByDongCode(patrolLogSaveRequestDto.getDong())
             .orElseThrow(() -> new NotFoundException(DONG_NOT_FOUND_EXCEPTION.message()));
 
+        log.debug("[createPatrolLog] dong : {}", dong);
+
         patrolLogRepository.save(PatrolLog.builder()
             .user(user)
             .dong(dong)
@@ -52,7 +54,7 @@ public class PatrolLogServiceImpl implements PatrolLogService {
             .patrolLogImageUrl(patrolLogSaveRequestDto.getPatrolLogImageUrl())
             .patrolLogLat(patrolLogSaveRequestDto.getPatrolLogLat())
             .patrolLogLng(patrolLogSaveRequestDto.getPatrolLogLng())
-            .patrolWritten(NOT_WRITTEN.value())
+            .patrolLogWritten(NOT_WRITTEN.value())
             .build());
     }
 

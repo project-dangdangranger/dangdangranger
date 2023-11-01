@@ -26,7 +26,7 @@ public class PatrolLog extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "log")
+    @Column(name = "patrol_log_no")
     private Integer patrolLogNo;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -43,11 +43,11 @@ public class PatrolLog extends BaseEntity {
     private Double patrolLogLat;
     private Double patrolLogLng;
     private String patrolLogImageUrl;
-    private Integer patrolWritten;
+    private Integer patrolLogWritten;
 
     @Builder
     public PatrolLog(Integer patrolLogNo, User user, Dong dong, LocalDateTime patrolLogDate,
-        Double patrolLogTotalDistance, Integer patrolLogTotalTime, Integer patrolWritten,
+        Double patrolLogTotalDistance, Integer patrolLogTotalTime, Integer patrolLogWritten,
         Double patrolLogLat, Double patrolLogLng, String patrolLogImageUrl) {
         this.patrolLogNo = patrolLogNo;
         this.user = user;
@@ -55,7 +55,7 @@ public class PatrolLog extends BaseEntity {
         this.patrolLogDate = patrolLogDate;
         this.patrolLogTotalDistance = patrolLogTotalDistance;
         this.patrolLogTotalTime = patrolLogTotalTime;
-        this.patrolWritten = patrolWritten;
+        this.patrolLogWritten = patrolLogWritten;
         this.patrolLogLat = patrolLogLat;
         this.patrolLogLng = patrolLogLng;
         this.patrolLogImageUrl = patrolLogImageUrl;
