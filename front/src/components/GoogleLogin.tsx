@@ -55,10 +55,21 @@ const GoogleLogin = () => {
 		}
 	};
 
+	const handleGoogleLogout = async () => {
+		try {
+			await GoogleSignin.revokeAccess();
+			await GoogleSignin.signOut();
+			await EncryptedStorage.removeItem("accessToken");
+			await EncryptedStorage.removeItem("refreshToken");
+		} catch (error) {
+			console.error(error);
+		}
+	};
+
 	return (
 		<>
 			<Button title="Google 로그인" onPress={handleGoogleLogin} />
-			<Button title="Google 로그아웃" onPress={GoogleSignin.signOut} />
+			<Button title="Google 로그아웃" onPress={handleGoogleLogout} />
 		</>
 	);
 };
