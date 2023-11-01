@@ -1,4 +1,11 @@
-import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
+import {
+	Image,
+	ScrollView,
+	Text,
+	TextInput,
+	TouchableOpacity,
+	View,
+} from "react-native";
 import ColorHeader from "../recycles/ColorHeader";
 import CommonLayout from "../recycles/CommonLayout";
 import FooterBar from "../recycles/FooterBar";
@@ -59,6 +66,11 @@ const PatrolDiary = () => {
 								/>
 							</View>
 						</View>
+						<TextInput
+							style={PatrolDiaryLayout.formInput}
+							onChangeText={() => {}}
+							placeholder="실종견의 정보를 입력해주세요."
+						/>
 					</View>
 				</View>
 				<TouchableOpacity onPress={() => navigate("PatrolDiaryWrite")}>
