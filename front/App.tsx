@@ -20,6 +20,7 @@ import PatrolMap from "./src/screens/PatrolMap";
 import PatrolLog from "./src/screens/PatrolLog";
 import PatrolDiary from "./src/screens/PatrolDiary";
 import Login from "./src/screens/Login";
+import PatrolDiaryWrite from "./src/screens/PatrolDiaryWrite";
 
 const App = () => {
 	const Stack = createNativeStackNavigator();
@@ -54,6 +55,7 @@ const App = () => {
 					<Stack.Screen name="PatrolLog" component={PatrolLog} />
 					<Stack.Screen name="PatrolDiary" component={PatrolDiary} />
 					<Stack.Screen name="Login" component={Login} />
+					<Stack.Screen name="PatrolDiaryWrite" component={PatrolDiaryWrite} />
 				</Stack.Navigator>
 			</NavigationContainer>
 		</>

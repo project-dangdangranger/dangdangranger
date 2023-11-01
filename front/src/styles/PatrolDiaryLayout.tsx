@@ -6,21 +6,32 @@ import {
 
 const PatrolDiaryLayout = StyleSheet.create({
 	container: {
-		height: responsiveHeight(42),
+		height: responsiveHeight(72),
 		alignItems: "center",
 	},
 
-	titleWrap: {
-		marginVertical: responsiveHeight(2),
-		width: responsiveWidth(80),
+	headerWrap: {
+		marginTop: responsiveHeight(1.5),
+		width: responsiveWidth(88),
 	},
-	titleText: {
+	headerTextDesc: {
+		fontWeight: "600",
+	},
+	headerTextTitle: {
 		fontSize: 25,
-		fontWeight: "bold",
+		fontWeight: "900",
 		color: "black",
 	},
-	titleTextColored: {
-		color: "#70C8EE",
+	headerRowWrap: {
+		flexDirection: "row",
+		justifyContent: "space-between",
+	},
+
+	radioWrap: {
+		flexDirection: "row",
+		justifyContent: "center",
+		alignItems: "center",
+		// backgroundColor: "blue",
 	},
 
 	imgWrap: {
