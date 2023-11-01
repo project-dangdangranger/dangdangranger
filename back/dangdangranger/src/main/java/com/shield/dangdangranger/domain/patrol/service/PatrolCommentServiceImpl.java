@@ -10,6 +10,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
+import static com.shield.dangdangranger.domain.patrol.constant.PatrolCommentResponseMessage.PATROL_COMMENT_NOT_FOUND_EXCEPTION;
 import static com.shield.dangdangranger.domain.user.constant.UserExceptionMessage.USER_NOT_FOUND_EXCEPTION;
 import static com.shield.dangdangranger.global.constant.BaseConstant.NOTCANCELED;
 
@@ -35,4 +38,15 @@ public class PatrolCommentServiceImpl implements PatrolCommentService{
 
         return patrolComment;
     }
+
+    @Override
+    public void updatePatrolComment(UpdateRequestDto updateRequestDto) {
+        PatrolComment comment = patrolCommentRepository.findPatrolCommentByPatrolCommentNoAndCanceled(updateRequestDto.getPatrolCommentNo(), NOTCANCELED)
+                .orElseThrow(() -> new NotFoundException(PATROL_COMMENT_NOT_FOUND_EXCEPTION.message()));
+
+        comment.updatePatrolComment(updateRequestDto.getPatrolCommentContent());
+        patrolCommentRepository.save(comment);
+
+    }
+
 }

@@ -15,4 +15,13 @@ public class PatrolCommentRequestDto {
         private Integer patrolNo;
         private String patrolCommentContent;
     }
+
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Builder
+    public static class UpdateRequestDto{
+        private Integer patrolCommentNo;
+        private String patrolCommentContent;
+    }
 }

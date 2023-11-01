@@ -2,16 +2,17 @@ package com.shield.dangdangranger.domain.patrol.service;
 
 import com.shield.dangdangranger.domain.Image.entity.Image;
 import com.shield.dangdangranger.domain.Image.repo.ImageRepository;
+import com.shield.dangdangranger.domain.patrol.dto.PatrolCommentResponseDto.*;
 import com.shield.dangdangranger.domain.patrol.dto.PatrolReportRequestDto.*;
 import com.shield.dangdangranger.domain.patrol.dto.PatrolReportResponseDto.*;
+import com.shield.dangdangranger.domain.patrol.entity.PatrolComment;
 import com.shield.dangdangranger.domain.patrol.entity.PatrolLog;
 import com.shield.dangdangranger.domain.patrol.entity.PatrolReport;
+import com.shield.dangdangranger.domain.patrol.repo.PatrolCommentRepository;
 import com.shield.dangdangranger.domain.patrol.repo.PatrolLogRepository;
 import com.shield.dangdangranger.domain.patrol.repo.PatrolReportRepository;
 import com.shield.dangdangranger.domain.user.entity.User;
 import com.shield.dangdangranger.domain.user.repo.UserRepository;
-import com.shield.dangdangranger.global.constant.BaseConstant;
-import com.shield.dangdangranger.global.entity.BaseEntity;
 import com.shield.dangdangranger.global.error.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,7 +21,6 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static com.shield.dangdangranger.domain.Image.constant.ImageExceptionMessage.IMAGE_NOT_FOUND_EXCEPTION;
 import static com.shield.dangdangranger.domain.patrol.constant.PatrolLogResponseMessage.PATROL_LOG_NOT_FOUND_EXCEPTION;
@@ -38,6 +38,7 @@ public class PatrolReportServiceImpl implements PatrolReportService {
     private final PatrolLogRepository patrolLogRepository;
     private final ImageRepository imageRepository;
     private final UserRepository userRepository;
+    private final PatrolCommentRepository patrolCommentRepository;
 
     @Override
     public PatrolReport registPatrolReport(Integer userNo, PatrolReportSaveRequestDto patrolReportSaveRequestDto) {
@@ -141,6 +142,19 @@ public class PatrolReportServiceImpl implements PatrolReportService {
         User user = userRepository.findUserByUserNoAndCanceled(infoResponseDto.getUserNo(), NOTCANCELED)
                 .orElseThrow(() -> new NotFoundException(USER_NOT_FOUND_EXCEPTION.message()));
 
+        //순찰일지의 댓글 리스트
+        List<PatrolComment> patrolComments = patrolCommentRepository.findAllByPatrolNoAndCanceled(patrolNo, NOTCANCELED);
+        List<CommentInfoResponseDto> commentList = new ArrayList<>();
+        for(PatrolComment comment : patrolComments) {
+            CommentInfoResponseDto commentInfo = CommentInfoResponseDto.builder()
+                    .patrolCommentNo(comment.getPatrolCommentNo())
+                    .userName(comment.getUser().getUserName())
+                    .patrolCommentContent(comment.getPatrolCommentContent())
+                    .createDate(comment.getCreateDate())
+                    .build();
+            commentList.add(commentInfo);
+        }
+
         //상세조회시 조회수 증가
         infoResponseDto.updateHit(infoResponseDto.getPatrolReportHit());
 
@@ -158,6 +172,7 @@ public class PatrolReportServiceImpl implements PatrolReportService {
                 .patrolLogLng(patrolLog.getPatrolLogLng())
                 .patrolLogImageUrl(patrolLog.getPatrolLogImageUrl())
                 .patrolReportImages(imageList)
+                .patrolComments(commentList)
                 .build();
     }
 
