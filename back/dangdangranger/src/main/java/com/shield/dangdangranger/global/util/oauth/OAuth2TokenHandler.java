@@ -34,7 +34,7 @@ public class OAuth2TokenHandler {
         Map<String, Object> userAttribute = getUserAttribute(token);
         OAuth2UserInfo oAuth2UserInfo = new OAuth2UserInfo(userAttribute);
         return UserInfoRequestDto.builder()
-            .userId(oAuth2UserInfo.getUserId())
+            .userEmail(oAuth2UserInfo.getUserEmail())
             .userName(oAuth2UserInfo.getUserName())
             .userProfileImg(oAuth2UserInfo.getUserProfileImg())
             .userRole(ROLE_USER)
@@ -43,7 +43,7 @@ public class OAuth2TokenHandler {
 
     private User convertOAuth2UserToUser(OAuth2UserInfo oAuth2UserInfo) {
         return User.builder()
-            .userId(oAuth2UserInfo.getUserId())
+            .userEmail(oAuth2UserInfo.getUserEmail())
             .userName(oAuth2UserInfo.getUserName())
             .userProfileImg(oAuth2UserInfo.getUserProfileImg())
             .userRole(ROLE_USER)

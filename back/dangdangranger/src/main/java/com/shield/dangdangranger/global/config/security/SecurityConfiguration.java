@@ -1,8 +1,8 @@
 package com.shield.dangdangranger.global.config.security;
 
-import com.haru.ppobbi.global.config.filter.ExceptionHandlerFilter;
-import com.haru.ppobbi.global.config.filter.JWTFilter;
-import com.haru.ppobbi.global.config.filter.OAuth2Filter;
+import com.shield.dangdangranger.global.config.filter.ExceptionHandlerFilter;
+import com.shield.dangdangranger.global.config.filter.JWTFilter;
+import com.shield.dangdangranger.global.config.filter.OAuth2Filter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

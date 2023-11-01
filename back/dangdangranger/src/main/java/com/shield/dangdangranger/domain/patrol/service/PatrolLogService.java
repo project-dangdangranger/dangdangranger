@@ -1,5 +1,12 @@
 package com.shield.dangdangranger.domain.patrol.service;
 
-public interface PatrolLogService {
+import com.shield.dangdangranger.domain.patrol.dto.PatrolLogRequestDto.PatrolLogSaveRequestDto;
+import com.shield.dangdangranger.domain.patrol.dto.PatrolLogResponseDto.PatrolLogDetailInfoResponseDto;
+import com.shield.dangdangranger.domain.patrol.dto.PatrolLogResponseDto.PatrolLogRoughInfoResponseDto;
+import java.util.List;
 
+public interface PatrolLogService {
+    void createPatrolLog(Integer userNo, PatrolLogSaveRequestDto patrolLogSaveRequestDto);
+    List<PatrolLogRoughInfoResponseDto> readAllPatrolLog();
+    PatrolLogDetailInfoResponseDto readOnePatrolLog(Integer userNo, Integer patrolLogNo);
 }

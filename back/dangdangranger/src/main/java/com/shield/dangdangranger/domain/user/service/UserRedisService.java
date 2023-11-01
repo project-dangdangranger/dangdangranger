@@ -9,9 +9,7 @@ public interface UserRedisService {
 
     UserInfo readUserInfoFromRedis(Integer userNo);
 
-    void updateUserMessageToRedis(User user);
-
     void deleteUserInfoFromRedis(Integer userNo);
 
-    void updateUserNameToRedis(User user);
+    void updateUserInfoToRedis(User user);
 }
