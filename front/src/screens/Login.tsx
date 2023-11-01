@@ -22,8 +22,7 @@ import React, { useEffect } from "react";
 const Login = ({ navigation }: any) => {
 	useEffect(() => {
 		GoogleSignin.configure({
-			webClientId:
-				"448193928442-snl42hn9gjk4bk0h8rq6q0gga01d67o7.apps.googleusercontent.com",
+			webClientId: WEB_CLIENT_ID,
 			offlineAccess: true,
 		});
 	}, []);

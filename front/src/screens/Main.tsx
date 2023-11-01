@@ -19,8 +19,7 @@ import MissingSubImg from "../../assets/images/main-missing.png";
 import ChatBotSubImg from "../../assets/images/main-chatbot.png";
 import FooterBar from "../recycles/FooterBar";
 import { useEffect, useState } from "react";
-import { NativeModules } from "react-native";
-import GoogleLogin from "../components/GoogleLogin";
+// import { NativeModules } from "react-native";
 
 // const { KakaoMapModule } = NativeModules;
 
