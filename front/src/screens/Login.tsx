@@ -3,7 +3,7 @@ import CommonLayout from "../recycles/CommonLayout";
 import MainHeader from "../recycles/MainHeader";
 import FooterBar from "../recycles/FooterBar";
 import LoginImg from "../../assets/images/LoginImg.png";
-import LoginLayout from "../styles/LoginLayout";
+import LoginLayout from "../styles/loginLayout";
 import GoogleImg from "../../assets/images/Google.png";
 
 const Main = ({ navigation }: any) => {
