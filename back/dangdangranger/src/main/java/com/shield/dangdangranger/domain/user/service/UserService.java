@@ -7,6 +7,7 @@ import com.shield.dangdangranger.domain.user.dto.UserRequestDto.UserWalletReques
 import com.shield.dangdangranger.domain.user.dto.UserResponseDto.AccessTokenResponseDto;
 import com.shield.dangdangranger.domain.user.dto.UserResponseDto.SignResponseDto;
 import com.shield.dangdangranger.domain.user.dto.UserResponseDto.UserInfoResponseDto;
+import com.shield.dangdangranger.domain.user.dto.UserResponseDto.UserWalletAddressResponseDto;
 
 public interface UserService {
 
@@ -19,6 +20,8 @@ public interface UserService {
     AccessTokenResponseDto reissueAccessToken(Integer userNo);
 
     void updateUserInfo(Integer userNo, UpdateUserInfoRequestDto updateUserInfoRequestDto);
+
+    UserWalletAddressResponseDto readUserWalletAddress(Integer userNo);
 
     void updateUserWallet(Integer userNo, UserWalletRequestDto userWalletRequestDto);
 

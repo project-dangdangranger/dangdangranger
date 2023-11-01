@@ -36,4 +36,12 @@ public class UserResponseDto {
         private TokenInfo tokenInfo;
         private String signInUp;
     }
+
+    @Getter
+    @AllArgsConstructor
+    @Builder
+    public static class UserWalletAddressResponseDto {
+
+        private String userWalletAddress;
+    }
 }

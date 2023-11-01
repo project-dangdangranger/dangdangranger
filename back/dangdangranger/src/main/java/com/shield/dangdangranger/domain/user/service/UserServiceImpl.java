@@ -18,6 +18,7 @@ import com.shield.dangdangranger.domain.user.dto.UserRequestDto.UserWalletReques
 import com.shield.dangdangranger.domain.user.dto.UserResponseDto.AccessTokenResponseDto;
 import com.shield.dangdangranger.domain.user.dto.UserResponseDto.SignResponseDto;
 import com.shield.dangdangranger.domain.user.dto.UserResponseDto.UserInfoResponseDto;
+import com.shield.dangdangranger.domain.user.dto.UserResponseDto.UserWalletAddressResponseDto;
 import com.shield.dangdangranger.domain.user.entity.User;
 import com.shield.dangdangranger.domain.user.entity.UserInfo;
 import com.shield.dangdangranger.domain.user.repo.UserRepository;
@@ -53,7 +54,7 @@ public class UserServiceImpl implements UserService {
         // 토큰 발급 후, 정보 반환
         TokenInfo tokenInfo = jwtTokenHandler.generateToken(user.getUserNo());
         String signInUp = SIGN_UP.message();
-        if(user.getDong() != null) {
+        if (user.getDong() != null) {
             signInUp = SIGN_IN.message();
         }
         return SignResponseDto.builder()
@@ -155,6 +156,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public UserWalletAddressResponseDto readUserWalletAddress(Integer userNo) {
+        User user = userRepository.findUserByUserNoAndCanceled(userNo, NOTCANCELED)
+            .orElseThrow(() -> new NotFoundException(
+                USER_NOT_FOUND_EXCEPTION.message()));
+        return UserWalletAddressResponseDto.builder()
+            .userWalletAddress(user.getUserWalletAddress())
+            .build();
+    }
+
+    @Override
     @Transactional
     public void updateUserWallet(Integer userNo, UserWalletRequestDto userWalletRequestDto) {
         User user = userRepository.findUserByUserNoAndCanceled(userNo, NOTCANCELED)
@@ -171,7 +182,8 @@ public class UserServiceImpl implements UserService {
             () -> new NotFoundException(USER_NOT_FOUND_EXCEPTION.message())
         );
 
-        if(!passwordEncoder.matches(userWalletPwRequestDto.getUserWalletPw(), user.getUserWalletPw())) {
+        if (!passwordEncoder.matches(userWalletPwRequestDto.getUserWalletPw(),
+            user.getUserWalletPw())) {
             throw new NotFoundException(USER_WALLET_PW_NOT_CORRECT.message());
         }
     }
