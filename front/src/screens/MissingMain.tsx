@@ -10,18 +10,22 @@ import MainLayout from "../styles/mainLayout";
 import Carousel from "../components/Carousel";
 import MissingTwoBtn from "../components/MissingTwoBtn";
 import FooterBar from "../recycles/FooterBar";
+import { responsiveWidth } from "react-native-responsive-dimensions";
+
+import Ddd from "../recycles/MultiPicture";
 
 const MissingMain = () => {
 	const [patrol, setPatrol] = useState(0);
 	const [missing, setMissing] = useState(0);
-
 	return (
 		<>
 			<CommonLayout>
 				<ColorHeader title="실종" />
 				<View style={MainLayout.walkMainWrap}>
 					<MissingCount patrol={patrol} missing={missing} />
-					<Carousel />
+					{/* <Carousel /> */}
+
+					<Ddd />
 				</View>
 				<MissingTwoBtn />
 			</CommonLayout>
