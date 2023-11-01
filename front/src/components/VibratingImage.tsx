@@ -1,33 +1,48 @@
 import React, { useRef, useEffect } from "react";
 import { Animated, Easing } from "react-native";
+import {
+	responsiveHeight,
+	responsiveWidth,
+} from "react-native-responsive-dimensions";
 
 const RotatingImage = ({ start, source, style }: any) => {
 	const animationValue = useRef(new Animated.Value(0)).current;
+	const currentAngle = useRef(0); // 현재 각도를 저장하는 ref
 
 	useEffect(() => {
+		const runAnimation = () => {
+			animationValue.setValue(currentAngle.current); // 현재 각도에서 시작
+			Animated.timing(animationValue, {
+				toValue: currentAngle.current + 360,
+				duration: 4000,
+				easing: Easing.linear,
+				useNativeDriver: false,
+			}).start(({ finished }) => {
+				if (finished) {
+					currentAngle.current += 360; // 한 바퀴 회전을 마침
+					currentAngle.current %= 360; // 값을 0-359 범위로 유지
+					runAnimation(); // 다음 회전 시작
+				}
+			});
+		};
+
 		if (start) {
-			animationValue.setValue(0); // 초기화
-			Animated.loop(
-				Animated.timing(animationValue, {
-					toValue: 1,
-					duration: 4000, // 4 seconds for a 360 degree rotation
-					easing: Easing.linear,
-					useNativeDriver: true,
-				}),
-			).start();
+			runAnimation();
 		} else {
-			animationValue.stopAnimation();
-			// 그다음 위치 기 억한다음 저장해야 함
+			animationValue.stopAnimation((value) => {
+				currentAngle.current = value % 360; // 멈춘 각도를 저장
+			});
 		}
 	}, [start]);
 
 	const rotation = animationValue.interpolate({
-		inputRange: [0, 1],
+		inputRange: [0, 360],
 		outputRange: ["0deg", "360deg"],
 	});
 
 	const animatedStyle = {
 		transform: [{ rotate: rotation }],
+		height: responsiveHeight(40),
 	};
 
 	return <Animated.Image source={source} style={[style, animatedStyle]} />;

@@ -1,20 +1,20 @@
 import { Image, StyleSheet, View, TouchableOpacity } from "react-native";
-import PatrolStartImg from "../../assets/images/patrol-start-btnImg.png";
-import { useState } from "react";
+import PatrolStartImg from "../../assets/images/PatrolStart.png";
 import {
 	responsiveHeight,
 	responsiveWidth,
 } from "react-native-responsive-dimensions";
-import VibratingImage from "./VibratingImage";
-import { useNavigation } from "@react-navigation/native";
 
-const PatrolBtn = () => {
-	const [isPatrol, setIsPatrol] = useState(false);
+interface PatrolBtnProps {
+	setPatrol: (active: boolean) => void;
+}
+
+const PatrolBtn: React.FC<PatrolBtnProps> = ({ setPatrol }) => {
 	return (
 		<>
 			<View style={styles.container}>
-				<TouchableOpacity onPress={() => {}}>
-					<Image source={PatrolStartImg}></Image>
+				<TouchableOpacity onPress={() => setPatrol(true)}>
+					<Image style={styles.StartImg} source={PatrolStartImg}></Image>
 				</TouchableOpacity>
 			</View>
 		</>
@@ -23,10 +23,7 @@ const PatrolBtn = () => {
 
 const styles = StyleSheet.create({
 	container: {
-		// justifyContent: "center",
-		// backgroundColor: "red",
 		alignItems: "center",
-		marginBottom: responsiveHeight(10),
 	},
 	button: {
 		width: responsiveWidth(70),
@@ -52,6 +49,11 @@ const styles = StyleSheet.create({
 		height: 30,
 		position: "absolute",
 		left: -35,
+	},
+	StartImg: {
+		// marginBottom: 10,
+		height: responsiveHeight(40),
+		transform: [{ scale: 0.925 }],
 	},
 });
 
