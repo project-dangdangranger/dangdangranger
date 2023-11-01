@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
-import { Text, View, PermissionsAndroid } from "react-native";
+import { Text, View, PermissionsAndroid, Dimensions } from "react-native";
 import MapView, { PROVIDER_GOOGLE, Marker } from "react-native-maps";
 import Geolocation from "react-native-geolocation-service";
-
 const GoogleMap = ({ navigation }: any) => {
+	const mapWidth = Dimensions.get("window").width;
+	const mapHeight = Dimensions.get("window").height;
 	const [location, setLocation] = useState(null as any);
-
 	useEffect(() => {
 		requestPermission();
 	}, []);
@@ -16,18 +16,22 @@ const GoogleMap = ({ navigation }: any) => {
 				PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
 			);
 			if (result === PermissionsAndroid.RESULTS.GRANTED) {
+				console.log("ACCESS_FINE_LOCATION Permission granted");
 				Geolocation.getCurrentPosition(
 					(position) => {
-						console.log("position : ", position);
-						setLocation(position.coords);
+						console.log(position);
+						setLocation({
+							latitude: position.coords.latitude,
+							longitude: position.coords.longitude,
+							latitudeDelta: 0.009,
+							longitudeDelta: 0.009,
+						});
 					},
 					(error) => {
-						console.error("error.code : ", error.message);
 						console.log(error.code, error.message);
 					},
 					{ enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 },
 				);
-				console.log("ACCESS_FINE_LOCATION Permission granted");
 			} else {
 				console.log("ACCESS_FINE_LOCATION Permission denied");
 			}
@@ -48,17 +52,19 @@ const GoogleMap = ({ navigation }: any) => {
 	return (
 		<View style={{ flex: 1 }}>
 			<MapView
-				style={{ flex: 1 }}
+				style={{ width: mapWidth, height: mapHeight }}
 				provider={PROVIDER_GOOGLE}
-				initialRegion={{
-					latitude: location.latitude,
-					longitude: location.longitude,
-					latitudeDelta: 0.0922,
-					longitudeDelta: 0.0421,
-				}}
+				showsUserLocation={true}
+				showsMyLocationButton={true}
+				zoomEnabled={true}
+				rotateEnabled={true}
+				initialRegion={location}
 			>
 				<Marker
-					coordinate={location}
+					coordinate={{
+						latitude: location.latitude,
+						longitude: location.longitude,
+					}}
 					title="My Location"
 					description="This is my current location"
 				/>
