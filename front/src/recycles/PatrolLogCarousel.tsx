@@ -29,7 +29,7 @@ export default PatrolLogCarousel;
 
 const style = StyleSheet.create({
 	scrollWrap: {
-		height: responsiveHeight(25),
+		height: responsiveHeight(24),
 		width: "100%",
 	},
 	cardWrap: {
