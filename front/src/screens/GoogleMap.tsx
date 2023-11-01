@@ -1,5 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { Text, View, PermissionsAndroid, Dimensions } from "react-native";
+import {
+	Text,
+	View,
+	PermissionsAndroid,
+	Dimensions,
+	Button,
+} from "react-native";
 import MapView, { PROVIDER_GOOGLE, Polyline } from "react-native-maps";
 import Geolocation from "react-native-geolocation-service";
 
@@ -13,8 +19,9 @@ type Location = {
 const GoogleMap = () => {
 	const mapWidth = Dimensions.get("window").width;
 	const mapHeight = Dimensions.get("window").height;
-	const [location, setLocation] = useState<Location | null>(null);
+	const [location, setLocation] = useState<Location | undefined>();
 	const [positions, setPositions] = useState<Location[]>([]);
+	const [savedRoutes, setSavedRoutes] = useState<Location[][]>([]); // 저장된 경로들을 저장할 상태
 	const [watchId, setWatchId] = useState<number | null>(null);
 
 	useEffect(() => {
@@ -83,13 +90,10 @@ const GoogleMap = () => {
 		);
 	};
 
-	if (!location) {
-		return (
-			<View>
-				<Text>Location 없음</Text>
-			</View>
-		);
-	}
+	const saveCurrentRoute = () => {
+		setSavedRoutes((prevRoutes) => [...prevRoutes, positions]);
+		setPositions([]); // 경로 저장 후 현재 경로 초기화
+	};
 
 	return (
 		<View style={{ flex: 1 }}>
@@ -107,7 +111,16 @@ const GoogleMap = () => {
 					strokeColor="#000" // fallback for when `strokeColors` is not supported by the map-provider
 					strokeWidth={4}
 				/>
+				{savedRoutes.map((route, index) => (
+					<Polyline
+						key={index}
+						coordinates={route}
+						strokeColor="#FF0000"
+						strokeWidth={4}
+					/>
+				))}
 			</MapView>
+			<Button title="Save Current Route" onPress={saveCurrentRoute} />
 		</View>
 	);
 };
