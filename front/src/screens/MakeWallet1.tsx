@@ -21,7 +21,7 @@ import AbsoluteVar from "../recycles/FooterBar";
 import MainLayout from "../styles/mainLayout";
 import CustomButton from "../recycles/CustomBtn";
 import NFTImg from "../../assets/images/NFTImg.png";
-import AgreeWalletLayout from "../styles/AgreeWalletLayout";
+import AgreeWalletLayout from "../styles/agreeWalletLayout";
 
 import CheckIcon from "../../assets/images/check-icon.png";
 import WarningIcon from "../../assets/images/warning-icon.png";
