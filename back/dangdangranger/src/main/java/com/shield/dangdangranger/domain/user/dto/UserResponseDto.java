@@ -25,6 +25,7 @@ public class UserResponseDto {
         private String userProfileImg;
         private String userAddress;
         private String userDongCode;
+        private String userWalletAddress;
     }
 
     @Getter
