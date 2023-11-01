@@ -22,7 +22,7 @@ import { useEffect, useState } from "react";
 import { NativeModules } from "react-native";
 import GoogleLogin from "../components/GoogleLogin";
 
-const { KakaoMapModule } = NativeModules;
+// const { KakaoMapModule } = NativeModules;
 
 const Main = ({ navigation }: any) => {
 	const LoginStore = {
@@ -64,7 +64,7 @@ const Main = ({ navigation }: any) => {
 				</View>
 				<CustomButton
 					text="지역 순찰하기"
-					onPress={() => KakaoMapModule.showHelloWorld()}
+					onPress={() => navigation.navigate("GoogleMap")}
 				/>
 				{LoginStore.isLogged ? null : (
 					<View style={MainLayout.mainTextWrap}>

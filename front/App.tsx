@@ -15,6 +15,7 @@ import Report from "./src/screens/Report";
 import ReportDorList from "./src/screens/ReportDorList";
 import PatrolMain from "./src/screens/PatrolMain";
 import PatrolGo from "./src/screens/PatrolGo";
+import GoogleMap from "./src/screens/GoogleMap";
 
 const App = () => {
 	const Stack = createNativeStackNavigator();
@@ -44,6 +45,7 @@ const App = () => {
 					<Stack.Screen name="ReportDorList" component={ReportDorList} />
 					<Stack.Screen name="PatrolMain" component={PatrolMain} />
 					<Stack.Screen name="PatrolGo" component={PatrolGo} />
+					<Stack.Screen name="GoogleMap" component={GoogleMap} />
 				</Stack.Navigator>
 			</NavigationContainer>
 		</>
