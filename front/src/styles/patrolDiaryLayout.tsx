@@ -63,6 +63,15 @@ const PatrolDiaryLayout = StyleSheet.create({
 		bottom: 0,
 	},
 
+	formInput: {
+		width: responsiveWidth(85),
+		height: 36,
+		borderRadius: 12,
+		marginTop: 7,
+		padding: 6,
+		backgroundColor: "rgba(118, 118, 128, 0.12)",
+	},
+
 	debug: {
 		borderWidth: 2,
 		backgroundColor: "red",
