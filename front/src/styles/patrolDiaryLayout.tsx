@@ -72,6 +72,18 @@ const PatrolDiaryLayout = StyleSheet.create({
 		backgroundColor: "rgba(118, 118, 128, 0.12)",
 	},
 
+	patrolRowWrap: {
+		flex: 1,
+		flexDirection: "row",
+		justifyContent: "space-between",
+		marginTop: responsiveHeight(2),
+	},
+
+	iconImg: {
+		width: 30,
+		height: 30,
+	},
+
 	debug: {
 		borderWidth: 2,
 		backgroundColor: "red",
