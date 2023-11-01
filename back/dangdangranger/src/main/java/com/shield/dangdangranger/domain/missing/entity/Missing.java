@@ -13,7 +13,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.shield.dangdangranger.domain.dog.entity.Dog;
-import com.shield.dangdangranger.domain.region.entity.Dong;
+import com.shield.dangdangranger.domain.user.entity.User;
 import com.shield.dangdangranger.global.entity.BaseEntity;
 
 import lombok.AccessLevel;
@@ -41,8 +41,8 @@ public class Missing extends BaseEntity {
     private Dog dog;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "dong_code")
-    private Dong dong;
+    @JoinColumn(name = "user_no")
+    private User user;
 	
 	@Column(name = "missing_content")
     private String missingContent;
@@ -60,12 +60,12 @@ public class Missing extends BaseEntity {
     private Integer missingStatus;
 
 	@Builder
-	public Missing(Integer missingNo, MissingType missingType, Dog dog, Dong dong, String missingContent,
+	public Missing(Integer missingNo, MissingType missingType, Dog dog, User user, String missingContent,
 			LocalDateTime missingDate, Double missingLat, Double missingLng, Integer missingStatus) {
 		this.missingNo = missingNo;
 		this.missingType = missingType;
 		this.dog = dog;
-		this.dong = dong;
+		this.user = user;
 		this.missingContent = missingContent;
 		this.missingDate = missingDate;
 		this.missingLat = missingLat;
