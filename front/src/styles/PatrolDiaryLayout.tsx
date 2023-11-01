@@ -31,6 +31,7 @@ const PatrolDiaryLayout = StyleSheet.create({
 		flexDirection: "row",
 		justifyContent: "center",
 		alignItems: "center",
+		marginTop: responsiveHeight(1),
 		// backgroundColor: "blue",
 	},
 

@@ -39,13 +39,9 @@ const PatrolDiary = () => {
 				<View style={PatrolDiaryLayout.container}>
 					<View style={PatrolDiaryLayout.headerWrap}>
 						<Text>PATROL Service</Text>
-						<View
-							style={[PatrolDiaryLayout.debug, PatrolDiaryLayout.headerRowWrap]}
-						>
+						<View style={PatrolDiaryLayout.headerRowWrap}>
 							<Text style={PatrolDiaryLayout.headerTextTitle}>순찰 일지</Text>
-							<View
-								style={[PatrolDiaryLayout.debug, PatrolDiaryLayout.radioWrap]}
-							>
+							<View style={PatrolDiaryLayout.radioWrap}>
 								<RadioBtn
 									label="최신순"
 									selected={selectedOption === "최신순"}
@@ -55,6 +51,11 @@ const PatrolDiary = () => {
 									label="내동네"
 									selected={selectedOption === "내동네"}
 									onPress={() => setSelectedOption("내동네")}
+								/>
+								<RadioBtn
+									label="내일지"
+									selected={selectedOption === "내일지"}
+									onPress={() => setSelectedOption("내일지")}
 								/>
 							</View>
 						</View>
