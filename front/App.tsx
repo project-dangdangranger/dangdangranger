@@ -15,6 +15,7 @@ import Report from "./src/screens/Report";
 import ReportDorList from "./src/screens/ReportDorList";
 import PatrolMain from "./src/screens/PatrolMain";
 import PatrolGo from "./src/screens/PatrolGo";
+import GoogleMap from "./src/screens/GoogleMap";
 import PatrolMap from "./src/screens/PatrolMap";
 import PatrolLog from "./src/screens/PatrolLog";
 import PatrolDiary from "./src/screens/PatrolDiary";
@@ -48,6 +49,7 @@ const App = () => {
 					<Stack.Screen name="ReportDorList" component={ReportDorList} />
 					<Stack.Screen name="PatrolMain" component={PatrolMain} />
 					<Stack.Screen name="PatrolGo" component={PatrolGo} />
+					<Stack.Screen name="GoogleMap" component={GoogleMap} />
 					<Stack.Screen name="PatrolMap" component={PatrolMap} />
 					<Stack.Screen name="PatrolLog" component={PatrolLog} />
 					<Stack.Screen name="PatrolDiary" component={PatrolDiary} />
