@@ -2,7 +2,7 @@ import { Text, View } from "react-native";
 import ColorHeader from "../recycles/ColorHeader";
 import CommonLayout from "../recycles/CommonLayout";
 import FooterBar from "../recycles/FooterBar";
-import PatrolDiaryWriteLayout from "../styles/PatrolDiaryWriteLayout";
+import PatrolDiaryWriteLayout from "../styles/patrolDiaryWriteLayout";
 
 const PatrolDiaryWrite = () => {
 	return (
