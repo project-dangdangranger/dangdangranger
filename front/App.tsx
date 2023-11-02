@@ -1,5 +1,6 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { NavigationContainer, NavigationProp } from "@react-navigation/native";
+import { RecoilRoot } from "recoil";
 import Main from "./src/screens/Main";
 import Profile from "./src/screens/Profile";
 import Wallet from "./src/screens/Wallet";
@@ -34,7 +35,7 @@ const App = () => {
 	const Stack = createNativeStackNavigator();
 
 	return (
-		<>
+		<RecoilRoot>
 			<NavigationContainer>
 				<Stack.Navigator
 					initialRouteName="Start"
@@ -74,7 +75,7 @@ const App = () => {
 					<Stack.Screen name="Start" component={Start} />
 				</Stack.Navigator>
 			</NavigationContainer>
-		</>
+		</RecoilRoot>
 	);
 };
 
