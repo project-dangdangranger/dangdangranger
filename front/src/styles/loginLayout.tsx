@@ -9,6 +9,13 @@ const styles = StyleSheet.create({
 		flex: 1,
 		backgroundColor: "#fff",
 	},
+	textregister: {
+		flex: 1,
+		justifyContent: "center",
+		alignItems: "center",
+		// marginLeft: responsiveWidth(15),
+		marginTop: responsiveWidth(10),
+	},
 	textcontainer: {
 		flex: 1,
 		justifyContent: "center",
@@ -20,7 +27,7 @@ const styles = StyleSheet.create({
 		fontSize: 30,
 		fontWeight: "900",
 		marginBottom: 10,
-		color: "black",
+		color: "#0349A1",
 	},
 	Text2: {
 		fontSize: 15,
