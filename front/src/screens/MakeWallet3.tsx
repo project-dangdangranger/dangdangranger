@@ -1,27 +1,11 @@
 import { useEffect, useRef, useState } from "react";
 import { View, Text, Image, TouchableOpacity, ScrollView } from "react-native";
-// import GestureFlipView from "../components/GestureFlipView";
 import CommonLayout from "../recycles/CommonLayout";
-// import ProfileItem from "../components/ProfileItem";
-// import NftProfile from "../components/NftProfile";
+import EncryptedStorage from "react-native-encrypted-storage";
+import Clipboard from "@react-native-clipboard/clipboard";
 
-import WhiteHeader from "../recycles/WhiteHeader";
-// import SubMain from "../components/SubMain";
-// import SubMainImg from "../../assets/images/sub-main-bg.png";
-// import rightArrowIcon from "../../assets/images/right-arrow.png";
-import ProfileLayout from "../styles/profileLayout";
-import TempImg from "../../assets/images/templogo.png";
 import Footer from "../recycles/Footer";
 import ColorHeader from "../recycles/ColorHeader";
-import AlbumLayout from "../styles/albumLayout";
-import TempProfileImg from "../../assets/images/dog1.jpg";
-import WhitePenIcon from "../../assets/images/pen-icon.png";
-import FourBtn from "../recycles/PetrolBtn";
-import AbsoluteVar from "../recycles/FooterBar";
-import MainLayout from "../styles/mainLayout";
-import CustomButton from "../recycles/CustomBtn";
-import NFTImg from "../../assets/images/NFTImg.png";
-
 import WalletProcess from "../components/WalletProcess";
 
 import ProtectWalletLayout from "../styles/protectWalletLayout";
@@ -34,15 +18,15 @@ const Profile = ({ navigation }: any) => {
 	const [mnemonic, setMnemonic] = useState<string>("");
 
 	const showMnemonic = () => {
-		// Clipboard.setString(mnemonic);
-		// setClickStatus(true);
+		Clipboard.setString(mnemonic);
+		setClickStatus(true);
 	};
 
 	useEffect(() => {
 		const getMnemonic = async () => {
-			// const mnemonic = await SecureStore.getItemAsync("mnemonic");
-			// console.log("mnemonic", mnemonic);
-			// setMnemonic(String(mnemonic));
+			const mnemonic = await EncryptedStorage.getItem("mnemonic");
+			console.log("mnemonic", mnemonic);
+			setMnemonic(String(mnemonic));
 		};
 		getMnemonic();
 	}, []);
