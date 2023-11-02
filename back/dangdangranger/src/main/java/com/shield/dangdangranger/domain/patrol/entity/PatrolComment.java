@@ -17,11 +17,8 @@ public class PatrolComment extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "patrol_comment_no")
     private Integer patrolCommentNo;
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer patrolNo;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_no")
@@ -30,11 +27,15 @@ public class PatrolComment extends BaseEntity {
     @Column(name = "patrol_comment_content")
     private String patrolCommentContent;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "patrol_report_no")
+    private PatrolReport patrolReport;
+
     @Builder
-    public PatrolComment(Integer patrolNo, User user, String patrolCommentContent) {
-        this.patrolNo = patrolNo;
+    public PatrolComment(User user, String patrolCommentContent, PatrolReport patrolReport) {
         this.user = user;
         this.patrolCommentContent = patrolCommentContent;
+        this.patrolReport = patrolReport;
     }
 
     public void updatePatrolComment(String patrolCommentContent){

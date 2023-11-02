@@ -11,7 +11,7 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "patrolreport")
+@Table(name = "patrol_report")
 public class PatrolReport extends BaseEntity {
 
     @Id
@@ -35,7 +35,7 @@ public class PatrolReport extends BaseEntity {
     @JoinColumn(name = "patrol_log_no")
     private PatrolLog patrolLog;
 
-    @OneToMany(mappedBy = "patrol_comment")
+    @OneToMany(mappedBy = "patrolReport")
     private List<PatrolComment> patrolComments = new ArrayList<>();
 
     @Builder

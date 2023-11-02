@@ -9,8 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import static com.shield.dangdangranger.domain.patrol.constant.PatrolCommentResponseMessage.CREATE_PATROL_COMMENT_SUCCESS;
-import static com.shield.dangdangranger.domain.patrol.constant.PatrolCommentResponseMessage.PATROL_COMMENT_UPDATE_SUCCESS;
+import static com.shield.dangdangranger.domain.patrol.constant.PatrolCommentResponseMessage.*;
 
 @RestController
 @RequestMapping("/api/patrolcomment")
@@ -31,6 +30,12 @@ public class PatrolCommentController {
     public ResponseEntity<ResponseDto<String>> updatePatrolComment (@RequestBody UpdateRequestDto updateRequestDto){
         patrolCommentService.updatePatrolComment(updateRequestDto);
         return ResponseEntity.status(HttpStatus.OK).body(ResponseDto.create(PATROL_COMMENT_UPDATE_SUCCESS.message()));
+    }
+
+    @DeleteMapping("/{patrolCommentNo}")
+    public ResponseEntity<ResponseDto<String>> deletePatrolComment(@PathVariable Integer patrolCommentNo) {
+        patrolCommentService.deletePatrolComment(patrolCommentNo);
+        return ResponseEntity.status(HttpStatus.OK).body(ResponseDto.create(PATROL_COMMENT_DELETE_SUCCESS.message()));
     }
 
 

@@ -11,5 +11,7 @@ public interface PatrolCommentService {
 
     public void updatePatrolComment(UpdateRequestDto updateRequestDto);
 
+    public void deletePatrolComment(Integer patrolCommentNo);
+
 
 }

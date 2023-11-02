@@ -143,7 +143,7 @@ public class PatrolReportServiceImpl implements PatrolReportService {
                 .orElseThrow(() -> new NotFoundException(USER_NOT_FOUND_EXCEPTION.message()));
 
         //순찰일지의 댓글 리스트
-        List<PatrolComment> patrolComments = patrolCommentRepository.findAllByPatrolNoAndCanceled(patrolNo, NOTCANCELED);
+        List<PatrolComment> patrolComments = patrolCommentRepository.findAllByPatrolReportAndCanceled(infoResponseDto, NOTCANCELED);
         List<CommentInfoResponseDto> commentList = new ArrayList<>();
         for(PatrolComment comment : patrolComments) {
             CommentInfoResponseDto commentInfo = CommentInfoResponseDto.builder()
