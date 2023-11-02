@@ -1,7 +1,6 @@
 import Main from "./Main";
 import Login from "./Login";
 import EncryptedStorage from "react-native-encrypted-storage";
-import { Text } from "react-native";
 import React, { useEffect, useState } from "react";
 
 const Start = () => {
