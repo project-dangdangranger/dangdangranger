@@ -22,13 +22,14 @@ public class UserInfo {
     private String userProfileImg;
     private String userAddress;
     private String dongCode;
+    private String userWalletAddress;
 
     @TimeToLive(unit = TimeUnit.MILLISECONDS)
     private Long ttl;
 
     @Builder
     UserInfo(Integer userNo, String userEmail, String userName,
-        String userProfileImg, Long ttl, String userAddress, String dongCode) {
+        String userProfileImg, Long ttl, String userAddress, String dongCode, String userWalletAddress) {
         this.userNo = userNo;
         this.userEmail = userEmail;
         this.userName = userName;
@@ -36,6 +37,7 @@ public class UserInfo {
         this.userAddress = userAddress;
         this.dongCode = dongCode;
         this.ttl = ttl;
+        this.userWalletAddress = userWalletAddress;
     }
 
     public void updateUserInfo(User user) {
