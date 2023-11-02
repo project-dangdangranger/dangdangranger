@@ -7,14 +7,16 @@ import {
 	ScrollView,
 	TextInput,
 } from "react-native";
-import { ethers } from "ethers";
+import { Wallet, ethers } from "ethers";
 import EncryptedStorage from "react-native-encrypted-storage";
 import CryptoJS from "react-native-crypto-js";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
 import axios from "axios";
+import AXIOS from "../utils/axios";
 
 import ColorHeader from "../recycles/ColorHeader";
-import WalletProcess from "../components/WalletProcess";
+import WalletProcess from "../components/WalletProcess1";
+import WalletProcess2 from "../components/WalletProcess2";
 import WalletLoading from "../components/WalletLoading";
 
 import CommonLayout from "../recycles/CommonLayout";
@@ -25,12 +27,15 @@ const Profile = ({ navigation }: any) => {
 	const [isChecked, setIsChecked] = useState<Boolean>(false);
 	const [password, setPassword] = useState<string>("");
 	const [checkPassword, setCheckPassword] = useState<string>("");
+	const [walletprocess2, setWalletprocess2] = useState<Boolean>(false);
 
 	const SECRET_SALT = process.env.SECRET_SALT;
 
 	const createWallet = async () => {
+		setWalletprocess2(true);
 		if (!isChecked) {
 			alert("비밀번호 복구불가 안내 문구에 체크해주세요.");
+			setWalletprocess2(false);
 			return;
 		}
 		if (password !== checkPassword) {
@@ -47,6 +52,7 @@ const Profile = ({ navigation }: any) => {
 		} catch (err) {
 			alert("지갑 생성 오류, 관리자에게 문의하세요.");
 			console.error("비밀번호 저장 오류");
+			setWalletprocess2(false);
 		}
 		try {
 			axios
@@ -66,36 +72,41 @@ const Profile = ({ navigation }: any) => {
 					const privateKey = await EncryptedStorage.getItem("privateKey");
 					const Mnemonic = await newAccount?.mnemonic?.phrase;
 					try {
-						const addressDbApi = await axios.put("/user/address", {
-							userAddress: walletAddress,
-						});
-						const walletApi = await axios.put("/user/wallet", {
+						const walletApi = await AXIOS.put("/user/wallet", {
+							userWalletAddress: walletAddress,
 							userWalletPw: password,
 						});
-						if (addressDbApi.status === 200 && walletApi.status === 200) {
+						console.log("walletApi:", walletApi);
+
+						if (walletApi.status === 200) {
 							setIsLoading(false);
 							setIsChecked(false);
 							await navigation.navigate("MakeWallet3");
 						} else {
-							alert("지갑 생성 실패, 관리자에게 문의하세요.");
+							alert("지갑 생성 실패, 관리자에게 문의하세요.222222");
 							setIsLoading(false);
 							console.error("Error generating wallet");
+							setWalletprocess2(false);
 						}
 					} catch (err) {
-						alert("지갑 생성 실패, 관리자에게 문의하세요.");
+						alert("지갑 생성 실패, 관리자에게 문의하세요.333333");
 						setIsLoading(false);
 						console.error("Error generating wallet:", err);
+						setWalletprocess2(false);
 					}
 				})
 				.catch((err) => {
-					alert("지갑 생성 실패, 관리자에게 문의하세요.");
+					// console.log(err);
+					alert("지갑 생성 실패, 관리자에게 문의하세요.111");
 					setIsLoading(false);
-					console.error("Error generating wallet:", err);
+					console.error("Error generating wallet:", err.response);
+					setWalletprocess2(false);
 				});
 		} catch (error) {
-			alert("지갑 생성 실패, 관리자에게 문의하세요.");
+			alert("지갑 생성 실패, 관리자에게 문의하세요.44444");
 			setIsLoading(false);
 			console.error("Error generating wallet:", error);
+			setWalletprocess2(false);
 		}
 	};
 
@@ -118,8 +129,7 @@ const Profile = ({ navigation }: any) => {
 						때만 사용됩니다.
 					</Text>
 				</View>
-
-				<WalletProcess />
+				{walletprocess2 ? <WalletProcess2 /> : <WalletProcess />}
 
 				<View style={CreateWalletPasswordLayout.formWrap}>
 					<Text style={CreateWalletPasswordLayout.formTitle}>
