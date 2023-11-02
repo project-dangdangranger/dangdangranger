@@ -15,7 +15,7 @@ import java.util.List;
 public class PatrolReport extends BaseEntity {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "patrol_report_no")
     private Integer patrolReportNo;
 

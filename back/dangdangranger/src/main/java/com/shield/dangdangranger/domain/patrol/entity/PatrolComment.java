@@ -10,9 +10,9 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "patrol_comment")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Table(name = "patrol_comment")
 public class PatrolComment extends BaseEntity {
 
     @Id

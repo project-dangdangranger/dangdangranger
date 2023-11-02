@@ -63,7 +63,7 @@ public class PatrolReportServiceImpl implements PatrolReportService {
         List<String> patrolImageList = patrolReportSaveRequestDto.getPatrolReportImageList();
         for (int i = 0; i < patrolImageList.size(); i++) {
             Image image = Image.builder()
-                    .imageTypeCode("R")
+                    .imageTypeNo(2)
                     .parentNo(nowPatrolReportNo)
                     .imageUrl(patrolImageList.get(i))
                     .build();
@@ -82,7 +82,7 @@ public class PatrolReportServiceImpl implements PatrolReportService {
             PatrolReport patrolReport = reportList.get(i);
             User user = userRepository.findUserByUserNoAndCanceled(patrolReport.getUserNo(), NOTCANCELED)
                     .orElseThrow(() -> new NotFoundException(USER_NOT_FOUND_EXCEPTION.message()));
-            Image image = imageRepository.findFirstByImageTypeCodeAndParentNoAndCanceled("R", patrolReport.getPatrolReportNo(), NOTCANCELED)
+            Image image = imageRepository.findFirstByImageTypeNoAndParentNoAndCanceled(2, patrolReport.getPatrolReportNo(), NOTCANCELED)
                     .orElseThrow(() -> new NotFoundException(IMAGE_NOT_FOUND_EXCEPTION.message()));
 
             PatrolListInfoResponseDto patrolListInfo = PatrolListInfoResponseDto.builder()
@@ -110,11 +110,15 @@ public class PatrolReportServiceImpl implements PatrolReportService {
             User user = userRepository.findUserByUserNoAndCanceled(userNo, NOTCANCELED)
                     .orElseThrow(() -> new NotFoundException(USER_NOT_FOUND_EXCEPTION.message()));
 
+            Image image = imageRepository.findFirstByImageTypeNoAndParentNoAndCanceled(2, patrolReport.getPatrolReportNo(), NOTCANCELED)
+                    .orElseThrow(() -> new NotFoundException(IMAGE_NOT_FOUND_EXCEPTION.message()));
+
             PatrolListInfoResponseDto patrolListInfo = PatrolListInfoResponseDto.builder()
                     .patrolNo(patrolReport.getPatrolReportNo())
                     .patrolTitle(patrolReport.getPatrolReportTitle())
                     .patrolDate(patrolReport.getPatrolLog().getPatrolLogDate())
                     .userName(user.getUserName())
+                    .patrolFirstImg(image.getImageUrl())
                     .patrolHit(patrolReport.getPatrolReportHit())
                     .build();
 
@@ -133,7 +137,7 @@ public class PatrolReportServiceImpl implements PatrolReportService {
         //순찰로그 정보
         PatrolLog patrolLog = infoResponseDto.getPatrolLog();
         //순찰일지 이미지리스트
-        List<Image> list = imageRepository.findAllByImageTypeCodeAndParentNoAndCanceled("R", patrolNo, NOTCANCELED );
+        List<Image> list = imageRepository.findAllByImageTypeNoAndParentNoAndCanceled(2, patrolNo, NOTCANCELED );
         List<String> imageList = new ArrayList<>();
         for (int i = 0; i < imageList.size(); i++) {
             imageList.add(list.get(i).getImageUrl());
@@ -186,7 +190,7 @@ public class PatrolReportServiceImpl implements PatrolReportService {
         patrolReport.updatePatrolReport(updateRequestDto.getPatrolReportTitle(), updateRequestDto.getPatrolReportContent());
 
         //순찰일지 이미지리스트
-        List<Image> list = imageRepository.findAllByImageTypeCodeAndParentNoAndCanceled("R", patrolNo, NOTCANCELED);
+        List<Image> list = imageRepository.findAllByImageTypeNoAndParentNoAndCanceled(2, patrolNo, NOTCANCELED);
         List<String> imageList = new ArrayList<>();
         for (int i = 0; i < imageList.size(); i++) {
             imageList.add(list.get(i).getImageUrl());
@@ -200,7 +204,7 @@ public class PatrolReportServiceImpl implements PatrolReportService {
             imageOriginHash.add(imageList.get(i));
         }
 
-        for (int i = 0; i < updateImageList.size(); i++) { //수정된 순찰일지 이미지리스트
+        for (int i = 0; i < updateImageList.size(); i++) { //수정 요청된 순찰일지 이미지리스트
             imageNewHash.add(list.get(i).getImageUrl());
         }
 
@@ -216,7 +220,7 @@ public class PatrolReportServiceImpl implements PatrolReportService {
         for (int i = 0; i < updateImageList.size(); i++) { //추가된 순찰일지 insert하기
             if(!imageOriginHash.contains(updateImageList.get(i))){
                 Image image = Image.builder()
-                        .imageTypeCode("R")
+                        .imageTypeNo(2)
                         .imageUrl(updateImageList.get(i))
                         .parentNo(patrolNo)
                         .build();
@@ -233,7 +237,14 @@ public class PatrolReportServiceImpl implements PatrolReportService {
     public void deletePatrolReport(Integer patrolNo) {
         PatrolReport patrolReport = patrolReportRepository.findPatrolReportByPatrolReportNoAndCanceled(patrolNo, NOTCANCELED)
                 .orElseThrow(() -> new NotFoundException(PATROL_REPORT_NOT_FOUND_EXCEPTION.message()));
+        //순찰일지 삭제
         patrolReport.setCanceled(CANCELED);
+        //순찰일지 이미지 리스트 삭제
+        List<Image> list = imageRepository.findAllByImageTypeNoAndParentNoAndCanceled(2, patrolNo, NOTCANCELED);
+        for(Image image : list){
+            image.setCanceled(CANCELED);
+            imageRepository.save(image);
+        }
         patrolReportRepository.save(patrolReport);
     }
 
