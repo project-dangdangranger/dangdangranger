@@ -27,6 +27,8 @@ import MissingRegist from "./src/screens/MissingRegist";
 import MissingDetail from "./src/screens/MissingDetail";
 import CreateMissingDog from "./src/screens/CreateMissingDog";
 import Login from "./src/screens/Login";
+import Register from "./src/screens/Register";
+import Start from "./src/screens/Start";
 import PatrolLogDetail from "./src/screens/PatrolLogDetail";
 import Register from "./src/screens/Register";
 import Start from "./src/screens/Start";
@@ -70,6 +72,8 @@ const App = () => {
 					<Stack.Screen name="MissingDetail" component={MissingDetail} />
 					<Stack.Screen name="CreateMissingDog" component={CreateMissingDog} />
 					<Stack.Screen name="Login" component={Login} />
+					<Stack.Screen name="Register" component={Register} />
+					<Stack.Screen name="Start" component={Start} />
 					<Stack.Screen name="PatrolLogDetail" component={PatrolLogDetail} />
 					<Stack.Screen name="Register" component={Register} />
 					<Stack.Screen name="Start" component={Start} />
