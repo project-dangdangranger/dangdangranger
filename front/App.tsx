@@ -30,8 +30,6 @@ import Login from "./src/screens/Login";
 import Register from "./src/screens/Register";
 import Start from "./src/screens/Start";
 import PatrolLogDetail from "./src/screens/PatrolLogDetail";
-import Register from "./src/screens/Register";
-import Start from "./src/screens/Start";
 
 const App = () => {
 	const Stack = createNativeStackNavigator();
@@ -75,8 +73,6 @@ const App = () => {
 					<Stack.Screen name="Register" component={Register} />
 					<Stack.Screen name="Start" component={Start} />
 					<Stack.Screen name="PatrolLogDetail" component={PatrolLogDetail} />
-					<Stack.Screen name="Register" component={Register} />
-					<Stack.Screen name="Start" component={Start} />
 				</Stack.Navigator>
 			</NavigationContainer>
 		</RecoilRoot>
