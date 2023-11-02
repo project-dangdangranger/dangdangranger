@@ -30,6 +30,7 @@ import Login from "./src/screens/Login";
 import Register from "./src/screens/Register";
 import Start from "./src/screens/Start";
 import PatrolLogDetail from "./src/screens/PatrolLogDetail";
+import WalletMine from "./src/screens/WalletMine";
 
 const App = () => {
 	const Stack = createNativeStackNavigator();
@@ -73,6 +74,7 @@ const App = () => {
 					<Stack.Screen name="Register" component={Register} />
 					<Stack.Screen name="Start" component={Start} />
 					<Stack.Screen name="PatrolLogDetail" component={PatrolLogDetail} />
+					<Stack.Screen name="WalletMine" component={WalletMine} />
 				</Stack.Navigator>
 			</NavigationContainer>
 		</RecoilRoot>
