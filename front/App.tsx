@@ -26,6 +26,7 @@ import MissingRegist from "./src/screens/MissingRegist";
 import MissingDetail from "./src/screens/MissingDetail";
 import CreateMissingDog from "./src/screens/CreateMissingDog";
 import Login from "./src/screens/Login";
+import PatrolLogDetail from "./src/screens/PatrolLogDetail";
 
 const App = () => {
 	const Stack = createNativeStackNavigator();
@@ -66,6 +67,7 @@ const App = () => {
 					<Stack.Screen name="MissingDetail" component={MissingDetail} />
 					<Stack.Screen name="CreateMissingDog" component={CreateMissingDog} />
 					<Stack.Screen name="Login" component={Login} />
+					<Stack.Screen name="PatrolLogDetail" component={PatrolLogDetail} />
 				</Stack.Navigator>
 			</NavigationContainer>
 		</>
