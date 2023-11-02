@@ -25,6 +25,8 @@ const Login = ({ navigation }: any) => {
 			webClientId: WEB_CLIENT_ID,
 			offlineAccess: true,
 		});
+
+		console.log("아니뭐하는데:", WEB_CLIENT_ID);
 	}, []);
 	const handleGoogleLogin = async () => {
 		try {
@@ -57,11 +59,11 @@ const Login = ({ navigation }: any) => {
 			console.log("accessToken: ", accessToken);
 			console.log("refreshToken: ", refreshToken);
 			if (responseCheckUserInfo.data.data.signInUp === "회원가입 성공") {
-				console.log("회원가입 성공했습니다. 추가정보를 입력해야합니다.");
-				// navigation.navigate("AddInfo"); 그에 대한 로직이 필요함
+				Alert.alert("구글 로그인 성공", "추가 정보를 입력해야 합니다.");
+				navigation.navigate("Register");
 			} else if (responseCheckUserInfo.data.data.signInUp === "로그인 성공") {
 				console.log("로그인 성공했습니다. 메인페이지로 이동합니다.");
-				// navigation.navigate("Main"); 그에 대한 로직이 필요함
+				navigation.navigate("Main");
 			}
 		} catch (error) {
 			console.error(error);
@@ -85,7 +87,7 @@ const Login = ({ navigation }: any) => {
 					<Image source={LoginImg} style={LoginLayout.Img1} />
 				</View>
 
-				<Button title="Google 로그아웃" onPress={GoogleSignin.signOut} />
+				{/* <Button title="Google 로그아웃" onPress={GoogleSignin.signOut} /> */}
 				<TouchableOpacity
 					style={LoginLayout.BtnContainer}
 					onPress={handleGoogleLogin}

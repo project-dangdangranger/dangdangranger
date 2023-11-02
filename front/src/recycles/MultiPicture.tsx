@@ -12,10 +12,28 @@ const MyHorizontalScrollView = () => {
 	const [currentIndex, setCurrentIndex] = useState(0);
 	const scrollViewRef = useRef(null);
 
+	const imgs = [
+		{
+			id: 1,
+			src: Img1,
+			location: "서울특별시 역삼동",
+		},
+		{
+			id: 2,
+			src: Img2,
+			location: "서울특별시 역삼동",
+		},
+		{
+			id: 3,
+			src: Img3,
+			location: "서울특별시 역삼동",
+		},
+	];
+
 	// 페이지가 변경될 때 호출됩니다.
-	const handleScroll = (event) => {
+	const handleScroll = (event: any) => {
 		const contentOffsetX = event.nativeEvent.contentOffset.x;
-		const newIndex = Math.round(contentOffsetX / responsiveWidth(60));
+		const newIndex = Math.floor(contentOffsetX / responsiveWidth(80)); // '80'은 각 이미지 뷰의 너비입니다.
 		if (newIndex !== currentIndex) {
 			setCurrentIndex(newIndex);
 		}
@@ -25,7 +43,7 @@ const MyHorizontalScrollView = () => {
 	const renderPagination = () => {
 		return (
 			<View style={styles.paginationWrapper}>
-				{[...Array(3).keys()].map((key, index) => (
+				{[...Array(imgs.length).keys()].map((key, index) => (
 					<View
 						key={key}
 						style={[
@@ -49,24 +67,17 @@ const MyHorizontalScrollView = () => {
 				showsHorizontalScrollIndicator={false}
 				style={styles.scrollViewStyle}
 			>
-				<View style={styles.viewStyle}>
-					<Image style={styles.viewStyle} source={Img1} />
-					<View style={styles.textView}>
-						<Text style={styles.text}>서울특별시 역삼동</Text>
-					</View>
-				</View>
-				<View style={styles.viewStyle}>
-					<Image style={styles.viewStyle} source={Img2} />
-					<View style={styles.textView}>
-						<Text style={styles.text}>서울특별시 역삼동</Text>
-					</View>
-				</View>
-				<View style={styles.viewStyle}>
-					<Image style={styles.viewStyle} source={Img3}></Image>
-					<View style={styles.textView}>
-						<Text style={styles.text}>서울특별시 역삼동</Text>
-					</View>
-				</View>
+				{imgs.map((img, index) => {
+					return (
+						<View key={img.id} style={styles.viewStyle}>
+							<Image style={styles.viewStyle} source={img.src} />
+							<View style={styles.textView}>
+								<Text style={styles.text}>{img.location}</Text>
+							</View>
+						</View>
+					);
+				})}
+
 				<View style={styles.viewStyle}>
 					<Image style={styles.viewStyle} source={Img1} />
 					<View style={styles.textView}>

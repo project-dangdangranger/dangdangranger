@@ -27,6 +27,8 @@ import MissingDetail from "./src/screens/MissingDetail";
 import CreateMissingDog from "./src/screens/CreateMissingDog";
 import Login from "./src/screens/Login";
 import PatrolLogDetail from "./src/screens/PatrolLogDetail";
+import Register from "./src/screens/Register";
+import Start from "./src/screens/Start";
 
 const App = () => {
 	const Stack = createNativeStackNavigator();
@@ -35,7 +37,7 @@ const App = () => {
 		<>
 			<NavigationContainer>
 				<Stack.Navigator
-					initialRouteName="Main"
+					initialRouteName="Start"
 					screenOptions={{
 						headerShown: false,
 						// cardStyle: { backgroundColor: "white" },
@@ -68,6 +70,8 @@ const App = () => {
 					<Stack.Screen name="CreateMissingDog" component={CreateMissingDog} />
 					<Stack.Screen name="Login" component={Login} />
 					<Stack.Screen name="PatrolLogDetail" component={PatrolLogDetail} />
+					<Stack.Screen name="Register" component={Register} />
+					<Stack.Screen name="Start" component={Start} />
 				</Stack.Navigator>
 			</NavigationContainer>
 		</>
