@@ -30,10 +30,9 @@ public class MissingRepositoryImpl implements MissingRepositoryCustom {
 		// 메인 쿼리 작성
 		Long result = queryFactory.select(m.count())
 		    .from(m)
-		    .join(u).on(m.user.userNo.eq(u.userNo))
+		    .join(u).on(m.userNo.eq(u.userNo))
 		    .where(
 		        u.dong.dongCode.eq(subQuery),
-		        m.missingType.missingTypeNo.eq(1),
 		        m.missingStatus.eq(0),
 		        m.canceled.eq(0)
 		    )
