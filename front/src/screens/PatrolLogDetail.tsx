@@ -4,8 +4,10 @@ import CommonLayout from "../recycles/CommonLayout";
 import FooterBar from "../recycles/FooterBar";
 import patrolLogDetailLayout from "../styles/patrolLogDetailLayout";
 import LogMapImg from "../../assets/images/log-map-img.png";
-
-import debugImg from "../../assets/images/4btn-record-icon.png";
+import LocIconImg from "../../assets/images/location-icon.png";
+import DateIconImg from "../../assets/images/date-icon.png";
+import DistanceIconImg from "../../assets/images/distance-icon.png";
+import TimeIconImg from "../../assets/images/time-icon.png";
 
 const PatrolLogDetail = () => {
 	return (
@@ -25,7 +27,7 @@ const PatrolLogDetail = () => {
 								]}
 							>
 								<Image
-									source={debugImg}
+									source={LocIconImg}
 									style={patrolLogDetailLayout.iconWrap}
 								/>
 								<Text style={patrolLogDetailLayout.textWrap}>
@@ -39,22 +41,39 @@ const PatrolLogDetail = () => {
 								]}
 							>
 								<Image
-									source={debugImg}
+									source={DateIconImg}
 									style={patrolLogDetailLayout.iconWrap}
 								/>
 								<Text style={patrolLogDetailLayout.textWrap}>
-									2022년 11월 3일
+									2022년{"\n"}11월 3일
 								</Text>
 							</View>
 						</View>
-						<View
-							style={[
-								patrolLogDetailLayout.debug,
-								patrolLogDetailLayout.btnRowWrap,
-							]}
-						>
-							<View></View>
-							<View></View>
+						<View style={patrolLogDetailLayout.btnRowWrap}>
+							<View
+								style={[
+									patrolLogDetailLayout.btnWrap,
+									patrolLogDetailLayout.distanceWrap,
+								]}
+							>
+								<Image
+									source={DistanceIconImg}
+									style={patrolLogDetailLayout.iconWrap}
+								/>
+								<Text style={patrolLogDetailLayout.textWrap}>1.5 Km</Text>
+							</View>
+							<View
+								style={[
+									patrolLogDetailLayout.btnWrap,
+									patrolLogDetailLayout.timeWrap,
+								]}
+							>
+								<Image
+									source={TimeIconImg}
+									style={patrolLogDetailLayout.iconWrap}
+								/>
+								<Text style={patrolLogDetailLayout.textWrap}>1.5 hr</Text>
+							</View>
 						</View>
 					</View>
 				</View>
