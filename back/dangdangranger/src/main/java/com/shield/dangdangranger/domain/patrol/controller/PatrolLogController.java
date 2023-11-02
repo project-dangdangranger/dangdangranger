@@ -35,14 +35,14 @@ public class PatrolLogController {
         @RequestAttribute("userNo") Integer userNo,
         @RequestBody PatrolLogSaveRequestDto patrolLogSaveRequestDto) {
         patrolLogService.createPatrolLog(userNo, patrolLogSaveRequestDto);
-        return ResponseEntity.status(HttpStatus.CREATED)
-            .body(ResponseDto.create(CREATE_PATROL_LOG_SUCCESS.message()));
+        return ResponseEntity.status(HttpStatus.CREATED).body(ResponseDto.create(CREATE_PATROL_LOG_SUCCESS.message()));
     }
 
     @GetMapping()
-    public ResponseEntity<ResponseDto<List<PatrolLogRoughInfoResponseDto>>> readAllPatrolLog() {
+    public ResponseEntity<ResponseDto<List<PatrolLogRoughInfoResponseDto>>> readAllPatrolLog(
+        @RequestAttribute("userNo") Integer userNo) {
         return ResponseEntity.status(HttpStatus.OK)
-            .body(ResponseDto.create(READ_ALL_PATROL_LOG_SUCCESS.message(), patrolLogService.readAllPatrolLog()));
+            .body(ResponseDto.create(READ_ALL_PATROL_LOG_SUCCESS.message(), patrolLogService.readAllPatrolLog(userNo)));
     }
 
     @GetMapping("/{patrolLogNo}")
