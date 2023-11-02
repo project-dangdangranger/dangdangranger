@@ -49,4 +49,24 @@ public class UserRequestDto {
 
         private String refreshToken;
     }
+
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class UserWalletPwRequestDto {
+
+        private String userWalletPw;
+    }
+
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class UserWalletRequestDto {
+
+        private String userWalletAddress;
+        private String userWalletPw;
+    }
+
 }
