@@ -1,13 +1,15 @@
 import React, { useEffect, useState, useRef } from "react";
-import {
-	Text,
-	View,
-	PermissionsAndroid,
-	Dimensions,
-	Button,
-} from "react-native";
+import { View, PermissionsAndroid, Dimensions, Button } from "react-native";
 import MapView, { PROVIDER_GOOGLE, Polyline } from "react-native-maps";
 import Geolocation from "react-native-geolocation-service";
+import { S3 } from "aws-sdk";
+import {
+	AWS_ACCESS_KEY,
+	AWS_SECRET_ACCESS_KEY,
+	AWS_REGION,
+	AWS_BUCKET,
+} from "@env";
+import { Buffer } from "buffer";
 
 type Location = {
 	latitude: number;
@@ -23,6 +25,12 @@ const GoogleMap = () => {
 	const [positions, setPositions] = useState<Location[]>([]);
 	const [watchId, setWatchId] = useState<number | null>(null);
 	const mapRef = useRef<MapView | null>(null);
+
+	const s3 = new S3({
+		accessKeyId: AWS_ACCESS_KEY,
+		secretAccessKey: AWS_SECRET_ACCESS_KEY,
+		region: AWS_REGION,
+	});
 
 	useEffect(() => {
 		requestPermission();
@@ -92,15 +100,34 @@ const GoogleMap = () => {
 
 	const saveAndUploadMapSnapshot = async () => {
 		if (mapRef.current) {
-			// console.log(mapRef);
-			// console.log("으아아아", mapRef.current);
 			const snapshot = await mapRef.current.takeSnapshot({
 				width: mapWidth,
 				height: mapHeight,
 				format: "png",
 				quality: 0.8, // 이미지 품질
+				result: "base64",
 			});
-			console.log(snapshot);
+			await uploadImage(snapshot);
+		}
+	};
+
+	const uploadImage = async (imageUri: string) => {
+		// console.log("img", imageUri);
+		const blob = Buffer.from(imageUri, "base64");
+		// console.log("blob : ", blob);
+		const params = {
+			Bucket: AWS_BUCKET,
+			Key: "filenameTest",
+			Body: blob,
+			ContentType: "image/png",
+		};
+
+		try {
+			const data = await s3.upload(params).promise();
+			console.log("File uploaded:", data);
+			// 업로드 후의 로직 (예: URL을 서버에 저장하는 등)
+		} catch (err) {
+			console.error("Upload failed:", err);
 		}
 	};
 
