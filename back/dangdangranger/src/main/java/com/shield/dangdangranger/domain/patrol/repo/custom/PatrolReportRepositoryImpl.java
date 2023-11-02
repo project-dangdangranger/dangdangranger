@@ -30,6 +30,7 @@ public class PatrolReportRepositoryImpl implements PatrolReportRepositoryCustom{
                 .where(qUser.userNo.eq(userNo)
                         .and(qPatrolLog.dong.eq(qUser.dong))
                         .and(qPatrolLog.canceled.eq(0))
+                        .and(qPatrolReport.canceled.eq(0))
                 )
                 .orderBy(qPatrolReport.createDate.desc())
                 .fetch();
