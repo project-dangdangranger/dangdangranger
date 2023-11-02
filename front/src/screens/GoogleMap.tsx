@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import {
 	Text,
 	View,
@@ -21,8 +21,8 @@ const GoogleMap = () => {
 	const mapHeight = Dimensions.get("window").height;
 	const [location, setLocation] = useState<Location | undefined>();
 	const [positions, setPositions] = useState<Location[]>([]);
-	const [savedRoutes, setSavedRoutes] = useState<Location[][]>([]); // 저장된 경로들을 저장할 상태
 	const [watchId, setWatchId] = useState<number | null>(null);
+	const mapRef = useRef<MapView | null>(null);
 
 	useEffect(() => {
 		requestPermission();
@@ -90,37 +90,38 @@ const GoogleMap = () => {
 		);
 	};
 
-	const saveCurrentRoute = () => {
-		setSavedRoutes((prevRoutes) => [...prevRoutes, positions]);
-		setPositions([]); // 경로 저장 후 현재 경로 초기화
+	const saveAndUploadMapSnapshot = async () => {
+		if (mapRef.current) {
+			// console.log(mapRef);
+			// console.log("으아아아", mapRef.current);
+			const snapshot = await mapRef.current.takeSnapshot({
+				width: mapWidth,
+				height: mapHeight,
+				format: "png",
+				quality: 0.8, // 이미지 품질
+			});
+			console.log(snapshot);
+		}
 	};
 
 	return (
 		<View style={{ flex: 1 }}>
 			<MapView
-				style={{ width: mapWidth, height: mapHeight }}
+				style={{ width: 500, height: 500 }}
 				provider={PROVIDER_GOOGLE}
 				showsUserLocation={true}
 				showsMyLocationButton={true}
 				zoomEnabled={true}
 				rotateEnabled={true}
 				initialRegion={location}
+				ref={mapRef}
 			>
-				<Polyline
-					coordinates={positions}
-					strokeColor="#000" // fallback for when `strokeColors` is not supported by the map-provider
-					strokeWidth={4}
-				/>
-				{savedRoutes.map((route, index) => (
-					<Polyline
-						key={index}
-						coordinates={route}
-						strokeColor="#FF0000"
-						strokeWidth={4}
-					/>
-				))}
+				<Polyline coordinates={positions} strokeColor="#000" strokeWidth={4} />
 			</MapView>
-			<Button title="Save Current Route" onPress={saveCurrentRoute} />
+			<Button
+				title="Save and Upload Map Snapshot"
+				onPress={saveAndUploadMapSnapshot}
+			/>
 		</View>
 	);
 };
