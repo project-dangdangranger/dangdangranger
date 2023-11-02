@@ -7,114 +7,102 @@ import {
 	ScrollView,
 	TextInput,
 } from "react-native";
-// import GestureFlipView from "../components/GestureFlipView";
-import CommonLayout from "../recycles/CommonLayout";
-// import ProfileItem from "../components/ProfileItem";
-// import NftProfile from "../components/NftProfile";
+import { ethers } from "ethers";
+import EncryptedStorage from "react-native-encrypted-storage";
+import CryptoJS from "react-native-crypto-js";
+import BouncyCheckbox from "react-native-bouncy-checkbox";
+import axios from "axios";
 
-import WhiteHeader from "../recycles/WhiteHeader";
-// import SubMain from "../components/SubMain";
-// import SubMainImg from "../../assets/images/sub-main-bg.png";
-// import rightArrowIcon from "../../assets/images/right-arrow.png";
-import ProfileLayout from "../styles/profileLayout";
-import TempImg from "../../assets/images/templogo.png";
-import Footer from "../recycles/Footer";
 import ColorHeader from "../recycles/ColorHeader";
-import AlbumLayout from "../styles/albumLayout";
-import TempProfileImg from "../../assets/images/dog1.jpg";
-import WhitePenIcon from "../../assets/images/pen-icon.png";
-import FourBtn from "../recycles/PetrolBtn";
-import AbsoluteVar from "../recycles/FooterBar";
-import MainLayout from "../styles/mainLayout";
-import CustomButton from "../recycles/CustomBtn";
-import NFTImg from "../../assets/images/NFTImg.png";
-
 import WalletProcess from "../components/WalletProcess";
 import WalletLoading from "../components/WalletLoading";
 
+import CommonLayout from "../recycles/CommonLayout";
 import CreateWalletPasswordLayout from "../styles/createWalletPasswordLayout";
 
 const Profile = ({ navigation }: any) => {
-	const flipView = useRef<any>();
-	const [dogList, setDogList] = useState<any>([]);
 	const [isLoading, setIsLoading] = useState<Boolean>(false);
 	const [isChecked, setIsChecked] = useState<Boolean>(false);
 	const [password, setPassword] = useState<string>("");
 	const [checkPassword, setCheckPassword] = useState<string>("");
 
-	const RPC_URL = process.env.RPC_URL;
 	const SECRET_SALT = process.env.SECRET_SALT;
-	const NFT_STORAGE = process.env.NFT_STORAGE;
 
 	const createWallet = async () => {
-		// if(!isChecked){
-		//     alert('비밀번호 복구불가 안내 문구에 체크해주세요.');
-		//     return;
-		// }
-		// if(password !== checkPassword){
-		//     alert('비밀번호를 다시 확인해주세요.');
-		//     return;
-		// }
-		// if(!isLoading){
-		//     setIsLoading(true);
-		// }
-		// try{
-		//     axiosApi.put('/user/wallet', {
-		//         "userWalletPw": password,
-		//     })
-		// }catch(err){
-		//     alert("지갑 생성 오류, 관리자에게 문의하세요.");
-		//     console.error("비밀번호 저장 오류");
-		// }
-		// try {
-		//     axios.get('https://idog.store/blockchain/wallet').then(async (data) => {
-		//         const encryptedValue = data.data;
-		//         const decrypted = await decryptValue(encryptedValue, SECRET_SALT);
-		//         const newAccount = await ethers.HDNodeWallet.fromPhrase(decrypted);
-		//         console.log("newAccount", newAccount);
-		//         await SecureStore.setItemAsync("walletAddress", newAccount?.address);
-		//         await SecureStore.setItemAsync("privateKey", newAccount?.privateKey);
-		//         await SecureStore.setItemAsync("mnemonic", String(newAccount?.mnemonic?.phrase));
-		//         const walletAddress = await SecureStore.getItemAsync("walletAddress");
-		//         const privateKey = await SecureStore.getItemAsync("privateKey");
-		//         const Mnemonic = await newAccount?.mnemonic?.phrase;
-		//         try{
-		//             const addressDbApi = await axiosApi.put('/user/address', {
-		//                 "userAddress": walletAddress,
-		//             });
-		//             const walletApi = await axiosApi.put('/user/wallet',{
-		//                 "userWalletPw": password,
-		//             });
-		//             if(addressDbApi.status === 200 && walletApi.status === 200){
-		//                 setIsLoading(false);
-		//                 setIsChecked(false);
-		//                 await navigation.navigate('ProtectWallet');
-		//             }else{
-		//                 alert("지갑 생성 실패, 관리자에게 문의하세요.");
-		//                 setIsLoading(false);
-		//                 console.error("Error generating wallet");
-		//             }
-		//         }catch(err){
-		//             alert("지갑 생성 실패, 관리자에게 문의하세요.");
-		//             setIsLoading(false);
-		//             console.error("Error generating wallet:", err);
-		//         }
-		//     }).catch((err) => {
-		//         alert("지갑 생성 실패, 관리자에게 문의하세요.");
-		//         setIsLoading(false);
-		//         console.error("Error generating wallet:", err);
-		//     })
-		// } catch (error) {
-		//     alert("지갑 생성 실패, 관리자에게 문의하세요.");
-		//     setIsLoading(false);
-		//     console.error("Error generating wallet:", error);
-		// }
+		if (!isChecked) {
+			alert("비밀번호 복구불가 안내 문구에 체크해주세요.");
+			return;
+		}
+		if (password !== checkPassword) {
+			alert("비밀번호를 다시 확인해주세요.");
+			return;
+		}
+		if (!isLoading) {
+			setIsLoading(true);
+		}
+		try {
+			axios.put("/user/wallet", {
+				userWalletPw: password,
+			});
+		} catch (err) {
+			alert("지갑 생성 오류, 관리자에게 문의하세요.");
+			console.error("비밀번호 저장 오류");
+		}
+		try {
+			axios
+				.get("https://www.animaid.co.kr/blockchain/wallet")
+				.then(async (data) => {
+					const encryptedValue = data.data;
+					const decrypted = await decryptValue(encryptedValue, SECRET_SALT);
+					const newAccount = await ethers.HDNodeWallet.fromPhrase(decrypted);
+					console.log("newAccount", newAccount);
+					await EncryptedStorage.setItem("walletAddress", newAccount?.address);
+					await EncryptedStorage.setItem("privateKey", newAccount?.privateKey);
+					await EncryptedStorage.setItem(
+						"mnemonic",
+						String(newAccount?.mnemonic?.phrase),
+					);
+					const walletAddress = await EncryptedStorage.getItem("walletAddress");
+					const privateKey = await EncryptedStorage.getItem("privateKey");
+					const Mnemonic = await newAccount?.mnemonic?.phrase;
+					try {
+						const addressDbApi = await axios.put("/user/address", {
+							userAddress: walletAddress,
+						});
+						const walletApi = await axios.put("/user/wallet", {
+							userWalletPw: password,
+						});
+						if (addressDbApi.status === 200 && walletApi.status === 200) {
+							setIsLoading(false);
+							setIsChecked(false);
+							await navigation.navigate("MakeWallet3");
+						} else {
+							alert("지갑 생성 실패, 관리자에게 문의하세요.");
+							setIsLoading(false);
+							console.error("Error generating wallet");
+						}
+					} catch (err) {
+						alert("지갑 생성 실패, 관리자에게 문의하세요.");
+						setIsLoading(false);
+						console.error("Error generating wallet:", err);
+					}
+				})
+				.catch((err) => {
+					alert("지갑 생성 실패, 관리자에게 문의하세요.");
+					setIsLoading(false);
+					console.error("Error generating wallet:", err);
+				});
+		} catch (error) {
+			alert("지갑 생성 실패, 관리자에게 문의하세요.");
+			setIsLoading(false);
+			console.error("Error generating wallet:", error);
+		}
 	};
 
 	const decryptValue = (encrypted: any, secretkey: any) => {
-		// const bytes = CryptoJS.AES.decrypt(encrypted, secretkey);
-		// const originalText = bytes.toString(CryptoJS.enc.Utf8);
-		// return originalText;
+		const bytes = CryptoJS.AES.decrypt(encrypted, secretkey);
+		const originalText = bytes.toString(CryptoJS.enc.Utf8);
+		return originalText;
 	};
 
 	return (
@@ -140,8 +128,8 @@ const Profile = ({ navigation }: any) => {
 					<TextInput
 						placeholder="신규 비밀번호를 입력해주세요."
 						style={CreateWalletPasswordLayout.formInput}
-						// value={password}
-						// onChangeText={(text) => setPassword(text)}
+						value={password}
+						onChangeText={(text) => setPassword(text)}
 						secureTextEntry={true}
 					/>
 					<Text style={CreateWalletPasswordLayout.formTitle}>
@@ -150,17 +138,21 @@ const Profile = ({ navigation }: any) => {
 					<TextInput
 						placeholder="비밀번호 확인을 위해 다시 입력해주세요."
 						style={CreateWalletPasswordLayout.formInput}
-						// value={checkPassword}
-						// onChangeText={(text) => setCheckPassword(text)}
+						value={checkPassword}
+						onChangeText={(text) => setCheckPassword(text)}
 						secureTextEntry={true}
 					/>
 					<View style={CreateWalletPasswordLayout.checkWrap}>
-						{/* <Checkbox
-                            style={CreateWalletPasswordLayout.checkbox}
-                            value={isChecked}
-                            onValueChange={setIsChecked}
-                            color={isChecked ? "#9D9D9D" : "#9D9D9D"}
-                        /> */}
+						<BouncyCheckbox
+							size={20}
+							fillColor="red"
+							unfillColor="#FFFFFF"
+							iconStyle={{ borderColor: "red" }}
+							innerIconStyle={{ borderWidth: 2 }}
+							onPress={(isChecked: boolean) => {
+								setIsChecked(isChecked);
+							}}
+						/>
 						<Text style={CreateWalletPasswordLayout.checkInfo}>
 							POPPY WALLET은 비밀번호를 복구해드릴 수 없습니다. 이를 이해하고
 							확인하였습니다.
@@ -169,11 +161,7 @@ const Profile = ({ navigation }: any) => {
 				</View>
 
 				<View style={CreateWalletPasswordLayout.buttonWrap}>
-					{/* <TouchableOpacity activeOpacity={0.7} onPress={createWallet}> */}
-					<TouchableOpacity
-						activeOpacity={0.7}
-						onPress={() => navigation.navigate("MakeWallet3")}
-					>
+					<TouchableOpacity activeOpacity={0.7} onPress={createWallet}>
 						<View style={CreateWalletPasswordLayout.newCreateButton}>
 							<Text style={CreateWalletPasswordLayout.newCreateButtonText}>
 								비밀번호 생성하기
@@ -181,14 +169,13 @@ const Profile = ({ navigation }: any) => {
 						</View>
 					</TouchableOpacity>
 				</View>
-				<Footer />
+				{/* <Footer /> */}
 			</CommonLayout>
-			{/* {
-                isLoading ?
-                <WalletLoading title="지갑 생성 중.. 잠시만 기다려주세요"/>
-                :
-                <></>
-            } */}
+			{isLoading ? (
+				<WalletLoading title="지갑 생성 중.. 잠시만 기다려주세요" />
+			) : (
+				<></>
+			)}
 		</>
 	);
 
