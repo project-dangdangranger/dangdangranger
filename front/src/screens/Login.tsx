@@ -1,11 +1,4 @@
-import {
-	Text,
-	View,
-	Image,
-	Alert,
-	TouchableOpacity,
-	Button,
-} from "react-native";
+import { Text, View, Image, Alert, TouchableOpacity } from "react-native";
 import CommonLayout from "../recycles/CommonLayout";
 import MainHeader from "../recycles/MainHeader";
 import FooterBar from "../recycles/FooterBar";
@@ -25,8 +18,6 @@ const Login = ({ navigation }: any) => {
 			webClientId: WEB_CLIENT_ID,
 			offlineAccess: true,
 		});
-
-		console.log("아니뭐하는데:", WEB_CLIENT_ID);
 	}, []);
 	const handleGoogleLogin = async () => {
 		try {
