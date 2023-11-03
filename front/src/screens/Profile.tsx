@@ -20,13 +20,16 @@ import FourBtn from "../recycles/FourBtn";
 import AbsoluteVar from "../recycles/FooterBar";
 import axios from "../utils/axios";
 
-const Profile = ({ navigation }: any) => {
+const Profile = ({ route, navigation }: any) => {
 	const [ProfileData, setProfileData] = useState<any>([]);
 	useEffect(() => {
-		axios.get("/user").then((data) => {
-			setProfileData(data.data.data);
-		});
-	}, []);
+		if (route.params?.updated) {
+			// 파라미터가 전달되었다면 여기서 데이터를 다시 가져오거나 로직을 처리합니다.
+			axios.get("/user").then((data) => {
+				setProfileData(data.data.data);
+			});
+		}
+	}, [route.params]);
 
 	return (
 		<>
@@ -60,7 +63,6 @@ const Profile = ({ navigation }: any) => {
 					</View>
 				</View>
 				<FourBtn />
-				{/* <Footer /> */}
 			</CommonLayout>
 			<AbsoluteVar />
 		</>

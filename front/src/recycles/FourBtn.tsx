@@ -27,7 +27,10 @@ const FourBtn = ({ ProfileData }: any | null) => {
 					</TouchableOpacity>
 					<TouchableOpacity
 						style={styles.btn}
-						onPress={() => navigate("Register")}
+						onPress={
+							() => navigate("UpdateInfo", ProfileData)
+							// () => navigate("Register")
+						}
 					>
 						<Image source={Btn2} style={styles.btnImg} />
 						<Text style={styles.btnText2}>프로필 관리</Text>
