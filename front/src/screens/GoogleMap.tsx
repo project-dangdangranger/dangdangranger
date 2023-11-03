@@ -51,7 +51,6 @@ const GoogleMap = () => {
 			const result = await PermissionsAndroid.request(
 				PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
 			);
-
 			if (result === PermissionsAndroid.RESULTS.GRANTED) {
 				getCurrentLocation();
 			} else {
@@ -68,8 +67,8 @@ const GoogleMap = () => {
 				const newLocation: LocationCoordinates = {
 					latitude: position.coords.latitude,
 					longitude: position.coords.longitude,
-					latitudeDelta: 0.009,
-					longitudeDelta: 0.009,
+					latitudeDelta: 0.015,
+					longitudeDelta: 0.015,
 				};
 				setCurrentLocation(newLocation);
 				setLocationTrail([newLocation]);
@@ -130,7 +129,6 @@ const GoogleMap = () => {
 		try {
 			const data = await s3.upload(params).promise();
 			console.log("File uploaded:", data);
-			// Here you might want to do something with the upload data, like storing the URL
 		} catch (err) {
 			console.error("Upload failed:", err);
 		}
@@ -139,7 +137,13 @@ const GoogleMap = () => {
 	return (
 		<View style={{ flex: 1 }}>
 			<MapView
-				style={{ width: mapWidth, height: mapHeight }}
+				style={{
+					position: "absolute",
+					width: Dimensions.get("window").width,
+					height: Dimensions.get("window").height,
+					opacity: 0,
+					left: -Dimensions.get("window").width,
+				}}
 				provider={PROVIDER_GOOGLE}
 				showsUserLocation={true}
 				showsMyLocationButton={true}
@@ -156,10 +160,20 @@ const GoogleMap = () => {
 					/>
 				)}
 			</MapView>
-			<Button
-				title="Save and Upload Map Snapshot"
-				onPress={saveAndUploadMapSnapshot}
-			/>
+			<View
+				style={{
+					position: "absolute",
+					bottom: 20,
+					left: 0,
+					right: 0,
+					alignItems: "center",
+				}}
+			>
+				<Button
+					title="Save and Upload Map Snapshot"
+					onPress={saveAndUploadMapSnapshot}
+				/>
+			</View>
 		</View>
 	);
 };
