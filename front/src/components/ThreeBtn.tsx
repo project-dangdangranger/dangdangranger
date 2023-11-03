@@ -4,7 +4,7 @@ import {
 	StyleSheet,
 	TouchableOpacity,
 	Image,
-	Alert,
+	Linking,
 } from "react-native";
 import {
 	responsiveHeight,
@@ -31,7 +31,8 @@ const ThreeBtn = () => {
 	};
 
 	const callPolice = () => {
-		Alert.alert("네 112입니다. 무엇을 도와드릴까요?");
+		//전화걸기 -> 112 입력된 채로 넘어가기
+		Linking.openURL(`tel:112`);
 	};
 
 	return (
