@@ -15,15 +15,19 @@ import Btn2 from "../../assets/images/3btn-siren-icon.png";
 import Btn3 from "../../assets/images/3btn-call-icon.png";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigation } from "../../App";
+import React, { useState } from "react";
+import { NativeModules } from "react-native";
 
+const { KakaoMapModule } = NativeModules;
 const ThreeBtn = () => {
 	const { navigate } = useNavigation<StackNavigation>();
 	const authHandling = (pageName: string) => {
 		navigate(pageName);
 	};
+	const [sirenOn, setSirenOn] = useState(false);
 
 	const siren = () => {
-		Alert.alert("삐뽀삐뽀");
+		KakaoMapModule.playSound();
 	};
 
 	const callPolice = () => {
