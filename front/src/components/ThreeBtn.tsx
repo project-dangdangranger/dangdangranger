@@ -24,6 +24,7 @@ const ThreeBtn = () => {
 	const authHandling = (pageName: string) => {
 		navigate(pageName);
 	};
+	const [sirenOn, setSirenOn] = useState(false);
 
 	const siren = () => {
 		KakaoMapModule.playSound();
