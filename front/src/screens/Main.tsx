@@ -22,8 +22,6 @@ import { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 // import { NativeModules } from "react-native";
 
-// const { KakaoMapModule } = NativeModules;
-
 const Main = () => {
 	const LoginStore = {
 		isLogged: true,
