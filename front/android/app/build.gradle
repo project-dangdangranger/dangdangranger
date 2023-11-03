@@ -129,8 +129,6 @@ dependencies {
         implementation jscFlavor
     }
     
-    // sound
-    implementation project(':react-native-sound')
 
 }
 
