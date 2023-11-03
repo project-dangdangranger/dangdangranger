@@ -15,6 +15,9 @@ import Btn2 from "../../assets/images/3btn-siren-icon.png";
 import Btn3 from "../../assets/images/3btn-call-icon.png";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigation } from "../../App";
+import Sound from "react-native-sound";
+import React, { useState } from "react";
+// import sound from "../../assets/sounds/sound.mp3";
 
 const ThreeBtn = () => {
 	const { navigate } = useNavigation<StackNavigation>();
@@ -22,8 +25,35 @@ const ThreeBtn = () => {
 		navigate(pageName);
 	};
 
+	const alertSound = new Sound("sound.mp3", Sound.MAIN_BUNDLE, (error) => {
+		console.log("sound error!! ", error);
+		return;
+	});
+
+	// const [sirenOn, setSirenOn] = useState(false);
+
 	const siren = () => {
-		Alert.alert("삐뽀삐뽀");
+		// Alert.alert("삐뽀삐뽀");
+		// if (sirenOn) {
+		// 	alertSound.stop(() => {
+		// 		console.log("사이렌 off!");
+		// 		setSirenOn(false);
+		// 	});
+		// } else {
+		// 	alertSound.stop(() => {
+		// 		console.log("사이렌 on!");
+		// 		alertSound.play();
+		// 		setSirenOn(true);
+		// 	});
+		// }
+
+		alertSound.play((success) => {
+			if (success) {
+				console.log("successfully finished playing");
+			} else {
+				console.log("playback failed due to audio decoding errors");
+			}
+		});
 	};
 
 	const callPolice = () => {
