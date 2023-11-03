@@ -19,14 +19,15 @@ import MissingSubImg from "../../assets/images/main-missing.png";
 import ChatBotSubImg from "../../assets/images/main-chatbot.png";
 import FooterBar from "../recycles/FooterBar";
 import { useEffect, useState } from "react";
-// import { NativeModules } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+// import { NativeModules } from "react-native";
+
+// const { KakaoMapModule } = NativeModules;
 
 const Main = () => {
 	const LoginStore = {
 		isLogged: true,
 	};
-
 	const navigation = useNavigation();
 
 	const authHandling = (pageName: string) => {
