@@ -18,7 +18,12 @@ type LocationCoordinates = {
 	longitudeDelta: number;
 };
 
-const GoogleMap = () => {
+type Props = {
+	startTracking: string;
+	stopTracking: string;
+};
+
+const GoogleMap = (props: Props) => {
 	const mapWidth = Dimensions.get("window").width;
 	const mapHeight = Dimensions.get("window").height;
 	const [currentLocation, setCurrentLocation] = useState<
@@ -36,15 +41,25 @@ const GoogleMap = () => {
 
 	useEffect(() => {
 		requestPermission();
-		const id = startWatchingLocation();
-		watchIdRef.current = id;
+	}, []);
 
-		return () => {
+	useEffect(() => {
+		if (props.startTracking) {
+			const id = startWatchingLocation();
+			watchIdRef.current = id;
+		} else {
 			if (watchIdRef.current !== null) {
 				Geolocation.clearWatch(watchIdRef.current);
+				watchIdRef.current = null;
 			}
-		};
-	}, []);
+		}
+	}, [props.startTracking]);
+
+	useEffect(() => {
+		if (props.stopTracking) {
+			saveAndUploadMapSnapshot();
+		}
+	}, [props.stopTracking]);
 
 	const requestPermission = async () => {
 		try {
