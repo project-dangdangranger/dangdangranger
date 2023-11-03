@@ -19,10 +19,12 @@ import CustomText from "../recycles/CustomText";
 import { responsiveHeight } from "react-native-responsive-dimensions";
 import axios from "../utils/axios";
 import WalletMine from "./WalletMine";
+import { useRecoilState } from "recoil";
+import { walletAddress } from "../atoms/atoms";
 
 const Profile = ({ navigation }: any) => {
 	const [checkWallet, setCheckWallet] = useState<boolean>(false);
-	const [checkout, setCheckout] = useState("");
+	const [checkout, setCheckout] = useRecoilState(walletAddress);
 
 	useEffect(() => {
 		axios
@@ -41,6 +43,7 @@ const Profile = ({ navigation }: any) => {
 
 	if (checkWallet) {
 		console.log("생성:", checkWallet);
+		console.log("월렛 주소:", checkout);
 	}
 
 	return (

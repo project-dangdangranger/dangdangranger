@@ -3,7 +3,6 @@ import CommonLayout from "../recycles/CommonLayout";
 import MainHeader from "../recycles/MainHeader";
 import FooterBar from "../recycles/FooterBar";
 import LoginLayout from "../styles/loginLayout";
-import { BASE_URL, CONTENT_TYPE, TIMEOUT } from "../constants/constants";
 import React, { useEffect } from "react";
 import {
 	responsiveHeight,
@@ -14,6 +13,15 @@ import { Picker } from "@react-native-picker/picker";
 import { useState } from "react";
 import axios from "../utils/axios";
 import CustomSubBtn from "../recycles/CustomSubBtn";
+import { S3 } from "aws-sdk";
+import {
+	AWS_ACCESS_KEY,
+	AWS_SECRET_ACCESS_KEY,
+	AWS_REGION,
+	AWS_BUCKET,
+} from "@env";
+import { Buffer } from "buffer";
+import ColorHeader from "../recycles/ColorHeader";
 
 const Login = ({ navigation }: any) => {
 	const [selectedImg, setSelectedImg] = useState("");
@@ -24,6 +32,12 @@ const Login = ({ navigation }: any) => {
 	const [si, setSi] = useState([]);
 	const [guguns, setGuguns] = useState([]);
 	const [dong, setDong] = useState([]);
+
+	const s3 = new S3({
+		accessKeyId: AWS_ACCESS_KEY,
+		secretAccessKey: AWS_SECRET_ACCESS_KEY,
+		region: AWS_REGION,
+	});
 
 	const handleNicknameChange = (newNickname: any) => {
 		setNickname(newNickname);
@@ -49,6 +63,27 @@ const Login = ({ navigation }: any) => {
 		});
 	};
 
+	const uploadImage = async (imageUri: string) => {
+		// console.log("img", imageUri);
+		const blob = Buffer.from(imageUri, "base64");
+		// console.log("blob : ", blob);
+		// key = 지금 날짜와 시간
+		const params = {
+			Bucket: AWS_BUCKET,
+			Key: `${Date.now()}.png`,
+			Body: blob,
+			ContentType: "image/png",
+		};
+
+		try {
+			const data = await s3.upload(params).promise();
+			console.log("File uploaded:", data);
+			// 업로드 후의 로직 (예: URL을 서버에 저장하는 등)
+		} catch (err) {
+			console.error("Upload failed:", err);
+		}
+	};
+
 	const submitRegister = () => {
 		console.log("헬로우:", nickname);
 		console.log("사진:", selectedImg);
@@ -69,17 +104,20 @@ const Login = ({ navigation }: any) => {
 			return;
 		}
 
-		axios
-			.put(`/user`, {
-				userName: nickname,
-				userDong: selectedDong,
-				userProfileImg: selectedImg,
-			})
-			.then((res) => {
-				if (res.data.message === "회원 정보 수정 완료") {
-					navigation.navigate("Main");
-				}
-			});
+		const s3Img = uploadImage(selectedImg);
+		console.log("s3Img:", s3Img);
+
+		// axios
+		// 	.put(`/user`, {
+		// 		userName: nickname,
+		// 		userDong: selectedDong,
+		// 		userProfileImg: selectedImg,
+		// 	})
+		// 	.then((res) => {
+		// 		if (res.data.message === "회원 정보 수정 완료") {
+		// 			navigation.navigate("Main");
+		// 		}
+		// 	});
 	};
 
 	// wjwkd anj
@@ -88,7 +126,7 @@ const Login = ({ navigation }: any) => {
 		<>
 			<></>
 			<CommonLayout>
-				<MainHeader></MainHeader>
+				<ColorHeader title="회원정보입력" />
 
 				<View style={LoginLayout.textregister}>
 					<Text style={LoginLayout.Text1}>회원 정보입력</Text>

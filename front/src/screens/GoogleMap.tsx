@@ -115,9 +115,10 @@ const GoogleMap = () => {
 		// console.log("img", imageUri);
 		const blob = Buffer.from(imageUri, "base64");
 		// console.log("blob : ", blob);
+		// key는 오늘날짜, 시간
 		const params = {
 			Bucket: AWS_BUCKET,
-			Key: "filenameTest",
+			Key: `${new Date().toISOString()}.png`,
 			Body: blob,
 			ContentType: "image/png",
 		};

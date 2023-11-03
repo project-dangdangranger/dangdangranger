@@ -7,6 +7,7 @@ import {
 	TouchableOpacity,
 	Alert,
 	Text,
+	Modal,
 } from "react-native";
 import CommonLayout from "../recycles/CommonLayout";
 import ColorHeader from "../recycles/ColorHeader";
@@ -18,14 +19,16 @@ import {
 	responsiveHeight,
 	responsiveWidth,
 } from "react-native-responsive-dimensions";
-import Clipboard from "@react-native-community/clipboard";
+import Clipboard from "@react-native-clipboard/clipboard";
 import copy from "../../assets/images/copy.png";
 import axios from "../utils/axios";
 import { useNavigation } from "@react-navigation/native";
+import closeIcon from "../../assets/images/close-icon.png";
+import ModalPrivateKey from "../components/ModalPrivateKey";
 
 const Profile = ({ checkout }: any) => {
 	const navigation = useNavigation();
-	console.log(checkout.userWalletAddress);
+	const [modalVisible, setModalVisible] = useState(false);
 	const [password, setPassword] = useState("");
 
 	const copyToClipboard = () => {
@@ -39,12 +42,14 @@ const Profile = ({ checkout }: any) => {
 		}
 
 		axios
-			.post("/user/wallet", {
+			.post("/user/wallet/check", {
 				userWalletPw: password,
 			})
 			.then((data) => {
-				console.log("data.data.data: ", data);
-				// navigation.navigate("Main");
+				console.log("data.data.data:ㅡㄴㅁ이ㅓㄴ무아 ", data.data.message);
+				if (data.data.message === "지갑 비밀번호 일치") {
+					setModalVisible(true);
+				}
 			})
 			.catch((err) => {
 				console.log("errdpfjs에러니?: ", err.response);
@@ -94,6 +99,7 @@ const Profile = ({ checkout }: any) => {
 					</View>
 
 					<View style={styles.container}>
+						<Text style={styles.walletText}>개인키 확인하기</Text>
 						<TextInput
 							style={styles.textInput}
 							value={password}
@@ -105,6 +111,11 @@ const Profile = ({ checkout }: any) => {
 
 					<CustomButton text="지갑 발급하기" onPress={AlertSubmit} />
 				</CommonLayout>
+
+				<ModalPrivateKey
+					modalVisible={modalVisible}
+					setModalVisible={setModalVisible}
+				/>
 				<AbsoluteVar />
 			</>
 		</>
@@ -148,5 +159,54 @@ const styles = StyleSheet.create({
 		fontSize: 17,
 		fontWeight: "bold",
 		marginBottom: responsiveHeight(1),
+	},
+	centeredView: {
+		flex: 1,
+		justifyContent: "center",
+		alignItems: "center",
+		backgroundColor: "rgba(0, 0, 0, 0.5)", // 이 부분이 모달 외부를 어둡게 합니다.
+	},
+	modalView: {
+		position: "relative",
+		backgroundColor: "white",
+		borderRadius: 20,
+		padding: 35,
+		alignItems: "center",
+		shadowColor: "#000",
+		shadowOffset: {
+			width: 0,
+			height: 2,
+		},
+		shadowOpacity: 0.25,
+		shadowRadius: 4,
+		elevation: 5,
+	},
+	xImg: {
+		position: "absolute",
+		top: 0,
+		left: responsiveWidth(20),
+	},
+	button: {
+		width: responsiveWidth(50),
+		justifyContent: "center",
+		borderRadius: 30,
+		padding: 10,
+		elevation: 2,
+	},
+	buttonClose: {
+		backgroundColor: "#3D6CC9",
+		// alignItems: "center",
+		// justifyContent: "center",
+	},
+	textStyle: {
+		color: "white",
+		fontWeight: "bold",
+		textAlign: "center",
+
+		fontSize: 20,
+	},
+	modalText: {
+		marginBottom: 15,
+		textAlign: "center",
 	},
 });

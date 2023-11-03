@@ -20,13 +20,14 @@ import ChatBotSubImg from "../../assets/images/main-chatbot.png";
 import FooterBar from "../recycles/FooterBar";
 import { useEffect, useState } from "react";
 // import { NativeModules } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 
-// const { KakaoMapModule } = NativeModules;
-
-const Main = ({ navigation }: any) => {
+const Main = () => {
 	const LoginStore = {
 		isLogged: true,
 	};
+
+	const navigation = useNavigation();
 
 	const authHandling = (pageName: string) => {
 		// if (LoginStore.isLogged) {
