@@ -9,7 +9,7 @@ import {
 import { useState } from "react";
 import { launchImageLibrary } from "react-native-image-picker";
 
-const EditImage = ({ setSelectedImg }) => {
+const EditImage = ({ selectedImg, setSelectedImg }: any) => {
 	const [imageUri, setImageUri] = useState(null);
 
 	const handleChoosePhoto = () => {
@@ -37,7 +37,7 @@ const EditImage = ({ setSelectedImg }) => {
 		<>
 			<View style={styles.profileWrap}>
 				<Image
-					source={imageUri ? { uri: imageUri } : TempProfileImg}
+					source={selectedImg ? { uri: selectedImg } : TempProfileImg}
 					style={styles.userPhoto}
 				/>
 				<TouchableOpacity

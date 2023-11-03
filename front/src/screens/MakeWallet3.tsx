@@ -6,7 +6,7 @@ import Clipboard from "@react-native-clipboard/clipboard";
 
 import Footer from "../recycles/Footer";
 import ColorHeader from "../recycles/ColorHeader";
-import WalletProcess from "../components/WalletProcess";
+import WalletProcess from "../components/WalletProcess3";
 
 import ProtectWalletLayout from "../styles/protectWalletLayout";
 
@@ -76,7 +76,8 @@ const Profile = ({ navigation }: any) => {
 
 				<TouchableOpacity
 					activeOpacity={0.7}
-					onPress={() => navigation.navigate("Wallet")}
+					// onPress={() => navigation.navigate("Wallet")}
+					onPress={() => navigation.navigate("Main")}
 				>
 					<View style={ProtectWalletLayout.createButton}>
 						<Text style={ProtectWalletLayout.createButtonText}>

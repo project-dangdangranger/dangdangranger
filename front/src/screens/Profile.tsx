@@ -18,10 +18,18 @@ import TempProfileImg from "../../assets/images/dog1.jpg";
 import WhitePenIcon from "../../assets/images/pen-icon.png";
 import FourBtn from "../recycles/FourBtn";
 import AbsoluteVar from "../recycles/FooterBar";
+import axios from "../utils/axios";
 
-const Profile = ({ navigation }: any) => {
-	const flipView = useRef<any>();
-	const [dogList, setDogList] = useState<any>([]);
+const Profile = ({ route, navigation }: any) => {
+	const [ProfileData, setProfileData] = useState<any>([]);
+	useEffect(() => {
+		if (route.params?.updated) {
+			// 파라미터가 전달되었다면 여기서 데이터를 다시 가져오거나 로직을 처리합니다.
+			axios.get("/user").then((data) => {
+				setProfileData(data.data.data);
+			});
+		}
+	}, [route.params]);
 
 	return (
 		<>
@@ -30,26 +38,15 @@ const Profile = ({ navigation }: any) => {
 				<View>
 					<View style={AlbumLayout.profileWrap}>
 						<Image
-							// source={{ uri: myProfileImg }}
-							source={TempProfileImg}
+							source={{ uri: ProfileData.userProfileImg }}
+							// source={TempProfileImg}
 							style={AlbumLayout.userPhoto}
 						/>
-						<TouchableOpacity
-							activeOpacity={0.7}
-							style={AlbumLayout.changeImageWrap}
-						>
-							<View>
-								<Image
-									source={WhitePenIcon}
-									style={AlbumLayout.changeImageIcon}
-								/>
-							</View>
-						</TouchableOpacity>
 					</View>
 					<View style={AlbumLayout.userColcontainer}>
 						<View style={AlbumLayout.userContainer}>
 							<Text style={AlbumLayout.userContainerText}>
-								"{"사용자의 닉네임"}" 님,
+								{ProfileData.userName} 님
 							</Text>
 							<TouchableOpacity style={AlbumLayout.btnCSS1}>
 								<Text style={AlbumLayout.userContainerText1}>정보 검색</Text>
@@ -57,8 +54,7 @@ const Profile = ({ navigation }: any) => {
 						</View>
 						<View style={AlbumLayout.userContainer}>
 							<Text style={AlbumLayout.userContainerText2}>
-								width: responsiveWidth(70), height: responsiveHeight(6), 최대
-								30글자
+								{ProfileData.userAddress}
 							</Text>
 						</View>
 						<View style={AlbumLayout.DividSection}>
@@ -67,7 +63,6 @@ const Profile = ({ navigation }: any) => {
 					</View>
 				</View>
 				<FourBtn />
-				{/* <Footer /> */}
 			</CommonLayout>
 			<AbsoluteVar />
 		</>

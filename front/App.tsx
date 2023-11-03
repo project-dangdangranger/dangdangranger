@@ -6,7 +6,6 @@ import Profile from "./src/screens/Profile";
 import Wallet from "./src/screens/Wallet";
 import DogProfile from "./src/screens/DogProfile";
 import MyWrite from "./src/screens/MyWrite";
-import EditProfile from "./src/screens/EditProfile";
 import MakeWallet1 from "./src/screens/MakeWallet1";
 import MakeWallet2 from "./src/screens/MakeWallet2";
 import MakeWallet3 from "./src/screens/MakeWallet3";
@@ -30,6 +29,10 @@ import Login from "./src/screens/Login";
 import Register from "./src/screens/Register";
 import Start from "./src/screens/Start";
 import PatrolLogDetail from "./src/screens/PatrolLogDetail";
+import WalletMine from "./src/screens/WalletMine";
+import CreateDog from "./src/screens/CreateDog";
+import PrivateKey from "./src/screens/PrivateKey";
+import UpdateInfo from "./src/screens/UpdateInfo";
 
 const App = () => {
 	const Stack = createNativeStackNavigator();
@@ -49,7 +52,6 @@ const App = () => {
 					<Stack.Screen name="Wallet" component={Wallet} />
 					<Stack.Screen name="DogProfile" component={DogProfile} />
 					<Stack.Screen name="MyWrite" component={MyWrite} />
-					<Stack.Screen name="EditProfile" component={EditProfile} />
 					<Stack.Screen name="MakeWallet1" component={MakeWallet1} />
 					<Stack.Screen name="MakeWallet2" component={MakeWallet2} />
 					<Stack.Screen name="MakeWallet3" component={MakeWallet3} />
@@ -73,6 +75,10 @@ const App = () => {
 					<Stack.Screen name="Register" component={Register} />
 					<Stack.Screen name="Start" component={Start} />
 					<Stack.Screen name="PatrolLogDetail" component={PatrolLogDetail} />
+					<Stack.Screen name="WalletMine" component={WalletMine} />
+					<Stack.Screen name="CreateDog" component={CreateDog} />
+					<Stack.Screen name="PrivateKey" component={PrivateKey} />
+					<Stack.Screen name="UpdateInfo" component={UpdateInfo} />
 				</Stack.Navigator>
 			</NavigationContainer>
 		</RecoilRoot>

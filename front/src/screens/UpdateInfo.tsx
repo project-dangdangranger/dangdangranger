@@ -22,8 +22,11 @@ import {
 } from "@env";
 import { Buffer } from "buffer";
 import ColorHeader from "../recycles/ColorHeader";
+import RNFetchBlob from "rn-fetch-blob";
+import { useNavigation } from "@react-navigation/native";
 
-const Login = ({ navigation }: any) => {
+const Login = () => {
+	const navigation = useNavigation();
 	const [selectedImg, setSelectedImg] = useState("");
 	const [nickname, setNickname] = useState("");
 	const [selectedSi, setSelectedSi] = useState();
@@ -32,6 +35,17 @@ const Login = ({ navigation }: any) => {
 	const [si, setSi] = useState([]);
 	const [guguns, setGuguns] = useState([]);
 	const [dong, setDong] = useState([]);
+	const [userInfo, setUserInfo] = useState({});
+
+	useEffect(() => {
+		axios.get("/user").then((res) => {
+			console.log(res.data.data);
+			setUserInfo(res.data.data);
+			setNickname(res.data.data.userName);
+			setSelectedDong(res.data.data.userAddress);
+			setSelectedImg(res.data.data.userProfileImg);
+		});
+	}, []);
 
 	const s3 = new S3({
 		accessKeyId: AWS_ACCESS_KEY,
@@ -65,74 +79,57 @@ const Login = ({ navigation }: any) => {
 
 	const uploadImage = async (imageUri: string) => {
 		// console.log("img", imageUri);
-		const blob = Buffer.from(imageUri, "base64");
-		// console.log("blob : ", blob);
-		// key = 지금 날짜와 시간
+		const response = await fetch(imageUri);
+		const blob = await response.blob();
+		const type = blob.type;
+		const random = Math.floor(Math.random() * 100000000);
+		const filename = `profile_${new Date().toISOString()}_${random}.png`;
 		const params = {
 			Bucket: AWS_BUCKET,
-			Key: `${Date.now()}.png`,
+			Key: filename,
 			Body: blob,
-			ContentType: "image/png",
+			ContentType: type,
 		};
-
-		try {
-			const data = await s3.upload(params).promise();
-			console.log("File uploaded:", data);
-			// 업로드 후의 로직 (예: URL을 서버에 저장하는 등)
-		} catch (err) {
-			console.error("Upload failed:", err);
-		}
+		s3.upload(params, (err: any, data: any) => {
+			if (err) {
+				console.log("Error occured while trying to upload to S3 bucket", err);
+			} else {
+				axios
+					.put("/user", {
+						userName: nickname,
+						userDong: selectedDong,
+						userProfileImg: data.Location,
+					})
+					.then((data) => {
+						if (data.data.message === "회원 정보 수정 완료") {
+							Alert.alert("앨범 등록 완료", "앨범 등록이 완료되었습니다.");
+							navigation.navigate("Profile", { updated: true });
+						}
+					});
+			}
+		});
 	};
 
-	const submitRegister = () => {
-		console.log("헬로우:", nickname);
-		console.log("사진:", selectedImg);
-		console.log("동:", selectedDong);
-
-		if (!nickname) {
-			Alert.alert("닉네임을 입력해주세요.");
+	const submitRegister = async () => {
+		if (!nickname || !selectedDong || !selectedImg) {
+			Alert.alert("회원정보 수정", "필수입력사항입니다.");
 			return;
 		}
 
-		if (!selectedDong) {
-			Alert.alert("동을 선택해주세요.");
-			return;
-		}
-
-		if (!selectedImg) {
-			Alert.alert("프로필 사진을 선택해주세요.");
-			return;
-		}
-
-		const s3Img = uploadImage(selectedImg);
-		console.log("s3Img:", s3Img);
-
-		// axios
-		// 	.put(`/user`, {
-		// 		userName: nickname,
-		// 		userDong: selectedDong,
-		// 		userProfileImg: selectedImg,
-		// 	})
-		// 	.then((res) => {
-		// 		if (res.data.message === "회원 정보 수정 완료") {
-		// 			navigation.navigate("Main");
-		// 		}
-		// 	});
+		uploadImage(selectedImg);
 	};
-
-	// wjwkd anj
 
 	return (
 		<>
 			<></>
 			<CommonLayout>
-				<ColorHeader title="회원정보입력" />
+				<ColorHeader title="회원정보수정" />
 
 				<View style={LoginLayout.textregister}>
-					<Text style={LoginLayout.Text1}>회원 정보입력</Text>
+					<Text style={LoginLayout.Text1}>회원정보 수정</Text>
 				</View>
 
-				<EditImage setSelectedImg={setSelectedImg} />
+				<EditImage selectedImg={selectedImg} setSelectedImg={setSelectedImg} />
 
 				<View style={styles.formInputContainer}>
 					<Text style={styles.nicknameText}>닉네임</Text>
@@ -140,13 +137,16 @@ const Login = ({ navigation }: any) => {
 						style={styles.formInput1}
 						value={nickname}
 						onChangeText={handleNicknameChange}
-						placeholder="사용자 닉네임을 입력해주세요."
+						placeholder="닉네임을 수정해주세요"
 						maxLength={20}
 					/>
 				</View>
 				<View style={styles.pickers}>
+					<Text>현재 동네 </Text>
+					<Text>{userInfo.userAddress}</Text>
 					<View style={styles.pickerRow}>
 						<Text style={styles.pickerRowText}>시</Text>
+
 						<View style={styles.pickerConitaner}>
 							<Picker
 								selectedValue={selectedSi}
@@ -168,7 +168,6 @@ const Login = ({ navigation }: any) => {
 							</Picker>
 						</View>
 					</View>
-
 					<View style={styles.pickerRow}>
 						<Text style={styles.pickerRowText}>구</Text>
 
@@ -193,7 +192,6 @@ const Login = ({ navigation }: any) => {
 							</Picker>
 						</View>
 					</View>
-
 					<View style={styles.pickerRow}>
 						<Text style={styles.pickerRowText}>동</Text>
 
@@ -220,7 +218,7 @@ const Login = ({ navigation }: any) => {
 				</View>
 				<View style={styles.customBtn}>
 					<CustomSubBtn
-						text="회원가입"
+						text="회원정보 수정"
 						color={"#0349A1"}
 						onPress={submitRegister}
 					/>
@@ -235,7 +233,8 @@ export default Login;
 
 const styles = StyleSheet.create({
 	formInputContainer: {
-		marginVertical: responsiveHeight(5),
+		marginTop: responsiveHeight(5),
+		marginBottom: responsiveHeight(2),
 		marginHorizontal: responsiveWidth(10),
 		justifyContent: "space-between",
 		flexDirection: "row",

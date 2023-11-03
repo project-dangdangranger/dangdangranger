@@ -9,3 +9,8 @@ export const accessTokenState = atom({
 	key: "accessTokenState",
 	default: "",
 });
+
+export const walletAddress = atom({
+	key: "walletAddress",
+	default: [],
+});

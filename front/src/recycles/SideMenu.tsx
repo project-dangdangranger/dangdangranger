@@ -7,7 +7,7 @@ import templogo from "../../assets/images/templogo.png";
 
 const SideMenu = (props: any) => {
 	const navigation = useNavigation();
-	console.log(props.clickX);
+
 	return (
 		<>
 			<View style={SideMenuLayout.sideMenuWrap}>
