@@ -73,6 +73,9 @@ const GoogleMap = () => {
 				};
 				setCurrentLocation(newLocation);
 				setLocationTrail([newLocation]);
+				if (mapRef.current) {
+					mapRef.current.animateToRegion(newLocation, 1000);
+				}
 			},
 			(error) => {
 				console.log(error.code, error.message);
