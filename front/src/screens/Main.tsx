@@ -21,14 +21,11 @@ import FooterBar from "../recycles/FooterBar";
 import { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 // import { NativeModules } from "react-native";
-import { useNavigation } from "@react-navigation/native";
 
 const Main = () => {
 	const LoginStore = {
 		isLogged: true,
 	};
-	const navigation = useNavigation();
-
 	const navigation = useNavigation();
 
 	const authHandling = (pageName: string) => {
