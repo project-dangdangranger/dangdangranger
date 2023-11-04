@@ -1,10 +1,6 @@
 import { Text, View, Image, Alert, TouchableOpacity } from "react-native";
 import CommonLayout from "../recycles/CommonLayout";
 import MainHeader from "../recycles/MainHeader";
-import {
-	responsiveHeight,
-	responsiveWidth,
-} from "react-native-responsive-dimensions";
 import MainCount from "../components/MainCount";
 import MainLayout from "../styles/mainLayout";
 import Page from "../../assets/images/mainPage.png";

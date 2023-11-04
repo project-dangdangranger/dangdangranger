@@ -77,6 +77,8 @@ const PatrolDiaryLayout = StyleSheet.create({
 		flexDirection: "row",
 		justifyContent: "space-between",
 		marginTop: responsiveHeight(2),
+		width: responsiveWidth(88),
+		flexWrap: "wrap",
 	},
 
 	iconImg: {
