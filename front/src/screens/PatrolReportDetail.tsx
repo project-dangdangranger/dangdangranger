@@ -9,9 +9,10 @@ import exImg from "../../assets/images/photo-ex-img1.png";
 import ReportUserInfo from "../components/ReportUserInfo";
 import dotIconImg from "../../assets/images/3-dot-icon.png";
 import PatrolDiaryLayout from "../styles/patrolDiaryLayout";
-import { responsiveHeight } from "react-native-responsive-dimensions";
+import { useNavigation } from "@react-navigation/native";
 
 const PatrolReportDetail = ({ route }: any) => {
+	const { navigate } = useNavigation();
 	const [data, setData] = useState({});
 	const { patrolNo } = route.params;
 	const [userData, setUserData] = useState({});
@@ -45,29 +46,6 @@ const PatrolReportDetail = ({ route }: any) => {
 
 	return (
 		<>
-			<Modal
-				animationType="fade"
-				transparent={true}
-				visible={modalVisible}
-				onRequestClose={() => setModalVisible(false)}
-			>
-				<TouchableOpacity
-					style={styles.modalContainer}
-					onPress={() => setModalVisible(false)}
-				>
-					<View style={[styles.modalView]}>
-						<TouchableOpacity
-							style={styles.modalItem}
-							onPress={() => {
-								navigate("PatrolDiaryWrite");
-								setModalVisible(false);
-							}}
-						>
-							<Text style={PatrolDiaryLayout.modalText}>글 수정하기</Text>
-						</TouchableOpacity>
-					</View>
-				</TouchableOpacity>
-			</Modal>
 			<CommonLayout>
 				<ColorHeader title={"순찰 상세 기록"} />
 
@@ -112,10 +90,43 @@ const PatrolReportDetail = ({ route }: any) => {
 								<Text style={styles.commentwriteText}>댓글 작성</Text>
 							</TouchableOpacity>
 						</View>
+						<View style={styles.commentList}>
+							{data.patrolComments?.map((item: any) => {
+								console.log(item);
+								return (
+									<View style={styles.commentDetail}>
+										<Text>{item.patrolCommentContent}</Text>
+									</View>
+								);
+							})}
+						</View>
 					</View>
 				</View>
 			</CommonLayout>
 			<FooterBar />
+			<Modal
+				animationType="fade"
+				transparent={true}
+				visible={modalVisible}
+				onRequestClose={() => setModalVisible(false)}
+			>
+				<TouchableOpacity
+					style={styles.modalContainer}
+					onPress={() => setModalVisible(false)}
+				>
+					<View style={[styles.modalView]}>
+						<TouchableOpacity
+							style={styles.modalItem}
+							onPress={() => {
+								navigate("PatrolDiaryWrite");
+								setModalVisible(false);
+							}}
+						>
+							<Text style={PatrolDiaryLayout.modalText}>글 수정하기</Text>
+						</TouchableOpacity>
+					</View>
+				</TouchableOpacity>
+			</Modal>
 		</>
 	);
 };

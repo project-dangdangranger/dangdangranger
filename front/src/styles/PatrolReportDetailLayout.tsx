@@ -144,7 +144,10 @@ const PatrolReportDetailLayout = StyleSheet.create({
 		top: responsiveHeight(63),
 		left: responsiveWidth(45),
 	},
-	commentcontainer: { height: responsiveHeight(40), backgroundColor: "#fff" },
+	commentcontainer: {
+		backgroundColor: "#F7F8FC",
+		paddingTop: responsiveHeight(2),
+	},
 	commentMainContainer: {
 		marginHorizontal: responsiveWidth(5),
 		flexDirection: "row",
@@ -169,6 +172,17 @@ const PatrolReportDetailLayout = StyleSheet.create({
 		fontSize: 20,
 		fontWeight: "bold",
 		color: "#3D6CC9",
+	},
+	commentList: {
+		marginTop: responsiveHeight(2),
+		marginHorizontal: responsiveWidth(5),
+	},
+	commentDetail: {
+		marginVertical: responsiveHeight(1),
+		backgroundColor: "blue",
+		width: responsiveWidth(90),
+		height: responsiveHeight(10),
+		borderRadius: 10,
 	},
 });
 
