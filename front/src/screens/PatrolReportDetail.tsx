@@ -1,22 +1,77 @@
-import { Text, View, Image, TouchableOpacity, Modal } from "react-native";
+import {
+	Text,
+	View,
+	Image,
+	TouchableOpacity,
+	Modal,
+	TextInput,
+} from "react-native";
 import CommonLayout from "../recycles/CommonLayout";
 import FooterBar from "../recycles/FooterBar";
 import ColorHeader from "../recycles/ColorHeader";
 import axios from "../utils/axios";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import styles from "../styles/PatrolReportDetailLayout";
 import exImg from "../../assets/images/photo-ex-img1.png";
 import ReportUserInfo from "../components/ReportUserInfo";
 import dotIconImg from "../../assets/images/3-dot-icon.png";
 import PatrolDiaryLayout from "../styles/patrolDiaryLayout";
 import { useNavigation } from "@react-navigation/native";
+import {
+	responsiveHeight,
+	responsiveWidth,
+} from "react-native-responsive-dimensions";
 
 const PatrolReportDetail = ({ route }: any) => {
 	const { navigate } = useNavigation();
 	const [data, setData] = useState({});
 	const { patrolNo } = route.params;
 	const [userData, setUserData] = useState({});
+
 	const [modalVisible, setModalVisible] = useState(false);
+	const [modalPosition, setModalPosition] = useState({ top: 0, left: 0 });
+	const threedotRef = useRef(null);
+	const handlePressThreedot = () => {
+		threedotRef.current.measure((fx, fy, width, height, px, py) => {
+			px = responsiveWidth(45);
+			setModalPosition({ top: py + height + 10, left: px });
+			setModalVisible(true);
+		});
+	};
+
+	const [dataVersion, setDataVersion] = useState(0);
+	const [commentList, setCommentList] = useState(data?.patrolComments);
+	const [commentsubmittext, setCommentSubmitText] = useState("");
+	const commentSubmit = () => {
+		axios
+			.post("/patrolcomment", {
+				patrolNo: patrolNo,
+				userNo: userData?.userNo,
+				patrolCommentContent: commentsubmittext,
+			})
+			.then((res) => {
+				setDataVersion((prevVersion) => prevVersion + 1);
+				setCommentSubmitText("");
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+	};
+
+	useEffect(() => {
+		const fetchData = async () => {
+			try {
+				const response = await axios.get(`/patrol/${patrolNo}`);
+				if (response.data.message === "순찰일지 상세조회 완료") {
+					setData(response.data.data);
+				}
+			} catch (error) {
+				console.log(error);
+			}
+		};
+
+		fetchData();
+	}, [dataVersion]);
 
 	useEffect(() => {
 		axios
@@ -67,13 +122,41 @@ const PatrolReportDetail = ({ route }: any) => {
 							</Text>
 						</View>
 						<View style={styles.editContainer}>
-							<TouchableOpacity
-								onPress={() => {
-									setModalVisible(true);
-								}}
-							>
-								<Image style={styles.threedot} source={dotIconImg}></Image>
+							<TouchableOpacity onPress={handlePressThreedot}>
+								<View ref={threedotRef} collapsable={false}>
+									<Image style={styles.threedot} source={dotIconImg} />
+								</View>
 							</TouchableOpacity>
+							<Modal
+								animationType="fade"
+								transparent={true}
+								visible={modalVisible}
+								onRequestClose={() => setModalVisible(false)}
+							>
+								<TouchableOpacity
+									style={styles.modalContainer}
+									onPress={() => setModalVisible(false)}
+								>
+									<View
+										style={[
+											styles.modalView,
+											{ top: modalPosition.top, left: modalPosition.left },
+										]}
+									>
+										<TouchableOpacity
+											style={styles.modalItem}
+											onPress={() => {
+												navigate("PatrolDiaryWrite");
+												setModalVisible(false);
+											}}
+										>
+											<Text style={PatrolDiaryLayout.modalText}>
+												글 수정하기
+											</Text>
+										</TouchableOpacity>
+									</View>
+								</TouchableOpacity>
+							</Modal>
 						</View>
 					</View>
 
@@ -92,41 +175,55 @@ const PatrolReportDetail = ({ route }: any) => {
 						</View>
 						<View style={styles.commentList}>
 							{data.patrolComments?.map((item: any) => {
-								console.log(item);
+								const dateTime = `${item.createDate.slice(
+									0,
+									10,
+								)} ${item.createDate.slice(11, 16)}`;
+
 								return (
-									<View style={styles.commentDetail}>
-										<Text>{item.patrolCommentContent}</Text>
+									<View key={item.patrolCommentNo} style={styles.commentDetail}>
+										<View style={styles.commentCol}>
+											<View style={styles.commentTitle}>
+												<Text>{item.userName}</Text>
+												<Text>{dateTime}</Text>
+												<TouchableOpacity style={styles.settingbtn}>
+													<Image
+														style={styles.commentSettingImg}
+														source={dotIconImg}
+													></Image>
+												</TouchableOpacity>
+											</View>
+											<Text style={styles.commentContent}>
+												{item.patrolCommentContent}
+											</Text>
+										</View>
 									</View>
 								);
 							})}
+							<View>
+								<TextInput
+									style={styles.commentInput}
+									value={commentsubmittext}
+									placeholder="댓글을 입력하세요"
+									maxLength={50}
+									onChangeText={(text) => {
+										setCommentSubmitText(text);
+									}}
+								></TextInput>
+								<TouchableOpacity
+									style={styles.commentSumbit}
+									onPress={() => {
+										commentSubmit();
+									}}
+								>
+									<Text style={styles.subminText}>등록</Text>
+								</TouchableOpacity>
+							</View>
 						</View>
 					</View>
 				</View>
 			</CommonLayout>
 			<FooterBar />
-			<Modal
-				animationType="fade"
-				transparent={true}
-				visible={modalVisible}
-				onRequestClose={() => setModalVisible(false)}
-			>
-				<TouchableOpacity
-					style={styles.modalContainer}
-					onPress={() => setModalVisible(false)}
-				>
-					<View style={[styles.modalView]}>
-						<TouchableOpacity
-							style={styles.modalItem}
-							onPress={() => {
-								navigate("PatrolDiaryWrite");
-								setModalVisible(false);
-							}}
-						>
-							<Text style={PatrolDiaryLayout.modalText}>글 수정하기</Text>
-						</TouchableOpacity>
-					</View>
-				</TouchableOpacity>
-			</Modal>
 		</>
 	);
 };

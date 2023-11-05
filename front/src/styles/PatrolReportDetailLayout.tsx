@@ -113,6 +113,7 @@ const PatrolReportDetailLayout = StyleSheet.create({
 	editContainer: {
 		// backgroundColor: "red",
 	},
+
 	threedot: {
 		height: responsiveHeight(4),
 		width: responsiveWidth(4),
@@ -128,6 +129,7 @@ const PatrolReportDetailLayout = StyleSheet.create({
 		// width: responsiveWidth(100),
 	},
 	modalView: {
+		position: "absolute",
 		width: responsiveWidth(40),
 		marginHorizontal: responsiveWidth(5),
 		height: responsiveHeight(8),
@@ -141,8 +143,8 @@ const PatrolReportDetailLayout = StyleSheet.create({
 		shadowOpacity: 0.25,
 		shadowRadius: 3.84,
 		elevation: 5,
-		top: responsiveHeight(63),
-		left: responsiveWidth(45),
+		// top: responsiveHeight(63),
+		// left: responsiveWidth(45),
 	},
 	commentcontainer: {
 		backgroundColor: "#F7F8FC",
@@ -179,10 +181,58 @@ const PatrolReportDetailLayout = StyleSheet.create({
 	},
 	commentDetail: {
 		marginVertical: responsiveHeight(1),
-		backgroundColor: "blue",
+		backgroundColor: "#E9ECF5",
 		width: responsiveWidth(90),
-		height: responsiveHeight(10),
 		borderRadius: 10,
+	},
+	commentTitle: {
+		flexDirection: "row",
+		width: responsiveWidth(50),
+		justifyContent: "space-between",
+	},
+	commentCol: {
+		marginVertical: responsiveHeight(1),
+		flexDirection: "column",
+		justifyContent: "space-between",
+		// height: responsiveHeight(5.5),
+		marginLeft: responsiveWidth(20),
+	},
+	commentSettingImg: {
+		width: responsiveWidth(6),
+		height: responsiveHeight(3),
+	},
+	settingbtn: {
+		marginTop: responsiveHeight(0.5),
+		marginLeft: responsiveWidth(14),
+		paddingHorizontal: responsiveWidth(2),
+		paddingVertical: responsiveHeight(0.5),
+	},
+	commentContent: {
+		width: responsiveWidth(60),
+	},
+	commentInput: {
+		borderWidth: 2,
+		borderColor: "#3D6CC9",
+		paddingHorizontal: responsiveWidth(5),
+		paddingVertical: responsiveHeight(1),
+		borderRadius: 10,
+		marginTop: responsiveHeight(1),
+	},
+	commentSumbit: {
+		position: "absolute",
+		backgroundColor: "#3D6CC9",
+		alignItems: "center",
+		justifyContent: "center",
+		width: responsiveWidth(15),
+		height: responsiveHeight(4),
+		right: responsiveWidth(5),
+		top: responsiveHeight(2),
+		borderRadius: 5,
+	},
+	subminText: {
+		color: "#fff",
+		fontSize: 17,
+		fontWeight: "bold",
 	},
 });
 
