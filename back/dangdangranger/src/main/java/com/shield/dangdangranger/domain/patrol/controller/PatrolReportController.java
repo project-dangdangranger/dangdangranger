@@ -66,6 +66,13 @@ public class PatrolReportController {
         return ResponseEntity.status(HttpStatus.OK).body(ResponseDto.create(PATROL_REPORT_DELETE_SUCCESS.message()));
     }
 
+    @GetMapping("/title/{keyword}")
+    public ResponseEntity<ResponseDto<List<PatrolListInfoResponseDto>>> searchByTitle(
+            @RequestAttribute("userNo") Integer userNo, @PathVariable String keyword ) {
+        List<PatrolListInfoResponseDto> patrolReportInfoList = patrolReportService.searchByTitle(userNo, keyword);
+        return ResponseEntity.status(HttpStatus.OK).body(ResponseDto.create(SEARCH_BY_TITLE_SUCCESS.message(), patrolReportInfoList));
+    }
+
 
 
 

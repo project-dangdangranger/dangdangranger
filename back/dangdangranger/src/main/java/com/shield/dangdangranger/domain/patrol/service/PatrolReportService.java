@@ -20,6 +20,8 @@ public interface PatrolReportService {
 
     public void deletePatrolReport(Integer patrolNo);
 
+    public List<PatrolListInfoResponseDto> searchByTitle(Integer userNo, String keyword);
+
 
 
 

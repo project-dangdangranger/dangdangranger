@@ -38,5 +38,28 @@ public class PatrolReportRepositoryImpl implements PatrolReportRepositoryCustom{
         return list;
     }
 
+    @Override
+    public List<PatrolReport> findAllByUserDongCodeAndPatrolReportTitleContainingAndCanceled(
+            Integer userNo, String keyword, Integer isCanceled) {
+        QPatrolReport qPatrolReport = QPatrolReport.patrolReport;
+        QPatrolLog qPatrolLog = QPatrolLog.patrolLog;
+        QUser qUser = QUser.user;
+
+        List<PatrolReport> list = queryFactory
+                .selectFrom(qPatrolReport)
+                .join(qPatrolReport.patrolLog, qPatrolLog)
+                .join(qPatrolLog.user, qUser)
+                .where(qUser.userNo.eq(userNo)
+                        .and(qPatrolLog.dong.eq(qUser.dong))
+                        .and(qPatrolReport.patrolReportTitle.contains(keyword))
+                        .and(qPatrolLog.canceled.eq(0))
+                        .and(qPatrolReport.canceled.eq(0))
+                )
+                .orderBy(qPatrolReport.createDate.desc())
+                .fetch();
+
+        return list;
+    }
+
 
 }

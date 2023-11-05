@@ -248,4 +248,31 @@ public class PatrolReportServiceImpl implements PatrolReportService {
         patrolReportRepository.save(patrolReport);
     }
 
+    @Override
+    public List<PatrolListInfoResponseDto> searchByTitle(Integer userNo, String keyword) {
+        List<PatrolReport> reportList = patrolReportRepository
+                .searchByUserDongCodeAndPatrolReportTitleContainingAndCanceled(userNo, keyword, NOTCANCELED);
+        List<PatrolListInfoResponseDto> list = new ArrayList<>();
+
+        for (int i = 0; i < reportList.size(); i++) {
+            PatrolReport patrolReport = reportList.get(i);
+            User user = userRepository.findUserByUserNoAndCanceled(patrolReport.getUserNo(), NOTCANCELED)
+                    .orElseThrow(() -> new NotFoundException(USER_NOT_FOUND_EXCEPTION.message()));
+            Image image = imageRepository.findFirstByImageTypeNoAndParentNoAndCanceled(2, patrolReport.getPatrolReportNo(), NOTCANCELED)
+                    .orElseThrow(() -> new NotFoundException(IMAGE_NOT_FOUND_EXCEPTION.message()));
+
+            PatrolListInfoResponseDto patrolListInfo = PatrolListInfoResponseDto.builder()
+                    .patrolNo(patrolReport.getPatrolReportNo())
+                    .patrolTitle(patrolReport.getPatrolReportTitle())
+                    .patrolDate(patrolReport.getPatrolLog().getPatrolLogDate())
+                    .userName(user.getUserName())
+                    .patrolFirstImg(image.getImageUrl())
+                    .patrolHit(patrolReport.getPatrolReportHit())
+                    .build();
+
+            list.add(patrolListInfo);
+        }
+        return list;
+    }
+
 }
