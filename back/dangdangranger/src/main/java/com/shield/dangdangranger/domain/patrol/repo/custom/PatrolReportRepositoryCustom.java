@@ -11,5 +11,8 @@ public interface PatrolReportRepositoryCustom {
     List<PatrolReport> searchByUserDongCodeAndPatrolReportTitleContainingAndCanceled(
             Integer userNo, String keyword, Integer isCanceled);
 
+    List<PatrolReport> searchByUserDongCodeAndPatrolReportContentContainingAndCanceled(
+            Integer userNo, String keyword, Integer isCanceled);
+
 
 }
