@@ -6,11 +6,13 @@ import {
 
 const PatrolDiaryLayout = StyleSheet.create({
 	container: {
-		height: responsiveHeight(72),
 		alignItems: "center",
 	},
-
+	settings: {
+		position: "relative",
+	},
 	headerWrap: {
+		marginLeft: responsiveWidth(3),
 		marginTop: responsiveHeight(1.5),
 		width: responsiveWidth(88),
 	},
@@ -73,20 +75,45 @@ const PatrolDiaryLayout = StyleSheet.create({
 	},
 
 	patrolRowWrap: {
-		flex: 1,
+		width: responsiveWidth(88),
 		flexDirection: "row",
 		justifyContent: "space-between",
 		marginTop: responsiveHeight(2),
+		flexWrap: "wrap",
 	},
 
 	iconImg: {
 		width: 30,
 		height: 30,
 	},
-
-	debug: {
-		borderWidth: 2,
-		backgroundColor: "red",
+	modalContainer: {
+		flex: 1,
+		top: responsiveHeight(28),
+		width: responsiveWidth(50),
+		left: responsiveWidth(50),
+	},
+	modalView: {
+		marginHorizontal: responsiveWidth(5),
+		height: responsiveHeight(8),
+		backgroundColor: "white",
+		borderRadius: 10,
+		shadowColor: "#000",
+		shadowOffset: {
+			width: 0,
+			height: 2,
+		},
+		shadowOpacity: 0.25,
+		shadowRadius: 3.84,
+		elevation: 5,
+	},
+	modalItem: {
+		height: responsiveHeight(8),
+		// marginBottom: 15,
+		justifyContent: "center",
+		alignItems: "center",
+	},
+	modalText: {
+		fontSize: 17,
 	},
 });
 
