@@ -109,7 +109,7 @@ const Profile = ({ checkout }: any) => {
 						/>
 					</View>
 
-					<CustomButton text="지갑 발급하기" onPress={AlertSubmit} />
+					<CustomButton text="개인키 확인하기" onPress={AlertSubmit} />
 				</CommonLayout>
 
 				<ModalPrivateKey

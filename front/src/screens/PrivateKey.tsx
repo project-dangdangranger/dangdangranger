@@ -1,19 +1,10 @@
 import { useEffect, useState } from "react";
-import {
-	View,
-	Image,
-	Alert,
-	Text,
-	StyleSheet,
-	Button,
-	TouchableOpacity,
-} from "react-native";
+import { View, Image, Alert, Text, TouchableOpacity } from "react-native";
 import CommonLayout from "../recycles/CommonLayout";
 import ColorHeader from "../recycles/ColorHeader";
 import AbsoluteVar from "../recycles/FooterBar";
 import CustomText from "../recycles/CustomText";
 
-import axios from "../utils/axios";
 import { useNavigation } from "@react-navigation/native";
 
 import ModalPrivateKey from "../components/ModalPrivateKey";
@@ -27,15 +18,17 @@ import { useRecoilValue } from "recoil";
 import EncryptedStorage from "react-native-encrypted-storage";
 
 const Profile = () => {
-	const [myPrivateKey, setPrivateKey] = useState("");
+	const [myPrivateKey, setMyPrivateKey] = useState("");
+
 	useEffect(() => {
 		handleGoogleLogin();
 	}, []);
 	const handleGoogleLogin = async () => {
 		try {
 			const privateKey = await EncryptedStorage.getItem("privateKey");
+			console.log(privateKey);
 			if (privateKey) {
-				setPrivateKey(privateKey);
+				setMyPrivateKey(privateKey);
 			}
 		} catch (error) {
 			console.error(error);
@@ -45,34 +38,12 @@ const Profile = () => {
 	const [showText, setShowText] = useState(true);
 	const checkout = useRecoilValue(walletAddress);
 
-	const sampleText = checkout.userWalletAddress;
-
 	const navigation = useNavigation();
 	const [modalVisible, setModalVisible] = useState(false);
-	const [password, setPassword] = useState("");
 
 	const copyToClipboard = () => {
-		Clipboard.setString(checkout.userWalletAddress);
+		Clipboard.setString(myPrivateKey);
 		Alert.alert("클립보드에 복사되었습니다!");
-	};
-
-	const AlertSubmit = () => {
-		if (!password) {
-			Alert.alert("비밀번호를 입력해주세요.");
-		}
-
-		axios
-			.post("/user/wallet/check", {
-				userWalletPw: password,
-			})
-			.then((data) => {
-				console.log("data.data.data: ", data.data.data);
-				setModalVisible(true);
-				// navigation.navigate("Main");
-			})
-			.catch((err) => {
-				console.log("errdpfjs에러니?: ", err.response);
-			});
 	};
 
 	return (
@@ -151,7 +122,7 @@ const Profile = () => {
 						</View>
 					</View>
 					<CustomButton
-						text="지갑주소 복사하기"
+						text="개인키 복사하기"
 						color={"#70C8EE"}
 						onPress={() => copyToClipboard()}
 					/>

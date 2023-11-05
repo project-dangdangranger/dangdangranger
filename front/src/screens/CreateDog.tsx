@@ -18,7 +18,7 @@ import {
 import CustomSubButton from "../recycles/CustomSubBtn";
 import AddPlusIcon from "../../assets/images/add-plus-icon.png";
 
-const Profile = ({ navigation }: any) => {
+const CreateDog = ({ navigation }: any) => {
 	return (
 		<>
 			<CommonLayout>
@@ -101,7 +101,7 @@ const Profile = ({ navigation }: any) => {
 	);
 };
 
-export default Profile;
+export default CreateDog;
 
 const styles = StyleSheet.create({
 	viewcontainer: {

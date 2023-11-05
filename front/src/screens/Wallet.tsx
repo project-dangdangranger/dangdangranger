@@ -26,23 +26,30 @@ const Profile = ({ navigation }: any) => {
 	const [checkWallet, setCheckWallet] = useState<boolean>(false);
 	const [checkout, setCheckout] = useRecoilState(walletAddress);
 
+	let hasWallet = false;
+
 	useEffect(() => {
 		axios
 			.get("/user/wallet")
 			.then((data) => {
 				console.log("data.data.data: ", data.data.data);
-				if (data.data.data) {
+				if (data.data.data != null) {
+					hasWallet = true;
 					setCheckWallet(true);
 					setCheckout(data.data.data);
+				} else {
+					hasWallet = false;
+					setCheckWallet(false);
 				}
 			})
 			.catch((err) => {
 				console.log("errdpfjs에러니?: ", err.response);
+				hasWallet = false;
 			});
 	}, []);
 
-	if (checkWallet) {
-		console.log("생성:", checkWallet);
+	if (hasWallet) {
+		console.log("생성:", hasWallet);
 		console.log("월렛 주소:", checkout);
 	}
 
