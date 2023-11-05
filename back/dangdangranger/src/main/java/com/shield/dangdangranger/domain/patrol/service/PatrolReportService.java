@@ -24,7 +24,7 @@ public interface PatrolReportService {
 
     public List<PatrolListInfoResponseDto> searchByContent(Integer userNo, String keyword);
 
-
+    public List<PatrolListInfoResponseDto> searchByTitleAndContent(Integer userNo, String keyword);
 
 
 
