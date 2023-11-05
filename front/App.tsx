@@ -33,6 +33,7 @@ import WalletMine from "./src/screens/WalletMine";
 import CreateDog from "./src/screens/CreateDog";
 import PrivateKey from "./src/screens/PrivateKey";
 import UpdateInfo from "./src/screens/UpdateInfo";
+import PatrolReportDetail from "./src/screens/PatrolReportDetail";
 
 const App = () => {
 	const Stack = createNativeStackNavigator();
@@ -79,6 +80,10 @@ const App = () => {
 					<Stack.Screen name="CreateDog" component={CreateDog} />
 					<Stack.Screen name="PrivateKey" component={PrivateKey} />
 					<Stack.Screen name="UpdateInfo" component={UpdateInfo} />
+					<Stack.Screen
+						name="PatrolReportDetail"
+						component={PatrolReportDetail}
+					/>
 				</Stack.Navigator>
 			</NavigationContainer>
 		</RecoilRoot>

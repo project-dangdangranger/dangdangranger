@@ -3,13 +3,20 @@ import {
 	responsiveHeight,
 	responsiveWidth,
 } from "react-native-responsive-dimensions";
-
 import locationIcon from "../../assets/images/location-pin-icon.png";
+import { useNavigation } from "@react-navigation/native";
 
 const PatrolDiaryCard = ({ imgSrc, patrolDiaryInfo }: any) => {
+	const navigation = useNavigation();
 	return (
 		<>
-			<TouchableOpacity>
+			<TouchableOpacity
+				onPress={() => {
+					navigation.navigate("PatrolReportDetail", {
+						patrolNo: patrolDiaryInfo.patrolNo,
+					});
+				}}
+			>
 				<View style={style.cardWrap}>
 					<View style={style.imgWrap}>
 						<Image source={imgSrc} style={style.img} />

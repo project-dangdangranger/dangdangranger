@@ -110,7 +110,7 @@ const PatrolDiary = () => {
 							<TextInput
 								style={PatrolDiaryLayout.formInput}
 								onChangeText={() => {}}
-								placeholder="실종견의 정보를 입력해주세요."
+								placeholder="순찰일지 정보를 입력해주세요."
 							/>
 						</View>
 					</View>
