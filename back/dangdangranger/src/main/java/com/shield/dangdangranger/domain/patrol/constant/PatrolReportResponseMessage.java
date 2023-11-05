@@ -9,6 +9,9 @@ public enum PatrolReportResponseMessage {
     PATROL_REPORT_NOT_FOUND_EXCEPTION("순찰일지 1개 조회 실패"),
     PATROL_REPORT_UPDATE_SUCCESS("순찰일지 수정 성공"),
     PATROL_REPORT_DELETE_SUCCESS("순찰일지 삭제 성공"),
+    SEARCH_BY_TITLE_SUCCESS("순찰일지 제목 검색 성공"),
+    SEARCH_BY_CONTENT_SUCCESS("순찰일지 내용 검색 성공"),
+    SEARCH_BY_TITLE_AND_CONTENT_SUCCESS("순찰일지 제목 및 내용 검색 성공")
     ;
 
     private final String message;
