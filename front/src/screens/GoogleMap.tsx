@@ -19,8 +19,10 @@ type LocationCoordinates = {
 };
 
 type Props = {
-	startTracking: string;
-	stopTracking: string;
+	start: boolean;
+	patrol: boolean;
+	setStart: boolean;
+	setPatrol: boolean;
 };
 
 const GoogleMap = (props: Props) => {
@@ -44,7 +46,7 @@ const GoogleMap = (props: Props) => {
 	}, []);
 
 	useEffect(() => {
-		if (props.startTracking) {
+		if (props.start) {
 			const id = startWatchingLocation();
 			watchIdRef.current = id;
 		} else {
@@ -53,13 +55,15 @@ const GoogleMap = (props: Props) => {
 				watchIdRef.current = null;
 			}
 		}
-	}, [props.startTracking]);
+	}, [props.start]);
 
 	useEffect(() => {
-		if (props.stopTracking) {
+		if (props.patrol) {
+			props.setPatrol = false;
+			props.setStart = false;
 			saveAndUploadMapSnapshot();
 		}
-	}, [props.stopTracking]);
+	}, [props.patrol]);
 
 	const requestPermission = async () => {
 		try {
