@@ -1,7 +1,6 @@
 package com.shield.dangdangranger.domain.patrol.dto;
 
 import com.shield.dangdangranger.domain.patrol.entity.PatrolLog;
-import com.shield.dangdangranger.domain.region.entity.Dong;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -45,5 +44,12 @@ public class PatrolLogResponseDto {
             this.patrolLogImageUrl = patrolLog.getPatrolLogImageUrl();
             this.patrolLogDate = patrolLog.getPatrolLogDate();
         }
+    }
+
+    @Getter
+    @AllArgsConstructor
+    @Builder
+    public static class PatrolPeopleCntResponseDto {
+        private Integer patrolPeopleCnt;
     }
 }

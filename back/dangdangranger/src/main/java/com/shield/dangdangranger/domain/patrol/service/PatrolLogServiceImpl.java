@@ -4,12 +4,13 @@ import static com.shield.dangdangranger.domain.patrol.constant.PatrolLogExceptio
 import static com.shield.dangdangranger.domain.patrol.constant.PatrolWritten.NOT_WRITTEN;
 import static com.shield.dangdangranger.domain.region.constant.RegionErrorMessage.DONG_NOT_FOUND_EXCEPTION;
 import static com.shield.dangdangranger.domain.user.constant.UserExceptionMessage.USER_NOT_FOUND_EXCEPTION;
-import static com.shield.dangdangranger.global.constant.BaseConstant.NOTCANCELED;
 import static com.shield.dangdangranger.global.constant.BaseConstant.FORBIDDEN_EXCEPTION_MESSAGE;
+import static com.shield.dangdangranger.global.constant.BaseConstant.NOTCANCELED;
 
 import com.shield.dangdangranger.domain.patrol.dto.PatrolLogRequestDto.PatrolLogSaveRequestDto;
 import com.shield.dangdangranger.domain.patrol.dto.PatrolLogResponseDto.PatrolLogDetailInfoResponseDto;
 import com.shield.dangdangranger.domain.patrol.dto.PatrolLogResponseDto.PatrolLogRoughInfoResponseDto;
+import com.shield.dangdangranger.domain.patrol.dto.PatrolLogResponseDto.PatrolPeopleCntResponseDto;
 import com.shield.dangdangranger.domain.patrol.entity.PatrolLog;
 import com.shield.dangdangranger.domain.patrol.repo.PatrolLogRepository;
 import com.shield.dangdangranger.domain.patrol.repo.custom.PatrolLogRepositoryCustom;
@@ -85,5 +86,13 @@ public class PatrolLogServiceImpl implements PatrolLogService {
     @Override
     public void addPatrolPerson() {
         patrolRedisService.addPatrolPersonInRedis();
+    }
+
+    @Override
+    public PatrolPeopleCntResponseDto readPatrolPeopleCnt() {
+        log.debug("patrol people cnt : {}", patrolRedisService.readPatrolPeopleCntFromRedis());
+        return PatrolPeopleCntResponseDto.builder()
+            .patrolPeopleCnt(patrolRedisService.readPatrolPeopleCntFromRedis())
+            .build();
     }
 }

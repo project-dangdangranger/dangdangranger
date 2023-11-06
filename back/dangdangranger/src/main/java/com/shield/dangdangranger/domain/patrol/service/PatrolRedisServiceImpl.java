@@ -23,4 +23,10 @@ public class PatrolRedisServiceImpl implements PatrolRedisService{
         String patrolKey = "patrol_people_cnt";
         redisTemplate.opsForValue().decrement(patrolKey, 1);
     }
+
+    @Override
+    public int readPatrolPeopleCntFromRedis() {
+        String patrolKey = "patrol_people_cnt";
+        return (int) redisTemplate.opsForValue().get(patrolKey);
+    }
 }
