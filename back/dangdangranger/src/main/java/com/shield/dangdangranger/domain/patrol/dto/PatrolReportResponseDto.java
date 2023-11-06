@@ -66,6 +66,7 @@ public class PatrolReportResponseDto {
     public static class PatrolListInfoResponseDto {
         private Integer patrolNo;
         private String patrolTitle;
+        private String patrolLogAddress;
         private LocalDateTime patrolDate;
         private String userName;
         private String patrolFirstImg;
