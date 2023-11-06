@@ -23,3 +23,9 @@ declare module "@env" {
 	export const MINT_DOG_TOKEN_ADDRESS: string;
 	export const ADMIN_WALLET_PRIVATE_KEY: string;
 }
+
+// sockjs-client.d.ts
+declare module "sockjs-client" {
+	var SockJS: any;
+	export default SockJS;
+}
