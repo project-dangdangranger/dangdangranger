@@ -32,4 +32,14 @@ public class RegionVo {
             this.dongName = dong.getDongName();
         }
     }
+
+    @Getter
+    @AllArgsConstructor
+    @Builder
+    public static class AddressVo {
+        private String sidoName;
+        private String gugunName;
+        private String dongName;
+    }
+
 }
