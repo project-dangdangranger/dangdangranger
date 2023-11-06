@@ -16,11 +16,14 @@ import com.shield.dangdangranger.domain.patrol.repo.PatrolLogRepository;
 import com.shield.dangdangranger.domain.patrol.repo.custom.PatrolLogRepositoryCustom;
 import com.shield.dangdangranger.domain.region.entity.Dong;
 import com.shield.dangdangranger.domain.region.repo.DongRepository;
+import com.shield.dangdangranger.domain.region.repo.custom.DongCustomRepository;
+import com.shield.dangdangranger.domain.region.vo.RegionVo.AddressVo;
 import com.shield.dangdangranger.domain.user.entity.User;
 import com.shield.dangdangranger.domain.user.repo.UserRepository;
 import com.shield.dangdangranger.global.error.ForbiddenException;
 import com.shield.dangdangranger.global.error.NotFoundException;
 import java.util.List;
+import java.util.StringTokenizer;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -36,6 +39,7 @@ public class PatrolLogServiceImpl implements PatrolLogService {
     private final PatrolLogRepository patrolLogRepository;
     private final UserRepository userRepository;
     private final DongRepository dongRepository;
+    private final DongCustomRepository dongCustomRepository;
     private final PatrolLogRepositoryCustom patrolLogRepositoryCustom;
     private final PatrolRedisService patrolRedisService;
 
@@ -44,7 +48,9 @@ public class PatrolLogServiceImpl implements PatrolLogService {
     public void createPatrolLog(Integer userNo, PatrolLogSaveRequestDto patrolLogSaveRequestDto) {
         User user = userRepository.findUserByUserNoAndCanceled(userNo, NOTCANCELED)
             .orElseThrow(() -> new NotFoundException(USER_NOT_FOUND_EXCEPTION.message()));
-        Dong dong = dongRepository.findDongByDongCode(patrolLogSaveRequestDto.getDong())
+
+        AddressVo addressVo = parseAddressToVo(patrolLogSaveRequestDto.getAddress());
+        Dong dong = dongCustomRepository.findDongByAddress(addressVo)
             .orElseThrow(() -> new NotFoundException(DONG_NOT_FOUND_EXCEPTION.message()));
 
         log.debug("[createPatrolLog] dong : {}", dong);
@@ -61,6 +67,15 @@ public class PatrolLogServiceImpl implements PatrolLogService {
             .patrolLogLng(patrolLogSaveRequestDto.getPatrolLogLng())
             .patrolLogWritten(NOT_WRITTEN.value())
             .build());
+    }
+
+    private AddressVo parseAddressToVo(String address) {
+        StringTokenizer addressTokenizer = new StringTokenizer(address);
+        return AddressVo.builder()
+            .sidoName(addressTokenizer.nextToken())
+            .gugunName(addressTokenizer.nextToken())
+            .dongName(addressTokenizer.nextToken())
+            .build();
     }
 
     @Override
