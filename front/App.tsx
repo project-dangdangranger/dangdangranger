@@ -34,6 +34,8 @@ import CreateDog from "./src/screens/CreateDog";
 import PrivateKey from "./src/screens/PrivateKey";
 import UpdateInfo from "./src/screens/UpdateInfo";
 import PatrolReportDetail from "./src/screens/PatrolReportDetail";
+import ManualMain from "./src/screens/ManualMain";
+import ManualSub1 from "./src/components/Manual/ManualSub1";
 
 const App = () => {
 	const Stack = createNativeStackNavigator();
@@ -84,6 +86,7 @@ const App = () => {
 						name="PatrolReportDetail"
 						component={PatrolReportDetail}
 					/>
+					<Stack.Screen name="ManualMain" component={ManualMain} />
 				</Stack.Navigator>
 			</NavigationContainer>
 		</RecoilRoot>
