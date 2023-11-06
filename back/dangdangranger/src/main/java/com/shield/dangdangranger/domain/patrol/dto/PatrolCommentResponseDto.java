@@ -14,6 +14,7 @@ public class PatrolCommentResponseDto {
     public static class CommentInfoResponseDto {
         private Integer patrolCommentNo;
         private String userName;
+        private String userProfileImg;
         private String patrolCommentContent;
         private LocalDateTime createDate;
 

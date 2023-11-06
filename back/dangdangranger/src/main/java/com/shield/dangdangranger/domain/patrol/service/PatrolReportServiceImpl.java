@@ -153,6 +153,7 @@ public class PatrolReportServiceImpl implements PatrolReportService {
             CommentInfoResponseDto commentInfo = CommentInfoResponseDto.builder()
                     .patrolCommentNo(comment.getPatrolCommentNo())
                     .userName(comment.getUser().getUserName())
+                    .userProfileImg(comment.getUser().getUserProfileImg())
                     .patrolCommentContent(comment.getPatrolCommentContent())
                     .createDate(comment.getCreateDate())
                     .build();
@@ -168,8 +169,9 @@ public class PatrolReportServiceImpl implements PatrolReportService {
                 .patrolReportContent(infoResponseDto.getPatrolReportContent())
                 .patrolReportHit(infoResponseDto.getPatrolReportHit())
                 .userName(user.getUserName())
+                .userProfileImg(user.getUserProfileImg())
                 .patrolLogDate(patrolLog.getPatrolLogDate())
-                .dongName(patrolLog.getDong().getDongName())
+                .patrolLogAddress(patrolLog.getDong().getAddress())
                 .patrolLogTotalDistance(patrolLog.getPatrolLogTotalDistance())
                 .patrolLogTotalTime(patrolLog.getPatrolLogTotalTime())
                 .patrolLogLat(patrolLog.getPatrolLogLat())
