@@ -10,6 +10,7 @@ import {
 	AWS_BUCKET,
 } from "@env";
 import { Buffer } from "buffer";
+import axios from "../utils/axios";
 
 type LocationCoordinates = {
 	latitude: number;
@@ -34,7 +35,9 @@ const GoogleMap = (props: Props) => {
 	const [patrolLogDate, setPatrolLogDate] = useState<string>("");
 	const [patrolLogLat, setPatrolLogLat] = useState<number>(0);
 	const [patrolLogLng, setPatrolLogLng] = useState<number>(0);
-	const [patrolLogTime, setPatrolLogTime] = useState<number>(0);
+	const [patrolLogTotalTime, setPatrolLogTotalTime] = useState<number>(0);
+	const [patrolLogTotalDistance, setPatrolLogTotalDistance] =
+		useState<number>(0);
 	const [isInitialLocationSet, setIsInitialLocationSet] =
 		useState<boolean>(false);
 	const [locationTrail, setLocationTrail] = useState<LocationCoordinates[]>([]);
@@ -47,19 +50,20 @@ const GoogleMap = (props: Props) => {
 		region: AWS_REGION,
 	});
 
-	const stopLocationWatch = () => {
+	const clearLocationWatch = () => {
 		if (watchIdRef.current !== null) {
-			console.log("중지 했습니다.!");
 			Geolocation.clearWatch(watchIdRef.current);
 			watchIdRef.current = null;
-			setPatrolLogDate("");
-			setPatrolLogLat(0);
-			setPatrolLogLng(0);
-			setPatrolLogTime(0);
-			setIsInitialLocationSet(false);
-			setLocationTrail([]);
-			setCurrentLocation(undefined);
 		}
+	};
+	const stopAndReset = () => {
+		setPatrolLogDate("");
+		setPatrolLogLat(0);
+		setPatrolLogLng(0);
+		setPatrolLogTotalTime(0);
+		setIsInitialLocationSet(false);
+		setLocationTrail([]);
+		setCurrentLocation(undefined);
 	};
 
 	useEffect(() => {
@@ -71,7 +75,7 @@ const GoogleMap = (props: Props) => {
 
 			watchIdRef.current = startWatchingLocation();
 			const interval = setInterval(() => {
-				setPatrolLogTime((prev) => prev + 1);
+				setPatrolLogTotalTime((prev) => prev + 1);
 			}, 1000);
 			return () => clearInterval(interval);
 		}
@@ -79,14 +83,10 @@ const GoogleMap = (props: Props) => {
 
 	useEffect(() => {
 		if (!props.start && !props.patrol) {
-			if (watchIdRef.current !== null) {
-				Geolocation.clearWatch(watchIdRef.current);
-				watchIdRef.current = null;
-			}
+			clearLocationWatch();
 			console.log("중지 했습니다.!");
-			stopLocationWatch();
-			// saveAndUploadMapSnapshot();
-			// 이후에 axios처리 할 예정
+			saveAndUploadMapSnapshot();
+			stopAndReset();
 		}
 	}, [props.start, props.patrol]);
 
@@ -121,10 +121,10 @@ const GoogleMap = (props: Props) => {
 				setCurrentLocation(newLocation);
 				setLocationTrail([newLocation]);
 				if (!isInitialLocationSet) {
-					setPatrolLogDate(new Date().toISOString().slice(0, 19)); // 현재 날짜와 시간을 로깅
-					setPatrolLogLat(position.coords.latitude); // 초기 위도 저장
-					setPatrolLogLng(position.coords.longitude); // 초기 경도 저장
-					setIsInitialLocationSet(true); // 초기 위치가 설정되었음을 표시
+					setPatrolLogDate(new Date().toISOString().slice(0, 19));
+					setPatrolLogLat(position.coords.latitude);
+					setPatrolLogLng(position.coords.longitude);
+					setIsInitialLocationSet(true);
 				}
 				if (mapRef.current) {
 					mapRef.current.animateToRegion(newLocation, 1000);
@@ -183,6 +183,18 @@ const GoogleMap = (props: Props) => {
 		try {
 			const data = await s3.upload(params).promise();
 			console.log("File uploaded:", data);
+			console.log(data.Location);
+			// 현재 위치가 어떤 동인지, 어떤 거리인지 알아야함
+			const res = {
+				dong: "1111010100", // 동
+				patrolLogDate,
+				patrolLogTotalDistance: 13, // 거리 체크
+				patrolLogTotalTime: patrolLogTotalTime / 60,
+				patrolLogImageUrl: data.Location,
+				patrolLogLat,
+				patrolLogLng,
+			};
+			await axios.post("/log", res);
 		} catch (err) {
 			console.error("Upload failed:", err);
 		}
