@@ -9,7 +9,7 @@ const PatrolGo = () => {
 		<>
 			<CommonLayout>
 				<ColorHeader title="함께 순찰하기" />
-				<PatrolBtn></PatrolBtn>
+				<PatrolBtn />
 				<ThreeBtn></ThreeBtn>
 			</CommonLayout>
 			<FooterBar />

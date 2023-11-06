@@ -4,14 +4,17 @@ import {
 	responsiveHeight,
 	responsiveWidth,
 } from "react-native-responsive-dimensions";
+import { useNavigation } from "@react-navigation/native";
+import { StackNavigation } from "../../App";
 
 const DetailBtn = () => {
-	const press = () => {
-		Alert.alert("눌렀다!");
-	};
+	const { navigate } = useNavigation<StackNavigation>();
 	return (
 		<>
-			<TouchableOpacity style={style.btnWrap} onPress={() => press()}>
+			<TouchableOpacity
+				style={style.btnWrap}
+				onPress={() => navigate("PatrolLogDetail")}
+			>
 				<Text style={style.btnText}>Detail</Text>
 				<Image source={icon} style={style.btnImg} />
 			</TouchableOpacity>

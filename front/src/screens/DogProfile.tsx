@@ -17,47 +17,53 @@ import PetrolImg from "../../assets/images/Patrol-license.png";
 import { responsiveHeight } from "react-native-responsive-dimensions";
 import CustomSubButton from "../recycles/CustomSubBtn";
 import CustomBadge from "../components/CustomBadge";
+import axios from "../utils/axios";
+import DogList from "./DogList";
 
 const Profile = ({ navigation }: any) => {
-	const flipView = useRef<any>();
-	const [dogList, setDogList] = useState<any>([]);
+	const [dogList, setDogList] = useState([]);
+	useEffect(() => {
+		axios.get("/dog").then((res) => {
+			// console.log("도그: ", res.data.data);
+		});
+	}, []);
 
 	return (
 		<>
-			<CommonLayout>
-				<ColorHeader title="강아지 관리" />
-				<View>
-					<CustomText
-						mainText="나의 반려견을"
-						emphasizedText="방범대원"
-						emphasizedColor="#70C8EE"
-						finalText="으로 등록해보세요"
-					/>
-				</View>
+			{dogList.length === 0 ? (
+				<>
+					<CommonLayout>
+						<ColorHeader title="강아지 관리" />
+						<View>
+							<CustomText
+								mainText="나의 반려견을"
+								emphasizedText="방범대원"
+								emphasizedColor="#70C8EE"
+								finalText="으로 등록해보세요"
+							/>
+						</View>
 
-				<View style={styles.imgcontainer}>
-					<Image source={PetrolImg} />
-				</View>
+						<View style={styles.imgcontainer}>
+							<Image source={PetrolImg} />
+						</View>
 
-				<View style={{ position: "absolute", top: 90 }}>
-					<CustomSubButton
-						text={"NFT 반려대원 발급하기"}
-						onPress={() => navigation.navigate("DogList")}
-						color={"#70C8EE"}
-					/>
-				</View>
+						<View>
+							<CustomBadge text="우리 동네 1등 방범 대원" />
+						</View>
 
-				<View>
-					<CustomBadge text="우리 동네 1등 방범 대원" />
-				</View>
-
-				<CustomSubButton
-					text={"NFT 반려대원 발급하기"}
-					onPress={() => navigation.navigate("CreateDog")}
-					color={"#70C8EE"}
-				/>
-			</CommonLayout>
-			<AbsoluteVar />
+						<CustomSubButton
+							text={"NFT 반려대원 발급하기"}
+							onPress={() => navigation.navigate("CreateDog")}
+							color={"#70C8EE"}
+						/>
+					</CommonLayout>
+					<AbsoluteVar />
+				</>
+			) : (
+				<>
+					<DogList />
+				</>
+			)}
 		</>
 	);
 };

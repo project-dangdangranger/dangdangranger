@@ -4,10 +4,30 @@ import { useNavigation } from "@react-navigation/native";
 import SideMenuIcon from "./SideMenuIcon";
 import SideMenuLayout from "../styles/sideMenuLayout";
 import templogo from "../../assets/images/templogo.png";
+import { GoogleSignin } from "@react-native-google-signin/google-signin";
+import React, { useEffect, useState } from "react";
+import EncryptedStorage from "react-native-encrypted-storage";
 
 const SideMenu = (props: any) => {
 	const navigation = useNavigation();
-	console.log(props.clickX);
+	const [tokn, setToken] = useState("");
+	async function retrieveToken() {
+		try {
+			const token = await EncryptedStorage.getItem("accessToken");
+			if (token !== undefined) {
+				setToken(token);
+				return token;
+			}
+		} catch (error) {
+			// 에러가 발생했습니다.
+			console.log(error);
+		}
+	}
+
+	useEffect(() => {
+		retrieveToken();
+	}, []);
+
 	return (
 		<>
 			<View style={SideMenuLayout.sideMenuWrap}>
@@ -64,19 +84,38 @@ const SideMenu = (props: any) => {
 						/>
 					</View>
 
-					<View style={SideMenuLayout.authButtonWrap}>
-						<View style={SideMenuLayout.container}>
-							<TouchableOpacity
-								style={SideMenuLayout.btn}
-								activeOpacity={0.7}
-								onPress={() => navigation.navigate("Login")}
-							>
-								<View style={SideMenuLayout.button}>
-									<Text style={SideMenuLayout.text}>로그인</Text>
-								</View>
-							</TouchableOpacity>
+					{tokn ? (
+						<View style={SideMenuLayout.authButtonWrap}>
+							<View style={SideMenuLayout.container}>
+								<TouchableOpacity
+									style={SideMenuLayout.btn}
+									activeOpacity={0.7}
+									onPress={() => {
+										GoogleSignin.signOut();
+										setToken("");
+									}}
+								>
+									<View style={SideMenuLayout.button}>
+										<Text style={SideMenuLayout.text}>로그아웃</Text>
+									</View>
+								</TouchableOpacity>
+							</View>
 						</View>
-					</View>
+					) : (
+						<View style={SideMenuLayout.authButtonWrap}>
+							<View style={SideMenuLayout.container}>
+								<TouchableOpacity
+									style={SideMenuLayout.btn}
+									activeOpacity={0.7}
+									onPress={() => navigation.navigate("Login")}
+								>
+									<View style={SideMenuLayout.button}>
+										<Text style={SideMenuLayout.text}>로그인</Text>
+									</View>
+								</TouchableOpacity>
+							</View>
+						</View>
+					)}
 				</View>
 			</View>
 		</>
