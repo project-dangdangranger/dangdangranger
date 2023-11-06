@@ -41,15 +41,27 @@ const GoogleMap = (props: Props) => {
 		region: AWS_REGION,
 	});
 
-	// props.start가 true면 1초씩 증가하고, 그 값을 useEffect로 console.log로 보여줌
 	useEffect(() => {
 		if (props.start && props.patrol) {
+			const id = startWatchingLocation();
+			watchIdRef.current = id;
 			let count = 0;
 			const interval = setInterval(() => {
 				count++;
 				console.log(count);
 			}, 1000);
 			return () => clearInterval(interval);
+		} else {
+			console.log("중지 했습니다.!");
+			console.log("props.start : props.patrol ", props.start, props.patrol);
+			if (!props.start && !props.patrol) {
+				// saveAndUploadMapSnapshot();
+				console.log("saveAndUploadMapSnapshot 사진을 찍는다. ");
+			}
+			if (watchIdRef.current !== null) {
+				Geolocation.clearWatch(watchIdRef.current);
+				watchIdRef.current = null;
+			}
 		}
 	}, [props.start, props.patrol]);
 
@@ -58,24 +70,18 @@ const GoogleMap = (props: Props) => {
 	}, []);
 
 	// useEffect(() => {
-	// 	console.log("patrol: ", props.start);
-	// 	console.log("start: ", props.start);
-	// 	// props.setPatrol(false);
-	// }, [props.start, props.patrol]);
-
-	useEffect(() => {
-		if (props.start) {
-			console.log("시작 했습니다.!");
-			const id = startWatchingLocation();
-			watchIdRef.current = id;
-		} else {
-			console.log("중지 했습니다.!");
-			if (watchIdRef.current !== null) {
-				Geolocation.clearWatch(watchIdRef.current);
-				watchIdRef.current = null;
-			}
-		}
-	}, [props.start]);
+	// 	if (props.start) {
+	// 		console.log("시작 했습니다.!");
+	// 		const id = startWatchingLocation();
+	// 		watchIdRef.current = id;
+	// 	} else {
+	// 		console.log("중지 했습니다.!");
+	// 		if (watchIdRef.current !== null) {
+	// 			Geolocation.clearWatch(watchIdRef.current);
+	// 			watchIdRef.current = null;
+	// 		}
+	// 	}
+	// }, [props.start]);
 
 	// useEffect(() => {
 	// 	requestPermission();
@@ -89,14 +95,14 @@ const GoogleMap = (props: Props) => {
 	// 	};
 	// }, []);
 
-	useEffect(() => {
-		if (!props.patrol) {
-			console.log("중지 했습니다.!");
-			props.setPatrol(false);
-			props.setStart(false);
-			// saveAndUploadMapSnapshot();
-		}
-	}, [props.patrol]);
+	// useEffect(() => {
+	// 	if (!props.patrol) {
+	// 		console.log("중지 했습니다.!");
+	// 		props.setPatrol(false);
+	// 		props.setStart(false);
+	// 		// saveAndUploadMapSnapshot();
+	// 	}
+	// }, [props.patrol]);
 
 	const requestPermission = async () => {
 		try {
