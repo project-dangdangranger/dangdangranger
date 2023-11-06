@@ -4,27 +4,24 @@ import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import com.shield.dangdangranger.domain.dog.entity.Dog;
-import com.shield.dangdangranger.domain.user.entity.User;
 import com.shield.dangdangranger.global.entity.BaseEntity;
 
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "missing")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
+@Setter
 public class Missing extends BaseEntity {
 	
 	@Id
@@ -32,17 +29,17 @@ public class Missing extends BaseEntity {
 	@Column(name = "missing_no")
 	private Integer missingNo;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "missing_type_no")
-    private MissingType missingType;
+	@Column(name = "missing_type_no")
+    private Integer missingTypeNo;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "dog_no")
-    private Dog dog;
+	@Column(name = "dog_no")
+    private Integer dogNo;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_no")
-    private User user;
+	@Column(name = "user_no")
+    private Integer userNo;
+	
+	@Column(name = "missing_title")
+	private String missingTitle;
 	
 	@Column(name = "missing_content")
     private String missingContent;
@@ -57,19 +54,19 @@ public class Missing extends BaseEntity {
     private Double missingLng;
 	
 	@Column(name = "missing_status")
-    private Integer missingStatus;
+    private Integer missingStatus = 0;
 
 	@Builder
-	public Missing(Integer missingNo, MissingType missingType, Dog dog, User user, String missingContent,
-			LocalDateTime missingDate, Double missingLat, Double missingLng, Integer missingStatus) {
+	public Missing(Integer missingNo, Integer missingTypeNo, Integer dogNo, Integer userNo, String missingContent,
+			LocalDateTime missingDate, Double missingLat, Double missingLng, String missingTitle) {
 		this.missingNo = missingNo;
-		this.missingType = missingType;
-		this.dog = dog;
-		this.user = user;
+		this.missingTypeNo = missingTypeNo;
+		this.dogNo = dogNo;
+		this.userNo = userNo;
+		this.missingTitle = missingTitle;
 		this.missingContent = missingContent;
 		this.missingDate = missingDate;
 		this.missingLat = missingLat;
 		this.missingLng = missingLng;
-		this.missingStatus = missingStatus;
 	}
 }

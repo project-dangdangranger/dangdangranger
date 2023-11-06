@@ -88,6 +88,7 @@ public class PatrolReportServiceImpl implements PatrolReportService {
             PatrolListInfoResponseDto patrolListInfo = PatrolListInfoResponseDto.builder()
                     .patrolNo(patrolReport.getPatrolReportNo())
                     .patrolTitle(patrolReport.getPatrolReportTitle())
+                    .patrolLogAddress(patrolReport.getPatrolLog().getDong().getAddress())
                     .patrolDate(patrolReport.getPatrolLog().getPatrolLogDate())
                     .userName(user.getUserName())
                     .patrolFirstImg(image.getImageUrl())
@@ -116,6 +117,7 @@ public class PatrolReportServiceImpl implements PatrolReportService {
             PatrolListInfoResponseDto patrolListInfo = PatrolListInfoResponseDto.builder()
                     .patrolNo(patrolReport.getPatrolReportNo())
                     .patrolTitle(patrolReport.getPatrolReportTitle())
+                    .patrolLogAddress(patrolReport.getPatrolLog().getDong().getAddress())
                     .patrolDate(patrolReport.getPatrolLog().getPatrolLogDate())
                     .userName(user.getUserName())
                     .patrolFirstImg(image.getImageUrl())
@@ -153,6 +155,7 @@ public class PatrolReportServiceImpl implements PatrolReportService {
             CommentInfoResponseDto commentInfo = CommentInfoResponseDto.builder()
                     .patrolCommentNo(comment.getPatrolCommentNo())
                     .userName(comment.getUser().getUserName())
+                    .userProfileImg(comment.getUser().getUserProfileImg())
                     .patrolCommentContent(comment.getPatrolCommentContent())
                     .createDate(comment.getCreateDate())
                     .build();
@@ -168,8 +171,9 @@ public class PatrolReportServiceImpl implements PatrolReportService {
                 .patrolReportContent(infoResponseDto.getPatrolReportContent())
                 .patrolReportHit(infoResponseDto.getPatrolReportHit())
                 .userName(user.getUserName())
+                .userProfileImg(user.getUserProfileImg())
                 .patrolLogDate(patrolLog.getPatrolLogDate())
-                .dongName(patrolLog.getDong().getDongName())
+                .patrolLogAddress(patrolLog.getDong().getAddress())
                 .patrolLogTotalDistance(patrolLog.getPatrolLogTotalDistance())
                 .patrolLogTotalTime(patrolLog.getPatrolLogTotalTime())
                 .patrolLogLat(patrolLog.getPatrolLogLat())
@@ -246,6 +250,90 @@ public class PatrolReportServiceImpl implements PatrolReportService {
             imageRepository.save(image);
         }
         patrolReportRepository.save(patrolReport);
+    }
+
+    @Override
+    public List<PatrolListInfoResponseDto> searchByTitle(Integer userNo, String keyword) {
+        List<PatrolReport> reportList = patrolReportRepository
+                .searchByUserDongCodeAndPatrolReportTitleContainingAndCanceled(userNo, keyword, NOTCANCELED);
+        List<PatrolListInfoResponseDto> list = new ArrayList<>();
+
+        for (int i = 0; i < reportList.size(); i++) {
+            PatrolReport patrolReport = reportList.get(i);
+            User user = userRepository.findUserByUserNoAndCanceled(patrolReport.getUserNo(), NOTCANCELED)
+                    .orElseThrow(() -> new NotFoundException(USER_NOT_FOUND_EXCEPTION.message()));
+            Image image = imageRepository.findFirstByImageTypeNoAndParentNoAndCanceled(2, patrolReport.getPatrolReportNo(), NOTCANCELED)
+                    .orElseThrow(() -> new NotFoundException(IMAGE_NOT_FOUND_EXCEPTION.message()));
+
+            PatrolListInfoResponseDto patrolListInfo = PatrolListInfoResponseDto.builder()
+                    .patrolNo(patrolReport.getPatrolReportNo())
+                    .patrolTitle(patrolReport.getPatrolReportTitle())
+                    .patrolLogAddress(patrolReport.getPatrolLog().getDong().getAddress())
+                    .patrolDate(patrolReport.getPatrolLog().getPatrolLogDate())
+                    .userName(user.getUserName())
+                    .patrolFirstImg(image.getImageUrl())
+                    .patrolHit(patrolReport.getPatrolReportHit())
+                    .build();
+
+            list.add(patrolListInfo);
+        }
+        return list;
+    }
+
+    @Override
+    public List<PatrolListInfoResponseDto> searchByContent(Integer userNo, String keyword) {
+        List<PatrolReport> reportList = patrolReportRepository
+                .searchByUserDongCodeAndPatrolReportContentContainingAndCanceled(userNo, keyword, NOTCANCELED);
+        List<PatrolListInfoResponseDto> list = new ArrayList<>();
+
+        for (int i = 0; i < reportList.size(); i++) {
+            PatrolReport patrolReport = reportList.get(i);
+            User user = userRepository.findUserByUserNoAndCanceled(patrolReport.getUserNo(), NOTCANCELED)
+                    .orElseThrow(() -> new NotFoundException(USER_NOT_FOUND_EXCEPTION.message()));
+            Image image = imageRepository.findFirstByImageTypeNoAndParentNoAndCanceled(2, patrolReport.getPatrolReportNo(), NOTCANCELED)
+                    .orElseThrow(() -> new NotFoundException(IMAGE_NOT_FOUND_EXCEPTION.message()));
+
+            PatrolListInfoResponseDto patrolListInfo = PatrolListInfoResponseDto.builder()
+                    .patrolNo(patrolReport.getPatrolReportNo())
+                    .patrolTitle(patrolReport.getPatrolReportTitle())
+                    .patrolLogAddress(patrolReport.getPatrolLog().getDong().getAddress())
+                    .patrolDate(patrolReport.getPatrolLog().getPatrolLogDate())
+                    .userName(user.getUserName())
+                    .patrolFirstImg(image.getImageUrl())
+                    .patrolHit(patrolReport.getPatrolReportHit())
+                    .build();
+
+            list.add(patrolListInfo);
+        }
+        return list;
+    }
+
+    @Override
+    public List<PatrolListInfoResponseDto> searchByTitleAndContent(Integer userNo, String keyword) {
+        List<PatrolReport> reportList = patrolReportRepository
+                .searchByUserDongCodeAndPatrolReportTitleOrContentContainingAndCanceled(userNo, keyword, NOTCANCELED);
+        List<PatrolListInfoResponseDto> list = new ArrayList<>();
+
+        for (int i = 0; i < reportList.size(); i++) {
+            PatrolReport patrolReport = reportList.get(i);
+            User user = userRepository.findUserByUserNoAndCanceled(patrolReport.getUserNo(), NOTCANCELED)
+                    .orElseThrow(() -> new NotFoundException(USER_NOT_FOUND_EXCEPTION.message()));
+            Image image = imageRepository.findFirstByImageTypeNoAndParentNoAndCanceled(2, patrolReport.getPatrolReportNo(), NOTCANCELED)
+                    .orElseThrow(() -> new NotFoundException(IMAGE_NOT_FOUND_EXCEPTION.message()));
+
+            PatrolListInfoResponseDto patrolListInfo = PatrolListInfoResponseDto.builder()
+                    .patrolNo(patrolReport.getPatrolReportNo())
+                    .patrolTitle(patrolReport.getPatrolReportTitle())
+                    .patrolLogAddress(patrolReport.getPatrolLog().getDong().getAddress())
+                    .patrolDate(patrolReport.getPatrolLog().getPatrolLogDate())
+                    .userName(user.getUserName())
+                    .patrolFirstImg(image.getImageUrl())
+                    .patrolHit(patrolReport.getPatrolReportHit())
+                    .build();
+
+            list.add(patrolListInfo);
+        }
+        return list;
     }
 
 }
