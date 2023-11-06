@@ -46,6 +46,7 @@ const PatrolStopBtn: React.FC<PatrolBtnProps> = ({
 				style={styles.stopContainer}
 				onPress={() => {
 					setPatrol(false);
+					setStart(false);
 				}}
 			>
 				<Image style={styles.ImgEnd} source={endImg} />

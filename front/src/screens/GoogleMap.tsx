@@ -21,8 +21,8 @@ type LocationCoordinates = {
 type Props = {
 	start: boolean;
 	patrol: boolean;
-	setStart: boolean;
-	setPatrol: boolean;
+	setStart: (start: boolean) => void;
+	setPatrol: (patrol: boolean) => void;
 };
 
 const GoogleMap = (props: Props) => {
@@ -41,15 +41,35 @@ const GoogleMap = (props: Props) => {
 		region: AWS_REGION,
 	});
 
+	// props.start가 true면 1초씩 증가하고, 그 값을 useEffect로 console.log로 보여줌
+	useEffect(() => {
+		if (props.start && props.patrol) {
+			let count = 0;
+			const interval = setInterval(() => {
+				count++;
+				console.log(count);
+			}, 1000);
+			return () => clearInterval(interval);
+		}
+	}, [props.start, props.patrol]);
+
 	useEffect(() => {
 		requestPermission();
 	}, []);
 
+	// useEffect(() => {
+	// 	console.log("patrol: ", props.start);
+	// 	console.log("start: ", props.start);
+	// 	// props.setPatrol(false);
+	// }, [props.start, props.patrol]);
+
 	useEffect(() => {
 		if (props.start) {
+			console.log("시작 했습니다.!");
 			const id = startWatchingLocation();
 			watchIdRef.current = id;
 		} else {
+			console.log("중지 했습니다.!");
 			if (watchIdRef.current !== null) {
 				Geolocation.clearWatch(watchIdRef.current);
 				watchIdRef.current = null;
@@ -57,11 +77,24 @@ const GoogleMap = (props: Props) => {
 		}
 	}, [props.start]);
 
+	// useEffect(() => {
+	// 	requestPermission();
+	// 	const id = startWatchingLocation();
+	// 	watchIdRef.current = id;
+
+	// 	return () => {
+	// 		if (watchIdRef.current !== null) {
+	// 			Geolocation.clearWatch(watchIdRef.current);
+	// 		}
+	// 	};
+	// }, []);
+
 	useEffect(() => {
-		if (props.patrol) {
-			props.setPatrol = false;
-			props.setStart = false;
-			saveAndUploadMapSnapshot();
+		if (!props.patrol) {
+			console.log("중지 했습니다.!");
+			props.setPatrol(false);
+			props.setStart(false);
+			// saveAndUploadMapSnapshot();
 		}
 	}, [props.patrol]);
 

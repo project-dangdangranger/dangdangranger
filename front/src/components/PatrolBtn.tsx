@@ -6,10 +6,11 @@ import {
 } from "react-native-responsive-dimensions";
 import PatrolStartBtn from "./PatrolStartBtn";
 import PatrolStopBtn from "./PatrolStopBtn";
+import GoogleMap from "../screens/GoogleMap";
 
 const PatrolBtn = () => {
-	const [start, setStart] = useState(true); // 돌아가는거? -> 시간을 엮을 수 있음
-	const [patrol, setPatrol] = useState(false); // 스위치 보이냐 마냐
+	const [start, setStart] = useState(true);
+	const [patrol, setPatrol] = useState(false);
 
 	useEffect(() => {
 		setStart(true);
@@ -27,6 +28,12 @@ const PatrolBtn = () => {
 				) : (
 					<PatrolStartBtn setPatrol={setPatrol} />
 				)}
+				<GoogleMap
+					start={start}
+					patrol={patrol}
+					setStart={setStart}
+					setPatrol={setPatrol}
+				/>
 			</View>
 		</>
 	);
