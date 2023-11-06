@@ -10,8 +10,6 @@ import { useState } from "react";
 import { launchImageLibrary } from "react-native-image-picker";
 
 const EditImage = ({ selectedImg, setSelectedImg }: any) => {
-	const [imageUri, setImageUri] = useState(null);
-
 	const handleChoosePhoto = () => {
 		const options = {
 			storageOptions: {
@@ -27,7 +25,7 @@ const EditImage = ({ selectedImg, setSelectedImg }: any) => {
 				console.log("ImagePicker Error: ", response.error);
 			} else if (response.assets && response.assets.length > 0) {
 				const source = { uri: response.assets[0].uri };
-				setImageUri(source.uri); // 로컬 상태 업데이트
+
 				setSelectedImg(source.uri); // 부모 컴포넌트의 상태 업데이트
 			}
 		});

@@ -110,7 +110,7 @@ const CreateDog = ({ navigation }: any) => {
 			} else {
 				try {
 					await axios
-						.post("https://idog.store/blockchain/uploadIpfs", {
+						.post("https://www.animaid.co.kr/blockchain/uploadIpfs", {
 							img: data.Location,
 							petName: petName,
 							petSpecies: petSpecies,
@@ -558,6 +558,9 @@ const styles = StyleSheet.create({
 		justifyContent: "center",
 		alignItems: "center",
 		// marginVertical: responsiveHeight(12),
+	},
+	imageupdate: {
+		width: responsiveWidth(100),
 	},
 	imgcontainer: {
 		justifyContent: "center",

@@ -1,4 +1,11 @@
-import { Text, View, Image, Alert, TouchableOpacity } from "react-native";
+import {
+	Text,
+	View,
+	Image,
+	Alert,
+	TouchableOpacity,
+	Animated,
+} from "react-native";
 import CommonLayout from "../recycles/CommonLayout";
 import MainHeader from "../recycles/MainHeader";
 import FooterBar from "../recycles/FooterBar";
@@ -11,6 +18,12 @@ import axios from "axios";
 import EncryptedStorage from "react-native-encrypted-storage";
 import { BASE_URL, CONTENT_TYPE, TIMEOUT } from "../constants/constants";
 import React, { useEffect } from "react";
+import LottieView from "lottie-react-native";
+import LoginLottie from "../../assets/jsons/Login.json";
+import {
+	responsiveHeight,
+	responsiveWidth,
+} from "react-native-responsive-dimensions";
 
 const Login = ({ navigation }: any) => {
 	useEffect(() => {
@@ -79,6 +92,18 @@ const Login = ({ navigation }: any) => {
 				</View>
 
 				{/* <Button title="Google 로그아웃" onPress={GoogleSignin.signOut} /> */}
+				{/* <Animated.View>
+					<LottieView
+						autoPlay={true}
+						loop={true}
+						source={LoginLottie}
+						style={{
+							right: responsiveWidth(26),
+							height: responsiveHeight(20),
+							top: responsiveHeight(-1),
+						}}
+					/>
+				</Animated.View> */}
 				<TouchableOpacity
 					style={LoginLayout.BtnContainer}
 					onPress={handleGoogleLogin}
@@ -99,7 +124,6 @@ const Login = ({ navigation }: any) => {
 					</Text>
 				</View>
 			</CommonLayout>
-			<FooterBar />
 		</>
 	);
 };
