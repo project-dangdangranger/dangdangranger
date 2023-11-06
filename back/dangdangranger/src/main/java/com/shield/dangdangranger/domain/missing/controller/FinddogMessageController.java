@@ -4,9 +4,11 @@ import java.util.Map;
 
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shield.dangdangranger.domain.missing.message.FinddogMessage;
+import com.shield.dangdangranger.domain.missing.service.FinddogService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,9 +16,12 @@ import lombok.extern.slf4j.Slf4j;
 @Controller
 @RequiredArgsConstructor
 @Slf4j
+@RequestMapping("/api")
 public class FinddogMessageController {
 	
 	private static ObjectMapper mapper = new ObjectMapper();
+
+	private final FinddogService finddogService;
 
 	/**
      * websocket "/finddog"으로 들어오는 메시지를 처리한다.
@@ -25,16 +30,6 @@ public class FinddogMessageController {
 	public void message(FinddogMessage message) {
 		log.debug(message.toString());
 		
-		switch(message.getCode()) {
-		case ENTER:
-			
-			break;
-		case EXIT:
-			
-			break;
-		case SHARE_COORDINATE:
-			Map<String, Double> coordinate = mapper.convertValue(message.getParam(), Map.class);
-			break;
-		}
+		finddogService.publishMessage(message);
 	}
 }

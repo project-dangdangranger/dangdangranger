@@ -11,7 +11,7 @@ public class FinddogResponseDto {
     @AllArgsConstructor
     @Builder
     public static class FinddogSessionResponseDto {
-        private String topicNo;
+        private String topicId;
         
     }
 }

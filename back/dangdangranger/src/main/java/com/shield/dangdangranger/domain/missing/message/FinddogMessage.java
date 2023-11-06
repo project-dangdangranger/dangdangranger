@@ -17,6 +17,8 @@ import lombok.ToString;
 @AllArgsConstructor
 public class FinddogMessage implements Serializable {
 
+	private static final long serialVersionUID = 1L;
+	
 	public enum Code {
 		ENTER,
 		SHARE_COORDINATE,
