@@ -1,8 +1,10 @@
 package com.shield.dangdangranger.domain.missing.service;
 
+import com.shield.dangdangranger.domain.missing.dto.FinddogResponseDto.FinddogSessionResponseDto;
+
 public interface FinddogService {
 
-	void openSession(Integer missingNo);
+	FinddogSessionResponseDto createSession(Integer missingNo);
 	
 	void connectSession();
 	

@@ -22,10 +22,17 @@ public class RestControllerExceptionHandler {
     @Autowired
     private MatterMostSender matterMostSender;
     @ExceptionHandler(DuplicatedException.class)
-    public ResponseEntity<ResponseDto<String>> handleDuplicatedException(DuplicatedException duplicatedException) {
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(
-            ResponseDto.create(duplicatedException.getMessage())
-        );
+    public ResponseEntity<ResponseDto<?>> handleDuplicatedException(DuplicatedException duplicatedException) {
+        if (duplicatedException.getParams() == null) {
+	    	return ResponseEntity.status(HttpStatus.CONFLICT).body(
+	            ResponseDto.create(duplicatedException.getMessage())
+	        );
+        }
+        else {
+        	return ResponseEntity.status(HttpStatus.CONFLICT).body(
+	            ResponseDto.create(duplicatedException.getMessage(), duplicatedException.getParams())
+	        );
+        }
     }
 
     @ExceptionHandler(ForbiddenException.class)
