@@ -30,16 +30,6 @@ public class FinddogMessageController {
 	public void message(FinddogMessage message) {
 		log.debug(message.toString());
 		
-		switch(message.getCode()) {
-		case ENTER:
-			
-			break;
-		case EXIT:
-			
-			break;
-		case SHARE_COORDINATE:
-			Map<String, Double> coordinate = mapper.convertValue(message.getParam(), Map.class);
-			break;
-		}
+		finddogService.publishMessage(message);
 	}
 }

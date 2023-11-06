@@ -69,15 +69,4 @@ public class FinddogServiceImpl implements FinddogService {
 		finddogPublisher.publish(topic, message);
 	}
 
-	@Override
-	public void publishExitMessage(FinddogMessage message) {
-		
-	}
-
-	@Override
-	public void publishEnterMessage(FinddogMessage message) {
-		// TODO Auto-generated method stub
-		
-	}
-
 }

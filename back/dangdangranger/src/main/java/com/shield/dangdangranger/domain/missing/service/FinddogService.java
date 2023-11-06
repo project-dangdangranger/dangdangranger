@@ -10,8 +10,4 @@ public interface FinddogService {
 	void closeSession();
 	
 	void publishMessage(FinddogMessage message);
-	
-	void publishExitMessage(FinddogMessage message);
-	
-	void publishEnterMessage(FinddogMessage message);
 }
