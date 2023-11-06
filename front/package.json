@@ -16,6 +16,8 @@
 		"@react-native-picker/picker": "^2.5.1",
 		"@react-navigation/native": "^6.1.9",
 		"@react-navigation/native-stack": "^6.9.16",
+		"@stomp/stompjs": "^7.0.0",
+		"@types/sockjs-client": "^1.5.3",
 		"aws-sdk": "^2.1486.0",
 		"axios": "^1.6.0",
 		"buffer": "^6.0.3",
