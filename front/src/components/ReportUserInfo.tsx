@@ -46,7 +46,9 @@ const ReportUserInfo = ({ data, userData }: any) => {
 				</View>
 				<View style={styles.patrollication}>
 					<Text>순찰 장소</Text>
-					<Text style={styles.patrollocationText}>서울시 {data?.dongName}</Text>
+					<Text style={styles.patrollocationText}>
+						{data?.patrolLogAddress}
+					</Text>
 				</View>
 			</View>
 		</>

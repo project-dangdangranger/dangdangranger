@@ -9,6 +9,14 @@ const PatrolReportDetailLayout = StyleSheet.create({
 		backgroundColor: "#fff",
 		// marginHorizontal: responsiveWidth(10),
 	},
+	commentImg: {
+		marginLeft: responsiveWidth(1),
+		marginVertical: responsiveHeight(1),
+		position: "absolute",
+		width: responsiveWidth(14),
+		height: responsiveHeight(7),
+		borderRadius: 100,
+	},
 	img: {
 		width: responsiveWidth(100),
 		height: responsiveWidth(60),
@@ -94,7 +102,7 @@ const PatrolReportDetailLayout = StyleSheet.create({
 	},
 	patrollication: {},
 	patrollocationText: {
-		fontSize: 18,
+		fontSize: 15,
 		fontWeight: "bold",
 	},
 	contentcontainer: {

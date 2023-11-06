@@ -10,7 +10,7 @@ import ColorHeader from "../recycles/ColorHeader";
 import AlbumLayout from "../styles/albumLayout";
 import TempProfileImg from "../../assets/images/dog1.jpg";
 import WhitePenIcon from "../../assets/images/pen-icon.png";
-import FourBtn from "../recycles/PetrolBtn";
+import FourBtn from "../recycles/PetrolFourBtn";
 import AbsoluteVar from "../recycles/FooterBar";
 import MainLayout from "../styles/mainLayout";
 import CustomButton from "../recycles/CustomBtn";
@@ -26,32 +26,22 @@ const Profile = ({ navigation }: any) => {
 	const [checkWallet, setCheckWallet] = useState<boolean>(false);
 	const [checkout, setCheckout] = useRecoilState(walletAddress);
 
-	let hasWallet = false;
-
 	useEffect(() => {
 		axios
 			.get("/user/wallet")
 			.then((data) => {
 				console.log("data.data.data: ", data.data.data);
-				if (data.data.data != null) {
-					hasWallet = true;
+				if (data.data.data.userWalletAddress != null) {
 					setCheckWallet(true);
 					setCheckout(data.data.data);
 				} else {
-					hasWallet = false;
 					setCheckWallet(false);
 				}
 			})
 			.catch((err) => {
 				console.log("errdpfjs에러니?: ", err.response);
-				hasWallet = false;
 			});
 	}, []);
-
-	if (hasWallet) {
-		console.log("생성:", hasWallet);
-		console.log("월렛 주소:", checkout);
-	}
 
 	return (
 		<>
