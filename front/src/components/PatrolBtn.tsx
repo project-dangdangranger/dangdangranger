@@ -8,8 +8,8 @@ import PatrolStartBtn from "./PatrolStartBtn";
 import PatrolStopBtn from "./PatrolStopBtn";
 
 const PatrolBtn = () => {
-	const [start, setStart] = useState(true);
-	const [patrol, setPatrol] = useState(false);
+	const [start, setStart] = useState(true); // 돌아가는거? -> 시간을 엮을 수 있음
+	const [patrol, setPatrol] = useState(false); // 스위치 보이냐 마냐
 
 	useEffect(() => {
 		setStart(true);
