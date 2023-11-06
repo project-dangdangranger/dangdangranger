@@ -7,7 +7,7 @@ import {
 	Animated,
 } from "react-native";
 import { useEffect, useState } from "react";
-import DDRangers from "../../assets/images/DDR_logo.png";
+import DDRangers from "../../assets/images/Logo.png";
 import HamburgerMenu from "../../assets/images/hamburger_menu_icon.png";
 import SideMenu from "./SideMenu";
 import {

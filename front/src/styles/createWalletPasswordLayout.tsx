@@ -50,11 +50,10 @@ const CreateWalletPasswordLayout = StyleSheet.create({
 		color: "#9D9D9D",
 	},
 	checkInfo: {
-		marginLeft: 8,
-		marginRight: responsiveWidth(4),
-		fontSize: 10,
+		marginRight: responsiveWidth(10),
+		fontSize: 14,
 		fontWeight: "500",
-		color: "#B1B1B7",
+		color: "#FF3939",
 	},
 	buttonWrap: {
 		paddingHorizontal: responsiveWidth(4),

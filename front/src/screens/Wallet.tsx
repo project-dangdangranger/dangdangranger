@@ -17,41 +17,69 @@ import CustomButton from "../recycles/CustomBtn";
 import NFTImg from "../../assets/images/NFTImg.png";
 import CustomText from "../recycles/CustomText";
 import { responsiveHeight } from "react-native-responsive-dimensions";
+import axios from "../utils/axios";
+import WalletMine from "./WalletMine";
+import { useRecoilState } from "recoil";
+import { walletAddress } from "../atoms/atoms";
 
 const Profile = ({ navigation }: any) => {
-	const flipView = useRef<any>();
-	const [dogList, setDogList] = useState<any>([]);
+	const [checkWallet, setCheckWallet] = useState<boolean>(false);
+	const [checkout, setCheckout] = useRecoilState(walletAddress);
+
+	let hasWallet = false;
+
+	useEffect(() => {
+		axios
+			.get("/user/wallet")
+			.then((data) => {
+				console.log("data.data.data: ", data.data.data);
+				if (data.data.data != null) {
+					hasWallet = true;
+					setCheckWallet(true);
+					setCheckout(data.data.data);
+				} else {
+					hasWallet = false;
+					setCheckWallet(false);
+				}
+			})
+			.catch((err) => {
+				console.log("errdpfjs에러니?: ", err.response);
+				hasWallet = false;
+			});
+	}, []);
+
+	if (hasWallet) {
+		console.log("생성:", hasWallet);
+		console.log("월렛 주소:", checkout);
+	}
 
 	return (
 		<>
-			<CommonLayout>
-				<ColorHeader title="주소 관리" />
-				{/* <View>
-					<View style={MainLayout.walkMainWrap}>
-						<Text style={MainLayout.walkMainTitle}>
-							지갑이 없습니다.{"\n"}
-							<Text style={MainLayout.walkBoldText}>지갑</Text>을 만들어주세요{" "}
-							{"\n"}
-						</Text>
-					</View>
-				</View> */}
+			{!checkWallet ? (
+				<>
+					<CommonLayout>
+						<ColorHeader title="주소 관리" />
 
-				<CustomText
-					mainText="지갑이 없습니다."
-					emphasizedText="지갑"
-					emphasizedColor="#3E6DCA"
-					finalText="을 만들어주세요"
-				/>
+						<CustomText
+							mainText="지갑이 없습니다."
+							emphasizedText="지갑"
+							emphasizedColor="#3E6DCA"
+							finalText="을 만들어주세요"
+						/>
 
-				<View style={styles.imgcontainer}>
-					<Image source={NFTImg} />
-				</View>
-				<CustomButton
-					text="지갑 발급하기"
-					onPress={() => navigation.navigate("MakeWallet1")}
-				/>
-			</CommonLayout>
-			<AbsoluteVar />
+						<View style={styles.imgcontainer}>
+							<Image source={NFTImg} />
+						</View>
+						<CustomButton
+							text="지갑 발급하기"
+							onPress={() => navigation.navigate("MakeWallet1")}
+						/>
+					</CommonLayout>
+					<AbsoluteVar />
+				</>
+			) : (
+				<WalletMine checkout={checkout} />
+			)}
 		</>
 	);
 };

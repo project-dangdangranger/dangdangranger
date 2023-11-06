@@ -10,7 +10,7 @@ const MainLayout = StyleSheet.create({
 		marginHorizontal: responsiveWidth(5),
 	},
 	walkMainTitle: {
-		marginTop: responsiveHeight(3),
+		// marginTop: responsiveHeight(3),
 		fontSize: 24,
 		fontWeight: "700",
 		color: "#616166",

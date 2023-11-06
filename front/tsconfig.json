@@ -1,4 +1,4 @@
 {
 	"extends": "@tsconfig/react-native/tsconfig.json",
-	"compilerOptions": {}
+	"compilerOptions": { "lib": ["dom"] }
 }

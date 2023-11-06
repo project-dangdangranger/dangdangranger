@@ -25,6 +25,15 @@ const WalletProcessLayout = StyleSheet.create({
 		justifyContent: "center",
 		alignItems: "center",
 	},
+	iconWrap1: {
+		width: 42,
+		height: 42,
+		backgroundColor: "#D9D9D9",
+		borderRadius: 100,
+		display: "flex",
+		justifyContent: "center",
+		alignItems: "center",
+	},
 	icon: {
 		width: 20,
 		height: 20,

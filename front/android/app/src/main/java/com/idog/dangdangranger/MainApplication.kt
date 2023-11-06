@@ -8,6 +8,7 @@ import com.facebook.react.ReactPackage
 import com.facebook.react.defaults.DefaultNewArchitectureEntryPoint.load
 import com.facebook.react.defaults.DefaultReactNativeHost
 import com.facebook.soloader.SoLoader
+// import com.zmxv.RNSound.RNSoundPackage;
 
 class MainApplication : Application(), ReactApplication {
     private val mReactNativeHost: ReactNativeHost = object : DefaultReactNativeHost(this) {
@@ -19,6 +20,7 @@ class MainApplication : Application(), ReactApplication {
             val packages = PackageList(this).packages
             // 여기에 추가 패키지들을 추가하세요.
             packages.add(KakaoMapPackage())
+            // packages.add(RNSoundPackage())
             return packages
         }
 
