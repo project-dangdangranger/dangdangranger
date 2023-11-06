@@ -1,5 +1,12 @@
 import { useState } from "react";
-import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
+import {
+	View,
+	Text,
+	Image,
+	StyleSheet,
+	TouchableOpacity,
+	Animated,
+} from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import {
 	responsiveWidth,
@@ -12,15 +19,33 @@ import HamburgerIcon from "../../assets/images/hamburger_menu_icon.png";
 const ColorHeader = ({ title }: any) => {
 	const navigation = useNavigation();
 	const [activeSideMenu, setActiveSideMenu] = useState<Boolean>(false);
+	const sideMenuPosition = useState(
+		new Animated.Value(-responsiveWidth(100)),
+	)[0];
 	const clickHamburger = () => {
-		switch (activeSideMenu) {
-			case true:
-				setActiveSideMenu(false);
-				break;
-			case false:
-				setActiveSideMenu(true);
-				break;
+		if (activeSideMenu) {
+			setActiveSideMenu(false);
+			Animated.timing(sideMenuPosition, {
+				toValue: responsiveWidth(-100),
+				duration: 300,
+				useNativeDriver: false,
+			}).start();
+		} else {
+			setActiveSideMenu(true);
+			Animated.timing(sideMenuPosition, {
+				toValue: responsiveWidth(0),
+				duration: 300,
+				useNativeDriver: false,
+			}).start();
 		}
+	};
+
+	const clickX = () => {
+		Animated.timing(sideMenuPosition, {
+			toValue: responsiveWidth(-100),
+			duration: 300,
+			useNativeDriver: false,
+		}).start(() => setActiveSideMenu(false));
 	};
 
 	const updateActiveSideMenu = (status: Boolean) => {
@@ -28,6 +53,14 @@ const ColorHeader = ({ title }: any) => {
 	};
 	return (
 		<>
+			<View style={styles.sideMenu}>
+				<Animated.View
+					style={{ transform: [{ translateX: sideMenuPosition }] }}
+				>
+					<SideMenu clickX={clickX} />
+					<View style={{ height: responsiveHeight(70) }}></View>
+				</Animated.View>
+			</View>
 			<View style={styles.whiteHeaderWrap}>
 				<TouchableOpacity activeOpacity={0.7} onPress={() => navigation.pop()}>
 					<Image source={Preview} />
@@ -46,11 +79,6 @@ const ColorHeader = ({ title }: any) => {
 					<Image source={HamburgerIcon} />
 				</TouchableOpacity>
 			</View>
-			{activeSideMenu ? (
-				<SideMenu updateActiveSideMenu={updateActiveSideMenu} />
-			) : (
-				<></>
-			)}
 		</>
 	);
 };
@@ -84,6 +112,13 @@ const styles = StyleSheet.create({
 		fontSize: 18,
 		fontWeight: "700",
 		color: "#656565",
+	},
+	sideMenu: {
+		height: "100%",
+		position: "absolute",
+		top: 0,
+		left: 0,
+		zIndex: 999,
 	},
 });
 

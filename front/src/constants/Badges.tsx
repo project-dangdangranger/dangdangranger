@@ -1,7 +1,6 @@
 import React from "react";
 import { View, Image, ImageSourcePropType } from "react-native";
 
-// 뱃지 이미지들의 경로를 미리 정의
 const badges = {
 	badge1: require("./../../assets/images/badge-01.png"),
 	badge2: require("./../../assets/images/badge-02.png"),

@@ -19,15 +19,14 @@ import MissingSubImg from "../../assets/images/main-missing.png";
 import ChatBotSubImg from "../../assets/images/main-chatbot.png";
 import FooterBar from "../recycles/FooterBar";
 import { useEffect, useState } from "react";
-import { NativeModules } from "react-native";
-import GoogleLogin from "../components/GoogleLogin";
+import { useNavigation } from "@react-navigation/native";
+// import { NativeModules } from "react-native";
 
-// const { KakaoMapModule } = NativeModules;
-
-const Main = ({ navigation }: any) => {
+const Main = () => {
 	const LoginStore = {
 		isLogged: true,
 	};
+	const navigation = useNavigation();
 
 	const authHandling = (pageName: string) => {
 		// if (LoginStore.isLogged) {
@@ -55,7 +54,7 @@ const Main = ({ navigation }: any) => {
 					</Text>
 
 					<Text style={MainLayout.walkMainDesc}>
-						서비스 이름은 내 반려견의 프로필을 NFT화하여{"\n"}
+						댕댕레인저는 내 반려견의 프로필을 NFT화하여{"\n"}
 						방범대원으로 활동할 수 있도록 도와주는 플랫폼입니다.
 					</Text>
 				</View>
