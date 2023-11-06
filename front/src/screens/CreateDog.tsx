@@ -1,11 +1,4 @@
-import {
-	View,
-	Text,
-	Image,
-	StyleSheet,
-	TouchableOpacity,
-	TextInput,
-} from "react-native";
+import { View, Text, StyleSheet, TextInput } from "react-native";
 // import GestureFlipView from "../components/GestureFlipView";
 import CommonLayout from "../recycles/CommonLayout";
 import ColorHeader from "../recycles/ColorHeader";
@@ -16,9 +9,54 @@ import {
 	responsiveWidth,
 } from "react-native-responsive-dimensions";
 import CustomSubButton from "../recycles/CustomSubBtn";
-import AddPlusIcon from "../../assets/images/add-plus-icon.png";
+import EditImage from "../recycles/EditImage";
+import { S3 } from "aws-sdk";
+import axios from "../utils/axios";
+import { useState } from "react";
 
 const CreateDog = ({ navigation }: any) => {
+	const [selectedImg, setSelectedImg] = useState("");
+	const s3 = new S3({
+		accessKeyId: process.env.AWS_ACCESS_KEY,
+		secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+		region: process.env.AWS_REGION,
+	});
+
+	const uploadImage = async (imageUri: string) => {
+		// console.log("img", imageUri);
+		const response = await fetch(imageUri);
+		const blob = await response.blob();
+		const type = blob.type;
+		const random = Math.floor(Math.random() * 100000000);
+		const filename = `profile_${new Date().toISOString()}_${random}.png`;
+		const params = {
+			Bucket: process.env.AWS_BUCKET,
+			Key: filename,
+			Body: blob,
+			ContentType: type,
+		};
+		s3.upload(params, (err: any, data: any) => {
+			if (err) {
+				console.log("Error occured while trying to upload to S3 bucket", err);
+			} else {
+				// 여기에 원하는 엑시오스 요청을 보내면 됩니다.
+				console.log("params:", params, "data:", data);
+				// axios
+				// 	.put("/user", {
+				// 		userName: nickname,
+				// 		userDong: selectedDong,
+				// 		userProfileImg: data.Location,
+				// 	})
+				// 	.then((data) => {
+				// 		if (data.data.message === "회원 정보 수정 완료") {
+				// 			Alert.alert("정보 수정 완료", "정보 수정이 완료되었습니다.");
+				// 			navigation.navigate("Profile", { updated: true });
+				// 		}
+				// 	});
+			}
+		});
+	};
+
 	return (
 		<>
 			<CommonLayout>
@@ -32,15 +70,12 @@ const CreateDog = ({ navigation }: any) => {
 					/>
 				</View>
 				<View style={styles.viewcontainer}>
-					<TouchableOpacity
-						activeOpacity={0.7}
-						// onPress={pickImage}
-					>
-						<View style={styles.imageUploadWrap}>
-							<Image source={AddPlusIcon} />
-							<Text>사진 등록하기</Text>
-						</View>
-					</TouchableOpacity>
+					<View style={styles.imageupdate}>
+						<EditImage
+							selectedImg={selectedImg}
+							setSelectedImg={setSelectedImg}
+						/>
+					</View>
 					<View>
 						<Text style={styles.textAlign}>반려견의 이름을 입력해주세요.</Text>
 					</View>
@@ -108,6 +143,9 @@ const styles = StyleSheet.create({
 		justifyContent: "center",
 		alignItems: "center",
 		// marginVertical: responsiveHeight(12),
+	},
+	imageupdate: {
+		width: responsiveWidth(100),
 	},
 	imgcontainer: {
 		justifyContent: "center",

@@ -87,12 +87,16 @@ const PatrolDiaryLayout = StyleSheet.create({
 		height: 30,
 	},
 	modalContainer: {
-		flex: 1,
+		position: "absolute",
+		width: "100%", // You might want to adjust this
+		height: "100%", // You might want to adjust this
+		justifyContent: "flex-start",
+		alignItems: "flex-start",
 	},
 	modalView: {
 		width: responsiveWidth(40),
-		top: responsiveHeight(28),
-		left: responsiveWidth(50),
+		// top: responsiveHeight(50),
+		// left: responsiveWidth(50),
 		marginHorizontal: responsiveWidth(5),
 		height: responsiveHeight(8),
 		backgroundColor: "white",

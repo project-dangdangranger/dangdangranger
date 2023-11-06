@@ -93,6 +93,7 @@ const SideMenu = (props: any) => {
 									onPress={() => {
 										GoogleSignin.signOut();
 										setToken("");
+										navigation.navigate("Main");
 									}}
 								>
 									<View style={SideMenuLayout.button}>
