@@ -31,6 +31,12 @@ const GoogleMap = (props: Props) => {
 	const [currentLocation, setCurrentLocation] = useState<
 		LocationCoordinates | undefined
 	>();
+	const [patrolLogDate, setPatrolLogDate] = useState<string>("");
+	const [patrolLogLat, setPatrolLogLat] = useState<number>(0);
+	const [patrolLogLng, setPatrolLogLng] = useState<number>(0);
+	const [patrolLogTime, setPatrolLogTime] = useState<number>(0);
+	const [isInitialLocationSet, setIsInitialLocationSet] =
+		useState<boolean>(false);
 	const [locationTrail, setLocationTrail] = useState<LocationCoordinates[]>([]);
 	const watchIdRef = useRef<number | null>(null);
 	const mapRef = useRef<MapView | null>(null);
@@ -41,68 +47,52 @@ const GoogleMap = (props: Props) => {
 		region: AWS_REGION,
 	});
 
+	const stopLocationWatch = () => {
+		if (watchIdRef.current !== null) {
+			console.log("중지 했습니다.!");
+			Geolocation.clearWatch(watchIdRef.current);
+			watchIdRef.current = null;
+			setPatrolLogDate("");
+			setPatrolLogLat(0);
+			setPatrolLogLng(0);
+			setPatrolLogTime(0);
+			setIsInitialLocationSet(false);
+			setLocationTrail([]);
+			setCurrentLocation(undefined);
+		}
+	};
+
 	useEffect(() => {
-		if (props.start && props.patrol) {
-			const id = startWatchingLocation();
-			watchIdRef.current = id;
-			let count = 0;
+		if (props.start && props.patrol && !watchIdRef.current) {
+			console.log("시작 했습니다.!");
+			console.log("patrolLogDate: ", patrolLogDate);
+			console.log("patrolLogLat: ", patrolLogLat);
+			console.log("patrolLogLng: ", patrolLogLng);
+
+			watchIdRef.current = startWatchingLocation();
 			const interval = setInterval(() => {
-				count++;
-				console.log(count);
+				setPatrolLogTime((prev) => prev + 1);
 			}, 1000);
 			return () => clearInterval(interval);
-		} else {
-			console.log("중지 했습니다.!");
-			console.log("props.start : props.patrol ", props.start, props.patrol);
-			if (!props.start && !props.patrol) {
-				// saveAndUploadMapSnapshot();
-				console.log("saveAndUploadMapSnapshot 사진을 찍는다. ");
-			}
+		}
+	}, [props.start, props.patrol]);
+
+	useEffect(() => {
+		if (!props.start && !props.patrol) {
 			if (watchIdRef.current !== null) {
 				Geolocation.clearWatch(watchIdRef.current);
 				watchIdRef.current = null;
 			}
+			console.log("중지 했습니다.!");
+			stopLocationWatch();
+			// saveAndUploadMapSnapshot();
+			// 이후에 axios처리 할 예정
 		}
 	}, [props.start, props.patrol]);
 
 	useEffect(() => {
 		requestPermission();
 	}, []);
-
-	// useEffect(() => {
-	// 	if (props.start) {
-	// 		console.log("시작 했습니다.!");
-	// 		const id = startWatchingLocation();
-	// 		watchIdRef.current = id;
-	// 	} else {
-	// 		console.log("중지 했습니다.!");
-	// 		if (watchIdRef.current !== null) {
-	// 			Geolocation.clearWatch(watchIdRef.current);
-	// 			watchIdRef.current = null;
-	// 		}
-	// 	}
-	// }, [props.start]);
-
-	// useEffect(() => {
-	// 	requestPermission();
-	// 	const id = startWatchingLocation();
-	// 	watchIdRef.current = id;
-
-	// 	return () => {
-	// 		if (watchIdRef.current !== null) {
-	// 			Geolocation.clearWatch(watchIdRef.current);
-	// 		}
-	// 	};
-	// }, []);
-
-	// useEffect(() => {
-	// 	if (!props.patrol) {
-	// 		console.log("중지 했습니다.!");
-	// 		props.setPatrol(false);
-	// 		props.setStart(false);
-	// 		// saveAndUploadMapSnapshot();
-	// 	}
-	// }, [props.patrol]);
 
 	const requestPermission = async () => {
 		try {
@@ -130,6 +120,12 @@ const GoogleMap = (props: Props) => {
 				};
 				setCurrentLocation(newLocation);
 				setLocationTrail([newLocation]);
+				if (!isInitialLocationSet) {
+					setPatrolLogDate(new Date().toISOString().slice(0, 19)); // 현재 날짜와 시간을 로깅
+					setPatrolLogLat(position.coords.latitude); // 초기 위도 저장
+					setPatrolLogLng(position.coords.longitude); // 초기 경도 저장
+					setIsInitialLocationSet(true); // 초기 위치가 설정되었음을 표시
+				}
 				if (mapRef.current) {
 					mapRef.current.animateToRegion(newLocation, 1000);
 				}
