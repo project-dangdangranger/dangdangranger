@@ -36,6 +36,7 @@ public class PatrolLogServiceImpl implements PatrolLogService {
     private final UserRepository userRepository;
     private final DongRepository dongRepository;
     private final PatrolLogRepositoryCustom patrolLogRepositoryCustom;
+    private final PatrolRedisService patrolRedisService;
 
     @Override
     @Transactional
@@ -46,6 +47,7 @@ public class PatrolLogServiceImpl implements PatrolLogService {
             .orElseThrow(() -> new NotFoundException(DONG_NOT_FOUND_EXCEPTION.message()));
 
         log.debug("[createPatrolLog] dong : {}", dong);
+        patrolRedisService.deletePatrolPersonInRedis();
 
         patrolLogRepository.save(PatrolLog.builder()
             .user(user)
@@ -78,5 +80,10 @@ public class PatrolLogServiceImpl implements PatrolLogService {
             throw new ForbiddenException(FORBIDDEN_EXCEPTION_MESSAGE);
         }
         return new PatrolLogDetailInfoResponseDto(patrolLog);
+    }
+
+    @Override
+    public void addPatrolPerson() {
+        patrolRedisService.addPatrolPersonInRedis();
     }
 }

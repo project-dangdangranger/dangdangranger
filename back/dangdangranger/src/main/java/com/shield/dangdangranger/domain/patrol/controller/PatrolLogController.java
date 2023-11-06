@@ -1,5 +1,6 @@
 package com.shield.dangdangranger.domain.patrol.controller;
 
+import static com.shield.dangdangranger.domain.patrol.constant.PatrolLogResponseMessage.ADD_PATROL_PERSON_SUCCESS;
 import static com.shield.dangdangranger.domain.patrol.constant.PatrolLogResponseMessage.CREATE_PATROL_LOG_SUCCESS;
 import static com.shield.dangdangranger.domain.patrol.constant.PatrolLogResponseMessage.READ_ALL_PATROL_LOG_SUCCESS;
 import static com.shield.dangdangranger.domain.patrol.constant.PatrolLogResponseMessage.READ_ONE_PATROL_LOG_SUCCESS;

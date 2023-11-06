@@ -2,6 +2,8 @@ package com.shield.dangdangranger.domain.patrol.controller;
 
 import com.shield.dangdangranger.domain.patrol.dto.PatrolReportRequestDto.*;
 import com.shield.dangdangranger.domain.patrol.dto.PatrolReportResponseDto.*;
+import com.shield.dangdangranger.domain.patrol.entity.PatrolLog;
+import com.shield.dangdangranger.domain.patrol.service.PatrolLogService;
 import com.shield.dangdangranger.domain.patrol.service.PatrolReportService;
 import com.shield.dangdangranger.global.dto.ResponseDto;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import static com.shield.dangdangranger.domain.patrol.constant.PatrolLogResponseMessage.ADD_PATROL_PERSON_SUCCESS;
 import static com.shield.dangdangranger.domain.patrol.constant.PatrolReportResponseMessage.*;
 
 @RestController
@@ -21,6 +24,7 @@ import static com.shield.dangdangranger.domain.patrol.constant.PatrolReportRespo
 public class PatrolReportController {
 
     private final PatrolReportService patrolReportService;
+    private final PatrolLogService patrolLogService;
 
     @PostMapping()
     public ResponseEntity<ResponseDto<String>> createPatrolReport(
@@ -87,7 +91,11 @@ public class PatrolReportController {
         return ResponseEntity.status(HttpStatus.OK).body(ResponseDto.create(SEARCH_BY_TITLE_AND_CONTENT_SUCCESS.message(), patrolReportInfoList));
     }
 
-
+    @PostMapping("/start")
+    public ResponseEntity<ResponseDto<String>> addPatrolPerson() {
+        patrolLogService.addPatrolPerson();
+        return ResponseEntity.status(HttpStatus.CREATED).body(ResponseDto.create(ADD_PATROL_PERSON_SUCCESS.message()));
+    }
 
 
 

@@ -9,4 +9,6 @@ public interface PatrolLogService {
     void createPatrolLog(Integer userNo, PatrolLogSaveRequestDto patrolLogSaveRequestDto);
     List<PatrolLogRoughInfoResponseDto> readAllPatrolLog(Integer userNo);
     PatrolLogDetailInfoResponseDto readOnePatrolLog(Integer userNo, Integer patrolLogNo);
+
+    void addPatrolPerson();
 }

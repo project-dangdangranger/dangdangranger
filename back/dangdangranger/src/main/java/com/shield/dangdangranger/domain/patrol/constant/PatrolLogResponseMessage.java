@@ -5,6 +5,7 @@ public enum PatrolLogResponseMessage {
     READ_ALL_PATROL_LOG_SUCCESS("순찰기록 리스트 조회 성공"),
     READ_ONE_PATROL_LOG_SUCCESS("순찰기록 조회 성공"),
     PATROL_LOG_NOT_FOUND_EXCEPTION("순찰기록 1개 조회 실패"),
+    ADD_PATROL_PERSON_SUCCESS("순찰 중인 사람 추가 완료")
     ;
 
     private final String message;
