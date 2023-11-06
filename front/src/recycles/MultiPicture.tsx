@@ -100,7 +100,7 @@ const styles = StyleSheet.create({
 		width: responsiveWidth(80),
 	},
 	viewStyle: {
-		postion: "relative",
+		position: "relative",
 		width: responsiveWidth(80),
 		height: responsiveHeight(30),
 		borderRadius: 10,

@@ -3,13 +3,22 @@ import {
 	responsiveHeight,
 	responsiveWidth,
 } from "react-native-responsive-dimensions";
-
 import locationIcon from "../../assets/images/location-pin-icon.png";
+import { useNavigation } from "@react-navigation/native";
 
 const PatrolDiaryCard = ({ imgSrc, patrolDiaryInfo }: any) => {
+	const navigation = useNavigation();
+
+	console.log(patrolDiaryInfo);
 	return (
 		<>
-			<TouchableOpacity>
+			<TouchableOpacity
+				onPress={() => {
+					navigation.navigate("PatrolReportDetail", {
+						patrolNo: patrolDiaryInfo.patrolNo,
+					});
+				}}
+			>
 				<View style={style.cardWrap}>
 					<View style={style.imgWrap}>
 						<Image source={imgSrc} style={style.img} />
@@ -17,7 +26,9 @@ const PatrolDiaryCard = ({ imgSrc, patrolDiaryInfo }: any) => {
 					<View style={style.textWrap}>
 						<View style={style.textLocationWrap}>
 							<Image source={locationIcon} style={style.iconLocation} />
-							<Text style={style.textLocation}>{patrolDiaryInfo.location}</Text>
+							<Text style={style.textLocation}>
+								{patrolDiaryInfo.patrolLogAddress}
+							</Text>
 						</View>
 						<View style={style.textTitleWrap}>
 							<Text style={style.textTitle}>{patrolDiaryInfo.patrolTitle}</Text>
@@ -71,7 +82,9 @@ const style = StyleSheet.create({
 		alignItems: "center",
 		alignContent: "center",
 	},
-	textLocation: {},
+	textLocation: {
+		fontSize: 11,
+	},
 	iconLocation: {
 		width: 15,
 		height: 15,

@@ -2,15 +2,21 @@ package com.shield.dangdangranger.domain.user.controller;
 
 import static com.shield.dangdangranger.domain.user.constant.UserResponseMessage.DELETE_USER_SUCCESS;
 import static com.shield.dangdangranger.domain.user.constant.UserResponseMessage.GET_USER_INFO_SUCCESS;
+import static com.shield.dangdangranger.domain.user.constant.UserResponseMessage.READ_USER_WALLET_SUCCESS;
 import static com.shield.dangdangranger.domain.user.constant.UserResponseMessage.REISSUE_ACCESS_TOKEN__SUCCESS;
 import static com.shield.dangdangranger.domain.user.constant.UserResponseMessage.SIGN_IN_SUCCESS;
 import static com.shield.dangdangranger.domain.user.constant.UserResponseMessage.UPDATE_USER_INFO_SUCCESS;
+import static com.shield.dangdangranger.domain.user.constant.UserResponseMessage.UPDATE_USER_WALLET_SUCCESS;
+import static com.shield.dangdangranger.domain.user.constant.UserResponseMessage.USER_WALLET_PW_CORRECT;
 
 import com.shield.dangdangranger.domain.user.dto.UserRequestDto.UpdateUserInfoRequestDto;
 import com.shield.dangdangranger.domain.user.dto.UserRequestDto.UserInfoRequestDto;
+import com.shield.dangdangranger.domain.user.dto.UserRequestDto.UserWalletPwRequestDto;
+import com.shield.dangdangranger.domain.user.dto.UserRequestDto.UserWalletRequestDto;
 import com.shield.dangdangranger.domain.user.dto.UserResponseDto.AccessTokenResponseDto;
 import com.shield.dangdangranger.domain.user.dto.UserResponseDto.SignResponseDto;
 import com.shield.dangdangranger.domain.user.dto.UserResponseDto.UserInfoResponseDto;
+import com.shield.dangdangranger.domain.user.dto.UserResponseDto.UserWalletAddressResponseDto;
 import com.shield.dangdangranger.domain.user.service.UserService;
 import com.shield.dangdangranger.global.dto.ResponseDto;
 import lombok.RequiredArgsConstructor;
@@ -68,5 +74,26 @@ public class UserController {
         userService.updateUserInfo(userNo, updateUserInfoRequestDto);
         return ResponseEntity.status(HttpStatus.OK).body(ResponseDto.create(UPDATE_USER_INFO_SUCCESS.message())
         );
+    }
+
+    @GetMapping("/wallet")
+    public ResponseEntity<ResponseDto<UserWalletAddressResponseDto>> readUserWallet(
+        @RequestAttribute("userNo") Integer userNo) {
+        return ResponseEntity.status(HttpStatus.OK).body(ResponseDto.create(READ_USER_WALLET_SUCCESS.message(),
+            userService.readUserWalletAddress(userNo)));
+    }
+
+    @PutMapping("/wallet")
+    public ResponseEntity<ResponseDto<String>> updateUserWallet(
+        @RequestAttribute("userNo") Integer userNo, @RequestBody UserWalletRequestDto userWalletRequestDto) {
+        userService.updateUserWallet(userNo, userWalletRequestDto);
+        return ResponseEntity.status(HttpStatus.OK).body(ResponseDto.create(UPDATE_USER_WALLET_SUCCESS.message()));
+    }
+
+    @PostMapping("/wallet/check")
+    public ResponseEntity<ResponseDto<String>> checkUserWalletPw(
+        @RequestAttribute("userNo") Integer userNo, @RequestBody UserWalletPwRequestDto userWalletPwRequestDto) {
+        userService.checkUserWalletPw(userNo, userWalletPwRequestDto);
+        return ResponseEntity.status(HttpStatus.OK).body(ResponseDto.create(USER_WALLET_PW_CORRECT.message()));
     }
 }

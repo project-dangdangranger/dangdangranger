@@ -12,6 +12,7 @@ import com.shield.dangdangranger.domain.patrol.dto.PatrolLogResponseDto.PatrolLo
 import com.shield.dangdangranger.domain.patrol.dto.PatrolLogResponseDto.PatrolLogRoughInfoResponseDto;
 import com.shield.dangdangranger.domain.patrol.entity.PatrolLog;
 import com.shield.dangdangranger.domain.patrol.repo.PatrolLogRepository;
+import com.shield.dangdangranger.domain.patrol.repo.custom.PatrolLogRepositoryCustom;
 import com.shield.dangdangranger.domain.region.entity.Dong;
 import com.shield.dangdangranger.domain.region.repo.DongRepository;
 import com.shield.dangdangranger.domain.user.entity.User;
@@ -34,6 +35,7 @@ public class PatrolLogServiceImpl implements PatrolLogService {
     private final PatrolLogRepository patrolLogRepository;
     private final UserRepository userRepository;
     private final DongRepository dongRepository;
+    private final PatrolLogRepositoryCustom patrolLogRepositoryCustom;
 
     @Override
     @Transactional
@@ -42,6 +44,8 @@ public class PatrolLogServiceImpl implements PatrolLogService {
             .orElseThrow(() -> new NotFoundException(USER_NOT_FOUND_EXCEPTION.message()));
         Dong dong = dongRepository.findDongByDongCode(patrolLogSaveRequestDto.getDong())
             .orElseThrow(() -> new NotFoundException(DONG_NOT_FOUND_EXCEPTION.message()));
+
+        log.debug("[createPatrolLog] dong : {}", dong);
 
         patrolLogRepository.save(PatrolLog.builder()
             .user(user)
@@ -52,14 +56,13 @@ public class PatrolLogServiceImpl implements PatrolLogService {
             .patrolLogImageUrl(patrolLogSaveRequestDto.getPatrolLogImageUrl())
             .patrolLogLat(patrolLogSaveRequestDto.getPatrolLogLat())
             .patrolLogLng(patrolLogSaveRequestDto.getPatrolLogLng())
-            .patrolWritten(NOT_WRITTEN.value())
+            .patrolLogWritten(NOT_WRITTEN.value())
             .build());
     }
 
     @Override
-    public List<PatrolLogRoughInfoResponseDto> readAllPatrolLog() {
-        // TODO : 사용자 정보 받아와서 해당하는 사용자의 로그만 가져오게 수정
-        return patrolLogRepository.findAllByCanceledOrderByCreateDateDesc(NOTCANCELED)
+    public List<PatrolLogRoughInfoResponseDto> readAllPatrolLog(Integer userNo) {
+        return patrolLogRepositoryCustom.findAllPatrolLogByUser(userNo, NOTCANCELED)
             .stream().map(PatrolLogRoughInfoResponseDto::new).collect(Collectors.toList());
     }
 
@@ -67,10 +70,11 @@ public class PatrolLogServiceImpl implements PatrolLogService {
     public PatrolLogDetailInfoResponseDto readOnePatrolLog(Integer userNo, Integer patrolLogNo) {
         User loggedInUser = userRepository.findUserByUserNoAndCanceled(userNo, NOTCANCELED)
             .orElseThrow(() -> new NotFoundException(USER_NOT_FOUND_EXCEPTION.message()));
-        PatrolLog patrolLog = patrolLogRepository.findPatrolLogByPatrolLogNoAndCanceled(patrolLogNo, NOTCANCELED)
+        PatrolLog patrolLog = patrolLogRepository.findPatrolLogByPatrolLogNoAndCanceled(patrolLogNo,
+                NOTCANCELED)
             .orElseThrow(() -> new NotFoundException(PATROL_LOG_NOT_FOUND_EXCEPTION.message()));
 
-        if(patrolLog.getUser() != loggedInUser) {
+        if (patrolLog.getUser() != loggedInUser) {
             throw new ForbiddenException(FORBIDDEN_EXCEPTION_MESSAGE);
         }
         return new PatrolLogDetailInfoResponseDto(patrolLog);

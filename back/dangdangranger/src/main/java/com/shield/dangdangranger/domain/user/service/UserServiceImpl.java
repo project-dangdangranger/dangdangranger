@@ -4,6 +4,7 @@ package com.shield.dangdangranger.domain.user.service;
 import static com.shield.dangdangranger.domain.user.constant.SignInUp.SIGN_IN;
 import static com.shield.dangdangranger.domain.user.constant.SignInUp.SIGN_UP;
 import static com.shield.dangdangranger.domain.user.constant.UserExceptionMessage.USER_NOT_FOUND_EXCEPTION;
+import static com.shield.dangdangranger.domain.user.constant.UserExceptionMessage.USER_WALLET_PW_NOT_CORRECT;
 import static com.shield.dangdangranger.global.constant.BaseConstant.CANCELED;
 import static com.shield.dangdangranger.global.constant.BaseConstant.NOTCANCELED;
 
@@ -12,9 +13,12 @@ import com.shield.dangdangranger.domain.region.repo.DongRepository;
 import com.shield.dangdangranger.domain.user.dto.TokenInfo;
 import com.shield.dangdangranger.domain.user.dto.UserRequestDto.UpdateUserInfoRequestDto;
 import com.shield.dangdangranger.domain.user.dto.UserRequestDto.UserInfoRequestDto;
+import com.shield.dangdangranger.domain.user.dto.UserRequestDto.UserWalletPwRequestDto;
+import com.shield.dangdangranger.domain.user.dto.UserRequestDto.UserWalletRequestDto;
 import com.shield.dangdangranger.domain.user.dto.UserResponseDto.AccessTokenResponseDto;
 import com.shield.dangdangranger.domain.user.dto.UserResponseDto.SignResponseDto;
 import com.shield.dangdangranger.domain.user.dto.UserResponseDto.UserInfoResponseDto;
+import com.shield.dangdangranger.domain.user.dto.UserResponseDto.UserWalletAddressResponseDto;
 import com.shield.dangdangranger.domain.user.entity.User;
 import com.shield.dangdangranger.domain.user.entity.UserInfo;
 import com.shield.dangdangranger.domain.user.repo.UserRepository;
@@ -23,6 +27,7 @@ import com.shield.dangdangranger.global.util.jwt.JwtTokenHandler;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,6 +41,7 @@ public class UserServiceImpl implements UserService {
     private final JwtTokenHandler jwtTokenHandler;
     private final UserRedisService userRedisService;
     private final DongRepository dongRepository;
+    private final PasswordEncoder passwordEncoder;
 
 
     @Override
@@ -48,7 +54,7 @@ public class UserServiceImpl implements UserService {
         // 토큰 발급 후, 정보 반환
         TokenInfo tokenInfo = jwtTokenHandler.generateToken(user.getUserNo());
         String signInUp = SIGN_UP.message();
-        if(user.getDong() != null) {
+        if (user.getDong() != null) {
             signInUp = SIGN_IN.message();
         }
         return SignResponseDto.builder()
@@ -85,6 +91,7 @@ public class UserServiceImpl implements UserService {
                 .userProfileImg(userInfo.getUserProfileImg())
                 .userAddress(userInfo.getUserAddress())
                 .userDongCode(userInfo.getDongCode())
+                .userWalletAddress(userInfo.getUserWalletAddress())
                 .build();
         } catch (NotFoundException e) {
             // 없으면 DB 검색
@@ -102,6 +109,7 @@ public class UserServiceImpl implements UserService {
                 .userProfileImg(user.getUserProfileImg())
                 .userAddress(user.getDong().getAddress())
                 .userDongCode(user.getDong().getDongCode())
+                .userWalletAddress(user.getUserWalletAddress())
                 .build();
         }
     }
@@ -145,5 +153,38 @@ public class UserServiceImpl implements UserService {
 
         // redis 에 적용
         userRedisService.updateUserInfoToRedis(user);
+    }
+
+    @Override
+    public UserWalletAddressResponseDto readUserWalletAddress(Integer userNo) {
+        User user = userRepository.findUserByUserNoAndCanceled(userNo, NOTCANCELED)
+            .orElseThrow(() -> new NotFoundException(
+                USER_NOT_FOUND_EXCEPTION.message()));
+        return UserWalletAddressResponseDto.builder()
+            .userWalletAddress(user.getUserWalletAddress())
+            .build();
+    }
+
+    @Override
+    @Transactional
+    public void updateUserWallet(Integer userNo, UserWalletRequestDto userWalletRequestDto) {
+        User user = userRepository.findUserByUserNoAndCanceled(userNo, NOTCANCELED)
+            .orElseThrow(() -> new NotFoundException(USER_NOT_FOUND_EXCEPTION.message()));
+
+        user.updateUserWallet(userWalletRequestDto.getUserWalletAddress(),
+            passwordEncoder.encode(userWalletRequestDto.getUserWalletPw()));
+        userRepository.save(user);
+    }
+
+    @Override
+    public void checkUserWalletPw(Integer userNo, UserWalletPwRequestDto userWalletPwRequestDto) {
+        User user = userRepository.findUserByUserNoAndCanceled(userNo, NOTCANCELED).orElseThrow(
+            () -> new NotFoundException(USER_NOT_FOUND_EXCEPTION.message())
+        );
+
+        if (!passwordEncoder.matches(userWalletPwRequestDto.getUserWalletPw(),
+            user.getUserWalletPw())) {
+            throw new NotFoundException(USER_WALLET_PW_NOT_CORRECT.message());
+        }
     }
 }

@@ -1,10 +1,12 @@
+import { useRef } from "react";
 import {
 	Image,
-	ScrollView,
 	Text,
 	TextInput,
 	TouchableOpacity,
 	View,
+	Modal,
+	StyleSheet,
 } from "react-native";
 import ColorHeader from "../recycles/ColorHeader";
 import CommonLayout from "../recycles/CommonLayout";
@@ -19,19 +21,29 @@ import { useEffect, useState } from "react";
 import PatrolDiaryCard from "../components/PatrolDiaryCard";
 import dotIconImg from "../../assets/images/3-dot-icon.png";
 import axios from "../utils/axios";
+import {
+	responsiveHeight,
+	responsiveWidth,
+} from "react-native-responsive-dimensions";
 
 const PatrolDiary = () => {
 	const { navigate } = useNavigation<StackNavigation>();
-	const [selectedOption, setSelectedOption] = useState("최신순");
-	const patrolDiaryInfo = {
-		nameid: "나노나누",
-		location: "서울특별시 역삼동",
-		title: "찾아주세요..제발..ㅇㅇㅇㅇㅇㅇㅇㅇ",
-		writer: "나노나누",
-		viewCount: "232",
-		date: "2023.01.01",
-	};
+	const [selectedOption, setSelectedOption] = useState("내동네");
 	const [patrolDiaryList, setPatrolDiaryList] = useState([]);
+	const [modalVisible, setModalVisible] = useState(false);
+	// 모달 설정
+	const [modalPosition, setModalPosition] = useState({ top: 0, left: 0 });
+	const threedotRef = useRef(null);
+
+	const handlePressThreedot = (event) => {
+		event.preventDefault();
+		threedotRef.current.measure((fx, fy, width, height, px, py) => {
+			const x = px - responsiveWidth(40); // Horizontal position
+			const y = py + height; // Vertical position, just below the button
+			setModalPosition({ top: y, left: x });
+			setModalVisible(!modalVisible); // Toggle visibility
+		});
+	};
 
 	useEffect(() => {
 		if (selectedOption === "내일지") {
@@ -87,7 +99,12 @@ const PatrolDiary = () => {
 									selected={selectedOption === "내일지"}
 									onPress={() => setSelectedOption("내일지")}
 								/>
-								<TouchableOpacity onPress={() => navigate("PatrolDiaryWrite")}>
+
+								<TouchableOpacity
+									ref={threedotRef}
+									style={PatrolDiaryLayout.settings}
+									onPress={handlePressThreedot}
+								>
 									<Image
 										source={dotIconImg}
 										style={PatrolDiaryLayout.iconImg}
@@ -95,31 +112,103 @@ const PatrolDiary = () => {
 								</TouchableOpacity>
 							</View>
 						</View>
-						<TextInput
-							style={PatrolDiaryLayout.formInput}
-							onChangeText={() => {}}
-							placeholder="실종견의 정보를 입력해주세요."
-						/>
+						<View>
+							<TextInput
+								style={PatrolDiaryLayout.formInput}
+								onChangeText={() => {}}
+								placeholder="순찰일지 정보를 입력해주세요."
+							/>
+						</View>
 					</View>
+
 					<View style={PatrolDiaryLayout.patrolRowWrap}>
 						{patrolDiaryList?.map((patrolDiary) => {
 							return (
-								<PatrolDiaryCard
-									imgSrc={{ uri: patrolDiary.patrolFirstImg }}
-									patrolDiaryInfo={patrolDiary}
-									key={patrolDiary.patrolNo}
-								/>
+								<>
+									<PatrolDiaryCard
+										imgSrc={{ uri: patrolDiary.patrolFirstImg }}
+										patrolDiaryInfo={patrolDiary}
+										key={patrolDiary.patrolNo}
+									/>
+								</>
 							);
 						})}
 					</View>
 				</View>
-				<TouchableOpacity onPress={() => navigate("PatrolDiaryWrite")}>
-					<Text>Hi</Text>
-				</TouchableOpacity>
+				<TouchableOpacity
+					onPress={() => navigate("PatrolDiaryWrite")}
+				></TouchableOpacity>
 			</CommonLayout>
 			<FooterBar />
+			<Modal
+				animationType="fade"
+				transparent={true}
+				visible={modalVisible}
+				onRequestClose={() => setModalVisible(false)}
+			>
+				<TouchableOpacity
+					style={[
+						styles.modalContainer,
+						{ top: modalPosition.top, left: modalPosition.left },
+					]}
+					onPress={() => setModalVisible(false)}
+				>
+					<View style={PatrolDiaryLayout.modalView}>
+						<TouchableOpacity
+							style={PatrolDiaryLayout.modalItem}
+							onPress={() => {
+								navigate("PatrolDiaryWrite");
+								setModalVisible(false);
+							}}
+						>
+							<Text style={PatrolDiaryLayout.modalText}>글 작성하기</Text>
+						</TouchableOpacity>
+					</View>
+				</TouchableOpacity>
+			</Modal>
 		</>
 	);
 };
 
 export default PatrolDiary;
+
+const styles = StyleSheet.create({
+	container: {
+		position: "absolute",
+		bottom: 100,
+	},
+	button: {
+		padding: 10,
+		backgroundColor: "#DDDDDD",
+	},
+	buttonText: {
+		fontSize: 24,
+	},
+	modalContainer: {
+		flex: 1,
+		height: responsiveHeight(200),
+		backgroundColor: "rgba(0,0,0,0.5)",
+	},
+	modalView: {
+		backgroundColor: "white",
+		borderRadius: 20,
+		padding: 35,
+		alignItems: "flex-start",
+		shadowColor: "#000",
+		shadowOffset: {
+			width: 0,
+			height: 2,
+		},
+		shadowOpacity: 0.25,
+		shadowRadius: 3.84,
+		elevation: 5,
+	},
+	modalItem: {
+		// marginBottom: 15,
+		justifyContent: "center",
+		alignItems: "center",
+	},
+	modalText: {
+		fontSize: 10,
+	},
+});

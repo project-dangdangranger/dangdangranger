@@ -5,33 +5,38 @@ import com.shield.dangdangranger.global.entity.BaseEntity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "patrolreport")
+@Table(name = "patrol_report")
 public class PatrolReport extends BaseEntity {
 
     @Id
-    @GeneratedValue
-    @Column(name = "partrol_report_no")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "patrol_report_no")
     private Integer patrolReportNo;
 
     @Column(name = "user_no")
     private Integer userNo;
 
-    @Column(name = "partrol_report_title")
+    @Column(name = "patrol_report_title")
     private String patrolReportTitle;
 
-    @Column(name = "partrol_report_content")
+    @Column(name = "patrol_report_content")
     private String patrolReportContent;
 
-    @Column(name = "partrol_report_hit")
+    @Column(name = "patrol_report_hit")
     private Integer patrolReportHit;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "patrol_log_no")
     private PatrolLog patrolLog;
+
+    @OneToMany(mappedBy = "patrolReport")
+    private List<PatrolComment> patrolComments = new ArrayList<>();
 
     @Builder
     public PatrolReport(Integer userNo, String patrolReportTitle, String patrolReportContent, Integer patrolReportHit, PatrolLog patrolLog  ) {

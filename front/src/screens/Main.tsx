@@ -50,7 +50,7 @@ const Main = () => {
 					</Text>
 
 					<Text style={MainLayout.walkMainDesc}>
-						서비스 이름은 내 반려견의 프로필을 NFT화하여{"\n"}
+						댕댕레인저는 내 반려견의 프로필을 NFT화하여{"\n"}
 						방범대원으로 활동할 수 있도록 도와주는 플랫폼입니다.
 					</Text>
 				</View>
