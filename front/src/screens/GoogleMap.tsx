@@ -72,7 +72,8 @@ const GoogleMap = (props: Props) => {
 			console.log("patrolLogDate: ", patrolLogDate);
 			console.log("patrolLogLat: ", patrolLogLat);
 			console.log("patrolLogLng: ", patrolLogLng);
-
+			const response = axios.get("/patrol/start");
+			console.log("response : ", response);
 			watchIdRef.current = startWatchingLocation();
 			const interval = setInterval(() => {
 				setPatrolLogTotalTime((prev) => prev + 1);
@@ -85,7 +86,7 @@ const GoogleMap = (props: Props) => {
 		if (!props.start && !props.patrol) {
 			clearLocationWatch();
 			console.log("중지 했습니다.!");
-			saveAndUploadMapSnapshot();
+			// saveAndUploadMapSnapshot();
 			stopAndReset();
 		}
 	}, [props.start, props.patrol]);
@@ -188,7 +189,7 @@ const GoogleMap = (props: Props) => {
 			const res = {
 				dong: "1111010100", // 동
 				patrolLogDate,
-				patrolLogTotalDistance: 13, // 거리 체크
+				patrolLogTotalDistance,
 				patrolLogTotalTime: patrolLogTotalTime / 60,
 				patrolLogImageUrl: data.Location,
 				patrolLogLat,
