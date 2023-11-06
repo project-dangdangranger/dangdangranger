@@ -11,7 +11,7 @@ import {
 } from "@env";
 import { Buffer } from "buffer";
 
-type Location = {
+type LocationCoordinates = {
 	latitude: number;
 	longitude: number;
 	latitudeDelta: number;
@@ -21,9 +21,11 @@ type Location = {
 const GoogleMap = () => {
 	const mapWidth = Dimensions.get("window").width;
 	const mapHeight = Dimensions.get("window").height;
-	const [location, setLocation] = useState<Location | undefined>();
-	const [positions, setPositions] = useState<Location[]>([]);
-	const [watchId, setWatchId] = useState<number | null>(null);
+	const [currentLocation, setCurrentLocation] = useState<
+		LocationCoordinates | undefined
+	>();
+	const [locationTrail, setLocationTrail] = useState<LocationCoordinates[]>([]);
+	const watchIdRef = useRef<number | null>(null);
 	const mapRef = useRef<MapView | null>(null);
 
 	const s3 = new S3({
@@ -35,11 +37,11 @@ const GoogleMap = () => {
 	useEffect(() => {
 		requestPermission();
 		const id = startWatchingLocation();
-		setWatchId(id);
+		watchIdRef.current = id;
 
 		return () => {
-			if (watchId !== null) {
-				Geolocation.clearWatch(watchId);
+			if (watchIdRef.current !== null) {
+				Geolocation.clearWatch(watchIdRef.current);
 			}
 		};
 	}, []);
@@ -53,7 +55,7 @@ const GoogleMap = () => {
 			if (result === PermissionsAndroid.RESULTS.GRANTED) {
 				getCurrentLocation();
 			} else {
-				console.log("ACCESS_FINE_LOCATION Permission denied");
+				console.log("ACCESS_FINE_LOCATION permission denied");
 			}
 		} catch (e) {
 			console.log(e);
@@ -63,14 +65,14 @@ const GoogleMap = () => {
 	const getCurrentLocation = () => {
 		Geolocation.getCurrentPosition(
 			(position) => {
-				const newLocation: Location = {
+				const newLocation: LocationCoordinates = {
 					latitude: position.coords.latitude,
 					longitude: position.coords.longitude,
 					latitudeDelta: 0.009,
 					longitudeDelta: 0.009,
 				};
-				setLocation(newLocation);
-				setPositions([newLocation]);
+				setCurrentLocation(newLocation);
+				setLocationTrail([newLocation]);
 			},
 			(error) => {
 				console.log(error.code, error.message);
@@ -82,14 +84,14 @@ const GoogleMap = () => {
 	const startWatchingLocation = () => {
 		return Geolocation.watchPosition(
 			(position) => {
-				const newLocation: Location = {
+				const newLocation: LocationCoordinates = {
 					latitude: position.coords.latitude,
 					longitude: position.coords.longitude,
 					latitudeDelta: 0.009,
 					longitudeDelta: 0.009,
 				};
-				setLocation(newLocation);
-				setPositions((prev) => [...prev, newLocation]);
+				setCurrentLocation(newLocation);
+				setLocationTrail((prev) => [...prev, newLocation]);
 			},
 			(error) => {
 				console.log(error.code, error.message);
@@ -104,21 +106,20 @@ const GoogleMap = () => {
 				width: mapWidth,
 				height: mapHeight,
 				format: "png",
-				quality: 0.8, // 이미지 품질
+				quality: 1,
 				result: "base64",
 			});
 			await uploadImage(snapshot);
 		}
 	};
 
-	const uploadImage = async (imageUri: string) => {
-		// console.log("img", imageUri);
-		const blob = Buffer.from(imageUri, "base64");
-		// console.log("blob : ", blob);
-		// key는 오늘날짜, 시간
+	const uploadImage = async (imageBase64: string) => {
+		const blob = Buffer.from(imageBase64, "base64");
+		const random = Math.floor(Math.random() * 100000000);
+		const filename = `map_${new Date().toISOString()}_${random}.png`;
 		const params = {
 			Bucket: AWS_BUCKET,
-			Key: `${new Date().toISOString()}.png`,
+			Key: filename,
 			Body: blob,
 			ContentType: "image/png",
 		};
@@ -126,7 +127,7 @@ const GoogleMap = () => {
 		try {
 			const data = await s3.upload(params).promise();
 			console.log("File uploaded:", data);
-			// 업로드 후의 로직 (예: URL을 서버에 저장하는 등)
+			// Here you might want to do something with the upload data, like storing the URL
 		} catch (err) {
 			console.error("Upload failed:", err);
 		}
@@ -135,16 +136,22 @@ const GoogleMap = () => {
 	return (
 		<View style={{ flex: 1 }}>
 			<MapView
-				style={{ width: 500, height: 500 }}
+				style={{ width: mapWidth, height: mapHeight }}
 				provider={PROVIDER_GOOGLE}
 				showsUserLocation={true}
 				showsMyLocationButton={true}
 				zoomEnabled={true}
 				rotateEnabled={true}
-				initialRegion={location}
+				initialRegion={currentLocation}
 				ref={mapRef}
 			>
-				<Polyline coordinates={positions} strokeColor="#000" strokeWidth={4} />
+				{locationTrail.length > 0 && (
+					<Polyline
+						coordinates={locationTrail}
+						strokeColor="#000"
+						strokeWidth={4}
+					/>
+				)}
 			</MapView>
 			<Button
 				title="Save and Upload Map Snapshot"
