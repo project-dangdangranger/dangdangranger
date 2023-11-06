@@ -14,6 +14,7 @@ import React, { useEffect } from "react";
 
 const Login = ({ navigation }: any) => {
 	useEffect(() => {
+		console.log(WEB_CLIENT_ID);
 		GoogleSignin.configure({
 			webClientId: WEB_CLIENT_ID,
 			offlineAccess: true,

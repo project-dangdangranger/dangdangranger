@@ -34,6 +34,7 @@ import CreateDog from "./src/screens/CreateDog";
 import PrivateKey from "./src/screens/PrivateKey";
 import UpdateInfo from "./src/screens/UpdateInfo";
 import PatrolReportDetail from "./src/screens/PatrolReportDetail";
+import FindTogether from "./src/screens/FindTogether";
 
 const App = () => {
 	const Stack = createNativeStackNavigator();
@@ -84,6 +85,7 @@ const App = () => {
 						name="PatrolReportDetail"
 						component={PatrolReportDetail}
 					/>
+					<Stack.Screen name="FindTogether" component={FindTogether} />
 				</Stack.Navigator>
 			</NavigationContainer>
 		</RecoilRoot>
