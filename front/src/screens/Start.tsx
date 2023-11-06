@@ -2,27 +2,26 @@ import Main from "./Main";
 import Login from "./Login";
 import EncryptedStorage from "react-native-encrypted-storage";
 import React, { useEffect, useState } from "react";
+import { isLogged } from "../atoms/atoms";
+import { useRecoilState } from "recoil";
 
 const Start = () => {
-	const [tokn, setToken] = useState("");
-	async function retrieveToken() {
-		try {
-			const token = await EncryptedStorage.getItem("accessToken");
-			if (token !== undefined) {
-				setToken(token);
-				return token;
-			}
-		} catch (error) {
-			// 에러가 발생했습니다.
-			console.log(error);
+	const [islogged, setIsLogged] = useRecoilState(isLogged);
+
+	async function getAccessToken() {
+		const accessToken = await EncryptedStorage.getItem("accessToken");
+		console.log("accessToken: ", accessToken);
+		if (accessToken !== null) {
+			setIsLogged(true);
 		}
 	}
 
 	useEffect(() => {
-		retrieveToken();
+		console.log("Start.tsx의 useEffect() 실행:", islogged);
+		getAccessToken();
 	}, []);
 
-	return <>{tokn ? <Main /> : <Login />}</>;
+	return <>{islogged ? <Main /> : <Login />}</>;
 };
 
 export default Start;

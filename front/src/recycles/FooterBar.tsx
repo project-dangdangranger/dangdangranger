@@ -1,4 +1,11 @@
-import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
+import {
+	View,
+	Text,
+	StyleSheet,
+	Image,
+	TouchableOpacity,
+	Alert,
+} from "react-native";
 import {
 	responsiveHeight,
 	responsiveWidth,
@@ -13,10 +20,17 @@ import ProfilePng from "../../assets/images/Profile.png";
 import ProfileFillPng from "../../assets/images/Profile_fill.png";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigation } from "../../App";
+import { useRecoilValue } from "recoil";
+import { isLogged } from "../atoms/atoms";
 
 const FooterBar = () => {
 	const { navigate } = useNavigation<StackNavigation>();
-	const authHandling = (pageName: string) => {
+	const islogged = useRecoilValue(isLogged);
+	const toMove = (pageName: string) => {
+		if (!islogged) {
+			Alert.alert("로그인 필요", "로그인해주세요.");
+			return;
+		}
 		navigate(pageName);
 	};
 
@@ -26,14 +40,14 @@ const FooterBar = () => {
 				<View>
 					<TouchableOpacity
 						style={styles.btnCenter}
-						onPress={() => navigate("Main")}
+						onPress={() => toMove("Main")}
 					>
 						<Image source={HomePng} style={styles.btnImg} />
 						<Text>Home</Text>
 					</TouchableOpacity>
 				</View>
 				<View>
-					<TouchableOpacity onPress={() => authHandling("PatrolMain")}>
+					<TouchableOpacity onPress={() => toMove("PatrolMain")}>
 						<Image source={MingcuteSearchPng} style={styles.btnImg} />
 						<Text>순찰</Text>
 					</TouchableOpacity>
@@ -41,7 +55,7 @@ const FooterBar = () => {
 				<View>
 					<TouchableOpacity
 						style={styles.btnCenter}
-						onPress={() => navigate("MissingMain")}
+						onPress={() => toMove("MissingMain")}
 					>
 						<Image source={TempPng} style={styles.btnImg} />
 						<Text>실종견</Text>
@@ -50,7 +64,7 @@ const FooterBar = () => {
 				<View>
 					<TouchableOpacity
 						style={styles.btnCenter}
-						onPress={() => navigate("Profile")}
+						onPress={() => toMove("Profile")}
 					>
 						<Image source={ProfilePng} style={styles.btnImg} />
 						<Text>프로필</Text>

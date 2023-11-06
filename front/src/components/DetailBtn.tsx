@@ -26,7 +26,7 @@ export default DetailBtn;
 
 const style = StyleSheet.create({
 	btnWrap: {
-		backgroundColor: "black",
+		backgroundColor: "#2B2B2B",
 		borderRadius: 80,
 		height: responsiveHeight(3.8),
 		marginTop: -responsiveHeight(1),

@@ -96,16 +96,16 @@ const CreateDog = ({ navigation }: any) => {
 		// console.log("img", imageUri);
 		const response = await fetch(imageUri);
 		const blob = await response.blob();
-		const type = blob.type;
-		const random = Math.floor(Math.random() * 100000000);
-		const filename = `profile_${new Date().toISOString()}_${random}.png`;
-		const params = {
+		const random = await Math.floor(Math.random() * 100000000);
+		const type = await blob.type;
+		const filename = await `${random}_${imageUri.split("/").pop()}`;
+		const params = await {
 			Bucket: AWS_BUCKET,
 			Key: filename,
 			Body: blob,
 			ContentType: type,
 		};
-		s3.upload(params, (err: any, data: any) => {
+		await s3.upload(params, (err: any, data: any) => {
 			if (err) {
 				console.log("Error occured while trying to upload to S3 bucket", err);
 			} else {
@@ -119,6 +119,7 @@ const CreateDog = ({ navigation }: any) => {
 	// 여기서 발급하기를 누르면 나오는 함수
 	const submitRegister = async () => {
 		Alert.alert("섭밋 해야 합니다");
+		console.log();
 
 		uploadImage(selectedImg);
 	};

@@ -7,7 +7,7 @@ import {
 const PatrolDiaryWriteLayout = StyleSheet.create({
 	container: {
 		marginTop: -responsiveHeight(3),
-		height: responsiveHeight(84),
+		// height: responsiveHeight(84),
 		alignItems: "center",
 	},
 
@@ -29,7 +29,6 @@ const PatrolDiaryWriteLayout = StyleSheet.create({
 	},
 
 	formWrap: {
-		height: responsiveHeight(50),
 		width: responsiveWidth(88),
 		marginTop: -responsiveHeight(1),
 		alignItems: "center",
@@ -71,6 +70,30 @@ const PatrolDiaryWriteLayout = StyleSheet.create({
 	debug: {
 		borderWidth: 2,
 		backgroundColor: "red",
+	},
+
+	theeimgcontainer: {
+		flexDirection: "row",
+		justifyContent: "center",
+		alignItems: "center",
+	},
+	threeimg: {
+		borderRadius: 10,
+		height: 100,
+		width: 100,
+		marginRight: 10,
+	},
+	deleteContainer: {
+		paddingHorizontal: 5,
+		paddingVertical: 5,
+		borderRadius: 10,
+		backgroundColor: "white",
+		justifyContent: "center",
+		alignItems: "center",
+		marginRight: 10,
+	},
+	deleteText: {
+		fontSize: 15,
 	},
 });
 
