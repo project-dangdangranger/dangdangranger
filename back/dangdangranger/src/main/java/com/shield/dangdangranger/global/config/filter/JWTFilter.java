@@ -78,6 +78,8 @@ public class JWTFilter implements Filter {
             return true;
         }else if(url.matches("/api/flower(.*)")){
             return true;
+        }else if (url.matches("/ws-stomp/(.*)")) {
+        	return true;
         }
 
         return false;
