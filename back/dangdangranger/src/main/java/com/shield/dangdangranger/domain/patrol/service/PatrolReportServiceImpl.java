@@ -141,7 +141,8 @@ public class PatrolReportServiceImpl implements PatrolReportService {
         //순찰일지 이미지리스트
         List<Image> list = imageRepository.findAllByImageTypeNoAndParentNoAndCanceled(2, patrolNo, NOTCANCELED );
         List<String> imageList = new ArrayList<>();
-        for (int i = 0; i < imageList.size(); i++) {
+        for (int i = 0; i < list.size(); i++) {
+//            System.out.println("!!!!: " + list.get(i).getImageUrl());
             imageList.add(list.get(i).getImageUrl());
         }
         //사용자 정보
@@ -196,7 +197,7 @@ public class PatrolReportServiceImpl implements PatrolReportService {
         //순찰일지 이미지리스트
         List<Image> list = imageRepository.findAllByImageTypeNoAndParentNoAndCanceled(2, patrolNo, NOTCANCELED);
         List<String> imageList = new ArrayList<>();
-        for (int i = 0; i < imageList.size(); i++) {
+        for (int i = 0; i < list.size(); i++) {
             imageList.add(list.get(i).getImageUrl());
         }
         List<String> updateImageList = updateRequestDto.getPatrolReportImageList();
