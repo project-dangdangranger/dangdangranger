@@ -17,7 +17,7 @@ const DogItem = ({ item, navigation }: any) => {
 			onPress={() => navigation.navigate("DogDetail", { item })}
 		>
 			<View style={styles.dogItem}>
-				<Image source={item.dogImg} style={styles.dogImg} />
+				<Image source={{ uri: item.dogImg }} style={styles.dogImg} />
 				<View style={styles.dogItemContentContainer}>
 					<Text style={styles.dogTitle}>{item.dogName}</Text>
 					<View style={styles.dogItemContentRow}>

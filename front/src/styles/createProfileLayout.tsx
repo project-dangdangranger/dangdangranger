@@ -107,7 +107,7 @@ const CreateProfileLayout = StyleSheet.create({
 	submitButton: {
 		width: responsiveWidth(92),
 		height: 50,
-		backgroundColor: "#EE8A72",
+		backgroundColor: "#3D6CC9",
 		borderRadius: 10,
 		display: "flex",
 		justifyContent: "center",

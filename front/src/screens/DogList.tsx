@@ -26,8 +26,10 @@ import Badges from "../constants/Badges";
 import CustomTwinButton from "../recycles/CustomTwinBtn";
 import ProfileImg from "../../assets/images/profileImg.png";
 import DogItem from "../recycles/DogItem";
+import { useNavigation } from "@react-navigation/native";
 
-const Profile = ({ navigation }: any) => {
+const Profile = (dogList: any) => {
+	const navigation = useNavigation();
 	const data = [
 		{
 			dogNo: "0",
@@ -47,6 +49,9 @@ const Profile = ({ navigation }: any) => {
 		},
 	];
 
+	useEffect(() => {
+		console.log("라우트:", dogList);
+	}, []);
 	return (
 		<>
 			<CommonLayout>
@@ -84,7 +89,7 @@ const Profile = ({ navigation }: any) => {
 				</View>
 
 				<View style={styles.dogcontainer}>
-					{data.map((item, index) => {
+					{dogList?.dogList.map((item, index) => {
 						return <DogItem key={index} item={item} navigation={navigation} />;
 					})}
 				</View>

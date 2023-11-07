@@ -18,11 +18,6 @@ import {
 	responsiveWidth,
 } from "react-native-responsive-dimensions";
 import CustomSubButton from "../recycles/CustomSubBtn";
-import Badge1 from "../../assets/images/badge-01.png";
-import Badge2 from "../../assets/images/badge-02.png";
-import Badge3 from "../../assets/images/badge-03.png";
-import Badges from "../constants/Badges";
-import CustomTwinButton from "../recycles/CustomTwinBtn";
 import ProfileImg from "../../assets/images/profileImg.png";
 import { useNavigation } from "@react-navigation/native";
 

@@ -97,7 +97,6 @@ const PatrolDiaryWrite = () => {
 					console.log("성공:", res.data);
 					if (res.data.message === "순찰일지 등록 성공") {
 						Alert.alert("순찰일지 등록 성공", "순찰 일지 화면으로 이동합니다.");
-
 						navigation.navigate("PatrolDiary");
 					}
 				})
@@ -111,9 +110,7 @@ const PatrolDiaryWrite = () => {
 			console.error("An error occurred during the upload", error);
 		}
 	};
-
 	console.log(submitImgList);
-
 	const removeImageFromPatrolImgList = (indexToRemove) => {
 		setPatrolImgList((currentImages) =>
 			currentImages.filter((_, index) => index !== indexToRemove),

@@ -74,12 +74,10 @@ const CreateDog = ({ navigation }: any) => {
 	};
 
 	const handleConfirm = (date: Date) => {
-		console.log("handle confirm date:", date);
-		const dateAll = new Date(date);
-		var year = dateAll.getFullYear();
-		var month = ("0" + (1 + dateAll.getMonth())).slice(-2);
-		var day = ("0" + dateAll.getDate()).slice(-2);
-		setPetBirth(year + "-" + month + "-" + day);
+		const year = date.getFullYear().toString();
+		const month = (date.getMonth() + 1).toString().padStart(2, "0");
+		const day = date.getDate().toString().padStart(2, "0");
+		setPetBirth(year + "-" + month + "-" + day + "T00:00:00");
 		hideDatePicker();
 	};
 
@@ -170,7 +168,7 @@ const CreateDog = ({ navigation }: any) => {
 							})
 							.then(async (data) => {
 								console.log("디비로 보내는 데이터:", data);
-								if (data.data.message === "강아지 프로필 등록 완료") {
+								if (data.data.message === "강아지 등록 성공") {
 									Alert.alert(
 										"프로필 생성이 완료되었습니다.",
 										"외부 디지털 지갑에서 확인하려면 최대 1일까지도 소요될 수 있습니다.",
@@ -188,7 +186,7 @@ const CreateDog = ({ navigation }: any) => {
 					}
 				});
 		} catch (err) {
-			console.log(":DB보내는 에러는 에러 !!:", err.response);
+			console.log(":DB보내는 에러는 에러 !!:", err);
 		}
 	};
 
@@ -295,13 +293,12 @@ const CreateDog = ({ navigation }: any) => {
 		<>
 			<CommonLayout>
 				<ColorHeader title="프로필 작성" />
-				<View style={CreateProfileLayout.createProfileTitleWrap}>
-					<Text style={CreateProfileLayout.createProfileDesc}>반려견 NFT</Text>
-					<Text style={CreateProfileLayout.createProfileTitle}>
-						내 NFT에 저장하는,{"\n"}
-						나의 반려견
-					</Text>
-				</View>
+				<CustomText
+					mainText="나의 반려견"
+					emphasizedText="NFT"
+					emphasizedColor="#3D6CC9"
+					finalText="을 만들어보세요"
+				/>
 				<EditImage
 					selectedImg={selectedImg}
 					setSelectedImg={setSelectedImg}
@@ -483,87 +480,6 @@ const CreateDog = ({ navigation }: any) => {
 			)}
 		</>
 	);
-
-	// return (
-	// 	<>
-	// 		<CommonLayout>
-	// 			<ColorHeader title="강아지 관리" />
-	// 			<View>
-	// 				<CustomText
-	// 					mainText="방범대원증을"
-	// 					emphasizedText="NFT"
-	// 					emphasizedColor="#3D6CC9"
-	// 					finalText="로 등록해보세요"
-	// 				/>
-	// 			</View>
-	// 			<View style={styles.viewcontainer}>
-	// 				<TouchableOpacity
-	// 					activeOpacity={0.7}
-	// 					// onPress={pickImage}
-	// 				>
-	// 					<View style={styles.imageUploadWrap}>
-	// 						<Image source={AddPlusIcon} />
-	// 						<Text>사진 등록하기</Text>
-	// 					</View>
-	// 				</TouchableOpacity>
-	// 				<View>
-	// 					<Text style={styles.textAlign}>반려견의 이름을 입력해주세요.</Text>
-	// 				</View>
-	// 				<TextInput
-	// 					style={styles.formInput}
-	// 					// value={petSpecies || ""}
-	// 					onChangeText={() => {}}
-	// 					placeholder="반려견 이름을 입력해주세요."
-	// 					onBlur={() => {}}
-	// 				/>
-
-	// 				<View>
-	// 					<Text style={styles.textAlign}>반려견의 종을 입력해주세요.</Text>
-	// 				</View>
-	// 				<TextInput
-	// 					style={styles.formInput}
-	// 					// value={petSpecies || ""}
-	// 					onChangeText={() => {}}
-	// 					placeholder="반려견 종을 입력해주세요."
-	// 					onBlur={() => {}}
-	// 				/>
-
-	// 				<View>
-	// 					<Text style={styles.textAlign}>반려견의 이름을 입력해주세요.</Text>
-	// 				</View>
-	// 				<TextInput
-	// 					style={[styles.formInput]}
-	// 					// value={petSpecies || ""}
-	// 					onChangeText={() => {}}
-	// 					placeholder="종을 검색해 아래를 클릭하세요"
-	// 					onBlur={() => {}}
-	// 				/>
-
-	// 				<View>
-	// 					<Text style={styles.textAlign}>반려견의 생일을 입력해주세요.</Text>
-	// 				</View>
-	// 				<TextInput
-	// 					style={[styles.formInput, { marginBottom: responsiveHeight(2) }]}
-	// 					// value={petSpecies || ""}
-	// 					onChangeText={() => {}}
-	// 					placeholder="종을 검색해 아래를 클릭하세요"
-	// 					onBlur={() => {}}
-	// 				/>
-	// 			</View>
-
-	// 			<CustomSubButton
-	// 				text={"NFT 반려대원 발급하기"}
-	// 				onPress={
-	// 					() => {}
-
-	// 					// navigation.navigate("MakeDogProfile")
-	// 				}
-	// 				color={"#70C8EE"}
-	// 			/>
-	// 		</CommonLayout>
-	// 		<AbsoluteVar />
-	// 	</>
-	// );
 };
 
 export default CreateDog;
