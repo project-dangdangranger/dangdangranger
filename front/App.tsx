@@ -35,6 +35,10 @@ import PrivateKey from "./src/screens/PrivateKey";
 import UpdateInfo from "./src/screens/UpdateInfo";
 import PatrolReportDetail from "./src/screens/PatrolReportDetail";
 import FindTogether from "./src/screens/FindTogether";
+import { TextEncoder, TextDecoder } from "text-encoding";
+
+global.TextEncoder = TextEncoder;
+global.TextDecoder = TextDecoder;
 
 const App = () => {
 	const Stack = createNativeStackNavigator();

@@ -29,3 +29,9 @@ declare module "sockjs-client" {
 	var SockJS: any;
 	export default SockJS;
 }
+
+// text-endoing.d.ts
+declare module "text-encoding" {
+	export var TextEncoder: any;
+	export var TextDecoder: any;
+}
