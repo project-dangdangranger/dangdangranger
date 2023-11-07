@@ -38,7 +38,7 @@ const PatrolDiary = () => {
 	const handlePressThreedot = (event) => {
 		event.preventDefault();
 		threedotRef.current.measure((fx, fy, width, height, px, py) => {
-			const x = px - responsiveWidth(40); // Horizontal position
+			const x = px - responsiveWidth(64); // Horizontal position
 			const y = py + height; // Vertical position, just below the button
 			setModalPosition({ top: y, left: x });
 			setModalVisible(!modalVisible); // Toggle visibility
@@ -64,6 +64,7 @@ const PatrolDiary = () => {
 				.get("/patrol")
 				.then((res) => {
 					if (res.data.message === "모든 순찰일지 리스트 조회 완료") {
+						console.log(res);
 						setPatrolDiaryList(res.data.data);
 					}
 				})
@@ -147,23 +148,23 @@ const PatrolDiary = () => {
 				onRequestClose={() => setModalVisible(false)}
 			>
 				<TouchableOpacity
-					style={[
-						styles.modalContainer,
-						{ top: modalPosition.top, left: modalPosition.left },
-					]}
+					style={styles.modalbg}
 					onPress={() => setModalVisible(false)}
 				>
-					<View style={PatrolDiaryLayout.modalView}>
-						<TouchableOpacity
-							style={PatrolDiaryLayout.modalItem}
-							onPress={() => {
-								navigate("PatrolDiaryWrite");
-								setModalVisible(false);
-							}}
-						>
+					<TouchableOpacity
+						style={[
+							styles.modalItem,
+							{ top: modalPosition.top, left: modalPosition.left },
+						]}
+						onPress={() => {
+							navigate("PatrolDiaryWrite");
+							setModalVisible(false);
+						}}
+					>
+						<View style={styles.modalView}>
 							<Text style={PatrolDiaryLayout.modalText}>글 작성하기</Text>
-						</TouchableOpacity>
-					</View>
+						</View>
+					</TouchableOpacity>
 				</TouchableOpacity>
 			</Modal>
 		</>
@@ -173,6 +174,9 @@ const PatrolDiary = () => {
 export default PatrolDiary;
 
 const styles = StyleSheet.create({
+	modalbg: {
+		flex: 1,
+	},
 	container: {
 		position: "absolute",
 		bottom: 100,
@@ -185,14 +189,17 @@ const styles = StyleSheet.create({
 		fontSize: 24,
 	},
 	modalContainer: {
-		flex: 1,
-		height: responsiveHeight(200),
+		position: "absolute",
+		// flex: 1,
+		// height: responsiveHeight(200),
 		backgroundColor: "rgba(0,0,0,0.5)",
+		// paddingTop: 300,
 	},
 	modalView: {
 		backgroundColor: "white",
 		borderRadius: 20,
-		padding: 35,
+		paddingHorizontal: 35,
+		paddingVertical: 15,
 		alignItems: "flex-start",
 		shadowColor: "#000",
 		shadowOffset: {

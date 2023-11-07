@@ -13,6 +13,7 @@ const Profile = ({ route, navigation }: any) => {
 	useEffect(() => {
 		axios.get("/user").then((data) => {
 			setProfileData(data.data.data);
+			// console.log("유저들어가:", data);
 		});
 	}, []);
 
@@ -20,6 +21,7 @@ const Profile = ({ route, navigation }: any) => {
 		if (route.params?.updated) {
 			axios.get("/user").then((data) => {
 				setProfileData(data.data.data);
+				// console.log("유저들어가:", data);
 			});
 		}
 	}, [route.params]);

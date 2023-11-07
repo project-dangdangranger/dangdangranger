@@ -24,8 +24,14 @@ import {
 	responsiveHeight,
 	responsiveWidth,
 } from "react-native-responsive-dimensions";
+import { isLogged } from "../atoms/atoms";
+import { useRecoilState } from "recoil";
+import { useNavigation } from "@react-navigation/native";
 
-const Login = ({ navigation }: any) => {
+const Login = () => {
+	const [islogged, setIsLogged] = useRecoilState(isLogged);
+	const navigation = useNavigation();
+
 	useEffect(() => {
 		console.log(WEB_CLIENT_ID);
 		GoogleSignin.configure({
@@ -69,6 +75,7 @@ const Login = ({ navigation }: any) => {
 			} else if (responseCheckUserInfo.data.data.signInUp === "로그인 성공") {
 				console.log("로그인 성공했습니다. 메인페이지로 이동합니다.");
 				navigation.navigate("Main");
+				setIsLogged(true);
 			}
 		} catch (error) {
 			console.error(error);

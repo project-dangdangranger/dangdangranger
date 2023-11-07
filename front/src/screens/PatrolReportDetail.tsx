@@ -105,7 +105,10 @@ const PatrolReportDetail = ({ route }: any) => {
 				<ColorHeader title={"순찰 상세 기록"} />
 
 				{/* {uri: data?.patrolLogImageUr} */}
-				<Image source={exImg} style={styles.img}></Image>
+				<Image
+					source={{ uri: data?.patrolFirstImg }}
+					style={styles.img}
+				></Image>
 
 				<View style={styles.mainContainer}>
 					<View style={styles.contentContainer}>

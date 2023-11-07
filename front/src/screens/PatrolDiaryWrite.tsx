@@ -15,9 +15,12 @@ import img from "../../assets/images/debug-dog.png";
 import PatrolLogCarousel from "../recycles/PatrolLogCarousel";
 import AddPlusIcon from "../../assets/images/add-plus-icon.png";
 import CustomSubButton from "../recycles/CustomSubBtn";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "../utils/axios";
 import { useNavigation } from "@react-navigation/native";
+import EditImage from "../recycles/ReportEditImg";
+import { responsiveWidth } from "react-native-responsive-dimensions";
+import { S3 } from "aws-sdk";
 
 const PatrolDiaryWrite = () => {
 	const navigation = useNavigation();
@@ -30,6 +33,7 @@ const PatrolDiaryWrite = () => {
 		{ logNo: 4, imgSrc: img, date: "22-02-02" },
 	];
 
+	const [selectedImg, setSelectedImg] = useState(null);
 	const [patrolReportTitle, setPatrolReportTitle] = useState("");
 	const [patrolReportContent, setPatrolReportContent] = useState("");
 	const [patrolReportImageList, setPatrolReportImageList] = useState([
@@ -37,25 +41,83 @@ const PatrolDiaryWrite = () => {
 	]);
 	const [patrolLogNo, setPatrolLogNo] = useState(1);
 
-	const submitPatrolReport = () => {
-		axios
-			.post("/patrol", {
-				patrolReportTitle: patrolReportTitle,
-				patrolReportContent: patrolReportContent,
-				patrolReportImageList: patrolReportImageList,
-				patrolLogNo: patrolLogNo,
-			})
-			.then((res) => {
-				console.log("성공:", res.data);
-				if (res.data.message === "순찰일지 등록 성공") {
-					Alert.alert("순찰일지 등록 성공", "순찰 일지 화면으로 이동합니다.");
+	const [patrolImgList, setPatrolImgList] = useState([]);
 
-					navigation.navigate("PatrolDiary");
-				}
-			})
-			.catch((err) => {
-				console.log("에러;", err);
+	const s3 = new S3({
+		accessKeyId: process.env.AWS_ACCESS_KEY,
+		secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+		region: process.env.AWS_REGION,
+	});
+
+	const submitPatrolReport = () => {};
+
+	const [submitImgList, setSubmitImgList] = useState([]);
+
+	const uploadImage = async (patrolImgList: any) => {
+		const uploadPromises = patrolImgList.map(async (imageUri, index) => {
+			const response = await fetch(imageUri);
+			const blob = await response.blob();
+			const type = blob.type;
+			const random = Math.floor(Math.random() * 100000000);
+			const filename = `profile_${new Date().toISOString()}_${random}.png`;
+			const params = {
+				Bucket: process.env.AWS_BUCKET,
+				Key: filename,
+				Body: blob,
+				ContentType: type,
+			};
+
+			return new Promise((resolve, reject) => {
+				s3.upload(params, (err, data) => {
+					if (err) {
+						console.log(
+							"Error occured while trying to upload to S3 bucket",
+							err,
+						);
+						reject(err);
+					} else {
+						console.log("Upload success:", data);
+						resolve(data.Location);
+					}
+				});
 			});
+		});
+
+		try {
+			// 모든 프로미스가 완료될 때까지 기다립니다.
+			const uploadedImages = await Promise.all(uploadPromises);
+			axios
+				.post("/patrol", {
+					patrolReportTitle: patrolReportTitle,
+					patrolReportContent: patrolReportContent,
+					patrolReportImageList: uploadedImages,
+					patrolLogNo: patrolLogNo,
+				})
+				.then((res) => {
+					console.log("성공:", res.data);
+					if (res.data.message === "순찰일지 등록 성공") {
+						Alert.alert("순찰일지 등록 성공", "순찰 일지 화면으로 이동합니다.");
+
+						navigation.navigate("PatrolDiary");
+					}
+				})
+				.catch((err) => {
+					console.log("에러;", err);
+				});
+
+			// setSubmitImgList(uploadedImages);
+			console.log("uploadedImages::::::", uploadedImages);
+		} catch (error) {
+			console.error("An error occurred during the upload", error);
+		}
+	};
+
+	console.log(submitImgList);
+
+	const removeImageFromPatrolImgList = (indexToRemove) => {
+		setPatrolImgList((currentImages) =>
+			currentImages.filter((_, index) => index !== indexToRemove),
+		);
 	};
 
 	return (
@@ -80,11 +142,36 @@ const PatrolDiaryWrite = () => {
 							activeOpacity={0.7}
 							// onPress={pickImage}
 						>
-							<View style={PatrolDiaryWriteLayout.imageUploadWrap}>
-								<Image source={AddPlusIcon} />
-								<Text>사진 등록하기</Text>
+							<View style={{ width: responsiveWidth(100) }}>
+								<EditImage
+									selectedImg={selectedImg}
+									setSelectedImg={setSelectedImg}
+									patrolImgList={patrolImgList}
+									setPatrolImgList={setPatrolImgList}
+								/>
 							</View>
 						</TouchableOpacity>
+						<View style={PatrolDiaryWriteLayout.theeimgcontainer}>
+							{patrolImgList?.map((img, index) => {
+								return (
+									<View key={`img_${index}`}>
+										<Image
+											source={{ uri: img }}
+											style={PatrolDiaryWriteLayout.threeimg}
+										/>
+										<TouchableOpacity
+											onPress={() => removeImageFromPatrolImgList(index)}
+										>
+											<View style={PatrolDiaryWriteLayout.deleteContainer}>
+												<Text style={PatrolDiaryWriteLayout.deleteText}>
+													삭제하기
+												</Text>
+											</View>
+										</TouchableOpacity>
+									</View>
+								);
+							})}
+						</View>
 						<TextInput
 							style={PatrolDiaryWriteLayout.formInput}
 							value={patrolReportTitle}
@@ -113,7 +200,7 @@ const PatrolDiaryWrite = () => {
 						<CustomSubButton
 							text={"순찰일지 기록하기"}
 							onPress={() => {
-								submitPatrolReport();
+								uploadImage(patrolImgList);
 							}}
 							color={"#70C8EE"}
 						/>

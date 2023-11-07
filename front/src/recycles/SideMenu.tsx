@@ -11,15 +11,20 @@ import OutPng from "../../assets/images/out.png";
 import NftPng from "../../assets/images/nft_icon.png";
 import MissingPng from "../../assets/images/missing_icon.png";
 import PatrolPng from "../../assets/images/patrol_icon.png";
+import { useRecoilState } from "recoil";
+import { isLogged } from "../atoms/atoms";
 
 const SideMenu = (props: any) => {
 	const navigation = useNavigation();
 	const [tokn, setToken] = useState("");
+	const [islogged, setIsLogged] = useRecoilState(isLogged);
+
 	async function retrieveToken() {
 		try {
 			const token = await EncryptedStorage.getItem("accessToken");
-			if (token !== undefined) {
-				setToken(token);
+			console.log(token);
+			if (token !== null) {
+				setIsLogged(true);
 				return token;
 			}
 		} catch (error) {
@@ -28,9 +33,20 @@ const SideMenu = (props: any) => {
 		}
 	}
 
+	async function removeAccessToken() {
+		try {
+			await EncryptedStorage.removeItem("accessToken");
+			console.log("Access token removed successfully");
+		} catch (error) {
+			// There was an error on the native side
+			console.log("Failed to remove the access token", error);
+		}
+	}
+
 	useEffect(() => {
 		retrieveToken();
-	}, []);
+		console.log(islogged);
+	}, [islogged]);
 
 	return (
 		<>
@@ -74,7 +90,7 @@ const SideMenu = (props: any) => {
 						></SideMenuIcon>
 					</View>
 
-					{tokn ? (
+					{islogged ? (
 						<View style={SideMenuLayout.authButtonWrap}>
 							<View style={SideMenuLayout.container}>
 								<TouchableOpacity
@@ -82,7 +98,8 @@ const SideMenu = (props: any) => {
 									activeOpacity={0.7}
 									onPress={() => {
 										GoogleSignin.signOut();
-										setToken("");
+										removeAccessToken();
+										setIsLogged(false);
 										navigation.navigate("Main");
 									}}
 								>
