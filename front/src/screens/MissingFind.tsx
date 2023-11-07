@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, TouchableOpacity, Text } from "react-native";
 import {
 	responsiveHeight,
 	responsiveWidth,
@@ -52,6 +52,9 @@ const MissingFind = ({ navigation }: any) => {
 						);
 					})}
 				</View>
+				<TouchableOpacity onPress={() => navigation.navigate("FindTogether")}>
+					<Text>지도가 나올 지도?</Text>
+				</TouchableOpacity>
 			</CommonLayout>
 			<FooterBar />
 		</>
