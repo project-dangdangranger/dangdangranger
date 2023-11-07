@@ -63,6 +63,7 @@ const handleResponseError = async (error: AxiosError) => {
 	if (!error.response) return Promise.reject(error);
 	const { status, config } = error.response;
 	console.log("status :", status);
+	console.log(error);
 
 	switch (status) {
 		case 400:
