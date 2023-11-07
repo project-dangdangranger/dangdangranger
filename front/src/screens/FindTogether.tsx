@@ -96,6 +96,7 @@ const FindTogether = (missingNo: number) => {
 
 	// 상대방 위치 업데이트
 	const receivedMessage = (message: any) => {
+		console.log(message);
 		const parsedMessage = JSON.parse(message.body);
 		const userId = parsedMessage.userId;
 		const latitude = parsedMessage.latitude;
