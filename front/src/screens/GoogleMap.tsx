@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import { View, PermissionsAndroid, Dimensions, Button } from "react-native";
-import MapView, { PROVIDER_GOOGLE, Polyline } from "react-native-maps";
+import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
 import Geolocation from "react-native-geolocation-service";
 import { S3 } from "aws-sdk";
 import {
@@ -248,6 +248,7 @@ const GoogleMap = (props: Props) => {
 				patrolLogLat,
 				patrolLogLng,
 			};
+			console.log(res);
 			await axios.post("/log", res);
 		} catch (err) {
 			console.error("Upload failed:", err);
@@ -273,16 +274,16 @@ const GoogleMap = (props: Props) => {
 				initialRegion={currentLocation}
 				ref={mapRef}
 			>
-				{locationTrail.length > 0 && (
-					<Polyline
-						coordinates={locationTrail.map((trail) => ({
-							latitude: trail.latitude,
-							longitude: trail.longitude,
-						}))}
-						strokeColor="#000"
-						strokeWidth={4}
-					/>
-				)}
+				{/* {locationTrail.length > 0 && (
+                    <Polyline
+                        coordinates={locationTrail.map((trail) => ({
+                            latitude: trail.latitude,
+                            longitude: trail.longitude,
+                        }))}
+                        strokeColor="#000"
+                        strokeWidth={4}
+                    />
+                )} */}
 			</MapView>
 			<View
 				style={{

@@ -12,13 +12,13 @@ import axios from "../utils/axios";
 
 const FindTogether = (missingNo: number) => {
 	const navigation = useNavigation();
-	let stompClient: any = useRef({});
+	const stompClient: any = useRef({});
 	const [intervalId, setIntervalId] = useState<NodeJS.Timeout>();
 	// 같이 찾는 사람들의 위치 정보 저장
-	const positons = new Map();
+	const [positions, setPositions] = useState(new Map());
 	const [myLatitude, setMyLatitude] = useState(123);
 	const [myLongitude, setMyLongitude] = useState(345);
-	const [uuid, setUuid] = useState(null);
+	const topicId: any = useRef();
 
 	useEffect(() => {
 		//return leavePage();
@@ -28,52 +28,73 @@ const FindTogether = (missingNo: number) => {
 	const connectServer = async () => {
 		if (stompClient.current !== undefined && stompClient.current.connected)
 			return;
-		console.log("hi server");
 		let socket = new SockJS(`${SERVER_URL}/ws-stomp`);
 		stompClient.current = Stomp.over(function () {
-			return socket;
+			return new SockJS(`${SERVER_URL}/ws-stomp`);
 		});
+		console.log(`${SERVER_URL}/ws-stomp`);
 
 		console.log("end server");
 
 		await stompClient.current.connect({}, () => {
-			connectRoom();
+			setTimeout(function () {
+				console.log(stompClient.current.connected);
+				connectRoom();
+			}, 500);
 		});
 	};
 
 	const findWith = async () => {
-		const response = await axios.post("/finddog", { missingNo: 10 });
+		const response = await axios.post("/finddog", { missingNo: 12 });
 		console.log(response.data.data.topicId);
-		setUuid(response.data.data.topicId);
+		topicId.current = response.data.data.topicId;
 		await connectServer();
 	};
 
 	// topic 구독 내부 함수
 	const connectRoom = async () => {
+		console.log(`connectRoom start`);
 		if (!stompClient.current.connected) return;
-		console.log("uuid: ", uuid);
-		stompClient.current.subscribe("sub/find/room/" + uuid, receivedMessage);
+		console.log("uuid: ", topicId.current);
+		stompClient.current.subscribe(
+			"/sub/finddog/" + topicId.current,
+			receivedMessage,
+		);
+		stompClient.current.send(
+			"/pub/finddog",
+			{},
+			JSON.stringify({
+				code: "ENTER",
+				userNo: 12,
+				topicId: topicId.current,
+				param: {},
+			}),
+		);
 		console.log("완료");
 		startSending();
 	};
 
 	const startSending = () => {
+		console.log(`startSending`);
 		if (intervalId) return;
 		if (stompClient.current === undefined || !stompClient.current.connected)
 			return;
 
 		const id = setInterval(() => {
 			stompClient.current.send(
-				"/pub/find/room",
+				"/pub/finddog",
 				{},
 				JSON.stringify({
-					type: "SEND",
-					roomId: missingNo,
-					latitude: myLatitude,
-					longitude: myLongitude,
+					code: "SHARE_COORDINATE",
+					userNo: 12,
+					topicId: topicId.current,
+					param: {
+						latitude: myLatitude,
+						longitude: myLongitude,
+					},
 				}),
 			);
-		});
+		}, 5000);
 
 		setIntervalId(id);
 	};
@@ -81,10 +102,12 @@ const FindTogether = (missingNo: number) => {
 	// 상대방 위치 업데이트
 	const receivedMessage = (message: any) => {
 		const parsedMessage = JSON.parse(message.body);
-		const userId = parsedMessage.userId;
-		const latitude = parsedMessage.latitude;
-		const longitude = parsedMessage.longitude;
-		positons.set(userId, { lat: latitude, lng: longitude });
+		const userNo = parsedMessage.userNo;
+		const latitude = parsedMessage.param.latitude;
+		const longitude = parsedMessage.param.longitude;
+		setPositions(
+			new Map(positions).set(userNo, { lat: latitude, lng: longitude }),
+		);
 	};
 
 	// topic 구독 취소 및 세션 나가기: 함께 찾기 종료
@@ -96,7 +119,7 @@ const FindTogether = (missingNo: number) => {
 
 		if (stompClient.current === undefined || !stompClient.current.connected)
 			return;
-		stompClient.current.unsubscribe("sub/find/room/" + missingNo);
+		stompClient.current.unsubscribe("/sub/finddog/" + topicId.current);
 		stompClient.current.disconnect();
 	};
 
@@ -127,8 +150,8 @@ const FindTogether = (missingNo: number) => {
 					<Text>방 입장</Text>
 				</TouchableOpacity>
 				<View>
-					<Text>{positons.size}</Text>
-					{Array.from(positons).map(([key, value]) => (
+					<Text>{positions.size}</Text>
+					{Array.from(positions).map(([key, value]) => (
 						<Text key={key}>
 							{key}: {value.lat}, {value.lng}
 						</Text>
