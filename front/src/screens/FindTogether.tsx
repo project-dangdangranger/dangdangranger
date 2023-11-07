@@ -52,7 +52,17 @@ const FindTogether = (missingNo: number) => {
 	const connectRoom = async () => {
 		if (!stompClient.current.connected) return;
 		console.log("uuid: ", uuid);
-		stompClient.current.subscribe("sub/find/room/" + uuid, receivedMessage);
+		stompClient.current.subscribe("/finddog/sub/" + uuid, receivedMessage);
+		stompClient.current.send(
+			"/finddog",
+			{},
+			JSON.stringify({
+				code: "ENTER",
+				userNo: missingNo,
+				topicId: uuid,
+				param: {},
+			}),
+		);
 		console.log("완료");
 		startSending();
 	};
@@ -64,16 +74,19 @@ const FindTogether = (missingNo: number) => {
 
 		const id = setInterval(() => {
 			stompClient.current.send(
-				"/pub/find/room",
+				"/finddog",
 				{},
 				JSON.stringify({
-					type: "SEND",
-					roomId: missingNo,
-					latitude: myLatitude,
-					longitude: myLongitude,
+					code: "SHARE_CORDINATE",
+					userNo: missingNo,
+					topicId: uuid,
+					param: {
+						latitude: myLatitude,
+						longitude: myLongitude,
+					},
 				}),
 			);
-		});
+		}, 5000);
 
 		setIntervalId(id);
 	};
@@ -96,7 +109,7 @@ const FindTogether = (missingNo: number) => {
 
 		if (stompClient.current === undefined || !stompClient.current.connected)
 			return;
-		stompClient.current.unsubscribe("sub/find/room/" + missingNo);
+		stompClient.current.unsubscribe("/finddog/sub/" + uuid);
 		stompClient.current.disconnect();
 	};
 
