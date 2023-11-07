@@ -12,13 +12,13 @@ import axios from "../utils/axios";
 
 const FindTogether = (missingNo: number) => {
 	const navigation = useNavigation();
-	let stompClient: any = useRef({});
+	const stompClient: any = useRef({});
 	const [intervalId, setIntervalId] = useState<NodeJS.Timeout>();
 	// 같이 찾는 사람들의 위치 정보 저장
 	const positons = new Map();
 	const [myLatitude, setMyLatitude] = useState(123);
 	const [myLongitude, setMyLongitude] = useState(345);
-	const [uuid, setUuid] = useState(null);
+	const topicId: any = useRef();
 
 	useEffect(() => {
 		//return leavePage();
@@ -42,24 +42,27 @@ const FindTogether = (missingNo: number) => {
 	};
 
 	const findWith = async () => {
-		const response = await axios.post("/finddog", { missingNo: 10 });
+		const response = await axios.post("/finddog", { missingNo: 12 });
 		console.log(response.data.data.topicId);
-		setUuid(response.data.data.topicId);
+		topicId.current = response.data.data.topicId;
 		await connectServer();
 	};
 
 	// topic 구독 내부 함수
 	const connectRoom = async () => {
 		if (!stompClient.current.connected) return;
-		console.log("uuid: ", uuid);
-		stompClient.current.subscribe("/finddog/sub/" + uuid, receivedMessage);
+		console.log("uuid: ", topicId.current);
+		stompClient.current.subscribe(
+			"/finddog/sub/" + topicId.current,
+			receivedMessage,
+		);
 		stompClient.current.send(
 			"/finddog",
 			{},
 			JSON.stringify({
 				code: "ENTER",
 				userNo: missingNo,
-				topicId: uuid,
+				topicId: topicId.current,
 				param: {},
 			}),
 		);
@@ -79,7 +82,7 @@ const FindTogether = (missingNo: number) => {
 				JSON.stringify({
 					code: "SHARE_CORDINATE",
 					userNo: missingNo,
-					topicId: uuid,
+					topicId: topicId.current,
 					param: {
 						latitude: myLatitude,
 						longitude: myLongitude,
@@ -109,7 +112,7 @@ const FindTogether = (missingNo: number) => {
 
 		if (stompClient.current === undefined || !stompClient.current.connected)
 			return;
-		stompClient.current.unsubscribe("/finddog/sub/" + uuid);
+		stompClient.current.unsubscribe("/finddog/sub/" + topicId.current);
 		stompClient.current.disconnect();
 	};
 
