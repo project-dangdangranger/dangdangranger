@@ -15,7 +15,7 @@ const FindTogether = (missingNo: number) => {
 	const stompClient: any = useRef({});
 	const [intervalId, setIntervalId] = useState<NodeJS.Timeout>();
 	// 같이 찾는 사람들의 위치 정보 저장
-	const positons = new Map();
+	const [positions, setPositions] = useState(new Map());
 	const [myLatitude, setMyLatitude] = useState(123);
 	const [myLongitude, setMyLongitude] = useState(345);
 	const topicId: any = useRef();
@@ -28,16 +28,19 @@ const FindTogether = (missingNo: number) => {
 	const connectServer = async () => {
 		if (stompClient.current !== undefined && stompClient.current.connected)
 			return;
-		console.log("hi server");
 		let socket = new SockJS(`${SERVER_URL}/ws-stomp`);
 		stompClient.current = Stomp.over(function () {
-			return socket;
+			return new SockJS(`${SERVER_URL}/ws-stomp`);
 		});
+		console.log(`${SERVER_URL}/ws-stomp`);
 
 		console.log("end server");
 
 		await stompClient.current.connect({}, () => {
-			connectRoom();
+			setTimeout(function () {
+				console.log(stompClient.current.connected);
+				connectRoom();
+			}, 500);
 		});
 	};
 
@@ -50,18 +53,19 @@ const FindTogether = (missingNo: number) => {
 
 	// topic 구독 내부 함수
 	const connectRoom = async () => {
+		console.log(`connectRoom start`);
 		if (!stompClient.current.connected) return;
 		console.log("uuid: ", topicId.current);
 		stompClient.current.subscribe(
-			"/finddog/sub/" + topicId.current,
+			"/sub/finddog/" + topicId.current,
 			receivedMessage,
 		);
 		stompClient.current.send(
-			"/finddog",
+			"/pub/finddog",
 			{},
 			JSON.stringify({
 				code: "ENTER",
-				userNo: missingNo,
+				userNo: 12,
 				topicId: topicId.current,
 				param: {},
 			}),
@@ -71,17 +75,18 @@ const FindTogether = (missingNo: number) => {
 	};
 
 	const startSending = () => {
+		console.log(`startSending`);
 		if (intervalId) return;
 		if (stompClient.current === undefined || !stompClient.current.connected)
 			return;
 
 		const id = setInterval(() => {
 			stompClient.current.send(
-				"/finddog",
+				"/pub/finddog",
 				{},
 				JSON.stringify({
-					code: "SHARE_CORDINATE",
-					userNo: missingNo,
+					code: "SHARE_COORDINATE",
+					userNo: 12,
 					topicId: topicId.current,
 					param: {
 						latitude: myLatitude,
@@ -96,12 +101,13 @@ const FindTogether = (missingNo: number) => {
 
 	// 상대방 위치 업데이트
 	const receivedMessage = (message: any) => {
-		console.log(message);
 		const parsedMessage = JSON.parse(message.body);
-		const userId = parsedMessage.userId;
-		const latitude = parsedMessage.latitude;
-		const longitude = parsedMessage.longitude;
-		positons.set(userId, { lat: latitude, lng: longitude });
+		const userNo = parsedMessage.userNo;
+		const latitude = parsedMessage.param.latitude;
+		const longitude = parsedMessage.param.longitude;
+		setPositions(
+			new Map(positions).set(userNo, { lat: latitude, lng: longitude }),
+		);
 	};
 
 	// topic 구독 취소 및 세션 나가기: 함께 찾기 종료
@@ -113,7 +119,7 @@ const FindTogether = (missingNo: number) => {
 
 		if (stompClient.current === undefined || !stompClient.current.connected)
 			return;
-		stompClient.current.unsubscribe("/finddog/sub/" + topicId.current);
+		stompClient.current.unsubscribe("/sub/finddog/" + topicId.current);
 		stompClient.current.disconnect();
 	};
 
@@ -144,8 +150,8 @@ const FindTogether = (missingNo: number) => {
 					<Text>방 입장</Text>
 				</TouchableOpacity>
 				<View>
-					<Text>{positons.size}</Text>
-					{Array.from(positons).map(([key, value]) => (
+					<Text>{positions.size}</Text>
+					{Array.from(positions).map(([key, value]) => (
 						<Text key={key}>
 							{key}: {value.lat}, {value.lng}
 						</Text>
