@@ -11,6 +11,7 @@ import {
 } from "@env";
 import { Buffer } from "buffer";
 import axios from "../utils/axios";
+import haversine from "haversine";
 
 type LocationCoordinates = {
 	latitude: number;
@@ -64,6 +65,7 @@ const GoogleMap = (props: Props) => {
 		setIsInitialLocationSet(false);
 		setLocationTrail([]);
 		setCurrentLocation(undefined);
+		setPatrolLogTotalDistance(0);
 	};
 
 	useEffect(() => {
@@ -72,7 +74,7 @@ const GoogleMap = (props: Props) => {
 			console.log("patrolLogDate: ", patrolLogDate);
 			console.log("patrolLogLat: ", patrolLogLat);
 			console.log("patrolLogLng: ", patrolLogLng);
-			const response = axios.get("/patrol/start");
+			const response = axios.post("/patrol/start");
 			console.log("response : ", response);
 			watchIdRef.current = startWatchingLocation();
 			const interval = setInterval(() => {
@@ -94,6 +96,17 @@ const GoogleMap = (props: Props) => {
 	useEffect(() => {
 		requestPermission();
 	}, []);
+
+	useEffect(() => {
+		if (!isInitialLocationSet) {
+			getCurrentLocation();
+		}
+	}, [isInitialLocationSet]);
+
+	useEffect(() => {
+		// patrolLogTotalDistance가 변할때마다 콘솔
+		console.log("patrolLogTotalDistance: ", patrolLogTotalDistance);
+	}, [patrolLogTotalDistance]);
 
 	const requestPermission = async () => {
 		try {
@@ -121,12 +134,10 @@ const GoogleMap = (props: Props) => {
 				};
 				setCurrentLocation(newLocation);
 				setLocationTrail([newLocation]);
-				if (!isInitialLocationSet) {
-					setPatrolLogDate(new Date().toISOString().slice(0, 19));
-					setPatrolLogLat(position.coords.latitude);
-					setPatrolLogLng(position.coords.longitude);
-					setIsInitialLocationSet(true);
-				}
+				setPatrolLogDate(new Date().toISOString().slice(0, 19));
+				setPatrolLogLat(position.coords.latitude);
+				setPatrolLogLng(position.coords.longitude);
+				setIsInitialLocationSet(true);
 				if (mapRef.current) {
 					mapRef.current.animateToRegion(newLocation, 1000);
 				}
@@ -147,6 +158,23 @@ const GoogleMap = (props: Props) => {
 					latitudeDelta: 0.009,
 					longitudeDelta: 0.009,
 				};
+
+				if (locationTrail.length > 0) {
+					const start = {
+						latitude: locationTrail[locationTrail.length - 1].latitude,
+						longitude: locationTrail[locationTrail.length - 1].longitude,
+					};
+					const end = {
+						latitude: position.coords.latitude,
+						longitude: position.coords.longitude,
+					};
+					const distance = haversine(start, end, { unit: "meter" });
+					const distanceInKilometers = distance / 1000;
+					setPatrolLogTotalDistance(
+						(prevDistance) => prevDistance + distanceInKilometers,
+					);
+				}
+
 				setCurrentLocation(newLocation);
 				setLocationTrail((prev) => [...prev, newLocation]);
 			},
