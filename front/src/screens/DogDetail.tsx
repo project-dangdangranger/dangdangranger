@@ -21,13 +21,20 @@ import {
 import CustomSubButton from "../recycles/CustomSubBtn";
 import ProfileImg from "../../assets/images/profileImg.png";
 import { useNavigation } from "@react-navigation/native";
+import axios from "../utils/axios";
 
 const Profile = ({ route }) => {
 	const navigation = useNavigation();
 	const [data, setDate] = useState(route.params);
+
+	// 나이 계산해서 해야 함 ㅇㅇㅇ
+
 	useEffect(() => {
 		console.log("라우트:", route);
-		// setDate({ ...data, dogImg: ProfileImg });
+		axios.get(`/dog/${route.params.item.dogNo}`).then((res) => {
+			setDate(res.data.data);
+			console.log(res.data.data);
+		});
 	}, []);
 
 	return (
@@ -38,7 +45,7 @@ const Profile = ({ route }) => {
 				<Image source={ProfileImg} style={styles.mainImg} />
 
 				<View style={styles.mainTextContainer}>
-					<Text style={styles.mainText}>{data?.item.dogName} </Text>
+					<Text style={styles.mainText}>{data?.dogName} </Text>
 					<View style={styles.line} />
 				</View>
 				<View style={styles.dogContainer}>
@@ -46,28 +53,27 @@ const Profile = ({ route }) => {
 						<View style={styles.dogItemContentRow}>
 							<View style={styles.dogItemStyle}>
 								<Text>나이</Text>
-								<Text style={styles.dogItemMainText}>{data.dogNo}14</Text>
+								<Text style={styles.dogItemMainText}>{data?.dogNo}</Text>
 							</View>
 							<View style={styles.dogItemStyle}>
 								<Text>성별</Text>
-								<Text style={styles.dogItemMainText}>{data?.item.dogSex}</Text>
+								<Text style={styles.dogItemMainText}>{data?.dogSex}</Text>
 							</View>
 
 							<View style={styles.dogItemStyle}>
 								<Text>견종</Text>
-								<ScrollView horizontal={true}>
-									<Text
-										style={styles.dogItemBreedText}
-										numberOfLines={1}
-										ellipsizeMode="clip"
-									>
-										{data.item.dogBreed}
-									</Text>
-								</ScrollView>
+
+								<Text
+									style={styles.dogItemBreedText}
+									numberOfLines={1}
+									ellipsizeMode="clip"
+								>
+									{data?.dogBreed}
+								</Text>
 							</View>
 							<View style={styles.dogItemStyle}>
 								<Text>발급 일자</Text>
-								<Text style={styles.dogDataText}>2023.10.19</Text>
+								<Text style={styles.dogDataText}>{data?.createDate}</Text>
 							</View>
 						</View>
 						<View>
