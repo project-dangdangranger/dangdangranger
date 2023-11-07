@@ -7,8 +7,12 @@ import templogo from "../../assets/images/templogo.png";
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
 import React, { useEffect, useState } from "react";
 import EncryptedStorage from "react-native-encrypted-storage";
-import { isLogged } from "../atoms/atoms";
+import OutPng from "../../assets/images/out.png";
+import NftPng from "../../assets/images/nft_icon.png";
+import MissingPng from "../../assets/images/missing_icon.png";
+import PatrolPng from "../../assets/images/patrol_icon.png";
 import { useRecoilState } from "recoil";
+import { isLogged } from "../atoms/atoms";
 
 const SideMenu = (props: any) => {
 	const navigation = useNavigation();
@@ -50,7 +54,7 @@ const SideMenu = (props: any) => {
 				<View style={SideMenuLayout.sideMenuHeader}>
 					<Text style={SideMenuLayout.sideMenuLogo}>댕댕레인저</Text>
 					<TouchableOpacity activeOpacity={0.7} onPress={props.clickX}>
-						<Image source={templogo} />
+						<Image source={OutPng} />
 					</TouchableOpacity>
 				</View>
 
@@ -58,46 +62,32 @@ const SideMenu = (props: any) => {
 					<Text style={SideMenuLayout.navTitle}>
 						반려견 <Text style={SideMenuLayout.boldNavTitle}>소유증명</Text>
 					</Text>
-					<Text style={SideMenuLayout.navDesc}>
-						간편한 NFT 소유증명 및 이전
-					</Text>
+					<Text style={SideMenuLayout.navDesc}>간편한 방범대원증 NFT 발급</Text>
 					<View style={SideMenuLayout.navFlex}>
 						<SideMenuIcon
-							title="나의 프로필"
-							imageIcon={templogo}
+							title="방범대원 등록"
+							imageIcon={NftPng}
 							movePage="Profile"
 						></SideMenuIcon>
 					</View>
 					<View style={{ marginTop: 25 }}></View>
 					<Text style={SideMenuLayout.navTitle}>
-						반려견과의 <Text style={SideMenuLayout.boldNavTitle}>추억공유</Text>
+						반려견과의 <Text style={SideMenuLayout.boldNavTitle}>순찰</Text>
 					</Text>
-					<Text style={SideMenuLayout.navDesc}>소중한 추억을 간직하세요.</Text>
+					<Text style={SideMenuLayout.navDesc}>
+						안전한 우리 동네에 함께 하세요.
+					</Text>
 					<View style={SideMenuLayout.navFlex}>
 						<SideMenuIcon
-							title="포토앨범"
-							imageIcon={templogo}
-							movePage="Album"
+							title="순찰하기"
+							imageIcon={PatrolPng}
+							movePage="PatrolMain"
 						></SideMenuIcon>
 						<SideMenuIcon
-							title="진료일정등록"
-							imageIcon={templogo}
+							title="실종견 찾기"
+							imageIcon={MissingPng}
+							movePage="MissingMain"
 						></SideMenuIcon>
-						<SideMenuIcon
-							title="산책기록"
-							imageIcon={templogo}
-							movePage="Walk"
-						></SideMenuIcon>
-						<SideMenuIcon
-							title="하늘공원"
-							imageIcon={templogo}
-							movePage="Three"
-						></SideMenuIcon>
-						<SideMenuIcon
-							title="신고하기"
-							imageIcon={templogo}
-							movePage="Report"
-						/>
 					</View>
 
 					{islogged ? (

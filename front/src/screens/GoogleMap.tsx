@@ -8,8 +8,12 @@ import {
 	AWS_SECRET_ACCESS_KEY,
 	AWS_REGION,
 	AWS_BUCKET,
+	GEOCODING_API_KEY,
 } from "@env";
 import { Buffer } from "buffer";
+import axios from "../utils/axios";
+import haversine from "haversine";
+import Axios from "axios";
 
 type LocationCoordinates = {
 	latitude: number;
@@ -21,8 +25,8 @@ type LocationCoordinates = {
 type Props = {
 	start: boolean;
 	patrol: boolean;
-	setStart: boolean;
-	setPatrol: boolean;
+	setStart: (start: boolean) => void;
+	setPatrol: (patrol: boolean) => void;
 };
 
 const GoogleMap = (props: Props) => {
@@ -31,6 +35,15 @@ const GoogleMap = (props: Props) => {
 	const [currentLocation, setCurrentLocation] = useState<
 		LocationCoordinates | undefined
 	>();
+	const [address, setAddress] = useState<string>("");
+	const [patrolLogDate, setPatrolLogDate] = useState<string>("");
+	const [patrolLogLat, setPatrolLogLat] = useState<number>(0);
+	const [patrolLogLng, setPatrolLogLng] = useState<number>(0);
+	const [patrolLogTotalTime, setPatrolLogTotalTime] = useState<number>(0);
+	const [patrolLogTotalDistance, setPatrolLogTotalDistance] =
+		useState<number>(0);
+	const [isInitialLocationSet, setIsInitialLocationSet] =
+		useState<boolean>(false);
 	const [locationTrail, setLocationTrail] = useState<LocationCoordinates[]>([]);
 	const watchIdRef = useRef<number | null>(null);
 	const mapRef = useRef<MapView | null>(null);
@@ -41,29 +54,61 @@ const GoogleMap = (props: Props) => {
 		region: AWS_REGION,
 	});
 
+	const clearLocationWatch = () => {
+		if (watchIdRef.current !== null) {
+			Geolocation.clearWatch(watchIdRef.current);
+			watchIdRef.current = null;
+		}
+	};
+	const stopAndReset = () => {
+		setPatrolLogDate("");
+		setPatrolLogLat(0);
+		setPatrolLogLng(0);
+		setPatrolLogTotalTime(0);
+		setIsInitialLocationSet(false);
+		setLocationTrail([]);
+		setCurrentLocation(undefined);
+		setPatrolLogTotalDistance(0);
+	};
+
+	useEffect(() => {
+		if (props.start && props.patrol && !watchIdRef.current) {
+			console.log("시작 했습니다.!");
+			console.log("patrolLogDate: ", patrolLogDate);
+			console.log("patrolLogLat: ", patrolLogLat);
+			console.log("patrolLogLng: ", patrolLogLng);
+			const response = axios.post("/patrol/start");
+			console.log("response : ", response);
+			watchIdRef.current = startWatchingLocation();
+			const interval = setInterval(() => {
+				setPatrolLogTotalTime((prev) => prev + 1);
+			}, 1000);
+			return () => clearInterval(interval);
+		}
+	}, [props.start, props.patrol]);
+
+	useEffect(() => {
+		if (!props.start && !props.patrol) {
+			clearLocationWatch();
+			console.log("중지 했습니다.!");
+			saveAndUploadMapSnapshot();
+		}
+	}, [props.start, props.patrol]);
+
 	useEffect(() => {
 		requestPermission();
 	}, []);
 
 	useEffect(() => {
-		if (props.start) {
-			const id = startWatchingLocation();
-			watchIdRef.current = id;
-		} else {
-			if (watchIdRef.current !== null) {
-				Geolocation.clearWatch(watchIdRef.current);
-				watchIdRef.current = null;
-			}
+		if (!isInitialLocationSet && props.start && props.patrol) {
+			getCurrentLocation();
 		}
-	}, [props.start]);
+	}, [isInitialLocationSet]);
 
 	useEffect(() => {
-		if (props.patrol) {
-			props.setPatrol = false;
-			props.setStart = false;
-			saveAndUploadMapSnapshot();
-		}
-	}, [props.patrol]);
+		// patrolLogTotalDistance가 변할때마다 콘솔
+		console.log("patrolLogTotalDistance: ", patrolLogTotalDistance);
+	}, [patrolLogTotalDistance]);
 
 	const requestPermission = async () => {
 		try {
@@ -91,6 +136,13 @@ const GoogleMap = (props: Props) => {
 				};
 				setCurrentLocation(newLocation);
 				setLocationTrail([newLocation]);
+				setPatrolLogDate(new Date().toISOString().slice(0, 19));
+				setPatrolLogLat(position.coords.latitude);
+				setPatrolLogLng(position.coords.longitude);
+				setIsInitialLocationSet(true);
+
+				getAddressCode(position.coords.latitude, position.coords.longitude);
+
 				if (mapRef.current) {
 					mapRef.current.animateToRegion(newLocation, 1000);
 				}
@@ -102,6 +154,21 @@ const GoogleMap = (props: Props) => {
 		);
 	};
 
+	const getAddressCode = async (latitude: number, longitude: number) => {
+		try {
+			const response = await Axios.get(
+				`https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&language=ko&key=${GEOCODING_API_KEY}`,
+			);
+			const formattedAddress = response.data.results[0].formatted_address;
+			const addressParts = formattedAddress.split(" ");
+			const address = `${addressParts[1]} ${addressParts[2]} ${addressParts[3]}`;
+			setAddress(address);
+			console.log("address : ", address);
+		} catch (error) {
+			console.error("An error occurred while fetching the dong code:", error);
+		}
+	};
+
 	const startWatchingLocation = () => {
 		return Geolocation.watchPosition(
 			(position) => {
@@ -111,8 +178,30 @@ const GoogleMap = (props: Props) => {
 					latitudeDelta: 0.009,
 					longitudeDelta: 0.009,
 				};
+
+				if (locationTrail.length > 0) {
+					const start = {
+						latitude: locationTrail[locationTrail.length - 1].latitude,
+						longitude: locationTrail[locationTrail.length - 1].longitude,
+					};
+					const end = {
+						latitude: position.coords.latitude,
+						longitude: position.coords.longitude,
+					};
+					const distance = haversine(start, end, { unit: "meter" });
+					const distanceInKilometers = distance / 1000;
+					setPatrolLogTotalDistance(
+						(prevDistance) => prevDistance + distanceInKilometers,
+					);
+				}
+
 				setCurrentLocation(newLocation);
-				setLocationTrail((prev) => [...prev, newLocation]);
+				console.log("새 위치: ", newLocation);
+				setLocationTrail((prev) => {
+					// 새 배열 상태를 콘솔에 출력
+					console.log("업데이트된 위치 배열: ", [...prev, newLocation]);
+					return [...prev, newLocation];
+				});
 			},
 			(error) => {
 				console.log(error.code, error.message);
@@ -148,9 +237,22 @@ const GoogleMap = (props: Props) => {
 		try {
 			const data = await s3.upload(params).promise();
 			console.log("File uploaded:", data);
+			console.log(data.Location);
+			// 현재 위치가 어떤 동인지, 어떤 거리인지 알아야함
+			const res = {
+				address,
+				patrolLogDate,
+				patrolLogTotalDistance,
+				patrolLogTotalTime: patrolLogTotalTime / 60,
+				patrolLogImageUrl: data.Location,
+				patrolLogLat,
+				patrolLogLng,
+			};
+			await axios.post("/log", res);
 		} catch (err) {
 			console.error("Upload failed:", err);
 		}
+		stopAndReset();
 	};
 
 	return (
@@ -173,7 +275,10 @@ const GoogleMap = (props: Props) => {
 			>
 				{locationTrail.length > 0 && (
 					<Polyline
-						coordinates={locationTrail}
+						coordinates={locationTrail.map((trail) => ({
+							latitude: trail.latitude,
+							longitude: trail.longitude,
+						}))}
 						strokeColor="#000"
 						strokeWidth={4}
 					/>

@@ -91,6 +91,108 @@ const CreateDog = ({ navigation }: any) => {
 		region: AWS_REGION,
 	});
 
+	// IPFS 업로드
+	const uploadToIPFS = async (data: any) => {
+		await axios
+			.post("https://idog.store/blockchain/uploadIpfs", {
+				img: data.Location,
+				petName: petName,
+				petSpecies: petSpecies,
+				petBirth: petBirth,
+				petGender: petGender,
+			})
+			.then(async (data) => {
+				console.log("nft data:", data.data);
+				const nftCid = data.data;
+				const imageOrigin = "https://ipfs.io/ipfs/" + data.data;
+				console.log("imageOrigin:", imageOrigin);
+				const overrides = {
+					gasPrice: ethers.parseUnits("9000", "gwei"), // gasPrice 설정 (예: 100 gwei)
+				};
+				const walletAddress = myWalletAddress;
+				console.log("walletAddress", walletAddress);
+				console.log("데이터의 스테이터스는?:", data.status);
+
+				if (data.status === 200) {
+					console.log(1111111111111);
+					const tx = await mintDogTokenContract.mintDogProfile(
+						walletAddress,
+						`ipfs://${nftCid}`,
+					);
+					const receipt = await tx.wait();
+					const receiptHash = receipt.hash;
+
+					console.log("tx:", tx);
+					console.log("receipt:", receipt);
+					console.log("receiptHash:", receiptHash);
+					const POLYGON_KEY = String(POLYGON_API_KEY);
+					checkPolygon({ POLYGON_KEY, receiptHash, imageOrigin });
+				}
+
+				console.log("끝ㄴ!!");
+			});
+	};
+
+	const checkPolygon = async ({
+		POLYGON_KEY,
+		receiptHash,
+		imageOrigin,
+	}: any) => {
+		console.log(111111111);
+		console.log("imageOrigin:", imageOrigin);
+		console.log("receiptHash:", receiptHash);
+		console.log("POLYGON_KEY:", POLYGON_KEY);
+
+		try {
+			await axios
+				.get(
+					`https://api.polygonscan.com/api?module=account&action=tokennfttx&contractaddress=${process.env.MINT_DOG_TOKEN_ADDRESS}&address=${walletAddress}&startblock=0&endblock=99999999&page=1&offset=100&sort=asc&apikey=${POLYGON_KEY}`,
+				)
+				.then(async (data) => {
+					console.log("data:", data);
+					if (data.status === 200) {
+						console.log("polygon api:", data);
+						console.log("petName:", petName);
+						console.log("petSpecies:", petSpecies);
+						console.log("petBirth:", petBirth);
+						console.log("petGender:", petGender);
+						console.log("receiptHash:", receiptHash);
+						console.log("imageOrigin:", imageOrigin);
+
+						await axiosApi
+							.post("/dog", {
+								dogName: petName,
+								dogBreed: petSpecies,
+								dogSex: petGender,
+								dogBirth: petBirth,
+								dogNosePrint: "나건 여친구함",
+								dogImg: String(imageOrigin),
+								dogHash: String(receiptHash),
+							})
+							.then(async (data) => {
+								console.log("디비로 보내는 데이터:", data);
+								if (data.data.message === "강아지 프로필 등록 완료") {
+									Alert.alert(
+										"프로필 생성이 완료되었습니다.",
+										"외부 디지털 지갑에서 확인하려면 최대 1일까지도 소요될 수 있습니다.",
+									);
+									await setIsLoading(false);
+									await navigation.navigate("DogProfile");
+								} else {
+									await setIsLoading(false);
+									alert("프로필 생성 실패, 관리자에게 문의하세요.");
+								}
+							});
+					} else {
+						alert("프로필 생성 실패, 관리자에게 문의하세요.");
+						setIsLoading(false);
+					}
+				});
+		} catch (err) {
+			console.log(":DB보내는 에러는 에러 !!:", err.response);
+		}
+	};
+
 	// imagepicker 이용
 	const uploadImage = async (imageUri: string) => {
 		// console.log("img", imageUri);
@@ -110,6 +212,12 @@ const CreateDog = ({ navigation }: any) => {
 				console.log("Error occured while trying to upload to S3 bucket", err);
 			} else {
 				console.log(data);
+
+				try {
+					uploadToIPFS(data);
+				} catch (err) {
+					console.log(err);
+				}
 			}
 		});
 	};
@@ -118,9 +226,22 @@ const CreateDog = ({ navigation }: any) => {
 
 	// 여기서 발급하기를 누르면 나오는 함수
 	const submitRegister = async () => {
-		Alert.alert("섭밋 해야 합니다");
-		console.log();
-
+		if (!selectedImg) {
+			Alert.alert("이미지를 업로드 해야 합니다");
+			return;
+		}
+		if (!petName) {
+			Alert.alert("반려견의 이름을 입력해주세요.");
+			return;
+		}
+		if (!petSpecies) {
+			Alert.alert("반려견의 종을 입력해주세요.");
+			return;
+		}
+		if (!petGender) {
+			Alert.alert("반려견의 성별을 입력해주세요.");
+			return;
+		}
 		uploadImage(selectedImg);
 	};
 
@@ -162,7 +283,6 @@ const CreateDog = ({ navigation }: any) => {
 			setMyWalletAddress(String(myWalletAddress));
 		};
 
-		getWalletInfoFromStore();
 		getPetSpecies();
 		getWalletAddress();
 	}, []);

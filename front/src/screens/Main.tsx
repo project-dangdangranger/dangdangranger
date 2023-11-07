@@ -59,7 +59,7 @@ const Main = () => {
 				</View>
 				<CustomButton
 					text="지역 순찰하기"
-					onPress={() => navigation.navigate("GoogleMap")}
+					onPress={() => navigation.navigate("PatrolGo")}
 				/>
 				{LoginStore.isLogged ? null : (
 					<View style={MainLayout.mainTextWrap}>

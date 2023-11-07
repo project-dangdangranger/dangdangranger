@@ -34,6 +34,11 @@ import CreateDog from "./src/screens/CreateDog";
 import PrivateKey from "./src/screens/PrivateKey";
 import UpdateInfo from "./src/screens/UpdateInfo";
 import PatrolReportDetail from "./src/screens/PatrolReportDetail";
+import FindTogether from "./src/screens/FindTogether";
+import { TextEncoder, TextDecoder } from "text-encoding";
+
+global.TextEncoder = TextEncoder;
+global.TextDecoder = TextDecoder;
 import ManualMain from "./src/screens/ManualMain";
 import ManualSub1 from "./src/components/Manual/ManualSub1";
 
@@ -86,6 +91,7 @@ const App = () => {
 						name="PatrolReportDetail"
 						component={PatrolReportDetail}
 					/>
+					<Stack.Screen name="FindTogether" component={FindTogether} />
 					<Stack.Screen name="ManualMain" component={ManualMain} />
 				</Stack.Navigator>
 			</NavigationContainer>
