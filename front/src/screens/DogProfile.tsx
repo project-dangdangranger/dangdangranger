@@ -24,7 +24,8 @@ const Profile = ({ navigation }: any) => {
 	const [dogList, setDogList] = useState([]);
 	useEffect(() => {
 		axios.get("/dog").then((res) => {
-			// console.log("도그: ", res.data.data);
+			console.log("도그: ", res.data.data);
+			setDogList(res.data.data);
 		});
 	}, []);
 
@@ -61,7 +62,7 @@ const Profile = ({ navigation }: any) => {
 				</>
 			) : (
 				<>
-					<DogList />
+					<DogList dogList={dogList} />
 				</>
 			)}
 		</>
