@@ -182,6 +182,12 @@ const PatrolReportDetail = ({ route }: any) => {
 
 								return (
 									<View key={item.patrolCommentNo} style={styles.commentDetail}>
+										<View style={styles.centerimg}>
+											<Image
+												style={styles.commentImg}
+												source={{ uri: item.userProfileImg }}
+											></Image>
+										</View>
 										<View style={styles.commentCol}>
 											<View style={styles.commentTitle}>
 												<Text>{item.userName}</Text>

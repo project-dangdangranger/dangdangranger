@@ -39,6 +39,8 @@ import { TextEncoder, TextDecoder } from "text-encoding";
 
 global.TextEncoder = TextEncoder;
 global.TextDecoder = TextDecoder;
+import ManualMain from "./src/screens/ManualMain";
+import ManualSub1 from "./src/components/Manual/ManualSub1";
 
 const App = () => {
 	const Stack = createNativeStackNavigator();
@@ -90,6 +92,7 @@ const App = () => {
 						component={PatrolReportDetail}
 					/>
 					<Stack.Screen name="FindTogether" component={FindTogether} />
+					<Stack.Screen name="ManualMain" component={ManualMain} />
 				</Stack.Navigator>
 			</NavigationContainer>
 		</RecoilRoot>

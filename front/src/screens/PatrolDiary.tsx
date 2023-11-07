@@ -21,13 +21,29 @@ import { useEffect, useState } from "react";
 import PatrolDiaryCard from "../components/PatrolDiaryCard";
 import dotIconImg from "../../assets/images/3-dot-icon.png";
 import axios from "../utils/axios";
-import { responsiveHeight } from "react-native-responsive-dimensions";
+import {
+	responsiveHeight,
+	responsiveWidth,
+} from "react-native-responsive-dimensions";
 
 const PatrolDiary = () => {
 	const { navigate } = useNavigation<StackNavigation>();
 	const [selectedOption, setSelectedOption] = useState("내동네");
 	const [patrolDiaryList, setPatrolDiaryList] = useState([]);
 	const [modalVisible, setModalVisible] = useState(false);
+	// 모달 설정
+	const [modalPosition, setModalPosition] = useState({ top: 0, left: 0 });
+	const threedotRef = useRef(null);
+
+	const handlePressThreedot = (event) => {
+		event.preventDefault();
+		threedotRef.current.measure((fx, fy, width, height, px, py) => {
+			const x = px - responsiveWidth(40); // Horizontal position
+			const y = py + height; // Vertical position, just below the button
+			setModalPosition({ top: y, left: x });
+			setModalVisible(!modalVisible); // Toggle visibility
+		});
+	};
 
 	useEffect(() => {
 		if (selectedOption === "내일지") {
@@ -57,14 +73,6 @@ const PatrolDiary = () => {
 		}
 	}, [selectedOption]);
 
-	const [isMenuVisible, setMenuVisible] = useState(false);
-	const anchorRef = useRef();
-
-	const menuOptions = [
-		{ label: "글 작성하기", onPress: () => console.log("글 작성하기") },
-		// 여기에 더 많은 옵션을 추가할 수 있습니다.
-	];
-
 	return (
 		<>
 			<CommonLayout>
@@ -93,11 +101,9 @@ const PatrolDiary = () => {
 								/>
 
 								<TouchableOpacity
+									ref={threedotRef}
 									style={PatrolDiaryLayout.settings}
-									onPress={() => {
-										setModalVisible(true);
-										// navigate("PatrolDiaryWrite");
-									}}
+									onPress={handlePressThreedot}
 								>
 									<Image
 										source={dotIconImg}
@@ -141,7 +147,10 @@ const PatrolDiary = () => {
 				onRequestClose={() => setModalVisible(false)}
 			>
 				<TouchableOpacity
-					style={PatrolDiaryLayout.modalContainer}
+					style={[
+						styles.modalContainer,
+						{ top: modalPosition.top, left: modalPosition.left },
+					]}
 					onPress={() => setModalVisible(false)}
 				>
 					<View style={PatrolDiaryLayout.modalView}>
@@ -177,7 +186,8 @@ const styles = StyleSheet.create({
 	},
 	modalContainer: {
 		flex: 1,
-		top: responsiveHeight(26),
+		height: responsiveHeight(200),
+		backgroundColor: "rgba(0,0,0,0.5)",
 	},
 	modalView: {
 		backgroundColor: "white",

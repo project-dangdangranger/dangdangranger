@@ -68,4 +68,9 @@ public class User extends BaseEntity {
         this.dong = dong;
         this.userProfileImg = userProfileImg;
     }
+
+    public void updateUserWallet(String userWalletAddress, String userWalletPw) {
+        this.userWalletAddress = userWalletAddress;
+        this.userWalletPw = userWalletPw;
+    }
 }

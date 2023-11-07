@@ -64,24 +64,35 @@ const Login = ({ navigation }: any) => {
 	};
 
 	const uploadImage = async (imageUri: string) => {
-		// console.log("img", imageUri);
-		const blob = Buffer.from(imageUri, "base64");
-		// console.log("blob : ", blob);
-		// key = 지금 날짜와 시간
+		const response = await fetch(imageUri);
+		const blob = await response.blob();
+		const type = blob.type;
+		const random = Math.floor(Math.random() * 100000000);
+		const filename = `profile_${new Date().toISOString()}_${random}.png`;
 		const params = {
 			Bucket: AWS_BUCKET,
-			Key: `${Date.now()}.png`,
+			Key: filename,
 			Body: blob,
-			ContentType: "image/png",
+			ContentType: type,
 		};
-
-		try {
-			const data = await s3.upload(params).promise();
-			console.log("File uploaded:", data);
-			// 업로드 후의 로직 (예: URL을 서버에 저장하는 등)
-		} catch (err) {
-			console.error("Upload failed:", err);
-		}
+		s3.upload(params, (err: any, data: any) => {
+			if (err) {
+				console.log("Error occured while trying to upload to S3 bucket", err);
+			} else {
+				axios
+					.put("/user", {
+						userName: nickname,
+						userDong: selectedDong,
+						userProfileImg: data.Location,
+					})
+					.then((data) => {
+						if (data.data.message === "회원 정보 수정 완료") {
+							Alert.alert("정보 등록 완료", "정보 등록이 완료되었습니다.");
+							navigation.navigate("Profile", { updated: true });
+						}
+					});
+			}
+		});
 	};
 
 	const submitRegister = () => {
@@ -104,8 +115,7 @@ const Login = ({ navigation }: any) => {
 			return;
 		}
 
-		const s3Img = uploadImage(selectedImg);
-		console.log("s3Img:", s3Img);
+		uploadImage(selectedImg);
 
 		// axios
 		// 	.put(`/user`, {
@@ -132,7 +142,7 @@ const Login = ({ navigation }: any) => {
 					<Text style={LoginLayout.Text1}>회원 정보입력</Text>
 				</View>
 
-				<EditImage setSelectedImg={setSelectedImg} />
+				<EditImage selectedImg={selectedImg} setSelectedImg={setSelectedImg} />
 
 				<View style={styles.formInputContainer}>
 					<Text style={styles.nicknameText}>닉네임</Text>

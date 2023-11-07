@@ -1,4 +1,11 @@
-import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
+import {
+	View,
+	Text,
+	StyleSheet,
+	TouchableOpacity,
+	Image,
+	Alert,
+} from "react-native";
 import {
 	responsiveHeight,
 	responsiveWidth,
@@ -30,7 +37,13 @@ const FourBtn = () => {
 					</TouchableOpacity>
 					<TouchableOpacity
 						style={styles.btn}
-						onPress={() => navigate("PatrolMap")}
+						onPress={() => {
+							Alert.alert(
+								"순찰 통계",
+								"현재 공사중입니다. 다음에 다시 방문해주세요.",
+							);
+							// navigate("PatrolMap");
+						}}
 					>
 						<Image source={Btn2} style={styles.btnImg} />
 						<Text style={styles.btnText2}>순찰 통계</Text>

@@ -102,7 +102,7 @@ const Login = () => {
 					})
 					.then((data) => {
 						if (data.data.message === "회원 정보 수정 완료") {
-							Alert.alert("앨범 등록 완료", "앨범 등록이 완료되었습니다.");
+							Alert.alert("정보 수정 완료", "정보 수정이 완료되었습니다.");
 							navigation.navigate("Profile", { updated: true });
 						}
 					});
