@@ -15,7 +15,6 @@ import com.shield.dangdangranger.domain.missing.redis.FinddogPublisher;
 import com.shield.dangdangranger.domain.missing.redis.FinddogSubscriber;
 import com.shield.dangdangranger.domain.missing.repo.MissingRepository;
 import com.shield.dangdangranger.global.constant.BaseConstant;
-import com.shield.dangdangranger.global.error.DuplicatedException;
 import com.shield.dangdangranger.global.error.ForbiddenException;
 
 import lombok.RequiredArgsConstructor;
@@ -43,8 +42,7 @@ public class FinddogServiceImpl implements FinddogService {
 		String topicName = topicNames.get(missing.getMissingNo());
 		ChannelTopic topic = topics.get(topicName);
 		if (topicName != null && topic != null) 
-			throw new DuplicatedException("이미 함께 찾기 세션이 존재합니다.", 
-					FinddogSessionResponseDto.builder().topicId(topic.getTopic()).build());
+			return FinddogSessionResponseDto.builder().topicId(topic.getTopic()).build();
 
 		topicName = UUID.randomUUID().toString();
 		topic = new ChannelTopic(topicName);
