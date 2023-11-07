@@ -52,7 +52,8 @@ public class DogServiceImpl implements DogService{
                 .dogBirth(dog.getDogBirth())
                 .dogSex(dog.getDogSex())
                 .dogTokenId(dog.getDogTokenId())
-                .dogImg(dog.getDogImg()).build();
+                .dogImg(dog.getDogImg())
+                .createDate(dog.getCreateDate()).build();
     }
 
     @Override

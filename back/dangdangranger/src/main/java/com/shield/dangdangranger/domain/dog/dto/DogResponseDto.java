@@ -40,5 +40,6 @@ public class DogResponseDto {
         private LocalDateTime dogBirth;
         private Integer dogTokenId;
         private String dogImg;
+        private LocalDateTime createDate;
     }
 }

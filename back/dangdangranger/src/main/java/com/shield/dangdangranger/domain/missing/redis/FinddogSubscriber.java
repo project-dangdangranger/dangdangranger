@@ -33,7 +33,7 @@ public class FinddogSubscriber implements MessageListener {
             
             FinddogMessage finddogMessage = objectMapper.readValue(publishMessage, FinddogMessage.class);
             // Websocket 구독자에게 메시지 Send
-            messagingTemplate.convertAndSend("/sub/finddog/" + finddogMessage.getTopicId(), message);
+            messagingTemplate.convertAndSend("/sub/finddog/" + finddogMessage.getTopicId(), finddogMessage);
             log.debug("convertAndSend - {}", "/sub/finddog/" + finddogMessage.getTopicId());
             
         } catch (Exception e) {
