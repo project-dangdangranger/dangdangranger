@@ -16,7 +16,7 @@ import ChatBotSubImg from "../../assets/images/main-chatbot.png";
 import FooterBar from "../recycles/FooterBar";
 import { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
-// import { NativeModules } from "react-native";
+import axios from "../utils/axios";
 
 const Main = () => {
 	const LoginStore = {
@@ -32,8 +32,15 @@ const Main = () => {
 		// }
 	};
 
-	const [patrol, setPatrol] = useState(0);
-	const [missing, setMissing] = useState(0);
+	const [patrolPeople, setPatrolPeople] = useState(0);
+	const [missingPeople, setMissingPeople] = useState(0);
+
+	useEffect(() => {
+		axios.get("/patrol/people").then((data) => {
+			setPatrolPeople(data.data.data.patrolPeopleCnt);
+			// console.log("현재 순찰중인 사람 데이터:", data.data);
+		});
+	}, []);
 
 	return (
 		<>
@@ -41,7 +48,7 @@ const Main = () => {
 			<CommonLayout>
 				<MainHeader></MainHeader>
 				<View style={MainLayout.walkMainWrap}>
-					<MainCount patrol={patrol} missing={missing} />
+					<MainCount patrol={patrolPeople} missing={missingPeople} />
 					<Text style={MainLayout.walkMainTitle}>
 						<Text style={MainLayout.walkBoldText}>댕댕레인저</Text>와 함께{" "}
 						{"\n"}
