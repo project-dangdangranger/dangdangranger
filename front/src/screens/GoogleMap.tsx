@@ -8,10 +8,12 @@ import {
 	AWS_SECRET_ACCESS_KEY,
 	AWS_REGION,
 	AWS_BUCKET,
+	GEOCODING_API_KEY,
 } from "@env";
 import { Buffer } from "buffer";
 import axios from "../utils/axios";
 import haversine from "haversine";
+import Axios from "axios";
 
 type LocationCoordinates = {
 	latitude: number;
@@ -98,7 +100,7 @@ const GoogleMap = (props: Props) => {
 	}, []);
 
 	useEffect(() => {
-		if (!isInitialLocationSet) {
+		if (!isInitialLocationSet && props.start && props.patrol) {
 			getCurrentLocation();
 		}
 	}, [isInitialLocationSet]);
@@ -138,6 +140,9 @@ const GoogleMap = (props: Props) => {
 				setPatrolLogLat(position.coords.latitude);
 				setPatrolLogLng(position.coords.longitude);
 				setIsInitialLocationSet(true);
+
+				getDongCode(position.coords.latitude, position.coords.longitude);
+
 				if (mapRef.current) {
 					mapRef.current.animateToRegion(newLocation, 1000);
 				}
@@ -147,6 +152,31 @@ const GoogleMap = (props: Props) => {
 			},
 			{ enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 },
 		);
+	};
+
+	const getDongCode = async (latitude: number, longitude: number) => {
+		try {
+			const response = await Axios.get(
+				`https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&language=ko&key=${GEOCODING_API_KEY}`,
+			);
+
+			console.log("동코드 전 : ", response.data.results);
+
+			const formattedAddress = response.data.results[0].formatted_address;
+			console.log("동코드 :  ", formattedAddress);
+
+			const addressParts = formattedAddress.split(" ");
+			console.log("addressParts : ", addressParts);
+			const cityProvince = addressParts[1];
+			const cityDistrict = addressParts[2];
+			const townVillage = addressParts[3];
+			console.log(
+				"추출된 주소 : ",
+				`${cityProvince} ${cityDistrict} ${townVillage}`,
+			);
+		} catch (error) {
+			console.error("An error occurred while fetching the dong code:", error);
+		}
 	};
 
 	const startWatchingLocation = () => {

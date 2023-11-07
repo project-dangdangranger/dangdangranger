@@ -35,4 +35,5 @@ declare module "sockjs-client" {
 declare module "text-encoding" {
 	export var TextEncoder: any;
 	export var TextDecoder: any;
+	export const GEOCODING_API_KEY: string;
 }
