@@ -113,13 +113,14 @@ const PatrolDiary = () => {
 								</TouchableOpacity>
 							</View>
 						</View>
-						<View>
+
+						{/* <View>
 							<TextInput
 								style={PatrolDiaryLayout.formInput}
 								onChangeText={() => {}}
 								placeholder="순찰일지 정보를 입력해주세요."
 							/>
-						</View>
+						</View> */}
 					</View>
 
 					<View style={PatrolDiaryLayout.patrolRowWrap}>

@@ -54,7 +54,7 @@ const SideMenu = (props: any) => {
 				<View style={SideMenuLayout.sideMenuHeader}>
 					<Text style={SideMenuLayout.sideMenuLogo}>댕댕레인저</Text>
 					<TouchableOpacity activeOpacity={0.7} onPress={props.clickX}>
-						<Image source={NftPng} />
+						<Image source={ClosePng} style={SideMenuLayout.closeImg} />
 					</TouchableOpacity>
 				</View>
 

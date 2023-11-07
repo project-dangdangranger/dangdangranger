@@ -102,6 +102,10 @@ const SideMenuLayout = StyleSheet.create({
 		fontWeight: "900",
 		color: "#FFFFFF",
 	},
+	closeImg: {
+		resizeMode: "contain",
+		transform: [{ scale: 1.7 }],
+	},
 });
 
 export default SideMenuLayout;

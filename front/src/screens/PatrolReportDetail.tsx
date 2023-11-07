@@ -21,6 +21,7 @@ import {
 	responsiveHeight,
 	responsiveWidth,
 } from "react-native-responsive-dimensions";
+import MultiPicture from "../recycles/MultiPicture";
 
 const PatrolReportDetail = ({ route }: any) => {
 	const { navigate } = useNavigation();
@@ -64,6 +65,7 @@ const PatrolReportDetail = ({ route }: any) => {
 				const response = await axios.get(`/patrol/${patrolNo}`);
 				if (response.data.message === "순찰일지 상세조회 완료") {
 					setData(response.data.data);
+					console.log(response.data.data);
 				}
 			} catch (error) {
 				console.log(error);
@@ -105,10 +107,19 @@ const PatrolReportDetail = ({ route }: any) => {
 				<ColorHeader title={"순찰 상세 기록"} />
 
 				{/* {uri: data?.patrolLogImageUr} */}
-				<Image
+				{/* <Image
 					source={{ uri: data?.patrolFirstImg }}
 					style={styles.img}
-				></Image>
+				></Image> */}
+
+				<View
+					style={{ width: responsiveWidth(100), height: responsiveHeight(30) }}
+				>
+					<MultiPicture
+						imgList={data?.patrolReportImages}
+						location={data?.patrolLogAddress}
+					/>
+				</View>
 
 				<View style={styles.mainContainer}>
 					<View style={styles.contentContainer}>
