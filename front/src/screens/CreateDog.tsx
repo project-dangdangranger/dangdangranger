@@ -91,7 +91,7 @@ const CreateDog = ({ navigation }: any) => {
 	// IPFS 업로드
 	const uploadToIPFS = async (data: any) => {
 		await axios
-			.post("https://idog.store/blockchain/uploadIpfs", {
+			.post("https://animaid.co.kr/blockchain/uploadIpfs", {
 				img: data.Location,
 				petName: petName,
 				petSpecies: petSpecies,

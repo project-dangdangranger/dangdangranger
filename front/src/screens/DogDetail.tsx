@@ -6,6 +6,7 @@ import {
 	StyleSheet,
 	Platform,
 	TouchableOpacity,
+	ScrollView,
 } from "react-native";
 // import GestureFlipView from "../components/GestureFlipView";
 import CommonLayout from "../recycles/CommonLayout";
@@ -26,7 +27,7 @@ const Profile = ({ route }) => {
 	const [data, setDate] = useState(route.params);
 	useEffect(() => {
 		console.log("라우트:", route);
-		setDate({ ...data, dogImg: ProfileImg });
+		// setDate({ ...data, dogImg: ProfileImg });
 	}, []);
 
 	return (
@@ -37,7 +38,7 @@ const Profile = ({ route }) => {
 				<Image source={ProfileImg} style={styles.mainImg} />
 
 				<View style={styles.mainTextContainer}>
-					<Text style={styles.mainText}>강아지 이름 </Text>
+					<Text style={styles.mainText}>{data?.item.dogName} </Text>
 					<View style={styles.line} />
 				</View>
 				<View style={styles.dogContainer}>
@@ -49,17 +50,20 @@ const Profile = ({ route }) => {
 							</View>
 							<View style={styles.dogItemStyle}>
 								<Text>성별</Text>
-								<Text style={styles.dogItemMainText}>{data.dogSex}ddd</Text>
+								<Text style={styles.dogItemMainText}>{data?.item.dogSex}</Text>
 							</View>
+
 							<View style={styles.dogItemStyle}>
 								<Text>견종</Text>
-								<Text
-									style={styles.dogItemBreedText}
-									numberOfLines={1}
-									ellipsizeMode="clip"
-								>
-									{data.dogBreed}ddddd
-								</Text>
+								<ScrollView horizontal={true}>
+									<Text
+										style={styles.dogItemBreedText}
+										numberOfLines={1}
+										ellipsizeMode="clip"
+									>
+										{data.item.dogBreed}
+									</Text>
+								</ScrollView>
 							</View>
 							<View style={styles.dogItemStyle}>
 								<Text>발급 일자</Text>
