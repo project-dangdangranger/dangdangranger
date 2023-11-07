@@ -26,13 +26,15 @@ public class FinddogSubscriber implements MessageListener {
      */
     @Override
     public void onMessage(Message message, byte[] pattern) {
+    	log.debug("FinddogSubscriber.onMessage : message - {}", message);
         try {
             // redis에서 발행된 데이터를 받아 deserialize
             String publishMessage = (String) redisTemplate.getStringSerializer().deserialize(message.getBody());
             
             FinddogMessage finddogMessage = objectMapper.readValue(publishMessage, FinddogMessage.class);
             // Websocket 구독자에게 메시지 Send
-            messagingTemplate.convertAndSend("/finddog/sub/" + finddogMessage.getTopicId(), message);
+            messagingTemplate.convertAndSend("/sub/finddog/" + finddogMessage.getTopicId(), message);
+            log.debug("convertAndSend - {}", "/sub/finddog/" + finddogMessage.getTopicId());
             
         } catch (Exception e) {
             log.error(e.getMessage());
