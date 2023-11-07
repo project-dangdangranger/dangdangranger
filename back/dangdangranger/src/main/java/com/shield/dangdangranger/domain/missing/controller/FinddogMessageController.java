@@ -16,7 +16,6 @@ import lombok.extern.slf4j.Slf4j;
 @Controller
 @RequiredArgsConstructor
 @Slf4j
-@RequestMapping("/api")
 public class FinddogMessageController {
 	
 	private static ObjectMapper mapper = new ObjectMapper();
@@ -26,7 +25,7 @@ public class FinddogMessageController {
 	/**
      * websocket "/finddog"으로 들어오는 메시지를 처리한다.
      */
-	@MessageMapping("/finddog")
+	@MessageMapping("finddog")
 	public void message(FinddogMessage message) {
 		log.debug(message.toString());
 		
