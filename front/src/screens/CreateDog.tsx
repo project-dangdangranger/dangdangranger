@@ -48,7 +48,7 @@ const CreateDog = ({ navigation }: any) => {
 	const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
 	const [walletAddress, setWalletAddress] = useState<string>();
 	const [walletPrivateKey, setWalletPrivateKey] = useState<string>();
-	const [petName, setPetName] = useState<string | null>();
+	const [petName, setPetName] = useState<string | "">();
 	const [petSpecies, setPetSpecies] = useState<string | null>();
 	const [petGender, setPetGender] = useState<string | null>("M");
 	const [petBirth, setPetBirth] = useState<string | null>(
@@ -73,14 +73,13 @@ const CreateDog = ({ navigation }: any) => {
 		setDatePickerVisibility(false);
 	};
 
-	const handleConfirm = async (date: string) => {
+	const handleConfirm = (date: Date) => {
 		console.log("handle confirm date:", date);
-
 		const dateAll = new Date(date);
 		var year = dateAll.getFullYear();
 		var month = ("0" + (1 + dateAll.getMonth())).slice(-2);
 		var day = ("0" + dateAll.getDate()).slice(-2);
-		await setPetBirth(year + "-" + month + "-" + day);
+		setPetBirth(year + "-" + month + "-" + day);
 		hideDatePicker();
 	};
 
