@@ -259,11 +259,11 @@ const GoogleMap = (props: Props) => {
 		<View style={{ flex: 1 }}>
 			<MapView
 				style={{
-					position: "absolute",
+					// position: "absolute",
 					width: Dimensions.get("window").width,
 					height: Dimensions.get("window").height,
-					opacity: 0,
-					left: -Dimensions.get("window").width,
+					// opacity: 0,
+					// left: -Dimensions.get("window").width,
 				}}
 				provider={PROVIDER_GOOGLE}
 				showsUserLocation={true}
