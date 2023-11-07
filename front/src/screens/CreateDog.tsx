@@ -90,8 +90,11 @@ const CreateDog = ({ navigation }: any) => {
 
 	// IPFS 업로드
 	const uploadToIPFS = async (data: any) => {
+		console.log("여기왔니?1");
+		// console.log(data);
 		await axios
-			.post("https://animaid.co.kr/blockchain/uploadIpfs", {
+			// .post("http://10.0.2.2:3000/blockchain/uploadIpfs", {
+			.post("https://www.animaid.co.kr/blockchain/uploadIpfs", {
 				img: data.Location,
 				petName: petName,
 				petSpecies: petSpecies,
@@ -99,10 +102,11 @@ const CreateDog = ({ navigation }: any) => {
 				petGender: petGender,
 			})
 			.then(async (data) => {
-				console.log("nft data:", data.data);
-				const nftCid = data.data;
-				const imageOrigin = "https://ipfs.io/ipfs/" + data.data;
-				console.log("imageOrigin:", imageOrigin);
+				// console.log("express data : ", data);
+				console.log("nft data:", data.data.imageCid);
+				const nftCid = data.data.imageCid;
+				const imageOrigin = "https://ipfs.io/ipfs/" + nftCid;
+				// console.log("imageOrigin:", imageOrigin);
 				const overrides = {
 					gasPrice: ethers.parseUnits("9000", "gwei"), // gasPrice 설정 (예: 100 gwei)
 				};
@@ -409,7 +413,8 @@ const CreateDog = ({ navigation }: any) => {
 								<TouchableOpacity
 									activeOpacity={0.7}
 									onPress={() => {
-										uploadIpfs();
+										submitRegister();
+										// uploadIpfs();
 									}}
 								>
 									<View style={CreateProfileLayout.submitButton}>
