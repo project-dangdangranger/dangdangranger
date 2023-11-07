@@ -23,6 +23,7 @@ declare module "@env" {
 	export const MINT_DOG_TOKEN_ADDRESS: string;
 	export const ADMIN_WALLET_PRIVATE_KEY: string;
 	export const POLYGON_API_KEY: string;
+	export const GEOCODING_API_KEY: string;
 }
 
 // sockjs-client.d.ts
