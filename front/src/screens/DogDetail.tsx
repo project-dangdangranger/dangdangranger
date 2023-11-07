@@ -42,7 +42,7 @@ const Profile = ({ route }) => {
 			<CommonLayout>
 				<ColorHeader title="강아지 정보" />
 
-				<Image source={ProfileImg} style={styles.mainImg} />
+				<Image source={{ uri: data?.dogImg }} style={styles.mainImg} />
 
 				<View style={styles.mainTextContainer}>
 					<Text style={styles.mainText}>{data?.dogName} </Text>
