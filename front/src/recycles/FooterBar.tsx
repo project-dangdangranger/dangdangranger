@@ -11,6 +11,7 @@ import MingcuteSearchFillPng from "../../assets/images/mingcute_search_fill.png"
 import TempPng from "../../assets/images/Home.png";
 import ProfilePng from "../../assets/images/Profile.png";
 import ProfileFillPng from "../../assets/images/Profile_fill.png";
+import PatrolPng from "../../assets/images/dog.png";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigation } from "../../App";
 
@@ -34,7 +35,7 @@ const FooterBar = () => {
 				</View>
 				<View>
 					<TouchableOpacity onPress={() => authHandling("PatrolMain")}>
-						<Image source={MingcuteSearchPng} style={styles.btnImg} />
+						<Image source={PatrolPng} style={styles.btnImg} />
 						<Text>순찰</Text>
 					</TouchableOpacity>
 				</View>
@@ -43,7 +44,7 @@ const FooterBar = () => {
 						style={styles.btnCenter}
 						onPress={() => navigate("MissingMain")}
 					>
-						<Image source={TempPng} style={styles.btnImg} />
+						<Image source={MingcuteSearchPng} style={styles.btnImg} />
 						<Text>실종견</Text>
 					</TouchableOpacity>
 				</View>

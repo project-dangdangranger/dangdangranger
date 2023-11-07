@@ -7,6 +7,7 @@ import {
 const SideMenuLayout = StyleSheet.create({
 	sideMenuWrap: {
 		width: responsiveWidth(70),
+		height: responsiveHeight(100),
 		position: "absolute",
 		top: 0,
 		left: 0,
@@ -32,7 +33,7 @@ const SideMenuLayout = StyleSheet.create({
 		paddingHorizontal: responsiveWidth(4),
 	},
 	navTitle: {
-		fontSize: 16,
+		fontSize: 18,
 		fontWeight: "700",
 		color: "#000000",
 	},
