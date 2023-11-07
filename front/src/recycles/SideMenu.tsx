@@ -7,7 +7,7 @@ import templogo from "../../assets/images/templogo.png";
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
 import React, { useEffect, useState } from "react";
 import EncryptedStorage from "react-native-encrypted-storage";
-import OutPng from "../../assets/images/out.png";
+import ClosePng from "../../assets/images/close.png";
 import NftPng from "../../assets/images/nft_icon.png";
 import MissingPng from "../../assets/images/missing_icon.png";
 import PatrolPng from "../../assets/images/patrol_icon.png";
@@ -54,7 +54,7 @@ const SideMenu = (props: any) => {
 				<View style={SideMenuLayout.sideMenuHeader}>
 					<Text style={SideMenuLayout.sideMenuLogo}>댕댕레인저</Text>
 					<TouchableOpacity activeOpacity={0.7} onPress={props.clickX}>
-						<Image source={OutPng} />
+						<Image source={NftPng} />
 					</TouchableOpacity>
 				</View>
 
