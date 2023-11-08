@@ -72,8 +72,6 @@ if (localPropertiesFile.exists()) {
     localProperties.load(new FileInputStream(localPropertiesFile))
 }
 
-def kakaoMapApiHashKey = localProperties['kakao.map.api.hash.key'] ?: ""
-def kakaoNativeAppKey = localProperties['kakao.native.app.key'] ?: ""
 def jscFlavor = 'org.webkit:android-jsc:+'
 
 android {
@@ -86,10 +84,9 @@ android {
         applicationId "com.idog.dangdangranger"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        buildConfigField "String", "KAKAO_MAP_API_HASH_KEY", "\"${kakaoMapApiHashKey}\""
-        manifestPlaceholders = [kakaoNativeAppKey: kakaoNativeAppKey]
         versionCode 1
         versionName "1.0"
+        resValue "string", "mapbox_access_token", localProperties['mapbox.accessToken']
     }
     signingConfigs {
         debug {
@@ -104,8 +101,6 @@ android {
             signingConfig signingConfigs.debug
         }
         release {
-            // Caution! In production, you need to generate your own keystore file.
-            // see https://reactnative.dev/docs/signed-apk-android.
             signingConfig signingConfigs.debug
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
