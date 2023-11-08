@@ -62,7 +62,7 @@ const Profile = ({ navigation }: any) => {
 				</>
 			) : (
 				<>
-					<DogList dogList={dogList} />
+					<DogList />
 				</>
 			)}
 		</>

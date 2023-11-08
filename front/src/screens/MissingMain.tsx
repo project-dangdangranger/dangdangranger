@@ -12,7 +12,7 @@ import MissingTwoBtn from "../components/MissingTwoBtn";
 import FooterBar from "../recycles/FooterBar";
 import { responsiveWidth } from "react-native-responsive-dimensions";
 
-import MultiPicture from "../recycles/MultiPicture";
+import MultiPicture from "../components/Carousel";
 
 const MissingMain = () => {
 	const [patrol, setPatrol] = useState(0);

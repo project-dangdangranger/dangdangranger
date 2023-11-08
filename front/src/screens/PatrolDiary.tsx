@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import React, { useRef } from "react";
 import {
 	Image,
 	Text,
@@ -25,6 +25,7 @@ import {
 	responsiveHeight,
 	responsiveWidth,
 } from "react-native-responsive-dimensions";
+import { useFocusEffect } from "@react-navigation/native";
 
 const PatrolDiary = () => {
 	const { navigate } = useNavigation<StackNavigation>();
@@ -45,34 +46,36 @@ const PatrolDiary = () => {
 		});
 	};
 
-	useEffect(() => {
-		if (selectedOption === "내일지") {
-			axios
-				.get("/patrol/mine")
-				.then((res) => {
-					if (res.data.message === "사용자의 순찰일지 리스트 조회 완료") {
-						setPatrolDiaryList(res.data.data);
-					}
-				})
-				.catch((err) => {
-					console.log(err);
-				});
-		}
+	useFocusEffect(
+		React.useCallback(() => {
+			if (selectedOption === "내일지") {
+				axios
+					.get("/patrol/mine")
+					.then((res) => {
+						if (res.data.message === "사용자의 순찰일지 리스트 조회 완료") {
+							setPatrolDiaryList(res.data.data);
+						}
+					})
+					.catch((err) => {
+						console.log(err);
+					});
+			}
 
-		if (selectedOption === "내동네") {
-			axios
-				.get("/patrol")
-				.then((res) => {
-					if (res.data.message === "모든 순찰일지 리스트 조회 완료") {
-						console.log(res);
-						setPatrolDiaryList(res.data.data);
-					}
-				})
-				.catch((err) => {
-					console.log(err);
-				});
-		}
-	}, [selectedOption]);
+			if (selectedOption === "내동네") {
+				axios
+					.get("/patrol")
+					.then((res) => {
+						if (res.data.message === "모든 순찰일지 리스트 조회 완료") {
+							console.log(res);
+							setPatrolDiaryList(res.data.data);
+						}
+					})
+					.catch((err) => {
+						console.log(err);
+					});
+			}
+		}, [selectedOption]),
+	);
 
 	return (
 		<>
