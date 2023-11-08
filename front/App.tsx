@@ -19,7 +19,7 @@ import GoogleMap from "./src/screens/GoogleMap";
 import PatrolMap from "./src/screens/PatrolMap";
 import PatrolLog from "./src/screens/PatrolLog";
 import PatrolDiary from "./src/screens/PatrolDiary";
-import PatrolDiaryWrite from "./src/screens/PatrolDiaryWrite";
+import PatrolDiaryWrite from "./src/screens/CreatePatrolDiary";
 import MissingMain from "./src/screens/MissingMain";
 import MissingFind from "./src/screens/MissingFind";
 import MissingRegist from "./src/screens/MissingRegist";
@@ -36,7 +36,6 @@ import UpdateInfo from "./src/screens/UpdateInfo";
 import PatrolReportDetail from "./src/screens/PatrolReportDetail";
 import FindTogether from "./src/screens/FindTogether";
 import { TextEncoder, TextDecoder } from "text-encoding";
-
 global.TextEncoder = TextEncoder;
 global.TextDecoder = TextDecoder;
 import ManualMain from "./src/screens/ManualMain";
