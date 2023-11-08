@@ -1,19 +1,30 @@
-import React, { useEffect, useState, useRef } from "react";
-import { View, PermissionsAndroid, Dimensions, Button } from "react-native";
-import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
+import React, { useState, useEffect, useRef } from "react";
+import {
+	View,
+	Button,
+	StyleSheet,
+	PermissionsAndroid,
+	Dimensions,
+	Platform,
+} from "react-native";
+import { Buffer } from "buffer";
+import MapboxGL from "@rnmapbox/maps";
+import { MAPBOX_ACCESSTOKEN } from "@env";
 import Geolocation from "react-native-geolocation-service";
 import { S3 } from "aws-sdk";
 import {
 	AWS_ACCESS_KEY,
 	AWS_SECRET_ACCESS_KEY,
+	GEOCODING_API_KEY,
 	AWS_REGION,
 	AWS_BUCKET,
-	GEOCODING_API_KEY,
 } from "@env";
-import { Buffer } from "buffer";
 import axios from "../utils/axios";
-import haversine from "haversine";
 import Axios from "axios";
+import haversine from "haversine";
+
+MapboxGL.setWellKnownTileServer("Mapbox");
+MapboxGL.setAccessToken(MAPBOX_ACCESSTOKEN);
 
 type LocationCoordinates = {
 	latitude: number;
@@ -30,8 +41,15 @@ type Props = {
 };
 
 const GoogleMap = (props: Props) => {
+	const mapRef = useRef<MapboxGL.MapView>(null);
 	const mapWidth = Dimensions.get("window").width;
 	const mapHeight = Dimensions.get("window").height;
+	const [camera, setCamera] = useState({
+		centerCoordinate: [0, 0],
+		zoomLevel: 15,
+		animationDuration: 0,
+	});
+
 	const [currentLocation, setCurrentLocation] = useState<
 		LocationCoordinates | undefined
 	>();
@@ -46,7 +64,6 @@ const GoogleMap = (props: Props) => {
 		useState<boolean>(false);
 	const [locationTrail, setLocationTrail] = useState<LocationCoordinates[]>([]);
 	const watchIdRef = useRef<number | null>(null);
-	const mapRef = useRef<MapView | null>(null);
 
 	const s3 = new S3({
 		accessKeyId: AWS_ACCESS_KEY,
@@ -60,6 +77,7 @@ const GoogleMap = (props: Props) => {
 			watchIdRef.current = null;
 		}
 	};
+
 	const stopAndReset = () => {
 		setPatrolLogDate("");
 		setPatrolLogLat(0);
@@ -70,6 +88,11 @@ const GoogleMap = (props: Props) => {
 		setCurrentLocation(undefined);
 		setPatrolLogTotalDistance(0);
 	};
+
+	useEffect(() => {
+		MapboxGL.setTelemetryEnabled(false);
+		requestLocationPermission();
+	}, []);
 
 	useEffect(() => {
 		if (props.start && props.patrol && !watchIdRef.current) {
@@ -95,9 +118,22 @@ const GoogleMap = (props: Props) => {
 		}
 	}, [props.start, props.patrol]);
 
-	useEffect(() => {
-		requestPermission();
-	}, []);
+	const requestLocationPermission = async () => {
+		if (Platform.OS === "android") {
+			try {
+				const granted = await PermissionsAndroid.request(
+					PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+				);
+				if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+					getCurrentLocation();
+				} else {
+					console.log("ACCESS_FINE_LOCATION permission denied");
+				}
+			} catch (err) {
+				console.warn(err);
+			}
+		}
+	};
 
 	useEffect(() => {
 		if (!isInitialLocationSet && props.start && props.patrol) {
@@ -109,21 +145,16 @@ const GoogleMap = (props: Props) => {
 		// patrolLogTotalDistance가 변할때마다 콘솔
 		console.log("patrolLogTotalDistance: ", patrolLogTotalDistance);
 	}, [patrolLogTotalDistance]);
-
-	const requestPermission = async () => {
-		try {
-			const result = await PermissionsAndroid.request(
-				PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-			);
-			if (result === PermissionsAndroid.RESULTS.GRANTED) {
-				getCurrentLocation();
-			} else {
-				console.log("ACCESS_FINE_LOCATION permission denied");
-			}
-		} catch (e) {
-			console.log(e);
+	useEffect(() => {
+		if (currentLocation) {
+			// Set the camera once the current location is available
+			setCamera({
+				...camera,
+				centerCoordinate: [currentLocation.longitude, currentLocation.latitude],
+				animationDuration: 2000,
+			});
 		}
-	};
+	}, [currentLocation]);
 
 	const getCurrentLocation = () => {
 		Geolocation.getCurrentPosition(
@@ -143,9 +174,9 @@ const GoogleMap = (props: Props) => {
 
 				getAddressCode(position.coords.latitude, position.coords.longitude);
 
-				if (mapRef.current) {
-					mapRef.current.animateToRegion(newLocation, 1000);
-				}
+				// if (mapRef.current) {
+				// 	mapRef.current.animateToRegion(newLocation, 1000);
+				// }
 			},
 			(error) => {
 				console.log(error.code, error.message);
@@ -211,16 +242,16 @@ const GoogleMap = (props: Props) => {
 	};
 
 	const saveAndUploadMapSnapshot = async () => {
-		if (mapRef.current) {
-			const snapshot = await mapRef.current.takeSnapshot({
-				width: mapWidth,
-				height: mapHeight,
-				format: "png",
-				quality: 1,
-				result: "base64",
-			});
-			await uploadImage(snapshot);
-		}
+		// if (mapRef.current) {
+		// 	const snapshot = await mapRef.current.takeSnapshot({
+		// 		width: mapWidth,
+		// 		height: mapHeight,
+		// 		format: "png",
+		// 		quality: 1,
+		// 		result: "base64",
+		// 	});
+		// 	await uploadImage(snapshot);
+		// }
 	};
 
 	const uploadImage = async (imageBase64: string) => {
@@ -256,51 +287,58 @@ const GoogleMap = (props: Props) => {
 		stopAndReset();
 	};
 
-	return (
-		<View style={{ flex: 1 }}>
-			<MapView
-				style={{
-					position: "absolute",
-					width: Dimensions.get("window").width,
-					height: Dimensions.get("window").height,
-					opacity: 0,
-					left: -Dimensions.get("window").width,
-				}}
-				provider={PROVIDER_GOOGLE}
-				showsUserLocation={true}
-				showsMyLocationButton={true}
-				zoomEnabled={true}
-				rotateEnabled={true}
-				initialRegion={currentLocation}
-				ref={mapRef}
-			>
-				{/* {locationTrail.length > 0 && (
-                    <Polyline
-                        coordinates={locationTrail.map((trail) => ({
-                            latitude: trail.latitude,
-                            longitude: trail.longitude,
-                        }))}
-                        strokeColor="#000"
-                        strokeWidth={4}
-                    />
-                )} */}
-			</MapView>
-			<View
-				style={{
-					position: "absolute",
-					bottom: 20,
-					left: 0,
-					right: 0,
-					alignItems: "center",
+	const renderAnnotations = () => {
+		return (
+			<MapboxGL.ShapeSource
+				id="line1"
+				shape={{
+					type: "Feature",
+					geometry: {
+						type: "LineString",
+						coordinates: locationTrail.map((loc) => [
+							loc.longitude,
+							loc.latitude,
+						]),
+					},
 				}}
 			>
-				<Button
-					title="Save and Upload Map Snapshot"
-					onPress={saveAndUploadMapSnapshot}
+				<MapboxGL.LineLayer
+					id="linelayer1"
+					style={{ lineWidth: 5, lineColor: "blue" }}
 				/>
-			</View>
+			</MapboxGL.ShapeSource>
+		);
+	};
+
+	return (
+		<View style={styles.page}>
+			<MapboxGL.MapView style={styles.map} ref={mapRef}>
+				{currentLocation && (
+					<MapboxGL.Camera
+						zoomLevel={camera.zoomLevel}
+						centerCoordinate={camera.centerCoordinate}
+						animationMode={"flyTo"}
+						animationDuration={camera.animationDuration}
+					/>
+				)}
+				{renderAnnotations()}
+			</MapboxGL.MapView>
 		</View>
 	);
 };
+
+const styles = StyleSheet.create({
+	page: {
+		flex: 1,
+		justifyContent: "center",
+		alignItems: "center",
+		backgroundColor: "#F5FCFF",
+	},
+	map: {
+		flex: 1,
+		width: Dimensions.get("window").width,
+		height: Dimensions.get("window").height,
+	},
+});
 
 export default GoogleMap;
