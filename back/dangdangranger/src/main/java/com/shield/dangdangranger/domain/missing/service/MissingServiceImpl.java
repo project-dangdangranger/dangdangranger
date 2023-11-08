@@ -1,5 +1,6 @@
 package com.shield.dangdangranger.domain.missing.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -8,12 +9,14 @@ import org.springframework.transaction.annotation.Transactional;
 import com.shield.dangdangranger.domain.Image.constant.ImageType;
 import com.shield.dangdangranger.domain.Image.entity.Image;
 import com.shield.dangdangranger.domain.Image.repo.ImageRepository;
+import com.shield.dangdangranger.domain.missing.constant.MissingStatus;
 import com.shield.dangdangranger.domain.missing.constant.MissingType;
 import com.shield.dangdangranger.domain.missing.dto.MissingRequestDto.MissingSaveRequestDto;
 import com.shield.dangdangranger.domain.missing.dto.MissingRequestDto.MissingUpdateRequestDto;
 import com.shield.dangdangranger.domain.missing.dto.MissingResponseDto.MissingListInfoResponseDto;
 import com.shield.dangdangranger.domain.missing.entity.Missing;
 import com.shield.dangdangranger.domain.missing.repo.MissingRepository;
+import com.shield.dangdangranger.global.constant.BaseConstant;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -73,8 +76,21 @@ public class MissingServiceImpl implements MissingService {
 
 	@Override
 	public List<MissingListInfoResponseDto> selectAll(Integer userNo) {
-		// TODO Auto-generated method stub
-		return null;
+		
+		List<Missing> missingList = missingRepository.findByMissingStatusAndCanceled(MissingStatus.MISSING.value(), BaseConstant.NOTCANCELED);
+		List<MissingListInfoResponseDto> responseList = new ArrayList<>();
+		for (Missing missing : missingList) {
+			responseList.add(MissingListInfoResponseDto.builder()
+					.missingDate(missing.getMissingDate())
+					.missingLat(missing.getMissingLat())
+					.missingLng(missing.getMissingLng())
+					.missingNo(missing.getMissingNo())
+					.missingTitle(missing.getMissingTitle())
+					.missingTypeNo(missing.getMissingTypeNo())
+					.build());
+		}
+		
+		return responseList;
 	}
 
 	@Override

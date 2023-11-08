@@ -2,6 +2,9 @@ package com.shield.dangdangranger.domain.missing.controller;
 
 import static com.shield.dangdangranger.domain.missing.constant.MissingResponseMessage.GET_LOCAL_MISSING_COUNT_SUCCESS;
 import static com.shield.dangdangranger.domain.missing.constant.MissingResponseMessage.CREATE_MISSING_SUCCESS;
+import static com.shield.dangdangranger.domain.missing.constant.MissingResponseMessage.READ_ALL_MISSING;
+
+import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.shield.dangdangranger.domain.missing.dto.MissingRequestDto.MissingSaveRequestDto;
+import com.shield.dangdangranger.domain.missing.dto.MissingResponseDto.MissingListInfoResponseDto;
 import com.shield.dangdangranger.domain.missing.service.MissingService;
 import com.shield.dangdangranger.global.dto.ResponseDto;
 
@@ -27,12 +31,23 @@ public class MissingController {
 
 	private final MissingService missingService;
 
+	/**
+	 * 지역 실종견 수 조회 api
+	 * @param userNo
+	 * @return
+	 */
 	@GetMapping("/count")
 	public ResponseEntity<ResponseDto<Integer>> getLocalMissingDogCount(@RequestAttribute("userNo") Integer userNo) {
 		return ResponseEntity.status(HttpStatus.OK).body(ResponseDto
 				.create(GET_LOCAL_MISSING_COUNT_SUCCESS.message(), missingService.getLocalMissingDogCount(userNo)));
 	}
 	
+	/**
+	 * 실종견 등록 api
+	 * @param userNo
+	 * @param missingSaveRequestDto
+	 * @return
+	 */
 	@PostMapping()
 	public ResponseEntity<ResponseDto<String>> createMissing(
 			@RequestAttribute("userNo") Integer userNo,
@@ -41,5 +56,19 @@ public class MissingController {
 		missingService.registMissing(userNo, missingSaveRequestDto);
 		return ResponseEntity.status(HttpStatus.OK).body(ResponseDto
 				.create(CREATE_MISSING_SUCCESS.message()));
+	}
+	
+	/**
+	 * 실종견 리스트 조회 api
+	 * @param userNo
+	 * @return
+	 */
+	@GetMapping()
+	public ResponseEntity<ResponseDto<List<MissingListInfoResponseDto>>> getMissingList(
+			@RequestAttribute("userNo") Integer userNo) {
+		
+		return ResponseEntity.status(HttpStatus.OK)
+				.body(ResponseDto.create(READ_ALL_MISSING.message()
+						, missingService.selectAll(userNo)));
 	}
 }
