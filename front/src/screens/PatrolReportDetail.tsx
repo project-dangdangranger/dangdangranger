@@ -12,7 +12,6 @@ import ColorHeader from "../recycles/ColorHeader";
 import axios from "../utils/axios";
 import { useEffect, useState, useRef } from "react";
 import styles from "../styles/PatrolReportDetailLayout";
-import exImg from "../../assets/images/photo-ex-img1.png";
 import ReportUserInfo from "../components/ReportUserInfo";
 import dotIconImg from "../../assets/images/3-dot-icon.png";
 import PatrolDiaryLayout from "../styles/patrolDiaryLayout";
@@ -28,7 +27,6 @@ const PatrolReportDetail = ({ route }: any) => {
 	const [data, setData] = useState({});
 	const { patrolNo } = route.params;
 	const [userData, setUserData] = useState({});
-
 	const [modalVisible, setModalVisible] = useState(false);
 	const [modalPosition, setModalPosition] = useState({ top: 0, left: 0 });
 	const threedotRef = useRef(null);
@@ -106,7 +104,6 @@ const PatrolReportDetail = ({ route }: any) => {
 			<CommonLayout>
 				<ColorHeader title={"순찰 상세 기록"} />
 
-				{/* {uri: data?.patrolLogImageUr} */}
 				{/* <Image
 					source={{ uri: data?.patrolFirstImg }}
 					style={styles.img}

@@ -61,13 +61,6 @@ const MyHorizontalScrollView = ({ imgList, location }) => {
 						</View>
 					);
 				})}
-
-				<View style={styles.viewStyle}>
-					<Image style={styles.viewStyle} source={Img1} />
-					<View style={styles.textView}>
-						<Text style={styles.text}>서울특별시 역삼동</Text>
-					</View>
-				</View>
 			</ScrollView>
 			{renderPagination()}
 		</View>
@@ -78,14 +71,13 @@ const styles = StyleSheet.create({
 	container: {
 		justifyContent: "center",
 		alignItems: "center",
-		marginHorizontal: responsiveWidth(10),
+		// marginHorizontal: responsiveWidth(10),
 	},
 	scrollViewStyle: {
-		width: responsiveWidth(80),
+		width: responsiveWidth(100),
 	},
 	viewStyle: {
-		position: "relative",
-		width: responsiveWidth(80),
+		width: responsiveWidth(100),
 		height: responsiveHeight(30),
 		borderRadius: 10,
 		resizeMode: "cover",

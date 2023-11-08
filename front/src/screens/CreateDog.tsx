@@ -103,7 +103,7 @@ const CreateDog = ({ navigation }: any) => {
 			})
 			.then(async (data) => {
 				// console.log("express data : ", data);
-				console.log("nft data:", data.data.imageCid);
+				console.log("nft data:", data.data);
 				const nftCid = data.data.imageCid;
 				const imageOrigin = "https://ipfs.io/ipfs/" + nftCid;
 				// console.log("imageOrigin:", imageOrigin);
@@ -166,7 +166,7 @@ const CreateDog = ({ navigation }: any) => {
 								dogBreed: petSpecies,
 								dogSex: petGender,
 								dogBirth: petBirth,
-								dogNosePrint: "나건 여친구함",
+								dogNosePrint: "비문인식예정",
 								dogImg: String(imageOrigin),
 								dogHash: String(receiptHash),
 							})
@@ -178,7 +178,7 @@ const CreateDog = ({ navigation }: any) => {
 										"외부 디지털 지갑에서 확인하려면 최대 1일까지도 소요될 수 있습니다.",
 									);
 									await setIsLoading(false);
-									await navigation.navigate("DogProfile");
+									await navigation.navigate("DogList");
 								} else {
 									await setIsLoading(false);
 									alert("프로필 생성 실패, 관리자에게 문의하세요.");
@@ -193,6 +193,8 @@ const CreateDog = ({ navigation }: any) => {
 			console.log(":DB보내는 에러는 에러 !!:", err);
 		}
 	};
+
+	const [clicked, setClicked] = useState(false);
 
 	// imagepicker 이용
 	const uploadImage = async (imageUri: string) => {
@@ -243,6 +245,7 @@ const CreateDog = ({ navigation }: any) => {
 			Alert.alert("반려견의 성별을 입력해주세요.");
 			return;
 		}
+		setClicked(true);
 		uploadImage(selectedImg);
 	};
 
@@ -454,6 +457,7 @@ const CreateDog = ({ navigation }: any) => {
 									// uploadIpfs();
 									submitRegister();
 								}}
+								disabled={clicked}
 							>
 								<View style={CreateProfileLayout.submitButton}>
 									<Text style={CreateProfileLayout.submitButtonText}>

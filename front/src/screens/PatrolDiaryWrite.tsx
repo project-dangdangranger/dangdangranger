@@ -51,7 +51,7 @@ const PatrolDiaryWrite = () => {
 
 	const submitPatrolReport = () => {};
 
-	const [submitImgList, setSubmitImgList] = useState([]);
+	// const [submitImgList, setSubmitImgList] = useState([]);
 
 	const uploadImage = async (patrolImgList: any) => {
 		const uploadPromises = patrolImgList.map(async (imageUri, index) => {
@@ -110,7 +110,6 @@ const PatrolDiaryWrite = () => {
 			console.error("An error occurred during the upload", error);
 		}
 	};
-	console.log(submitImgList);
 	const removeImageFromPatrolImgList = (indexToRemove) => {
 		setPatrolImgList((currentImages) =>
 			currentImages.filter((_, index) => index !== indexToRemove),
