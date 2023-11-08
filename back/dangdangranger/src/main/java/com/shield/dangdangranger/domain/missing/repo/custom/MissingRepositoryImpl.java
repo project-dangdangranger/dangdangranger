@@ -33,6 +33,7 @@ public class MissingRepositoryImpl implements MissingRepositoryCustom {
 		    .join(u).on(m.userNo.eq(u.userNo))
 		    .where(
 		        u.dong.dongCode.eq(subQuery),
+		        m.missingTypeNo.eq(1),
 		        m.missingStatus.eq(0),
 		        m.canceled.eq(0)
 		    )
