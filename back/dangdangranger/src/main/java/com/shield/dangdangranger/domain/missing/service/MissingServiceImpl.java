@@ -9,14 +9,20 @@ import org.springframework.transaction.annotation.Transactional;
 import com.shield.dangdangranger.domain.Image.constant.ImageType;
 import com.shield.dangdangranger.domain.Image.entity.Image;
 import com.shield.dangdangranger.domain.Image.repo.ImageRepository;
+import com.shield.dangdangranger.domain.missing.constant.MissingResponseMessage;
 import com.shield.dangdangranger.domain.missing.constant.MissingStatus;
 import com.shield.dangdangranger.domain.missing.constant.MissingType;
 import com.shield.dangdangranger.domain.missing.dto.MissingRequestDto.MissingSaveRequestDto;
 import com.shield.dangdangranger.domain.missing.dto.MissingRequestDto.MissingUpdateRequestDto;
+import com.shield.dangdangranger.domain.missing.dto.MissingResponseDto.MissingInfoResponseDto;
 import com.shield.dangdangranger.domain.missing.dto.MissingResponseDto.MissingListInfoResponseDto;
 import com.shield.dangdangranger.domain.missing.entity.Missing;
 import com.shield.dangdangranger.domain.missing.repo.MissingRepository;
+import com.shield.dangdangranger.domain.user.constant.UserExceptionMessage;
+import com.shield.dangdangranger.domain.user.entity.User;
+import com.shield.dangdangranger.domain.user.repo.UserRepository;
 import com.shield.dangdangranger.global.constant.BaseConstant;
+import com.shield.dangdangranger.global.error.NotFoundException;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,6 +32,8 @@ import lombok.extern.slf4j.Slf4j;
 @Transactional
 @Slf4j
 public class MissingServiceImpl implements MissingService {
+	
+	private final UserRepository userRepository;
 	
 	private final MissingRepository missingRepository;
 	
@@ -94,9 +102,31 @@ public class MissingServiceImpl implements MissingService {
 	}
 
 	@Override
-	public MissingListInfoResponseDto selectOne(Integer missingNo) {
-		// TODO Auto-generated method stub
-		return null;
+	public MissingInfoResponseDto selectOne(Integer missingNo) {
+		Missing missing = missingRepository.findByMissingNoAndCanceled(missingNo, BaseConstant.NOTCANCELED)
+				.orElseThrow(() -> new NotFoundException(MissingResponseMessage.MISSING_NOT_FOUND.message()));
+		User user = userRepository.findById(missing.getUserNo())
+				.orElseThrow(() -> new NotFoundException(UserExceptionMessage.USER_NOT_FOUND_EXCEPTION.message()));
+		
+		MissingInfoResponseDto missingInfoResponseDto = MissingInfoResponseDto.builder()
+				.userName(user.getUserName())
+				.missingNo(missingNo)
+				.missingTypeNo(missing.getMissingTypeNo())
+				.missingTitle(missing.getMissingTitle())
+				.missingContent(missing.getMissingContent())
+				.missingDate(missing.getMissingDate())
+				.missingLat(missing.getMissingLat())
+				.missingLng(missing.getMissingLng())
+				.build();
+		
+		// 본인 강아지 실종인 경우 강아지 정보 등록
+		if (missing.getMissingTypeNo() == MissingType.MISSING.value()) {
+			missingInfoResponseDto.setDogNo(missing.getDogNo());
+		}
+		
+		// 함께찾기 topicId 등록
+		
+		return missingInfoResponseDto;
 	}
 
 	@Override

@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.shield.dangdangranger.domain.missing.dto.MissingRequestDto.MissingSaveRequestDto;
 import com.shield.dangdangranger.domain.missing.dto.MissingRequestDto.MissingUpdateRequestDto;
+import com.shield.dangdangranger.domain.missing.dto.MissingResponseDto.MissingInfoResponseDto;
 import com.shield.dangdangranger.domain.missing.dto.MissingResponseDto.MissingListInfoResponseDto;
 import com.shield.dangdangranger.domain.missing.entity.Missing;
 
@@ -23,7 +24,7 @@ public interface MissingService {
 	List<MissingListInfoResponseDto> selectAll(Integer userNo);
 	
 	// 실종견 게시글 상세 조회
-	MissingListInfoResponseDto selectOne(Integer missingNo);
+	MissingInfoResponseDto selectOne(Integer missingNo);
 	
 	// 실종견 게시글 수정
 	void updateMissing(MissingUpdateRequestDto missingUpdateRequestDto);
