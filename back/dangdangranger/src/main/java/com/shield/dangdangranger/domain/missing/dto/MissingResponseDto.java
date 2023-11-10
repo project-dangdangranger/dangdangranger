@@ -23,6 +23,7 @@ public class MissingResponseDto {
         private LocalDateTime missingDate;
         private Double missingLat;
         private Double missingLng;
+        @Setter
         private String topicId;
 	}
 	

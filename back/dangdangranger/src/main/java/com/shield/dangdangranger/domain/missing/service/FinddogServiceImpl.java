@@ -67,4 +67,10 @@ public class FinddogServiceImpl implements FinddogService {
 		finddogPublisher.publish(topic, message);
 	}
 
+	@Override
+	public String getFinddogTopicId(Integer missingNo) {
+		
+		return topicNames.get(missingNo);
+	}
+
 }

@@ -10,4 +10,6 @@ public interface FinddogService {
 	void closeSession();
 	
 	void publishMessage(FinddogMessage message);
+	
+	String getFinddogTopicId(Integer missingNo);
 }

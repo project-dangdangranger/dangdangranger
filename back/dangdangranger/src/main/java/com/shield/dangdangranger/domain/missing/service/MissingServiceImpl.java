@@ -42,6 +42,8 @@ public class MissingServiceImpl implements MissingService {
 	private final MissingRepository missingRepository;
 	
 	private final ImageRepository imageRepository;
+	
+	private final FinddogService finddogService;
 
 	@Override
 	public int getLocalMissingDogCount(Integer userNo) {
@@ -129,6 +131,7 @@ public class MissingServiceImpl implements MissingService {
 		}
 		
 		// 함께찾기 topicId 등록
+		missingInfoResponseDto.setTopicId(finddogService.getFinddogTopicId(missingNo));
 		
 		return missingInfoResponseDto;
 	}
