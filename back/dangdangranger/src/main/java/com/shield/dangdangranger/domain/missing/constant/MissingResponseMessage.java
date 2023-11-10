@@ -6,7 +6,9 @@ public enum MissingResponseMessage {
 	GET_MISSING_SUCCESS("실종견 상세정보 조회 성공"),
 	MISSING_NOT_FOUND("실종견 정보를 찾을 수 없습니다."),
 	CREATE_MISSING_SUCCESS("실종견 등록 성공"),
-	READ_ALL_MISSING("실종견 정보 리스트 조회 성공");
+	READ_ALL_MISSING("실종견 정보 리스트 조회 성공"),
+	DELETE_FORBIDDEN("삭제 권한이 없습니다."),
+	DELETE_SUCCESS("실종견 삭제 완료");
 	
 	private final String message;
 

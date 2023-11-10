@@ -1,5 +1,8 @@
 package com.shield.dangdangranger.domain.missing.service;
 
+import static com.shield.dangdangranger.global.constant.BaseConstant.CANCELED;
+import static com.shield.dangdangranger.global.constant.BaseConstant.NOTCANCELED;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,6 +25,7 @@ import com.shield.dangdangranger.domain.user.constant.UserExceptionMessage;
 import com.shield.dangdangranger.domain.user.entity.User;
 import com.shield.dangdangranger.domain.user.repo.UserRepository;
 import com.shield.dangdangranger.global.constant.BaseConstant;
+import com.shield.dangdangranger.global.error.ForbiddenException;
 import com.shield.dangdangranger.global.error.NotFoundException;
 
 import lombok.RequiredArgsConstructor;
@@ -142,9 +146,26 @@ public class MissingServiceImpl implements MissingService {
 	}
 
 	@Override
-	public void deleteMissing(Integer missingNo) {
-		// TODO Auto-generated method stub
+	public void deleteMissing(Integer userNo, Integer missingNo) {
+		User user = userRepository.findUserByUserNoAndCanceled(userNo, BaseConstant.NOTCANCELED.intValue())
+				.orElseThrow(() -> new NotFoundException(UserExceptionMessage.USER_NOT_FOUND_EXCEPTION.message()));
 		
+		Missing missing = missingRepository.findByMissingNoAndCanceled(missingNo, BaseConstant.NOTCANCELED.intValue())
+				.orElseThrow(() -> new NotFoundException(MissingResponseMessage.MISSING_NOT_FOUND.message()));
+		
+		if (missing.getUserNo() != user.getUserNo()) 
+			throw new ForbiddenException(MissingResponseMessage.DELETE_FORBIDDEN.message());
+		
+		missing.setCanceled(BaseConstant.CANCELED.intValue());
+		
+        // 이미지 리스트 삭제
+        List<Image> list = imageRepository.findAllByImageTypeNoAndParentNoAndCanceled(
+        		ImageType.MISSING.value(), missingNo, NOTCANCELED);
+        for(Image image : list){
+            image.setCanceled(CANCELED);
+            imageRepository.save(image);
+        }
+		missingRepository.save(missing);
 	}
 
 }

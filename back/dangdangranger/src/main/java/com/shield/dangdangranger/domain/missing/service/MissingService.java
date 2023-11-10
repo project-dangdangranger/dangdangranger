@@ -7,6 +7,7 @@ import com.shield.dangdangranger.domain.missing.dto.MissingRequestDto.MissingUpd
 import com.shield.dangdangranger.domain.missing.dto.MissingResponseDto.MissingInfoResponseDto;
 import com.shield.dangdangranger.domain.missing.dto.MissingResponseDto.MissingListInfoResponseDto;
 import com.shield.dangdangranger.domain.missing.entity.Missing;
+import com.shield.dangdangranger.domain.user.entity.User;
 
 public interface MissingService {
 
@@ -33,5 +34,5 @@ public interface MissingService {
 	void updateMissingStatus(Integer missingNo);
 	
 	// 실종견 삭제
-	void deleteMissing(Integer missingNo);
+	void deleteMissing(Integer userNo, Integer missingNo);
 }

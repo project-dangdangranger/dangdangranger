@@ -33,6 +33,9 @@ public class MissingRequestDto {
         private Integer missingNo;
         private String missingTitle;
         private String missingContent;
-        private List<String> missingImageList;
+		private LocalDateTime missingDate;
+		private Double missingLat;
+		private Double missingLng;
+        private List<String> missingImages;
     }
 }
