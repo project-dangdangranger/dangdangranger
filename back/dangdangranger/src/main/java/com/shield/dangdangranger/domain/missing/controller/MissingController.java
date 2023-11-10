@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.shield.dangdangranger.domain.missing.constant.MissingResponseMessage;
 import com.shield.dangdangranger.domain.missing.dto.MissingRequestDto.MissingSaveRequestDto;
+import com.shield.dangdangranger.domain.missing.dto.MissingRequestDto.MissingUpdateRequestDto;
 import com.shield.dangdangranger.domain.missing.dto.MissingResponseDto.MissingInfoResponseDto;
 import com.shield.dangdangranger.domain.missing.dto.MissingResponseDto.MissingListInfoResponseDto;
 import com.shield.dangdangranger.domain.missing.service.MissingService;
@@ -106,5 +107,22 @@ public class MissingController {
 		
 		return ResponseEntity.status(HttpStatus.OK)
 				.body(ResponseDto.create(MissingResponseMessage.DELETE_SUCCESS.message()));
+	}
+	
+	/**
+	 * 실종견 수정
+	 * @param userNo
+	 * @param missingSaveRequestDto
+	 * @return
+	 */
+	@PutMapping()
+	public ResponseEntity<ResponseDto<String>> updateMissing(
+			@RequestAttribute("userNo") Integer userNo,
+			@RequestBody MissingUpdateRequestDto missingSaveRequestDto) {
+		
+		missingService.updateMissing(missingSaveRequestDto);
+		
+		return ResponseEntity.status(HttpStatus.OK)
+				.body(ResponseDto.create(MissingResponseMessage.UPDATE_SUCCESS.message()));
 	}
 }

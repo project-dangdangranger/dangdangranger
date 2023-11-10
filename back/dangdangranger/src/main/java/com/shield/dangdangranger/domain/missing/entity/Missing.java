@@ -1,6 +1,7 @@
 package com.shield.dangdangranger.domain.missing.entity;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,6 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.shield.dangdangranger.domain.missing.dto.MissingRequestDto.MissingUpdateRequestDto;
 import com.shield.dangdangranger.global.entity.BaseEntity;
 
 import lombok.AccessLevel;
@@ -68,5 +70,13 @@ public class Missing extends BaseEntity {
 		this.missingDate = missingDate;
 		this.missingLat = missingLat;
 		this.missingLng = missingLng;
+	}
+	
+	public void updateMissing(MissingUpdateRequestDto dto) {
+        this.missingTitle = dto.getMissingTitle();
+        this.missingContent = dto.getMissingContent();
+		this.missingDate = dto.getMissingDate();
+		this.missingLat = dto.getMissingLat();
+		this.missingLng = dto.getMissingLng();
 	}
 }

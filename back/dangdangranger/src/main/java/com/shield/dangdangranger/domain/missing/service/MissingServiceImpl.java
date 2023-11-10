@@ -134,9 +134,30 @@ public class MissingServiceImpl implements MissingService {
 	}
 
 	@Override
+	@Transactional
 	public void updateMissing(MissingUpdateRequestDto missingUpdateRequestDto) {
-		// TODO Auto-generated method stub
+	
+		Missing missing = missingRepository.findByMissingNoAndCanceled(
+				missingUpdateRequestDto.getMissingNo(), BaseConstant.NOTCANCELED.intValue())
+				.orElseThrow(() -> new NotFoundException(MissingResponseMessage.MISSING_NOT_FOUND.message()));
+		Integer missingNo = missingUpdateRequestDto.getMissingNo();
 		
+		missing.updateMissing(missingUpdateRequestDto);
+		List<Image> originImageList = imageRepository.findAllByImageTypeNoAndParentNoAndCanceled(ImageType.MISSING.value(), missingNo, NOTCANCELED);
+		for (Image image : originImageList) {
+			image.setCanceled(CANCELED);
+			imageRepository.save(image);
+		}
+		List<String> updatedImageList = missingUpdateRequestDto.getMissingImages();
+		for (String newUrl : updatedImageList) {
+			imageRepository.save(
+					Image.builder()
+						.imageTypeNo(ImageType.MISSING.value())
+						.imageUrl(newUrl)
+						.parentNo(missingNo)
+						.build());
+		}
+		missingRepository.save(missing);
 	}
 
 	@Override
