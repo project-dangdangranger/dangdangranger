@@ -9,6 +9,14 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 public class MissingRequestDto {
+	
+	@Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Builder
+    public static class MissingStatusUpdateRequestDto {
+		private Integer missingNo;
+	}
 
 	@Data
     @AllArgsConstructor

@@ -164,9 +164,18 @@ public class MissingServiceImpl implements MissingService {
 	}
 
 	@Override
-	public void updateMissingStatus(Integer missingNo) {
-		// TODO Auto-generated method stub
+	public void updateMissingStatus(Integer userNo, Integer missingNo) {
+		User user = userRepository.findUserByUserNoAndCanceled(userNo, BaseConstant.NOTCANCELED.intValue())
+				.orElseThrow(() -> new NotFoundException(UserExceptionMessage.USER_NOT_FOUND_EXCEPTION.message()));
 		
+		Missing missing = missingRepository.findByMissingNoAndCanceled(missingNo, BaseConstant.NOTCANCELED.intValue())
+				.orElseThrow(() -> new NotFoundException(MissingResponseMessage.MISSING_NOT_FOUND.message()));
+		
+		if (missing.getUserNo() != user.getUserNo()) 
+			throw new ForbiddenException(MissingResponseMessage.DELETE_FORBIDDEN.message());
+		
+		missing.setMissingStatus(MissingStatus.FOUND.value());
+		missingRepository.save(missing);
 	}
 
 	@Override

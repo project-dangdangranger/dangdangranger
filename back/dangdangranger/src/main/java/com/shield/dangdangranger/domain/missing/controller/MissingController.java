@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.shield.dangdangranger.domain.missing.constant.MissingResponseMessage;
 import com.shield.dangdangranger.domain.missing.dto.MissingRequestDto.MissingSaveRequestDto;
+import com.shield.dangdangranger.domain.missing.dto.MissingRequestDto.MissingStatusUpdateRequestDto;
 import com.shield.dangdangranger.domain.missing.dto.MissingRequestDto.MissingUpdateRequestDto;
 import com.shield.dangdangranger.domain.missing.dto.MissingResponseDto.MissingInfoResponseDto;
 import com.shield.dangdangranger.domain.missing.dto.MissingResponseDto.MissingListInfoResponseDto;
@@ -121,6 +122,24 @@ public class MissingController {
 			@RequestBody MissingUpdateRequestDto missingSaveRequestDto) {
 		
 		missingService.updateMissing(missingSaveRequestDto);
+		
+		return ResponseEntity.status(HttpStatus.OK)
+				.body(ResponseDto.create(MissingResponseMessage.UPDATE_SUCCESS.message()));
+	}
+	
+	/**
+	 * 실종견 찾음 상태로 업데이트
+	 * @param userNo
+	 * @param missingSaveRequestDto
+	 * @return
+	 */
+	@PutMapping("/missing_status")
+	public ResponseEntity<ResponseDto<String>> updateMissing(
+			@RequestAttribute("userNo") Integer userNo,
+			@RequestBody MissingStatusUpdateRequestDto dto) {
+		log.debug(dto.getMissingNo().toString());
+		
+		missingService.updateMissingStatus(userNo, dto.getMissingNo());
 		
 		return ResponseEntity.status(HttpStatus.OK)
 				.body(ResponseDto.create(MissingResponseMessage.UPDATE_SUCCESS.message()));

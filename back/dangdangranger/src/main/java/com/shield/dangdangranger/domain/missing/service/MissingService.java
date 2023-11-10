@@ -31,7 +31,7 @@ public interface MissingService {
 	void updateMissing(MissingUpdateRequestDto missingUpdateRequestDto);
 	
 	// 실종견 완료 처리
-	void updateMissingStatus(Integer missingNo);
+	void updateMissingStatus(Integer userNo, Integer missingNo);
 	
 	// 실종견 삭제
 	void deleteMissing(Integer userNo, Integer missingNo);
