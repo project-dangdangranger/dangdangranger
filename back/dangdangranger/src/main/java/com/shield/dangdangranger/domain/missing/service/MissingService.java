@@ -4,8 +4,10 @@ import java.util.List;
 
 import com.shield.dangdangranger.domain.missing.dto.MissingRequestDto.MissingSaveRequestDto;
 import com.shield.dangdangranger.domain.missing.dto.MissingRequestDto.MissingUpdateRequestDto;
+import com.shield.dangdangranger.domain.missing.dto.MissingResponseDto.MissingInfoResponseDto;
 import com.shield.dangdangranger.domain.missing.dto.MissingResponseDto.MissingListInfoResponseDto;
 import com.shield.dangdangranger.domain.missing.entity.Missing;
+import com.shield.dangdangranger.domain.user.entity.User;
 
 public interface MissingService {
 
@@ -23,14 +25,14 @@ public interface MissingService {
 	List<MissingListInfoResponseDto> selectAll(Integer userNo);
 	
 	// 실종견 게시글 상세 조회
-	MissingListInfoResponseDto selectOne(Integer missingNo);
+	MissingInfoResponseDto selectOne(Integer missingNo);
 	
 	// 실종견 게시글 수정
 	void updateMissing(MissingUpdateRequestDto missingUpdateRequestDto);
 	
 	// 실종견 완료 처리
-	void updateMissingStatus(Integer missingNo);
+	void updateMissingStatus(Integer userNo, Integer missingNo);
 	
 	// 실종견 삭제
-	void deleteMissing(Integer missingNo);
+	void deleteMissing(Integer userNo, Integer missingNo);
 }
