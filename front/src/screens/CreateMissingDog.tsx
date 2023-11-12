@@ -24,9 +24,15 @@ import { S3 } from "aws-sdk";
 import CustomText from "../recycles/CustomText";
 import CreateProfileLayout from "../styles/createProfileLayout";
 import DatePickerIcon from "../../assets/images/date-picker-icon.png";
+import DateTimePickerModal from "react-native-modal-datetime-picker";
 
 const PatrolDiaryWrite = () => {
 	const navigation = useNavigation();
+
+	const handleConfirm = (date) => {
+		setMissingDate(date.toLocaleDateString());
+		hideDatePicker();
+	};
 
 	const logs = [
 		{ logNo: 0, imgSrc: img, date: "22-02-02" },
@@ -87,33 +93,36 @@ const PatrolDiaryWrite = () => {
 			});
 		});
 
-		try {
-			// 모든 프로미스가 완료될 때까지 기다립니다.
-			const uploadedImages = await Promise.all(uploadPromises);
-			axios
-				.post("/patrol", {
-					patrolReportTitle: patrolReportTitle,
-					patrolReportContent: patrolReportContent,
-					patrolReportImageList: uploadedImages,
-					patrolLogNo: patrolLogNo,
-				})
-				.then((res) => {
-					console.log("성공:", res.data);
-					if (res.data.message === "순찰일지 등록 성공") {
-						Alert.alert("순찰일지 등록 성공", "순찰 일지 화면으로 이동합니다.");
-						navigation.navigate("PatrolDiary");
-					}
-				})
-				.catch((err) => {
-					console.log("에러;", err);
-				});
+		console.log("hello:::", patrolReportTitle);
 
-			// setSubmitImgList(uploadedImages);
-			console.log("uploadedImages::::::", uploadedImages);
-		} catch (error) {
-			console.error("An error occurred during the upload", error);
-		}
+		// try {
+		// 	// 모든 프로미스가 완료될 때까지 기다립니다.
+		// 	const uploadedImages = await Promise.all(uploadPromises);
+		// 	axios
+		// 		.post("/patrol", {
+		// 			patrolReportTitle: patrolReportTitle,
+		// 			patrolReportContent: patrolReportContent,
+		// 			patrolReportImageList: uploadedImages,
+		// 			patrolLogNo: patrolLogNo,
+		// 		})
+		// 		.then((res) => {
+		// 			console.log("성공:", res.data);
+		// 			if (res.data.message === "순찰일지 등록 성공") {
+		// 				Alert.alert("순찰일지 등록 성공", "순찰 일지 화면으로 이동합니다.");
+		// 				navigation.navigate("PatrolDiary");
+		// 			}
+		// 		})
+		// 		.catch((err) => {
+		// 			console.log("에러;", err);
+		// 		});
+
+		// 	// setSubmitImgList(uploadedImages);
+		// 	console.log("uploadedImages::::::", uploadedImages);
+		// } catch (error) {
+		// 	console.error("An error occurred during the upload", error);
+		// }
 	};
+
 	const removeImageFromPatrolImgList = (indexToRemove) => {
 		setPatrolImgList((currentImages) =>
 			currentImages.filter((_, index) => index !== indexToRemove),
@@ -200,6 +209,12 @@ const PatrolDiaryWrite = () => {
 							placeholder="순찰 일지 내용을 작성해주세요."
 							onBlur={() => {}}
 						/>
+						<DateTimePickerModal
+							isVisible={isDatePickerVisible}
+							mode="date"
+							onConfirm={handleConfirm}
+							onCancel={hideDatePicker}
+						/>
 						<TouchableOpacity activeOpacity={0.7} onPress={showDatePicker}>
 							<View style={PatrolDiaryWriteLayout.dateInput}>
 								<Image
@@ -207,7 +222,7 @@ const PatrolDiaryWrite = () => {
 									source={DatePickerIcon}
 								/>
 								<Text style={CreateProfileLayout.dateFormText}>
-									{missingDate}
+									{"       "} {missingDate}
 								</Text>
 							</View>
 						</TouchableOpacity>
