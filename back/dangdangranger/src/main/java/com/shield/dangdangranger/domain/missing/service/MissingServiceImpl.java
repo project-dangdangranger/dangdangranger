@@ -213,7 +213,9 @@ public class MissingServiceImpl implements MissingService {
 
 	@Override
 	public List<RecentMissingImageDto> getRecentMissingImages() {
-		return missingRepository.getLimitedThreeRecentMissingImages();
+		List<RecentMissingImageDto> recentImages = missingRepository.getLimitedThreeRecentMissingImages();
+        recentImages = recentImages.subList(0, Math.min(recentImages.size(), 3)); // 결과를 3개로 제한
+		return recentImages;
 	}
 
 }
