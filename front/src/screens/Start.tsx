@@ -4,9 +4,12 @@ import EncryptedStorage from "react-native-encrypted-storage";
 import React, { useEffect, useState } from "react";
 import { isLogged } from "../atoms/atoms";
 import { useRecoilState } from "recoil";
+import { useNavigation } from "@react-navigation/native";
+import { useFocusEffect } from "@react-navigation/native";
 
 const Start = () => {
 	const [islogged, setIsLogged] = useRecoilState(isLogged);
+	const navigation = useNavigation();
 
 	async function getAccessToken() {
 		const accessToken = await EncryptedStorage.getItem("accessToken");
@@ -16,12 +19,21 @@ const Start = () => {
 		}
 	}
 
-	useEffect(() => {
-		console.log("Start.tsx의 useEffect() 실행:", islogged);
-		getAccessToken();
-	}, []);
+	useFocusEffect(
+		React.useCallback(() => {
+			getAccessToken().then(() => {
+				if (islogged === true) {
+					navigation.navigate("Main");
+				}
+			});
+		}, []),
+	);
 
-	return <>{islogged ? <Main /> : <Login />}</>;
+	return (
+		<>
+			<Login />
+		</>
+	);
 };
 
 export default Start;

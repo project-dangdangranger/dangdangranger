@@ -28,7 +28,6 @@ buildscript {
                 password = project.properties['mapbox.accessToken'] ?: ""
             }
         }
-
     }
     dependencies {
         classpath("com.android.tools.build:gradle")
