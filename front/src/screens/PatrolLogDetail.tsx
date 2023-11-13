@@ -10,18 +10,38 @@ import DistanceIconImg from "../../assets/images/distance-icon.png";
 import TimeIconImg from "../../assets/images/time-icon.png";
 import React, { useEffect, useState } from "react";
 import { useRoute } from "@react-navigation/native";
+import axios from "../utils/axios";
 
 const PatrolLogDetail = () => {
 	const route = useRoute();
 	const { logNo } = route.params;
+	const [logDetail, setLogDetail] = useState(null);
+
 	console.log("현재 페이지", logNo);
+
+	useEffect(() => {
+		getLogDetail();
+	}, []);
+
+	const getLogDetail = async () => {
+		try {
+			const response = await axios.get(`/log/${logNo}`);
+			setLogDetail(response.data.data);
+		} catch (error) {
+			console.error("Error fetching logs:", error);
+		}
+	};
+
 	return (
 		<>
 			<CommonLayout>
 				<ColorHeader title="순찰 상세 기록" />
 				<View style={patrolLogDetailLayout.container}>
 					<View style={patrolLogDetailLayout.imgWrap}>
-						<Image source={LogMapImg} style={patrolLogDetailLayout.img} />
+						<Image
+							source={{ uri: logDetail?.patrolLogImageUrl }}
+							style={patrolLogDetailLayout.img}
+						/>
 					</View>
 					<View style={patrolLogDetailLayout.detailContainer}>
 						<View style={patrolLogDetailLayout.btnRowWrap}>
@@ -31,12 +51,20 @@ const PatrolLogDetail = () => {
 									patrolLogDetailLayout.locationWrap,
 								]}
 							>
+								{/* 이미지는 logDetail.patrolLogImageUrl */}
 								<Image
 									source={LocIconImg}
 									style={patrolLogDetailLayout.iconWrap}
 								/>
 								<Text style={patrolLogDetailLayout.textWrap}>
-									서울특별시{"\n"}강남구 역삼동
+									{logDetail?.patrolLogAddress.split(" ").length > 2
+										? `${
+												logDetail?.patrolLogAddress.split(" ")[0]
+										  }\n${logDetail?.patrolLogAddress
+												.split(" ")
+												.slice(1)
+												.join(" ")}`
+										: logDetail?.patrolLogAddress}
 								</Text>
 							</View>
 							<View
@@ -50,7 +78,7 @@ const PatrolLogDetail = () => {
 									style={patrolLogDetailLayout.iconWrap}
 								/>
 								<Text style={patrolLogDetailLayout.textWrap}>
-									2022년{"\n"}11월 3일
+									{new Date(logDetail?.patrolLogDate).toLocaleDateString()}
 								</Text>
 							</View>
 						</View>
@@ -65,7 +93,9 @@ const PatrolLogDetail = () => {
 									source={DistanceIconImg}
 									style={patrolLogDetailLayout.iconWrap}
 								/>
-								<Text style={patrolLogDetailLayout.textWrap}>1.5 Km</Text>
+								<Text style={patrolLogDetailLayout.textWrap}>
+									{logDetail?.patrolLogTotalDistance.toFixed(2)} Km
+								</Text>
 							</View>
 							<View
 								style={[
@@ -77,7 +107,9 @@ const PatrolLogDetail = () => {
 									source={TimeIconImg}
 									style={patrolLogDetailLayout.iconWrap}
 								/>
-								<Text style={patrolLogDetailLayout.textWrap}>1.5 hr</Text>
+								<Text style={patrolLogDetailLayout.textWrap}>
+									{logDetail?.patrolLogTotalTime} min
+								</Text>
 							</View>
 						</View>
 					</View>
