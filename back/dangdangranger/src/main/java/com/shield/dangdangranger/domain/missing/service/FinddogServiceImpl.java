@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.shield.dangdangranger.domain.missing.dto.FinddogResponseDto.FinddogSessionResponseDto;
 import com.shield.dangdangranger.domain.missing.entity.Missing;
 import com.shield.dangdangranger.domain.missing.message.FinddogMessage;
+import com.shield.dangdangranger.domain.missing.message.FinddogMessage.Code;
 import com.shield.dangdangranger.domain.missing.redis.FinddogPublisher;
 import com.shield.dangdangranger.domain.missing.redis.FinddogSubscriber;
 import com.shield.dangdangranger.domain.missing.repo.MissingRepository;
@@ -59,12 +60,6 @@ public class FinddogServiceImpl implements FinddogService {
 	}
 
 	@Override
-	public void closeSession() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
 	public void publishMessage(FinddogMessage message) {
 		ChannelTopic topic = topics.get(message.getTopicId());
 		
@@ -96,4 +91,33 @@ public class FinddogServiceImpl implements FinddogService {
 		topicParticipants.put(missingNo, topicParticipants.get(missingNo) - 1);
 		setFinddogParticipants(getFinddogParticipants() - 1);
 	}
+
+	@Override
+	public void endSession(FinddogMessage message) {
+		setFinddogParticipants(getFinddogParticipants() - topicParticipants.get(message.getMissingNo()));
+		
+		topicNames.put(message.getMissingNo(), null);
+		topics.put(message.getTopicId(), null);
+		topicParticipants.put(message.getMissingNo(), null);
+	}
+
+	@Override
+	public void closeSession(Integer missingNo) {
+		String topicName = topicNames.get(missingNo);
+		if (topicName == null) return;
+		
+		publishMessage(FinddogMessage
+				.builder()
+				.code(Code.END_SESSION)
+				.missingNo(missingNo)
+				.topicId(topicName)
+				.build());
+		
+		setFinddogParticipants(getFinddogParticipants() - topicParticipants.get(missingNo));
+		
+		topicNames.put(missingNo, null);
+		topicParticipants.put(missingNo, null);
+		topics.put(topicName, null);
+	}
+
 }

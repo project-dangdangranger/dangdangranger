@@ -15,7 +15,6 @@ import com.shield.dangdangranger.domain.Image.entity.Image;
 import com.shield.dangdangranger.domain.Image.repo.ImageRepository;
 import com.shield.dangdangranger.domain.missing.constant.MissingResponseMessage;
 import com.shield.dangdangranger.domain.missing.constant.MissingStatus;
-import com.shield.dangdangranger.domain.missing.constant.MissingType;
 import com.shield.dangdangranger.domain.missing.dto.MissingRequestDto.MissingSaveRequestDto;
 import com.shield.dangdangranger.domain.missing.dto.MissingRequestDto.MissingUpdateRequestDto;
 import com.shield.dangdangranger.domain.missing.dto.MissingResponseDto.MissingInfoResponseDto;
@@ -65,13 +64,9 @@ public class MissingServiceImpl implements MissingService {
 				.missingDate(missingSaveRequestDto.getMissingDate())
 				.missingLat(missingSaveRequestDto.getMissingLat())
 				.missingLng(missingSaveRequestDto.getMissingLng())
+				.missingAddress(missingSaveRequestDto.getMissingAddress())
+				.dogNo(missingSaveRequestDto.getDogNo())
 				.build();
-		
-		// 내 반려견 실종 등록
-		if (missingSaveRequestDto.getMissingTypeNo() == MissingType.MISSING.value()) {
-			// TODO Dog 엔티티 유효성 검증?
-			missing.setDogNo(missingSaveRequestDto.getDogNo());
-		}
 		
 		missingRepository.save(missing);
 		Integer missingNo = missing.getMissingNo();
@@ -111,6 +106,8 @@ public class MissingServiceImpl implements MissingService {
 					.missingTitle(missing.getMissingTitle())
 					.missingTypeNo(missing.getMissingTypeNo())
 					.thumbnailUrl(imageUrl)
+					.missingAddress(missing.getMissingAddress())
+					.dogNo(missing.getDogNo())
 					.build());
 		}
 		
@@ -133,12 +130,9 @@ public class MissingServiceImpl implements MissingService {
 				.missingDate(missing.getMissingDate())
 				.missingLat(missing.getMissingLat())
 				.missingLng(missing.getMissingLng())
+				.missingAddress(missing.getMissingAddress())
+				.dogNo(missing.getDogNo())
 				.build();
-		
-		// 본인 강아지 실종인 경우 강아지 정보 등록
-		if (missing.getMissingTypeNo() == MissingType.MISSING.value()) {
-			missingInfoResponseDto.setDogNo(missing.getDogNo());
-		}
 		
 		// 함께찾기 topicId 등록
 		missingInfoResponseDto.setTopicId(finddogService.getFinddogTopicId(missingNo));
