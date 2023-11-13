@@ -8,6 +8,13 @@ import lombok.Getter;
 import lombok.Setter;
 
 public class MissingResponseDto {
+	
+	@Getter
+    @AllArgsConstructor
+    @Builder
+    public static class MissingSaveResponseDto {
+		private Integer missingNo;
+	}
 
 	@Getter
     @AllArgsConstructor
@@ -37,6 +44,6 @@ public class MissingResponseDto {
         private LocalDateTime missingDate;
         private Double missingLat;
         private Double missingLng;
-        
+        private String thumbnailUrl;
     }
 }

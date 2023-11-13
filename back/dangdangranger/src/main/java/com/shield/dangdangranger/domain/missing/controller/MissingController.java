@@ -24,7 +24,9 @@ import com.shield.dangdangranger.domain.missing.dto.MissingRequestDto.MissingSta
 import com.shield.dangdangranger.domain.missing.dto.MissingRequestDto.MissingUpdateRequestDto;
 import com.shield.dangdangranger.domain.missing.dto.MissingResponseDto.MissingInfoResponseDto;
 import com.shield.dangdangranger.domain.missing.dto.MissingResponseDto.MissingListInfoResponseDto;
+import com.shield.dangdangranger.domain.missing.dto.MissingResponseDto.MissingSaveResponseDto;
 import com.shield.dangdangranger.domain.missing.dto.RecentMissingImageDto;
+import com.shield.dangdangranger.domain.missing.entity.Missing;
 import com.shield.dangdangranger.domain.missing.service.MissingService;
 import com.shield.dangdangranger.global.dto.ResponseDto;
 
@@ -57,13 +59,18 @@ public class MissingController {
 	 * @return
 	 */
 	@PostMapping()
-	public ResponseEntity<ResponseDto<String>> createMissing(
+	public ResponseEntity<ResponseDto<MissingSaveResponseDto>> createMissing(
 			@RequestAttribute("userNo") Integer userNo,
 			@RequestBody MissingSaveRequestDto missingSaveRequestDto) {
 		
-		missingService.registMissing(userNo, missingSaveRequestDto);
-		return ResponseEntity.status(HttpStatus.OK).body(ResponseDto
-				.create(CREATE_MISSING_SUCCESS.message()));
+		Missing missing = missingService.registMissing(userNo, missingSaveRequestDto);
+		
+		return ResponseEntity.status(HttpStatus.OK)
+				.body(ResponseDto
+						.create(CREATE_MISSING_SUCCESS.message(), 
+								MissingSaveResponseDto.builder()
+									.missingNo(missing.getMissingNo())
+									.build()));
 	}
 	
 	/**

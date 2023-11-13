@@ -5,6 +5,7 @@ import static com.shield.dangdangranger.global.constant.BaseConstant.NOTCANCELED
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -89,12 +90,19 @@ public class MissingServiceImpl implements MissingService {
 		return missing;
 	}
 
+	@Transactional
 	@Override
 	public List<MissingListInfoResponseDto> selectAll(Integer userNo) {
 		
 		List<Missing> missingList = missingRepository.findByMissingStatusAndCanceled(MissingStatus.MISSING.value(), BaseConstant.NOTCANCELED);
 		List<MissingListInfoResponseDto> responseList = new ArrayList<>();
 		for (Missing missing : missingList) {
+			Optional<Image> optionalImage = imageRepository
+					.findFirstImageUrlByImageTypeNoAndParentNoAndCanceled(
+							ImageType.MISSING.value(), missing.getMissingNo(), NOTCANCELED);
+			String imageUrl = null;
+			if (optionalImage.isPresent()) imageUrl = optionalImage.get().getImageUrl();
+			
 			responseList.add(MissingListInfoResponseDto.builder()
 					.missingDate(missing.getMissingDate())
 					.missingLat(missing.getMissingLat())
@@ -102,6 +110,7 @@ public class MissingServiceImpl implements MissingService {
 					.missingNo(missing.getMissingNo())
 					.missingTitle(missing.getMissingTitle())
 					.missingTypeNo(missing.getMissingTypeNo())
+					.thumbnailUrl(imageUrl)
 					.build());
 		}
 		
@@ -204,7 +213,9 @@ public class MissingServiceImpl implements MissingService {
 
 	@Override
 	public List<RecentMissingImageDto> getRecentMissingImages() {
-		return missingRepository.getLimitedThreeRecentMissingImages();
+		List<RecentMissingImageDto> recentImages = missingRepository.getLimitedThreeRecentMissingImages();
+        recentImages = recentImages.subList(0, Math.min(recentImages.size(), 3)); // 결과를 3개로 제한
+		return recentImages;
 	}
 
 }
