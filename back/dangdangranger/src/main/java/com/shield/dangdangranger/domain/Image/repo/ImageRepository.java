@@ -10,7 +10,7 @@ public interface ImageRepository extends JpaRepository<Image, Integer> {
 
     Optional<Image> findFirstByImageTypeNoAndParentNoAndCanceled(Integer imageTypeNo, Integer patrolReportNo, Integer isCanceld);
 
-    List<Image> findAllByImageTypeNoAndParentNoAndCanceled(Integer imageTypeNo, Integer patrolReportNo, Integer isCanceld);
+    List<Image> findAllByImageTypeNoAndParentNoAndCanceled(Integer imageTypeNo, Integer parentNo, Integer isCanceld);
 
     Optional<Image> findImageByImageUrlAndCanceled(String imageUrl, Integer isCanceld);
 

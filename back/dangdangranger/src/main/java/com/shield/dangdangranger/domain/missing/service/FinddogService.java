@@ -10,4 +10,12 @@ public interface FinddogService {
 	void closeSession();
 	
 	void publishMessage(FinddogMessage message);
+	
+	String getFinddogTopicId(Integer missingNo);
+	
+	void increaseFinddogParticipants(Integer missingNo);
+	
+	void decreaseFinddogParticipants(Integer missingNo);
+	
+	int getFinddogParticipants();
 }

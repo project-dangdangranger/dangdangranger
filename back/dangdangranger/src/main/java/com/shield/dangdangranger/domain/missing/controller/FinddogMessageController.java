@@ -1,12 +1,8 @@
 package com.shield.dangdangranger.domain.missing.controller;
 
-import java.util.Map;
-
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shield.dangdangranger.domain.missing.message.FinddogMessage;
 import com.shield.dangdangranger.domain.missing.service.FinddogService;
 
@@ -18,8 +14,6 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class FinddogMessageController {
 	
-	private static ObjectMapper mapper = new ObjectMapper();
-
 	private final FinddogService finddogService;
 
 	/**
@@ -28,6 +22,17 @@ public class FinddogMessageController {
 	@MessageMapping("finddog")
 	public void message(FinddogMessage message) {
 		log.debug(message.toString());
+		
+		switch (message.getCode()) {
+		case ENTER:
+			finddogService.increaseFinddogParticipants(message.getMissingNo());
+			break;
+		case EXIT:
+			finddogService.decreaseFinddogParticipants(message.getMissingNo());
+			break;
+		default:
+			break;
+		}
 		
 		finddogService.publishMessage(message);
 	}
