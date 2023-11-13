@@ -1,5 +1,8 @@
 package com.shield.dangdangranger.domain.missing.service;
 
+import static com.shield.dangdangranger.global.constant.BaseConstant.CANCELED;
+import static com.shield.dangdangranger.global.constant.BaseConstant.NOTCANCELED;
+
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -12,11 +15,12 @@ import com.shield.dangdangranger.domain.missing.constant.MissingResponseMessage;
 import com.shield.dangdangranger.domain.missing.constant.SeachReportResponseMessage;
 import com.shield.dangdangranger.domain.missing.dto.SearchReportRequestDto.SearchReportListRequestDto;
 import com.shield.dangdangranger.domain.missing.dto.SearchReportRequestDto.SearchReportSaveRequestDto;
-import com.shield.dangdangranger.domain.missing.dto.SearchReportResponseDto.SearchReportInfoResponseDto;
+import com.shield.dangdangranger.domain.missing.dto.SearchReportRequestDto.SearchReportUpdateRequestDto;
 import com.shield.dangdangranger.domain.missing.entity.SearchReport;
 import com.shield.dangdangranger.domain.missing.repo.MissingRepository;
 import com.shield.dangdangranger.domain.missing.repo.SearchReportRepository;
 import com.shield.dangdangranger.global.constant.BaseConstant;
+import com.shield.dangdangranger.global.error.ForbiddenException;
 import com.shield.dangdangranger.global.error.NotFoundException;
 
 import lombok.RequiredArgsConstructor;
@@ -83,6 +87,40 @@ public class SearchReportServiceImpl implements SearchReportService {
 		return searchReportRepository.findOneBySearchReportNoAndCanceled(searchReportNo, BaseConstant.NOTCANCELED)
 				.orElseThrow(() -> new NotFoundException(
 						SeachReportResponseMessage.SEARCH_REPORT_NOT_FOUND_EXCEPTION.message()));
+	}
+
+	@Override
+	@Transactional
+	public void updateSearchReport(Integer userNo, SearchReportUpdateRequestDto searchReportUpdateRequestDto) {
+		
+		SearchReport searchReport = searchReportRepository.findOneBySearchReportNoAndCanceled(
+				searchReportUpdateRequestDto.getSearchReportNo(), BaseConstant.NOTCANCELED)
+				.orElseThrow(() -> new NotFoundException(
+						SeachReportResponseMessage.SEARCH_REPORT_NOT_FOUND_EXCEPTION.message()));
+		
+		if (!searchReport.getUserNo().equals(userNo)) throw new ForbiddenException(
+				SeachReportResponseMessage.SEARCH_REPORT_FORBIDDEN_EXCEPTION.message());
+		
+		Integer searchReportNo = searchReportUpdateRequestDto.getSearchReportNo();
+		
+		searchReport.updateSearchReport(searchReportUpdateRequestDto);
+		List<Image> originImageList = imageRepository.findAllByImageTypeNoAndParentNoAndCanceled(
+				ImageType.FOUND.value(), searchReportNo, NOTCANCELED);
+		for (Image image : originImageList) {
+			image.setCanceled(CANCELED);
+			imageRepository.save(image);
+		}
+		
+		List<String> updatedImageList = searchReportUpdateRequestDto.getSearchReportImages();
+		for (String newUrl : updatedImageList) {
+			imageRepository.save(
+					Image.builder()
+						.imageTypeNo(ImageType.MISSING.value())
+						.imageUrl(newUrl)
+						.parentNo(searchReportNo)
+						.build());
+		}
+		searchReportRepository.save(searchReport);
 	}
 
 }

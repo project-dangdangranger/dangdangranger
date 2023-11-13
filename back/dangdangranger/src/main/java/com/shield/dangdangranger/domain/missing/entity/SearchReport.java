@@ -7,6 +7,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.shield.dangdangranger.domain.missing.dto.SearchReportRequestDto.SearchReportUpdateRequestDto;
 import com.shield.dangdangranger.global.entity.BaseEntity;
 
 import lombok.AccessLevel;
@@ -51,6 +52,13 @@ public class SearchReport extends BaseEntity {
 		this.searchReportContent = searchReportContent;
 		this.searchReportLat = searchReportLat;
 		this.searchReportLng = searchReportLng;
+	}
+
+	public void updateSearchReport(SearchReportUpdateRequestDto searchReportUpdateRequestDto) {
+		this.searchReportContent = searchReportUpdateRequestDto.getSearchReportContent();
+		this.searchReportLat = searchReportUpdateRequestDto.getSearchReportLat();
+		this.searchReportLng = searchReportUpdateRequestDto.getSearchReportLng();
+		
 	}
 	
 }

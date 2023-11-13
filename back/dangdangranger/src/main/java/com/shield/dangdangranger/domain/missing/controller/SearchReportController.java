@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.shield.dangdangranger.domain.missing.dto.SearchReportRequestDto.SearchReportListRequestDto;
 import com.shield.dangdangranger.domain.missing.dto.SearchReportRequestDto.SearchReportSaveRequestDto;
-import com.shield.dangdangranger.domain.missing.dto.SearchReportResponseDto.SearchReportInfoResponseDto;
+import com.shield.dangdangranger.domain.missing.dto.SearchReportRequestDto.SearchReportUpdateRequestDto;
 import com.shield.dangdangranger.domain.missing.dto.SearchReportResponseDto.SearchReportSaveResponseDto;
 import com.shield.dangdangranger.domain.missing.entity.SearchReport;
 import com.shield.dangdangranger.domain.missing.service.SearchReportService;
@@ -70,4 +71,15 @@ public class SearchReportController {
 								searchReportService.selectOne(searchReportNo)));
 	}
 
+	// 실종견 신고 수정
+	@PutMapping()
+	public ResponseEntity<ResponseDto<String>> updateSearchReport(
+			@RequestAttribute("userNo") Integer userNo,
+			@RequestBody SearchReportUpdateRequestDto searchReportUpdateRequestDto) {
+		
+		searchReportService.updateSearchReport(userNo, searchReportUpdateRequestDto);
+		
+		return ResponseEntity.status(HttpStatus.OK)
+				.body(ResponseDto.create(SeachReportResponseMessage.UPDATE_SUCCESS.message()));
+	}
 }

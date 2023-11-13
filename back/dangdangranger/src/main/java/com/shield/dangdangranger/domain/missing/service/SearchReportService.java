@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.shield.dangdangranger.domain.missing.dto.SearchReportRequestDto.SearchReportListRequestDto;
 import com.shield.dangdangranger.domain.missing.dto.SearchReportRequestDto.SearchReportSaveRequestDto;
+import com.shield.dangdangranger.domain.missing.dto.SearchReportRequestDto.SearchReportUpdateRequestDto;
 import com.shield.dangdangranger.domain.missing.entity.SearchReport;
 
 public interface SearchReportService {
@@ -16,4 +17,6 @@ public interface SearchReportService {
 	
 	// 실종견 발견 신고 상세 조회
 	SearchReport selectOne(Integer searchReportNo);
+
+	void updateSearchReport(Integer userNo, SearchReportUpdateRequestDto searchReportUpdateRequestDto);
 }

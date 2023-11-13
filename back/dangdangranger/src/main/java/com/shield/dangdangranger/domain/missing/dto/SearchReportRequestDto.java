@@ -29,4 +29,16 @@ public class SearchReportRequestDto {
 	public static class SearchReportListRequestDto {
 		private Integer missingNo;
 	}
+	
+	@Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Builder
+	public static class SearchReportUpdateRequestDto {
+		private Integer searchReportNo;
+		private String searchReportContent;
+		private Double searchReportLat;
+		private Double searchReportLng;
+		private List<String> searchReportImages;
+	}
 }
