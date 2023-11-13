@@ -44,7 +44,7 @@ const MissingFind = ({ navigation }: any) => {
 					emphasizedColor="#3E6DCA"
 					finalText="을 주세요"
 				/>
-				<Carousel></Carousel>
+				{/* <Carousel></Carousel> */}
 				<View style={styles.dogcontainer}>
 					{data.map((item, index) => {
 						return (

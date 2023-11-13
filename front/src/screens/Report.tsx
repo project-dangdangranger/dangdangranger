@@ -31,7 +31,11 @@ const Profile = ({ navigation }: any) => {
 				</View>
 
 				<View style={styles.imgContainer}>
-					<TouchableOpacity>
+					<TouchableOpacity
+						onPress={() => {
+							navigation.navigate("CreateMissingDog");
+						}}
+					>
 						<Image source={Report1} style={styles.img} />
 						<View style={styles.imgTextContainer}>
 							<View style={styles.textcCenterCntainer}>
@@ -42,7 +46,11 @@ const Profile = ({ navigation }: any) => {
 				</View>
 
 				<View style={styles.imgContainer}>
-					<TouchableOpacity>
+					<TouchableOpacity
+						onPress={() => {
+							navigation.navigate("CreateMissingMyDog");
+						}}
+					>
 						<Image source={Report2} style={styles.img} />
 						<View style={styles.imgTextContainer}>
 							<View style={styles.textcCenterCntainer}>
