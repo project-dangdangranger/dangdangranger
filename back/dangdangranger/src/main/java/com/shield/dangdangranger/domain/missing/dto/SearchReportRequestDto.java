@@ -22,4 +22,11 @@ public class SearchReportRequestDto {
 		private List<String> searchReportImages;
 	}
 	
+	@Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Builder
+	public static class SearchReportListRequestDto {
+		private Integer missingNo;
+	}
 }

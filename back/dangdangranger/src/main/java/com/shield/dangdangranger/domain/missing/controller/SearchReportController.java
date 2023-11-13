@@ -1,14 +1,19 @@
 package com.shield.dangdangranger.domain.missing.controller;
 
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.shield.dangdangranger.domain.missing.dto.SearchReportRequestDto.SearchReportListRequestDto;
 import com.shield.dangdangranger.domain.missing.dto.SearchReportRequestDto.SearchReportSaveRequestDto;
+import com.shield.dangdangranger.domain.missing.dto.SearchReportResponseDto.SearchReportInfoResponseDto;
 import com.shield.dangdangranger.domain.missing.dto.SearchReportResponseDto.SearchReportSaveResponseDto;
 import com.shield.dangdangranger.domain.missing.entity.SearchReport;
 import com.shield.dangdangranger.domain.missing.service.SearchReportService;
@@ -40,6 +45,17 @@ public class SearchReportController {
 								SearchReportSaveResponseDto.builder()
 									.searchReportNo(searchReport.getSearchReportNo())
 									.build()));
+	}
+	
+	// 실종견 신고 조회
+	@GetMapping()
+	public ResponseEntity<ResponseDto<List<SearchReport>>> getSearchReportList(
+			@RequestBody SearchReportListRequestDto searchReportListRequestDto) {
+		
+		return ResponseEntity.status(HttpStatus.OK)
+				.body(ResponseDto
+						.create(SeachReportResponseMessage.GET_SEARCH_REPORT_LIST_SUCCESS.message(),
+								searchReportService.selectAll(searchReportListRequestDto)));
 	}
 
 }

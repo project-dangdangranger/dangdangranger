@@ -2,7 +2,8 @@ package com.shield.dangdangranger.domain.missing.constant;
 
 public enum SeachReportResponseMessage {
 	
-	CREATE_SEARCH_REPORT_SUCCESS("실종견 발견 신고 등록 성공");
+	CREATE_SEARCH_REPORT_SUCCESS("실종견 발견 신고 등록 성공"),
+	GET_SEARCH_REPORT_LIST_SUCCESS("실종견 발견 신고 목록 조회 성공");
 
 	private final String message;
 
