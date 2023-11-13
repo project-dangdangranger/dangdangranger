@@ -24,6 +24,12 @@ const FindTogether = (missingNo: number) => {
 	const [myLongitude, setMyLongitude] = useState(345);
 	const topicId: any = useRef();
 
+	const findingList = [
+		{ userNo: 1, lat: 37.501, lng: 127.0386 },
+		{ userNo: 2, lat: 37.5024, lng: 127.0392 },
+		{ userNo: 3, lat: 37.4998, lng: 127.0372 },
+	];
+
 	useEffect(() => {
 		//return leavePage();
 	}, []);
@@ -164,7 +170,12 @@ const FindTogether = (missingNo: number) => {
 				<TouchableOpacity onPress={() => disconnectServer()}>
 					<Text>나가기</Text>
 					</TouchableOpacity>*/}
-				<FindMap missingNo={9} missingLat={37.5} missingLng={127.03} />
+				<FindMap
+					missingNo={9}
+					missingLat={37.5}
+					missingLng={127.03}
+					findingList={findingList}
+				/>
 				<FindBtn
 					startSession={() => Alert.alert("강아지를 찾아봅시다")}
 					endSession={() => Alert.alert("이걸 못찾네")}

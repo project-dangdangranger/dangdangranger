@@ -27,6 +27,7 @@ import axios from "../utils/axios";
 import Axios from "axios";
 import haversine from "haversine";
 import missingIcon from "../../assets/images/missing-marker.png";
+import rangerIcon from "../../assets/images/dd-ranger-icon.png";
 import { Callout } from "react-native-maps";
 import { responsiveHeight } from "react-native-responsive-dimensions";
 
@@ -44,6 +45,7 @@ type Props = {
 	missingNo: number;
 	missingLat: number;
 	missingLng: number;
+	findingList: Array<{ userNo: number; lat: number; lng: number }>;
 };
 
 const FindMap = (props: Props) => {
@@ -176,6 +178,14 @@ const FindMap = (props: Props) => {
 					<Text>실종견 간단 정보입니다.</Text>
 				</View>
 			)}
+			{props.findingList.map((location, index) => (
+				<MapboxGL.MarkerView
+					coordinate={[location.lng, location.lat]}
+					key={location.userNo}
+				>
+					<Image source={rangerIcon} style={styles.icon} />
+				</MapboxGL.MarkerView>
+			))}
 		</MapboxGL.MapView>
 	);
 };
