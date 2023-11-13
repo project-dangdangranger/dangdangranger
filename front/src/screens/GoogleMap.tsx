@@ -7,6 +7,7 @@ import {
 	Dimensions,
 	Platform,
 	Image,
+	Text,
 } from "react-native";
 import { Buffer } from "buffer";
 import MapboxGL, { snapshotManager } from "@rnmapbox/maps";
@@ -23,6 +24,7 @@ import {
 import axios from "../utils/axios";
 import Axios from "axios";
 import haversine from "haversine";
+import RNFS from "react-native-fs";
 
 MapboxGL.setWellKnownTileServer("Mapbox");
 MapboxGL.setAccessToken(MAPBOX_ACCESSTOKEN);
@@ -115,8 +117,8 @@ const GoogleMap = (props: Props) => {
 		if (!props.start && !props.patrol) {
 			clearLocationWatch();
 			console.log("중지 했습니다.!");
-			// saveAndUploadMapSnapshot();
-			testSnapshot();
+			saveAndUploadMapSnapshot();
+			// testSnapshot();
 		}
 	}, [props.start, props.patrol]);
 	const [imageUri, setImageUri] = useState<string>("");
@@ -124,18 +126,20 @@ const GoogleMap = (props: Props) => {
 	// 간단한 스냅샷 캡처 및 로그 출력 테스트
 	const testSnapshot = async () => {
 		try {
-			const snapshotUri = await snapshotManager.takeSnap({
+			const snapshotUri = await MapboxGL.snapshotManager.takeSnap({
 				centerCoordinate: [-74.12641, 40.797968],
 				width: 300,
 				height: 500,
-				zoomLevel: 14,
-				pitch: 0,
-				heading: 0,
+				zoomLevel: 12,
+				pitch: 30,
+				heading: 20,
 				styleURL: MapboxGL.StyleURL.Dark,
-				writeToDisk: false, // Base64 결과 반환
+				withLogo: false, // Disable Mapbox logo (Android only)
 			});
-			setImageUri(`data:image/png;base64,${snapshotUri}`);
-			console.log("Snapshot URI:", snapshotUri);
+			// setImageUri(`data:image/png;base64,${snapshotUri}`);
+			// setImageUri(snapshotUri);
+
+			// console.log("Snapshot URI:", snapshotUri);
 
 			// Base64 인코딩된 데이터 확인 (예시)
 			if (snapshotUri.startsWith("data:image/png;base64,")) {
@@ -274,17 +278,17 @@ const GoogleMap = (props: Props) => {
 
 	const saveAndUploadMapSnapshot = async () => {
 		try {
-			const snapshotUri = await snapshotManager.takeSnap({
-				// centerCoordinate: [props.longitude, props.latitude], // 현재 위치의 좌표
+			const snapshotUri = await MapboxGL.snapshotManager.takeSnap({
 				centerCoordinate: [-74.12641, 40.797968],
-				width: mapWidth,
-				height: mapHeight,
-				zoomLevel: 14, // 예시 줌 레벨
-				pitch: 0,
-				heading: 0,
-				writeToDisk: false, // 결과를 Base64로 반환
+				width: 300,
+				height: 500,
+				zoomLevel: 12,
+				pitch: 30,
+				heading: 20,
+				styleURL: MapboxGL.StyleURL.Dark,
+				withLogo: false, // Disable Mapbox logo (Android only)
 			});
-			console.log("Snapshot saved to:", snapshotUri);
+			console.log("Snapshot URI:", snapshotUri);
 			if (snapshotUri) {
 				await uploadImage(snapshotUri);
 			}
@@ -308,7 +312,6 @@ const GoogleMap = (props: Props) => {
 			const data = await s3.upload(params).promise();
 			console.log("File uploaded:", data);
 			console.log(data.Location);
-			// 현재 위치가 어떤 동인지, 어떤 거리인지 알아야함
 			const res = {
 				address,
 				patrolLogDate,
@@ -326,35 +329,8 @@ const GoogleMap = (props: Props) => {
 		stopAndReset();
 	};
 
-	const renderAnnotations = () => {
-		return (
-			<MapboxGL.ShapeSource
-				id="line1"
-				shape={{
-					type: "Feature",
-					geometry: {
-						type: "LineString",
-						coordinates: locationTrail.map((loc) => [
-							loc.longitude,
-							loc.latitude,
-						]),
-					},
-				}}
-			>
-				<MapboxGL.LineLayer
-					id="linelayer1"
-					style={{ lineWidth: 5, lineColor: "blue" }}
-				/>
-			</MapboxGL.ShapeSource>
-		);
-	};
-
 	return (
 		<View style={styles.page}>
-			{imageUri && (
-				<Image source={{ uri: imageUri }} style={{ width: 300, height: 500 }} />
-			)}
-
 			<MapboxGL.MapView style={styles.map} ref={mapRef}>
 				{currentLocation && (
 					<MapboxGL.Camera
@@ -364,7 +340,24 @@ const GoogleMap = (props: Props) => {
 						animationDuration={camera.animationDuration}
 					/>
 				)}
-				{renderAnnotations()}
+				<MapboxGL.ShapeSource
+					id="line1"
+					shape={{
+						type: "Feature",
+						geometry: {
+							type: "LineString",
+							coordinates: locationTrail.map((loc) => [
+								loc.longitude,
+								loc.latitude,
+							]),
+						},
+					}}
+				>
+					<MapboxGL.LineLayer
+						id="linelayer1"
+						style={{ lineWidth: 5, lineColor: "blue" }}
+					/>
+				</MapboxGL.ShapeSource>
 			</MapboxGL.MapView>
 		</View>
 	);
