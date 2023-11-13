@@ -32,6 +32,9 @@ public class FinddogServiceImpl implements FinddogService {
 	private final FinddogSubscriber finddogSubscriber;
 	
 	private final MissingRepository missingRepository;
+	
+	private int participants = 0;
+	private Map<Integer, Integer> topicParticipants = new HashMap<>();
 
 	@Override
 	public FinddogSessionResponseDto createSession(Integer missingNo) {
@@ -47,6 +50,7 @@ public class FinddogServiceImpl implements FinddogService {
 		topicName = UUID.randomUUID().toString();
 		topic = new ChannelTopic(topicName);
 		topicNames.put(missingNo, topicName);
+		topicParticipants.put(missingNo, 0);
 		topics.put(topicName, topic);
 		redisMessageListener.addMessageListener(finddogSubscriber, topic);
 		log.debug("FinddogServiceImpl.createSession : 세션 생성됨 topicName - {}", topicName);
@@ -57,7 +61,7 @@ public class FinddogServiceImpl implements FinddogService {
 	@Override
 	public void closeSession() {
 		// TODO Auto-generated method stub
-
+		
 	}
 
 	@Override
@@ -73,4 +77,23 @@ public class FinddogServiceImpl implements FinddogService {
 		return topicNames.get(missingNo);
 	}
 
+	public int getFinddogParticipants() {
+		return participants;
+	}
+
+	private synchronized void setFinddogParticipants(int finddogParticipants) {
+		this.participants = finddogParticipants;
+	}
+
+	@Override
+	public void increaseFinddogParticipants(Integer missingNo) {
+		topicParticipants.put(missingNo, topicParticipants.get(missingNo) + 1);
+		setFinddogParticipants(getFinddogParticipants() + 1);
+	}
+
+	@Override
+	public void decreaseFinddogParticipants(Integer missingNo) {
+		topicParticipants.put(missingNo, topicParticipants.get(missingNo) - 1);
+		setFinddogParticipants(getFinddogParticipants() - 1);
+	}
 }
