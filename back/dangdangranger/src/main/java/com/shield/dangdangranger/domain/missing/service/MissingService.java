@@ -6,6 +6,7 @@ import com.shield.dangdangranger.domain.missing.dto.MissingRequestDto.MissingSav
 import com.shield.dangdangranger.domain.missing.dto.MissingRequestDto.MissingUpdateRequestDto;
 import com.shield.dangdangranger.domain.missing.dto.MissingResponseDto.MissingInfoResponseDto;
 import com.shield.dangdangranger.domain.missing.dto.MissingResponseDto.MissingListInfoResponseDto;
+import com.shield.dangdangranger.domain.missing.dto.RecentMissingImageDto;
 import com.shield.dangdangranger.domain.missing.entity.Missing;
 import com.shield.dangdangranger.domain.user.entity.User;
 
@@ -35,4 +36,7 @@ public interface MissingService {
 	
 	// 실종견 삭제
 	void deleteMissing(Integer userNo, Integer missingNo);
+	
+	// 최근 실종견 사진 조회
+	List<RecentMissingImageDto> getRecentMissingImages();
 }

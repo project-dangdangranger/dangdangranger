@@ -19,6 +19,7 @@ import com.shield.dangdangranger.domain.missing.dto.MissingRequestDto.MissingSav
 import com.shield.dangdangranger.domain.missing.dto.MissingRequestDto.MissingUpdateRequestDto;
 import com.shield.dangdangranger.domain.missing.dto.MissingResponseDto.MissingInfoResponseDto;
 import com.shield.dangdangranger.domain.missing.dto.MissingResponseDto.MissingListInfoResponseDto;
+import com.shield.dangdangranger.domain.missing.dto.RecentMissingImageDto;
 import com.shield.dangdangranger.domain.missing.entity.Missing;
 import com.shield.dangdangranger.domain.missing.repo.MissingRepository;
 import com.shield.dangdangranger.domain.user.constant.UserExceptionMessage;
@@ -199,6 +200,11 @@ public class MissingServiceImpl implements MissingService {
             imageRepository.save(image);
         }
 		missingRepository.save(missing);
+	}
+
+	@Override
+	public List<RecentMissingImageDto> getRecentMissingImages() {
+		return missingRepository.getLimitedThreeRecentMissingImages();
 	}
 
 }

@@ -24,6 +24,7 @@ import com.shield.dangdangranger.domain.missing.dto.MissingRequestDto.MissingSta
 import com.shield.dangdangranger.domain.missing.dto.MissingRequestDto.MissingUpdateRequestDto;
 import com.shield.dangdangranger.domain.missing.dto.MissingResponseDto.MissingInfoResponseDto;
 import com.shield.dangdangranger.domain.missing.dto.MissingResponseDto.MissingListInfoResponseDto;
+import com.shield.dangdangranger.domain.missing.dto.RecentMissingImageDto;
 import com.shield.dangdangranger.domain.missing.service.MissingService;
 import com.shield.dangdangranger.global.dto.ResponseDto;
 
@@ -143,5 +144,14 @@ public class MissingController {
 		
 		return ResponseEntity.status(HttpStatus.OK)
 				.body(ResponseDto.create(MissingResponseMessage.UPDATE_SUCCESS.message()));
+	}
+	
+	@GetMapping("/recent_missing_images")
+	public ResponseEntity<ResponseDto<List<RecentMissingImageDto>>> getRecentMissingImages(
+			@RequestAttribute("userNo") Integer userNo) {
+		
+		return ResponseEntity.status(HttpStatus.OK)
+				.body(ResponseDto.create(MissingResponseMessage.GET_RECENT_MISSING_IMAGES_SUCCESS.message(),
+						missingService.getRecentMissingImages()));
 	}
 }
