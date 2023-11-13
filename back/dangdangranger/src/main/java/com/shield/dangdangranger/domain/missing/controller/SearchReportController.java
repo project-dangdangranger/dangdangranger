@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -56,6 +57,17 @@ public class SearchReportController {
 				.body(ResponseDto
 						.create(SeachReportResponseMessage.GET_SEARCH_REPORT_LIST_SUCCESS.message(),
 								searchReportService.selectAll(searchReportListRequestDto)));
+	}
+	
+	// 실종견 신고 조회
+	@GetMapping("/{searchReportNo}")
+	public ResponseEntity<ResponseDto<SearchReport>> getSearchReportList(
+			@PathVariable Integer searchReportNo) {
+		
+		return ResponseEntity.status(HttpStatus.OK)
+				.body(ResponseDto
+						.create(SeachReportResponseMessage.GET_SEARCH_REPORT_SUCCESS.message(),
+								searchReportService.selectOne(searchReportNo)));
 	}
 
 }

@@ -9,6 +9,7 @@ import com.shield.dangdangranger.domain.Image.constant.ImageType;
 import com.shield.dangdangranger.domain.Image.entity.Image;
 import com.shield.dangdangranger.domain.Image.repo.ImageRepository;
 import com.shield.dangdangranger.domain.missing.constant.MissingResponseMessage;
+import com.shield.dangdangranger.domain.missing.constant.SeachReportResponseMessage;
 import com.shield.dangdangranger.domain.missing.dto.SearchReportRequestDto.SearchReportListRequestDto;
 import com.shield.dangdangranger.domain.missing.dto.SearchReportRequestDto.SearchReportSaveRequestDto;
 import com.shield.dangdangranger.domain.missing.dto.SearchReportResponseDto.SearchReportInfoResponseDto;
@@ -74,6 +75,14 @@ public class SearchReportServiceImpl implements SearchReportService {
 				searchReportListRequestDto.getMissingNo(), 
 				BaseConstant.NOTCANCELED);
 		
+	}
+
+	@Override
+	public SearchReport selectOne(Integer searchReportNo) {
+		
+		return searchReportRepository.findOneBySearchReportNoAndCanceled(searchReportNo, BaseConstant.NOTCANCELED)
+				.orElseThrow(() -> new NotFoundException(
+						SeachReportResponseMessage.SEARCH_REPORT_NOT_FOUND_EXCEPTION.message()));
 	}
 
 }
