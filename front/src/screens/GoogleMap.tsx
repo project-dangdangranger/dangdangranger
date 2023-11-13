@@ -142,7 +142,7 @@ const GoogleMap = (props: Props) => {
 			// console.log("Snapshot URI:", snapshotUri);
 
 			// Base64 인코딩된 데이터 확인 (예시)
-			if (snapshotUri.startsWith("data:image/png;base64,")) {
+			if (snapshotUri) {
 				console.log("Base64 encoded image confirmed");
 			} else {
 				console.log("Snapshot is not a Base64 encoded image");
@@ -288,8 +288,13 @@ const GoogleMap = (props: Props) => {
 				styleURL: MapboxGL.StyleURL.Dark,
 				withLogo: false, // Disable Mapbox logo (Android only)
 			});
-			console.log("Snapshot URI:", snapshotUri);
-			if (snapshotUri) {
+
+			const tmp = snapshotUri;
+			const fronttmp = snapshotUri.substring(0, 30);
+			console.log("fronttmp : ", fronttmp);
+
+			// console.log("Snapshot URI:", snapshotUri);
+			if (snapshotUri.startsWith("data:image/png;base64,")) {
 				await uploadImage(snapshotUri);
 			}
 		} catch (error) {
@@ -298,13 +303,18 @@ const GoogleMap = (props: Props) => {
 	};
 
 	const uploadImage = async (imageBase64: string) => {
-		const blob = Buffer.from(imageBase64, "base64");
+		// 접두어를 제거하고 base64 로 만들어야함
+		const base64Data = imageBase64.replace(/^data:image\/\w+;base64,/, "");
+		const buffer = Buffer.from(base64Data, "base64");
+
+		// const blob = Buffer.from(imageBase64, "base64");
 		const random = Math.floor(Math.random() * 100000000);
 		const filename = `map_${new Date().toISOString()}_${random}.png`;
 		const params = {
 			Bucket: AWS_BUCKET,
 			Key: filename,
-			Body: blob,
+			// Body: blob,
+			Body: buffer,
 			ContentType: "image/png",
 		};
 
