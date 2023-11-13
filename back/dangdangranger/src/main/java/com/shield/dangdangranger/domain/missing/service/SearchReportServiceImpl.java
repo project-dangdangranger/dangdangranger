@@ -104,9 +104,12 @@ public class SearchReportServiceImpl implements SearchReportService {
 				.orElseThrow(() -> new NotFoundException(
 						SeachReportResponseMessage.SEARCH_REPORT_NOT_FOUND_EXCEPTION.message()));
 		
-		List<String> images = new ArrayList<>();
+		List<String> imageUrls = new ArrayList<>();
+		
 		imageRepository.findAllByImageTypeNoAndParentNoAndCanceled(
-				ImageType.FOUND.value(), searchReportNo, BaseConstant.NOTCANCELED);
+				ImageType.FOUND.value(), searchReportNo, BaseConstant.NOTCANCELED).forEach((image) -> {
+					imageUrls.add(image.getImageUrl());
+				});;
 		
 		return SearchReportInfoResponseDto.builder()
 				.searchReportNo(searchReport.getSearchReportNo())
@@ -114,7 +117,7 @@ public class SearchReportServiceImpl implements SearchReportService {
 				.userNo(searchReport.getUserNo())
 				.searchReportLat(searchReport.getSearchReportLat())
 				.searchReportLng(searchReport.getSearchReportLng())
-				.searchReportImages(images)
+				.searchReportImages(imageUrls)
 				.build();
 	}
 
@@ -144,7 +147,7 @@ public class SearchReportServiceImpl implements SearchReportService {
 		for (String newUrl : updatedImageList) {
 			imageRepository.save(
 					Image.builder()
-						.imageTypeNo(ImageType.MISSING.value())
+						.imageTypeNo(ImageType.FOUND.value())
 						.imageUrl(newUrl)
 						.parentNo(searchReportNo)
 						.build());
