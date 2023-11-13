@@ -32,6 +32,7 @@ public class MissingResponseDto {
         private Double missingLng;
         @Setter
         private String topicId;
+        private String missingAddress;
 	}
 	
 	@Getter
@@ -45,5 +46,7 @@ public class MissingResponseDto {
         private Double missingLat;
         private Double missingLng;
         private String thumbnailUrl;
+        private String missingAddress;
+        private Integer dogNo;
     }
 }

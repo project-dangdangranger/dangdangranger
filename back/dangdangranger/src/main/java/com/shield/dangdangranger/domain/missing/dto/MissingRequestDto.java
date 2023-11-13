@@ -31,6 +31,7 @@ public class MissingRequestDto {
 		private Double missingLat;
 		private Double missingLng;
 		private List<String> missingImages;
+		private String missingAddress;
 	}
 	
 	@Data
@@ -45,5 +46,6 @@ public class MissingRequestDto {
 		private Double missingLat;
 		private Double missingLng;
         private List<String> missingImages;
+        private String missingAddress;
     }
 }
