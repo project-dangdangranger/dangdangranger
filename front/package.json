@@ -13,10 +13,12 @@
 	"dependencies": {
 		"@react-native-clipboard/clipboard": "^1.12.1",
 		"@react-native-community/datetimepicker": "^7.6.1",
+		"@react-native-community/geolocation": "^3.1.0",
 		"@react-native-google-signin/google-signin": "^10.1.0",
 		"@react-native-picker/picker": "^2.5.1",
 		"@react-navigation/native": "^6.1.9",
 		"@react-navigation/native-stack": "^6.9.16",
+		"@rnmapbox/maps": "^10.0.15",
 		"@stomp/stompjs": "^7.0.0",
 		"aws-sdk": "^2.1486.0",
 		"axios": "^1.6.0",

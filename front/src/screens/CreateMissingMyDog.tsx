@@ -32,6 +32,7 @@ import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { useFocusEffect } from "@react-navigation/native";
 import React from "react";
 import DogItemReport from "../components/DogItemReport";
+import GeoLocationAPI from "../components/GeoLocationAPI";
 
 const PatrolDiaryWrite = () => {
 	const navigation = useNavigation();
@@ -54,6 +55,8 @@ const PatrolDiaryWrite = () => {
 			});
 		}, []),
 	);
+
+	const [address, setAddress] = useState("");
 
 	const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
 	const [patrolReportTitle, setPatrolReportTitle] = useState("");
@@ -92,6 +95,11 @@ const PatrolDiaryWrite = () => {
 			return;
 		}
 
+		if (dogNo === null) {
+			Alert.alert("순찰견을 선택해주세요");
+			return;
+		}
+
 		const uploadPromises = patrolImgList.map(async (imageUri, index) => {
 			const response = await fetch(imageUri);
 			const blob = await response.blob();
@@ -126,6 +134,9 @@ const PatrolDiaryWrite = () => {
 		try {
 			// 모든 프로미스가 완료될 때까지 기다립니다.
 			const uploadedImages = await Promise.all(uploadPromises);
+
+			console.log("도그넘버:", dogNo);
+
 			axios
 				.post("/missing", {
 					missingTypeNo: 1,
@@ -136,6 +147,7 @@ const PatrolDiaryWrite = () => {
 					missingLng: 127.123,
 					missingImages: uploadedImages,
 					dogNo: dogNo,
+					missingAddress: address,
 				})
 				.then((res) => {
 					console.log("성공:", res.data);
@@ -179,6 +191,7 @@ const PatrolDiaryWrite = () => {
 	const [scrollEnabled, setScrollEnabled] = useState(true);
 
 	const handleSelectedDog = (item: any) => {
+		console.log(item.dogNo);
 		setIsSelected(!isSelected);
 		setDogImg([item?.dogImg]);
 		setDogNo(item.dogNo);
@@ -189,6 +202,7 @@ const PatrolDiaryWrite = () => {
 		<>
 			<CommonLayout>
 				<ColorHeader title="신고하기" />
+				<GeoLocationAPI setAddress={setAddress} />
 				<CustomText
 					mainText="실종견을 위해"
 					emphasizedText="등록 정보"

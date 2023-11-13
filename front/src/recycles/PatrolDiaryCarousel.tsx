@@ -11,13 +11,18 @@ import {
 	responsiveHeight,
 	responsiveWidth,
 } from "react-native-responsive-dimensions";
-import React, { useState } from "react";
-import { useNavigation } from "@react-navigation/native";
-const PatrolLogCarousel = ({ logs }: any) => {
-	const navigation = useNavigation();
+import React, { useState, useEffect } from "react";
+import axios from "../utils/axios";
 
-	const handleLogClick = (logNo) => {
-		navigation.navigate("PatrolLogDetail", { logNo });
+const PatrolDiaryCarousel = ({ logs, setDetailLogs }: any) => {
+	const handleLogClick = async (logNo) => {
+		const response = await axios.get(`/log/${logNo}`);
+		setDetailLogs({
+			patrolLogTotalDistance: response.data.data.patrolLogTotalDistance,
+			patrolLogDate: response.data.data.patrolLogDate.split("T")[0],
+			patrolLogAddress: response.data.data.patrolLogAddress,
+			patrolLogTotalTime: response.data.data.patrolLogTotalTime,
+		});
 	};
 
 	return (
@@ -43,7 +48,7 @@ const PatrolLogCarousel = ({ logs }: any) => {
 	);
 };
 
-export default PatrolLogCarousel;
+export default PatrolDiaryCarousel;
 
 const style = StyleSheet.create({
 	scrollWrap: {

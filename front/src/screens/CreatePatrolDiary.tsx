@@ -12,7 +12,7 @@ import FooterBar from "../recycles/FooterBar";
 import PatrolDiaryWriteLayout from "../styles/patrolDiaryWriteLayout";
 
 import img from "../../assets/images/debug-dog.png";
-import PatrolLogCarousel from "../recycles/PatrolLogCarousel";
+import PatrolDiaryCarousel from "../recycles/PatrolDiaryCarousel";
 import AddPlusIcon from "../../assets/images/add-plus-icon.png";
 import CustomSubButton from "../recycles/CustomSubBtn";
 import { useEffect, useState } from "react";
@@ -24,15 +24,7 @@ import { S3 } from "aws-sdk";
 
 const PatrolDiaryWrite = () => {
 	const navigation = useNavigation();
-
-	const logs = [
-		{ logNo: 0, imgSrc: img, date: "22-02-02" },
-		{ logNo: 1, imgSrc: img, date: "22-02-02" },
-		{ logNo: 2, imgSrc: img, date: "22-02-02" },
-		{ logNo: 3, imgSrc: img, date: "22-02-02" },
-		{ logNo: 4, imgSrc: img, date: "22-02-02" },
-	];
-
+	const [logs, setLogs] = useState([]);
 	const [selectedImg, setSelectedImg] = useState(null);
 	const [patrolReportTitle, setPatrolReportTitle] = useState("");
 	const [patrolReportContent, setPatrolReportContent] = useState("");
@@ -40,7 +32,12 @@ const PatrolDiaryWrite = () => {
 		"https://dangdangranger.s3.ap-northeast-2.amazonaws.com/map_2023-11-03T07%3A02%3A19.564Z_1072956.png",
 	]);
 	const [patrolLogNo, setPatrolLogNo] = useState(1);
-
+	const [detailLogs, setDetailLogs] = useState({
+		patrolLogAddress: "",
+		patrolLogDate: "",
+		patrolLogTotalDistance: 0,
+		patrolLogTotalTime: 0,
+	});
 	const [patrolImgList, setPatrolImgList] = useState([]);
 
 	const s3 = new S3({
@@ -49,9 +46,29 @@ const PatrolDiaryWrite = () => {
 		region: process.env.AWS_REGION,
 	});
 
-	const submitPatrolReport = () => {};
+	useEffect(() => {
+		getLogs();
+	}, []);
 
-	// const [submitImgList, setSubmitImgList] = useState([]);
+	useEffect(() => {
+		console.log(detailLogs);
+	}, [detailLogs]);
+
+	const getLogs = async () => {
+		try {
+			const response = await axios.get("/log");
+
+			const transformedLogs = response.data.data.map((log) => ({
+				logNo: log.patrolLogNo,
+				imgSrc: { uri: log.patrolLogImageUrl },
+				date: log.patrolLogDate.split("T")[0],
+			}));
+
+			setLogs(transformedLogs);
+		} catch (error) {
+			console.error("Error fetching logs:", error);
+		}
+	};
 
 	const uploadImage = async (patrolImgList: any) => {
 		if (patrolImgList.length === 0) {
@@ -146,7 +163,7 @@ const PatrolDiaryWrite = () => {
 						</Text>
 					</View>
 					<View style={PatrolDiaryWriteLayout.logWrap}>
-						<PatrolLogCarousel logs={logs} />
+						<PatrolDiaryCarousel logs={logs} setDetailLogs={setDetailLogs} />
 					</View>
 					<View style={PatrolDiaryWriteLayout.formWrap}>
 						<TouchableOpacity
