@@ -1,23 +1,19 @@
-import { Alert, Image, StyleSheet, Text, TouchableOpacity } from "react-native";
+import { Alert, Image, StyleSheet, Text, View } from "react-native";
 import icon from "../../assets/images/right-arrow-icon.png";
 import {
 	responsiveHeight,
 	responsiveWidth,
 } from "react-native-responsive-dimensions";
 import { useNavigation } from "@react-navigation/native";
-import { StackNavigation } from "../../App";
+// import { StackNavigation } from "../../App";
 
 const DetailBtn = () => {
-	const { navigate } = useNavigation<StackNavigation>();
 	return (
 		<>
-			<TouchableOpacity
-				style={style.btnWrap}
-				onPress={() => navigate("PatrolLogDetail")}
-			>
+			<View style={style.btnWrap}>
 				<Text style={style.btnText}>Detail</Text>
 				<Image source={icon} style={style.btnImg} />
-			</TouchableOpacity>
+			</View>
 		</>
 	);
 };
