@@ -1,7 +1,6 @@
 package com.shield.dangdangranger.domain.missing.entity;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -57,10 +56,13 @@ public class Missing extends BaseEntity {
 	
 	@Column(name = "missing_status")
     private Integer missingStatus = 0;
+	
+	@Column(name = "missing_address")
+	private String missingAddress;
 
 	@Builder
 	public Missing(Integer missingNo, Integer missingTypeNo, Integer dogNo, Integer userNo, String missingContent,
-			LocalDateTime missingDate, Double missingLat, Double missingLng, String missingTitle) {
+			LocalDateTime missingDate, Double missingLat, Double missingLng, String missingTitle, String missingAddress) {
 		this.missingNo = missingNo;
 		this.missingTypeNo = missingTypeNo;
 		this.dogNo = dogNo;
@@ -70,6 +72,7 @@ public class Missing extends BaseEntity {
 		this.missingDate = missingDate;
 		this.missingLat = missingLat;
 		this.missingLng = missingLng;
+		this.missingAddress = missingAddress;
 	}
 	
 	public void updateMissing(MissingUpdateRequestDto dto) {
@@ -78,5 +81,6 @@ public class Missing extends BaseEntity {
 		this.missingDate = dto.getMissingDate();
 		this.missingLat = dto.getMissingLat();
 		this.missingLng = dto.getMissingLng();
+		this.missingAddress = dto.getMissingAddress();
 	}
 }

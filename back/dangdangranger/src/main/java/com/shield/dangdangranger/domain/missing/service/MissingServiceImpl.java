@@ -65,6 +65,7 @@ public class MissingServiceImpl implements MissingService {
 				.missingDate(missingSaveRequestDto.getMissingDate())
 				.missingLat(missingSaveRequestDto.getMissingLat())
 				.missingLng(missingSaveRequestDto.getMissingLng())
+				.missingAddress(missingSaveRequestDto.getMissingAddress())
 				.build();
 		
 		// 내 반려견 실종 등록
@@ -111,6 +112,7 @@ public class MissingServiceImpl implements MissingService {
 					.missingTitle(missing.getMissingTitle())
 					.missingTypeNo(missing.getMissingTypeNo())
 					.thumbnailUrl(imageUrl)
+					.missingAddress(missing.getMissingAddress())
 					.build());
 		}
 		
@@ -133,6 +135,7 @@ public class MissingServiceImpl implements MissingService {
 				.missingDate(missing.getMissingDate())
 				.missingLat(missing.getMissingLat())
 				.missingLng(missing.getMissingLng())
+				.missingAddress(missing.getMissingAddress())
 				.build();
 		
 		// 본인 강아지 실종인 경우 강아지 정보 등록
