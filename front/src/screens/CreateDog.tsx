@@ -21,6 +21,8 @@ import {
 	AWS_BUCKET,
 	POLYGON_API_KEY,
 	MINT_DOG_TOKEN_ADDRESS,
+	OBJECT_DETECT_API_KEY,
+	OBJECT_DETECT_URL,
 } from "@env";
 
 import { mintDogTokenContract } from "../contracts/contract";
@@ -45,6 +47,8 @@ import EditImage from "../recycles/EditImage";
 
 const CreateDog = ({ navigation }: any) => {
 	const [imageUri, setImageUri] = useState<any>(null);
+	// const [base64Image, setBase64Image] = useState<any>(null);
+	// const [containDog, setContainDog] = useState<boolean>(false);
 	const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
 	const [walletAddress, setWalletAddress] = useState<string>();
 	const [walletPrivateKey, setWalletPrivateKey] = useState<string>();
@@ -198,8 +202,25 @@ const CreateDog = ({ navigation }: any) => {
 
 	// imagepicker 이용
 	const uploadImage = async (imageUri: string) => {
-		// console.log("img", imageUri);
+		console.log("img", imageUri);
+
+		/**
+		 * 1. image -> base64
+		 * 2. base64 기반 강아지 object detect
+		 * */
+		const base64data = await convertImageToBase64(imageUri);
+		const isDog = await detectObject(base64data);
+		// console.log("uploadimage - base64:", base64data);
+		// console.log("upload image - 강아지 포함 여부 : ", isDog);
+
+		if (!isDog) {
+			Alert.alert("강아지가 포함된 이미지를 등록해야 합니다");
+			return;
+		}
+
 		const response = await fetch(imageUri);
+		// console.log("image response : ", response);
+
 		const blob = await response.blob();
 		const random = await Math.floor(Math.random() * 100000000);
 		const type = await blob.type;
@@ -223,6 +244,64 @@ const CreateDog = ({ navigation }: any) => {
 				}
 			}
 		});
+	};
+
+	const detectObject = async (base64ImageUri: string) => {
+		const type = base64ImageUri.split(";")[0].split(":")[1];
+		const base64Data = base64ImageUri.replace(/^data:image\/\w+;base64,/, "");
+		// console.log("detect object method:", base64ImageUri);
+		// console.log("base64data : ", base64Data);
+
+		const requestJson = {
+			argument: {
+				type: type,
+				file: base64Data,
+			},
+		};
+
+		const config = {
+			headers: {
+				"Content-Type": "application/json",
+				Authorization: OBJECT_DETECT_API_KEY,
+			},
+		};
+
+		let isDog = false;
+		await axios
+			.post(OBJECT_DETECT_URL, requestJson, config)
+			.then((response) => {
+				const objects = response.data.return_object.data;
+				console.log("object detect response : ", objects);
+
+				objects.forEach((obj) => {
+					if (obj.class === "dog") {
+						isDog = true;
+						return;
+					}
+				});
+				console.log("강아지 포함 여부 : ", isDog);
+			})
+			.catch((err) => {
+				console.log("object detect err !! ", err);
+			});
+		return isDog;
+	};
+
+	const convertImageToBase64 = async (imageUri: string) => {
+		console.log("convert image to base64 - imageUri: ", imageUri);
+		try {
+			const response = await fetch(imageUri);
+			const blob = await response.blob();
+			const base64data = await new Promise((resolve, reject) => {
+				const reader = new FileReader();
+				reader.onload = () => resolve(reader.result);
+				reader.onerror = reject;
+				reader.readAsDataURL(blob);
+			});
+			return base64data;
+		} catch (error) {
+			console.error("Error converting image to base64:", error);
+		}
 	};
 
 	const [selectedImg, setSelectedImg] = useState<any>(null);
