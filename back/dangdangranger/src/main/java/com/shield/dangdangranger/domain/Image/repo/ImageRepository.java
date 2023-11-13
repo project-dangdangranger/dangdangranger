@@ -8,10 +8,12 @@ import java.util.Optional;
 
 public interface ImageRepository extends JpaRepository<Image, Integer> {
 
-    Optional<Image> findFirstByImageTypeNoAndParentNoAndCanceled(Integer imageTypeNo, Integer patrolReportNo, Integer isCanceld);
+    Optional<Image> findFirstByImageTypeNoAndParentNoAndCanceled(Integer imageTypeNo, Integer patrolReportNo, Integer isCanceled);
 
-    List<Image> findAllByImageTypeNoAndParentNoAndCanceled(Integer imageTypeNo, Integer parentNo, Integer isCanceld);
+    List<Image> findAllByImageTypeNoAndParentNoAndCanceled(Integer imageTypeNo, Integer parentNo, Integer isCanceled);
 
-    Optional<Image> findImageByImageUrlAndCanceled(String imageUrl, Integer isCanceld);
+    Optional<Image> findImageByImageUrlAndCanceled(String imageUrl, Integer isCanceled);
+    
+    Optional<Image> findFirstImageUrlByImageTypeNoAndParentNoAndCanceled(Integer imageTypeNo, Integer parentNo, Integer isCanceled);
 
 }
