@@ -12,7 +12,8 @@ const MyHorizontalScrollView = ({ imgList, location }) => {
 	const [currentIndex, setCurrentIndex] = useState(0);
 	const scrollViewRef = useRef(null);
 
-	console.log(imgList, location);
+	console.log("이미지:", imgList);
+	console.log("위치:", location);
 
 	// 페이지가 변경될 때 호출됩니다.
 	const handleScroll = (event: any) => {
