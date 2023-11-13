@@ -67,7 +67,7 @@ const App = () => {
 					<Stack.Screen name="ReportDorList" component={ReportDorList} />
 					<Stack.Screen name="PatrolMain" component={PatrolMain} />
 					<Stack.Screen name="PatrolGo" component={PatrolGo} />
-					<Stack.Screen name="GoogleMap" component={GoogleMap} />
+					{/* <Stack.Screen name="GoogleMap" component={GoogleMap} /> */}
 					<Stack.Screen name="PatrolMap" component={PatrolMap} />
 					<Stack.Screen name="PatrolLog" component={PatrolLog} />
 					<Stack.Screen name="PatrolDiary" component={PatrolDiary} />
@@ -88,7 +88,7 @@ const App = () => {
 						name="PatrolReportDetail"
 						component={PatrolReportDetail}
 					/>
-					<Stack.Screen name="FindTogether" component={FindTogether} />
+					{/* <Stack.Screen name="FindTogether" component={FindTogether} /> */}
 					<Stack.Screen name="ManualMain" component={ManualMain} />
 					<Stack.Screen
 						name="CreateMissingMyDog"

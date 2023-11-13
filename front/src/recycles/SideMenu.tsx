@@ -100,7 +100,7 @@ const SideMenu = (props: any) => {
 										GoogleSignin.signOut();
 										removeAccessToken();
 										setIsLogged(false);
-										navigation.navigate("Main");
+										navigation.navigate("Login");
 									}}
 								>
 									<View style={SideMenuLayout.button}>

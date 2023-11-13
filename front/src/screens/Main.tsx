@@ -17,20 +17,23 @@ import FooterBar from "../recycles/FooterBar";
 import { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import axios from "../utils/axios";
-// import Test from "../components/Test";
+import { useFocusEffect } from "@react-navigation/native";
+import { useRecoilState } from "recoil";
+import { isLogged } from "../atoms/atoms";
 
 const Main = () => {
 	const LoginStore = {
 		isLogged: true,
 	};
 	const navigation = useNavigation();
+	const [islogged, setIsLogged] = useRecoilState(isLogged);
 
 	const authHandling = (pageName: string) => {
-		// if (LoginStore.isLogged) {
-		Alert.alert("로그인 후 이용 가능합니다.");
-		// } else {
-		// alert("해당 서비스는 로그인 후 이용가능합니다.");
-		// }
+		if (islogged === true) {
+			navigation.navigate(pageName);
+		} else {
+			Alert.alert("로그인 후 이용 가능합니다.");
+		}
 	};
 
 	const [patrolPeople, setPatrolPeople] = useState(0);
@@ -68,7 +71,7 @@ const Main = () => {
 				</View>
 				<CustomButton
 					text="지역 순찰하기"
-					onPress={() => navigation.navigate("PatrolGo")}
+					onPress={() => authHandling("PatrolGo")}
 				/>
 				{LoginStore.isLogged ? null : (
 					<View style={MainLayout.mainTextWrap}>
