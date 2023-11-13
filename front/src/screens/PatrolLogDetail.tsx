@@ -8,8 +8,13 @@ import LocIconImg from "../../assets/images/location-icon.png";
 import DateIconImg from "../../assets/images/date-icon.png";
 import DistanceIconImg from "../../assets/images/distance-icon.png";
 import TimeIconImg from "../../assets/images/time-icon.png";
+import React, { useEffect, useState } from "react";
+import { useRoute } from "@react-navigation/native";
 
 const PatrolLogDetail = () => {
+	const route = useRoute();
+	const { logNo } = route.params;
+	console.log("현재 페이지", logNo);
 	return (
 		<>
 			<CommonLayout>

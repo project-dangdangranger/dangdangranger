@@ -12,17 +12,12 @@ import {
 	responsiveWidth,
 } from "react-native-responsive-dimensions";
 import React, { useState } from "react";
-
+import { useNavigation } from "@react-navigation/native";
 const PatrolLogCarousel = ({ logs }: any) => {
-	const [selectedLogNo, setSelectedLogNo] = useState(null);
+	const navigation = useNavigation();
 
 	const handleLogClick = (logNo) => {
-		if (selectedLogNo === logNo) {
-			setSelectedLogNo(null);
-			return;
-		}
-		setSelectedLogNo(logNo);
-		console.log(logNo);
+		navigation.navigate("PatrolLogDetail", { logNo });
 	};
 
 	return (
@@ -33,10 +28,7 @@ const PatrolLogCarousel = ({ logs }: any) => {
 						return (
 							<TouchableOpacity
 								key={log.logNo}
-								style={[
-									style.cardWrap,
-									selectedLogNo === log.logNo && style.logItemSelected,
-								]}
+								style={[style.cardWrap]}
 								onPress={() => handleLogClick(log.logNo)}
 							>
 								<Image source={log.imgSrc} style={style.cardImg} />
