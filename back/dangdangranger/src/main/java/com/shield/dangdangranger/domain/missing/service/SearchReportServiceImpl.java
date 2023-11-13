@@ -3,6 +3,7 @@ package com.shield.dangdangranger.domain.missing.service;
 import static com.shield.dangdangranger.global.constant.BaseConstant.CANCELED;
 import static com.shield.dangdangranger.global.constant.BaseConstant.NOTCANCELED;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -16,6 +17,7 @@ import com.shield.dangdangranger.domain.missing.constant.SeachReportResponseMess
 import com.shield.dangdangranger.domain.missing.dto.SearchReportRequestDto.SearchReportListRequestDto;
 import com.shield.dangdangranger.domain.missing.dto.SearchReportRequestDto.SearchReportSaveRequestDto;
 import com.shield.dangdangranger.domain.missing.dto.SearchReportRequestDto.SearchReportUpdateRequestDto;
+import com.shield.dangdangranger.domain.missing.dto.SearchReportResponseDto.SearchReportInfoResponseDto;
 import com.shield.dangdangranger.domain.missing.entity.SearchReport;
 import com.shield.dangdangranger.domain.missing.repo.MissingRepository;
 import com.shield.dangdangranger.domain.missing.repo.SearchReportRepository;
@@ -73,20 +75,47 @@ public class SearchReportServiceImpl implements SearchReportService {
 	}
 
 	@Override
-	public List<SearchReport> selectAll(SearchReportListRequestDto searchReportListRequestDto) {
+	public List<SearchReportInfoResponseDto> selectAll(SearchReportListRequestDto searchReportListRequestDto) {
 		
-		return searchReportRepository.findAllByMissingNoAndCanceled(
+		List<SearchReport> list = searchReportRepository.findAllByMissingNoAndCanceled(
 				searchReportListRequestDto.getMissingNo(), 
 				BaseConstant.NOTCANCELED);
+		
+		List<SearchReportInfoResponseDto> responseDtoList = new ArrayList<>();
+		for (SearchReport searchReport : list) {
+			responseDtoList.add(SearchReportInfoResponseDto.builder()
+					.searchReportNo(searchReport.getSearchReportNo())
+					.missingNo(searchReport.getMissingNo())
+					.userNo(searchReport.getUserNo())
+					.searchReportLat(searchReport.getSearchReportLat())
+					.searchReportLng(searchReport.getSearchReportLng())
+					.build()
+			);
+		}
+		
+		return responseDtoList;
 		
 	}
 
 	@Override
-	public SearchReport selectOne(Integer searchReportNo) {
+	public SearchReportInfoResponseDto selectOne(Integer searchReportNo) {
 		
-		return searchReportRepository.findOneBySearchReportNoAndCanceled(searchReportNo, BaseConstant.NOTCANCELED)
+		SearchReport searchReport = searchReportRepository.findOneBySearchReportNoAndCanceled(searchReportNo, BaseConstant.NOTCANCELED)
 				.orElseThrow(() -> new NotFoundException(
 						SeachReportResponseMessage.SEARCH_REPORT_NOT_FOUND_EXCEPTION.message()));
+		
+		List<String> images = new ArrayList<>();
+		imageRepository.findAllByImageTypeNoAndParentNoAndCanceled(
+				ImageType.FOUND.value(), searchReportNo, BaseConstant.NOTCANCELED);
+		
+		return SearchReportInfoResponseDto.builder()
+				.searchReportNo(searchReport.getSearchReportNo())
+				.missingNo(searchReport.getMissingNo())
+				.userNo(searchReport.getUserNo())
+				.searchReportLat(searchReport.getSearchReportLat())
+				.searchReportLng(searchReport.getSearchReportLng())
+				.searchReportImages(images)
+				.build();
 	}
 
 	@Override
