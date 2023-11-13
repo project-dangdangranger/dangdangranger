@@ -119,7 +119,7 @@ const CreateDog = ({ navigation }: any) => {
 				console.log("데이터의 스테이터스는?:", data.status);
 
 				if (data.status === 200) {
-					console.log(1111111111111);
+					console.log("mint dog contract 호출!!");
 					const tx = await mintDogTokenContract.mintDogProfile(
 						walletAddress,
 						`ipfs://${nftCid}`,
@@ -143,7 +143,7 @@ const CreateDog = ({ navigation }: any) => {
 		receiptHash,
 		imageOrigin,
 	}: any) => {
-		console.log(111111111);
+		console.log("check polygon method!!!");
 		console.log("imageOrigin:", imageOrigin);
 		console.log("receiptHash:", receiptHash);
 		console.log("POLYGON_KEY:", POLYGON_KEY);
