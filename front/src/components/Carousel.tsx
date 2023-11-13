@@ -58,7 +58,7 @@ const MyHorizontalScrollView = () => {
 				horizontal
 				pagingEnabled
 				onScroll={handleScroll}
-				scrollEventThrottle={16} // iOS에서 스크롤 이벤트를 받는 빈도를 결정합니다.
+				scrollEventThrottle={16}
 				showsHorizontalScrollIndicator={false}
 				style={styles.scrollViewStyle}
 			>

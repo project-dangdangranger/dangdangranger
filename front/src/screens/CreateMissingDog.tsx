@@ -123,7 +123,7 @@ const PatrolDiaryWrite = () => {
 			// 모든 프로미스가 완료될 때까지 기다립니다.
 			const uploadedImages = await Promise.all(uploadPromises);
 			axios
-				.post("/missing", {
+				.post("/patrol", {
 					missingTypeNo: 2,
 					missingTitle: patrolReportTitle,
 					missingContent: patrolReportContent,
@@ -144,7 +144,7 @@ const PatrolDiaryWrite = () => {
 					}
 				})
 				.catch((err) => {
-					console.log("에러;", err.message);
+					console.log("에러;", err);
 				});
 
 			// setSubmitImgList(uploadedImages);
