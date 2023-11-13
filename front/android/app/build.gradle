@@ -88,8 +88,11 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         buildConfigField "String", "KAKAO_MAP_API_HASH_KEY", "\"${kakaoMapApiHashKey}\""
         manifestPlaceholders = [kakaoNativeAppKey: kakaoNativeAppKey]
-        versionCode 1
-        versionName "1.0"
+        versionCode 4
+        versionName "1.0.0"
+
+        // apk version 관리용 네이밍 설정
+        archivesBaseName = "dang-v${versionName}(${versionCode})"
     }
     signingConfigs {
         debug {
@@ -97,6 +100,16 @@ android {
             storePassword 'android'
             keyAlias 'androiddebugkey'
             keyPassword 'android'
+        }
+
+        // keystore 설정
+        release {
+            if (project.hasProperty('DANG_KEY_STORE_FILE')) {
+                storeFile file(DANG_KEY_STORE_FILE)
+                storePassword DANG_STORE_PASSWORD
+                keyAlias DANG_KEY_ALIAS
+                keyPassword DANG_KEY_PASSWORD
+            }
         }
     }
     buildTypes {
@@ -107,6 +120,10 @@ android {
             // Caution! In production, you need to generate your own keystore file.
             // see https://reactnative.dev/docs/signed-apk-android.
             signingConfig signingConfigs.debug
+
+             // keystore 설정
+            signingConfig signingConfigs.release
+            
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
         }
