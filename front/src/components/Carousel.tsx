@@ -1,47 +1,44 @@
 import React, { useState, useRef } from "react";
-import { ScrollView, View, Image, Text, StyleSheet } from "react-native";
+import {
+	ScrollView,
+	View,
+	Image,
+	Text,
+	StyleSheet,
+	TouchableOpacity,
+} from "react-native";
 import {
 	responsiveHeight,
 	responsiveWidth,
 } from "react-native-responsive-dimensions";
-import Img1 from "../../assets/images/photo-ex-img2.png";
-import Img2 from "../../assets/images/photo-ex-img3.png";
-import Img3 from "../../assets/images/photo-ex-img4.png";
+import axios from "../utils/axios";
+import { useFocusEffect } from "@react-navigation/native";
 
-const MyHorizontalScrollView = (imgList: any) => {
+const MyHorizontalScrollView = () => {
 	const [currentIndex, setCurrentIndex] = useState(0);
 	const scrollViewRef = useRef(null);
 
-	const imgs = [
-		{
-			id: 1,
-			src: Img1,
-			location: "서울특별시 역삼동",
-		},
-		{
-			id: 2,
-			src: Img2,
-			location: "서울특별시 역삼동",
-		},
-		{
-			id: 3,
-			src: Img3,
-			location: "서울특별시 역삼동",
-		},
-	];
+	const [imgList, setImgList] = useState([]);
+	useFocusEffect(
+		React.useCallback(() => {
+			axios.get("/missing/recent_missing_images").then((res) => {
+				console.log("도그사진들: ", res.data.data);
+				setImgList(res.data.data);
+			});
+		}, []),
+	);
 
 	const handleScroll = (event: any) => {
 		const contentOffsetX = event.nativeEvent.contentOffset.x;
-		const newIndex = Math.floor(contentOffsetX / responsiveWidth(80));
+		const newIndex = Math.round(contentOffsetX / responsiveWidth(80));
 		if (newIndex !== currentIndex) {
 			setCurrentIndex(newIndex);
 		}
 	};
-
 	const renderPagination = () => {
 		return (
 			<View style={styles.paginationWrapper}>
-				{[...Array(imgs.length).keys()].map((key, index) => (
+				{[...Array(imgList.length).keys()].map((key, index) => (
 					<View
 						key={key}
 						style={[
@@ -61,17 +58,23 @@ const MyHorizontalScrollView = (imgList: any) => {
 				horizontal
 				pagingEnabled
 				onScroll={handleScroll}
-				scrollEventThrottle={16}
+				scrollEventThrottle={16} // iOS에서 스크롤 이벤트를 받는 빈도를 결정합니다.
 				showsHorizontalScrollIndicator={false}
 				style={styles.scrollViewStyle}
 			>
-				{imgs.map((img, index) => {
+				{imgList?.map((img, index) => {
 					return (
-						<View key={img.id} style={styles.viewStyle}>
-							<Image style={styles.viewStyle} source={img.src} />
-							<View style={styles.textView}>
+						<View key={img.missingNo} style={styles.viewStyle}>
+							<Image style={styles.viewStyle} source={{ uri: img.imageUrl }} />
+
+							<TouchableOpacity
+								onPress={() => {
+									console.log("이동할 No:", img.missingNo);
+								}}
+								style={styles.textView}
+							>
 								<Text style={styles.text}>이동하기</Text>
-							</View>
+							</TouchableOpacity>
 						</View>
 					);
 				})}

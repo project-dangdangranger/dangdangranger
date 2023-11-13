@@ -67,7 +67,8 @@ const style = StyleSheet.create({
 	img: {
 		width: responsiveWidth(39),
 		height: responsiveHeight(20),
-		resizeMode: "stretch",
+		// resizeMode: "cover",
+		borderRadius: 20,
 	},
 
 	textWrap: {
