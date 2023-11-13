@@ -2,7 +2,9 @@ package com.shield.dangdangranger.domain.missing.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -39,6 +41,22 @@ public class FinddogController {
 					ResponseDto.create(
 						FinddogResponseMessage.CREATE_SESSION_SUCCESS.message(), 
 						finddogService.createSession(finddogCreateRequestDto.getMissingNo())
+					)
+				);
+	}
+	
+	@DeleteMapping("/{missingNo}")
+	public ResponseEntity<ResponseDto<?>> closeSession(
+			@RequestAttribute("userNo") Integer userNo,
+			@PathVariable Integer missingNo) {
+		
+		finddogService.closeSession(missingNo);
+		
+		return ResponseEntity
+				.status(HttpStatus.CREATED)
+				.body(
+					ResponseDto.create(
+						FinddogResponseMessage.CLOSE_SESSION_SUCCESS.message()
 					)
 				);
 	}

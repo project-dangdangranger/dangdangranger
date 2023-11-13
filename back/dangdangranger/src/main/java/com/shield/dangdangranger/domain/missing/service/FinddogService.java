@@ -7,7 +7,7 @@ public interface FinddogService {
 
 	FinddogSessionResponseDto createSession(Integer missingNo);
 	
-	void closeSession();
+	void closeSession(Integer missingNo);
 	
 	void publishMessage(FinddogMessage message);
 	
@@ -18,4 +18,6 @@ public interface FinddogService {
 	void decreaseFinddogParticipants(Integer missingNo);
 	
 	int getFinddogParticipants();
+
+	void endSession(FinddogMessage message);
 }
