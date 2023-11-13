@@ -17,6 +17,7 @@ import FooterBar from "../recycles/FooterBar";
 import { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import axios from "../utils/axios";
+// import Test from "../components/Test";
 
 const Main = () => {
 	const LoginStore = {
@@ -47,6 +48,7 @@ const Main = () => {
 			<></>
 			<CommonLayout>
 				<MainHeader></MainHeader>
+				{/* <Test /> */}
 				<View style={MainLayout.walkMainWrap}>
 					<MainCount patrol={patrolPeople} missing={missingPeople} />
 					<Text style={MainLayout.walkMainTitle}>
