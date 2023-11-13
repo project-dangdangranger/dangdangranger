@@ -47,5 +47,6 @@ public class MissingResponseDto {
         private Double missingLng;
         private String thumbnailUrl;
         private String missingAddress;
+        private Integer dogNo;
     }
 }
