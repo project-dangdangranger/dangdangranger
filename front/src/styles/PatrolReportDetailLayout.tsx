@@ -117,6 +117,7 @@ const PatrolReportDetailLayout = StyleSheet.create({
 		// backgroundColor: "#E8E8E8",
 		width: responsiveWidth(80),
 		height: responsiveHeight(20),
+		marginLeft: responsiveWidth(10),
 	},
 	editContainer: {
 		// backgroundColor: "red",
@@ -241,6 +242,31 @@ const PatrolReportDetailLayout = StyleSheet.create({
 		color: "#fff",
 		fontSize: 17,
 		fontWeight: "bold",
+	},
+	missingDateText: {
+		fontSize: 15,
+		// fontWeight: "bold",
+	},
+	missingDateText1: {
+		fontSize: 15,
+		fontWeight: "bold",
+		color: "#3D6CC9",
+	},
+	missingDateText2: {
+		fontSize: 15,
+		fontWeight: "bold",
+		color: "#FF6A6A",
+	},
+	addresscontainer: {
+		flexDirection: "row",
+		alignItems: "center",
+		marginBottom: responsiveHeight(5),
+	},
+	missingtitle: {
+		marginLeft: responsiveWidth(15),
+	},
+	missingaddress: {
+		marginLeft: responsiveWidth(20),
 	},
 });
 
