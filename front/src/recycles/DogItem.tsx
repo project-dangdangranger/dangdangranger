@@ -22,10 +22,6 @@ const DogItem = ({ item, navigation }: any) => {
 					<Text style={styles.dogTitle}>{item.dogName}</Text>
 					<View style={styles.dogItemContentRow}>
 						<View style={styles.dogItemStyle}>
-							<Text>나이</Text>
-							<Text style={styles.dogItemMainText}>{item.dogNo}</Text>
-						</View>
-						<View style={styles.dogItemStyle}>
 							<Text>성별</Text>
 							<Text style={styles.dogItemMainText}>{item.dogSex}</Text>
 						</View>
@@ -36,7 +32,7 @@ const DogItem = ({ item, navigation }: any) => {
 								numberOfLines={1}
 								ellipsizeMode="clip"
 							>
-								{item.dogBreed}ddddddddddd
+								{item.dogBreed}
 							</Text>
 						</View>
 					</View>
@@ -111,7 +107,7 @@ const styles = StyleSheet.create({
 		fontWeight: "bold",
 	},
 	dogItemBreedText: {
-		width: responsiveWidth(16),
+		width: responsiveWidth(30),
 		fontSize: 15,
 		fontWeight: "bold",
 		overflow: "visible",
