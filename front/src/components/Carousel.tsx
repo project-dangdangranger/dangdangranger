@@ -8,7 +8,7 @@ import Img1 from "../../assets/images/photo-ex-img2.png";
 import Img2 from "../../assets/images/photo-ex-img3.png";
 import Img3 from "../../assets/images/photo-ex-img4.png";
 
-const MyHorizontalScrollView = () => {
+const MyHorizontalScrollView = (imgList: any) => {
 	const [currentIndex, setCurrentIndex] = useState(0);
 	const scrollViewRef = useRef(null);
 
@@ -30,16 +30,14 @@ const MyHorizontalScrollView = () => {
 		},
 	];
 
-	// 페이지가 변경될 때 호출됩니다.
 	const handleScroll = (event: any) => {
 		const contentOffsetX = event.nativeEvent.contentOffset.x;
-		const newIndex = Math.floor(contentOffsetX / responsiveWidth(80)); // '80'은 각 이미지 뷰의 너비입니다.
+		const newIndex = Math.floor(contentOffsetX / responsiveWidth(80));
 		if (newIndex !== currentIndex) {
 			setCurrentIndex(newIndex);
 		}
 	};
 
-	// 페이지 인디케이터를 렌더링합니다.
 	const renderPagination = () => {
 		return (
 			<View style={styles.paginationWrapper}>
@@ -63,7 +61,7 @@ const MyHorizontalScrollView = () => {
 				horizontal
 				pagingEnabled
 				onScroll={handleScroll}
-				scrollEventThrottle={16} // iOS에서 스크롤 이벤트를 받는 빈도를 결정합니다.
+				scrollEventThrottle={16}
 				showsHorizontalScrollIndicator={false}
 				style={styles.scrollViewStyle}
 			>
@@ -72,18 +70,11 @@ const MyHorizontalScrollView = () => {
 						<View key={img.id} style={styles.viewStyle}>
 							<Image style={styles.viewStyle} source={img.src} />
 							<View style={styles.textView}>
-								<Text style={styles.text}>{img.location}</Text>
+								<Text style={styles.text}>이동하기</Text>
 							</View>
 						</View>
 					);
 				})}
-
-				<View style={styles.viewStyle}>
-					<Image style={styles.viewStyle} source={Img1} />
-					<View style={styles.textView}>
-						<Text style={styles.text}>서울특별시 역삼동</Text>
-					</View>
-				</View>
 			</ScrollView>
 			{renderPagination()}
 		</View>

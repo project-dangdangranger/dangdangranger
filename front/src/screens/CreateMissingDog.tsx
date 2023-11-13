@@ -29,9 +29,13 @@ import DateTimePickerModal from "react-native-modal-datetime-picker";
 const PatrolDiaryWrite = () => {
 	const navigation = useNavigation();
 
-	const handleConfirm = (date) => {
-		setMissingDate(date.toLocaleDateString());
+	const handleConfirm = (date: Date) => {
+		const year = date.getFullYear().toString();
+		const month = (date.getMonth() + 1).toString().padStart(2, "0");
+		const day = date.getDate().toString().padStart(2, "0");
+		setMissingDate(year + "-" + month + "-" + day + "T00:00:00");
 		hideDatePicker();
+		console.log(missingDate);
 	};
 
 	const logs = [
@@ -64,6 +68,26 @@ const PatrolDiaryWrite = () => {
 	// const [submitImgList, setSubmitImgList] = useState([]);
 
 	const uploadImage = async (patrolImgList: any) => {
+		if (patrolImgList.length === 0) {
+			Alert.alert("이미지를 등록해주세요");
+			return;
+		}
+
+		if (patrolReportTitle.length === 0) {
+			Alert.alert("제목을 작성해주세요");
+			return;
+		}
+
+		if (patrolReportContent.length === 0) {
+			Alert.alert("내용을 작성해주세요");
+			return;
+		}
+
+		if (missingDate.length === 0) {
+			Alert.alert("신고 일자를 등록해주세요");
+			return;
+		}
+
 		const uploadPromises = patrolImgList.map(async (imageUri, index) => {
 			const response = await fetch(imageUri);
 			const blob = await response.blob();
@@ -95,32 +119,39 @@ const PatrolDiaryWrite = () => {
 
 		console.log("hello:::", patrolReportTitle);
 
-		// try {
-		// 	// 모든 프로미스가 완료될 때까지 기다립니다.
-		// 	const uploadedImages = await Promise.all(uploadPromises);
-		// 	axios
-		// 		.post("/patrol", {
-		// 			patrolReportTitle: patrolReportTitle,
-		// 			patrolReportContent: patrolReportContent,
-		// 			patrolReportImageList: uploadedImages,
-		// 			patrolLogNo: patrolLogNo,
-		// 		})
-		// 		.then((res) => {
-		// 			console.log("성공:", res.data);
-		// 			if (res.data.message === "순찰일지 등록 성공") {
-		// 				Alert.alert("순찰일지 등록 성공", "순찰 일지 화면으로 이동합니다.");
-		// 				navigation.navigate("PatrolDiary");
-		// 			}
-		// 		})
-		// 		.catch((err) => {
-		// 			console.log("에러;", err);
-		// 		});
+		try {
+			// 모든 프로미스가 완료될 때까지 기다립니다.
+			const uploadedImages = await Promise.all(uploadPromises);
+			axios
+				.post("/missing", {
+					missingTypeNo: 2,
+					missingTitle: patrolReportTitle,
+					missingContent: patrolReportContent,
+					missingDate: missingDate,
+					missingLat: 37.123,
+					missingLng: 127.123,
+					missingImages: uploadedImages,
+				})
+				.then((res) => {
+					console.log("성공:", res.data);
+					if (res.data.message === "실종견(신고) 등록 성공") {
+						Alert.alert(
+							"실종견(신고) 등록 성공",
+							"실종 화면 디테일로 이동합니다.",
+						);
+						// 있어야 함
+						// navigation.navigate("PatrolDiary");
+					}
+				})
+				.catch((err) => {
+					console.log("에러;", err.message);
+				});
 
-		// 	// setSubmitImgList(uploadedImages);
-		// 	console.log("uploadedImages::::::", uploadedImages);
-		// } catch (error) {
-		// 	console.error("An error occurred during the upload", error);
-		// }
+			// setSubmitImgList(uploadedImages);
+			console.log("uploadedImages::::::", uploadedImages);
+		} catch (error) {
+			console.error("An error occurred during the upload", error);
+		}
 	};
 
 	const removeImageFromPatrolImgList = (indexToRemove) => {
@@ -207,6 +238,7 @@ const PatrolDiaryWrite = () => {
 								setPatrolReportContent(text);
 							}}
 							placeholder="순찰 일지 내용을 작성해주세요."
+							multiline={true}
 							onBlur={() => {}}
 						/>
 						<DateTimePickerModal
@@ -227,7 +259,7 @@ const PatrolDiaryWrite = () => {
 							</View>
 						</TouchableOpacity>
 						<CustomSubButton
-							text={"순찰일지 기록하기"}
+							text={"실종견 등록하기"}
 							onPress={() => {
 								uploadImage(patrolImgList);
 							}}

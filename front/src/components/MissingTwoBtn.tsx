@@ -23,7 +23,7 @@ const MissingTwoBtn = () => {
 					</TouchableOpacity>
 					<TouchableOpacity
 						style={styles.btn}
-						onPress={() => navigate("MissingRegist")}
+						onPress={() => navigate("Report")}
 					>
 						<Image source={Btn2} style={styles.btnImg} />
 						<Text style={styles.btnText2}>실종견 등록</Text>
