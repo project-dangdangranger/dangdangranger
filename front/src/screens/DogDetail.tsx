@@ -25,27 +25,66 @@ import axios from "../utils/axios";
 
 const Profile = ({ route }) => {
 	const navigation = useNavigation();
-	const [data, setDate] = useState(route.params);
-
-	// 나이 계산해서 해야 함 ㅇㅇㅇ
+	const [dogData, setDogData] = useState(route.params);
+	const [dogBirth, setDogBirth] = useState(null);
+	const [dogAge, setDogAge] = useState<string>("");
+	const [dogCreateDate, setDogCreateDate] = useState(null);
 
 	useEffect(() => {
-		console.log("라우트:", route);
+		console.log("dog detail:", route);
 		axios.get(`/dog/${route.params.item.dogNo}`).then((res) => {
-			setDate(res.data.data);
-			console.log(res.data.data);
+			setDogData(res.data.data);
+			console.log("dog detail response: ", res.data);
+			console.log("dog birth : ", res.data.data.dogBirth);
+
+			setDogBirth(res.data.data.dogBirth.split("T")[0]);
+			setDogAge(calculateAge(res.data.data.dogBirth.split("T")[0]));
+			setDogCreateDate(res.data.data.createDate.split("T")[0]);
 		});
 	}, []);
+
+	const calculateAge = (dogBirth: any) => {
+		const currentDate = new Date();
+		console.log("오늘 날짜: ", currentDate);
+
+		const birth = new Date(dogBirth);
+		console.log("강아지 생일 : ", birth);
+
+		let ageYears = currentDate.getFullYear() - birth.getFullYear();
+		let ageMonths = currentDate.getMonth() - birth.getMonth();
+
+		if (
+			currentDate.getDate() < birth.getDate() ||
+			currentDate.getDate() === birth.getDate()
+		) {
+			ageMonths--;
+		}
+
+		// 생일이 지났을 경우 1살 추가
+		if (
+			currentDate.getFullYear() < birth.getFullYear() &&
+			currentDate.getMonth() >= birth.getMonth() &&
+			currentDate.getDate() >= birth.getDate()
+		) {
+			ageYears++;
+		}
+
+		if (ageYears >= 1) {
+			return `${ageYears}세`;
+		} else {
+			return `${ageMonths}개월`;
+		}
+	};
 
 	return (
 		<>
 			<CommonLayout>
 				<ColorHeader title="강아지 정보" />
 
-				<Image source={{ uri: data?.dogImg }} style={styles.mainImg} />
+				<Image source={{ uri: dogData?.dogImg }} style={styles.mainImg} />
 
 				<View style={styles.mainTextContainer}>
-					<Text style={styles.mainText}>{data?.dogName} </Text>
+					<Text style={styles.mainText}>{dogData?.dogName} </Text>
 					<View style={styles.line} />
 				</View>
 				<View style={styles.dogContainer}>
@@ -53,13 +92,20 @@ const Profile = ({ route }) => {
 						<View style={styles.dogItemContentRow}>
 							<View style={styles.dogItemStyle}>
 								<Text>나이</Text>
-								<Text style={styles.dogItemMainText}>{data?.dogNo}</Text>
+								<Text style={styles.dogItemMainText}>{dogAge}</Text>
 							</View>
 							<View style={styles.dogItemStyle}>
 								<Text>성별</Text>
-								<Text style={styles.dogItemMainText}>{data?.dogSex}</Text>
+								<Text style={styles.dogItemMainText}>{dogData?.dogSex}</Text>
 							</View>
 
+							<View style={styles.dogItemStyle}>
+								<Text>생일</Text>
+								<Text style={styles.dogDataText}>{dogBirth}</Text>
+							</View>
+						</View>
+
+						<View>
 							<View style={styles.dogItemStyle}>
 								<Text>견종</Text>
 
@@ -68,14 +114,20 @@ const Profile = ({ route }) => {
 									numberOfLines={1}
 									ellipsizeMode="clip"
 								>
-									{data?.dogBreed}
+									{dogData?.dogBreed}
 								</Text>
 							</View>
-							<View style={styles.dogItemStyle}>
-								<Text>발급 일자</Text>
-								<Text style={styles.dogDataText}>{data?.createDate}</Text>
-							</View>
 						</View>
+
+						<View>
+							<Text></Text>
+						</View>
+
+						<View style={styles.dogCreateDateStyle}>
+							<Text>발급 일자</Text>
+							<Text style={styles.dogDataText}>{dogCreateDate}</Text>
+						</View>
+
 						<View>
 							<Text style={styles.randomText}>
 								랜덤한 댕댕레인저 대사가 여기에 나옵니다.
@@ -103,11 +155,11 @@ const styles = StyleSheet.create({
 	mainImg: {
 		position: "relative",
 		width: responsiveWidth(100),
-		height: responsiveHeight(30),
+		height: responsiveHeight(50),
 	},
 	mainTextContainer: {
 		position: "absolute",
-		top: responsiveHeight(30),
+		top: responsiveHeight(50),
 		backgroundColor: "#fff",
 		width: responsiveWidth(100),
 		height: responsiveHeight(120),
@@ -186,6 +238,10 @@ const styles = StyleSheet.create({
 		justifyContent: "center",
 		// alignItems: "center",
 	},
+	dogCreateDateStyle: {
+		justifyContent: "center",
+		// alignItems: "center",
+	},
 	dogItemMainText: {
 		fontSize: 18,
 		fontWeight: "bold",
@@ -197,7 +253,6 @@ const styles = StyleSheet.create({
 		marginRight: responsiveWidth(5),
 	},
 	dogItemBreedText: {
-		width: responsiveWidth(16),
 		fontSize: 18,
 		fontWeight: "bold",
 		overflow: "visible",
@@ -205,7 +260,7 @@ const styles = StyleSheet.create({
 	},
 	dogDataText: { fontSize: 18, fontWeight: "bold" },
 	randomText: {
-		marginTop: responsiveHeight(5),
+		marginTop: responsiveHeight(3),
 		marginBottom: responsiveHeight(20),
 	},
 	subBtnLocation: {},
