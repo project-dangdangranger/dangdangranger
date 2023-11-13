@@ -14,7 +14,7 @@ import PatrolSubImg from "../../assets/images/main-patrol.png";
 import MissingSubImg from "../../assets/images/main-missing.png";
 import ChatBotSubImg from "../../assets/images/main-chatbot.png";
 import FooterBar from "../recycles/FooterBar";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import axios from "../utils/axios";
 import { useFocusEffect } from "@react-navigation/native";
@@ -22,6 +22,10 @@ import { useRecoilState } from "recoil";
 import { isLogged } from "../atoms/atoms";
 
 const Main = () => {
+	useEffect(() => {
+		console.log("isLogged:", islogged);
+	}, []);
+
 	const LoginStore = {
 		isLogged: true,
 	};
@@ -39,12 +43,14 @@ const Main = () => {
 	const [patrolPeople, setPatrolPeople] = useState(0);
 	const [missingPeople, setMissingPeople] = useState(0);
 
-	useEffect(() => {
-		axios.get("/patrol/people").then((data) => {
-			setPatrolPeople(data.data.data.patrolPeopleCnt);
-			// console.log("현재 순찰중인 사람 데이터:", data.data);
-		});
-	}, []);
+	useFocusEffect(
+		React.useCallback(() => {
+			axios.get("/patrol/people").then((data) => {
+				setPatrolPeople(data.data.data.patrolPeopleCnt);
+				// console.log("현재 순찰중인 사람 데이터:", data.data);
+			});
+		}, []),
+	);
 
 	return (
 		<>
