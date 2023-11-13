@@ -12,6 +12,7 @@ import axios from "../utils/axios";
 import GoogleMap from "./GoogleMap";
 import FindMap from "../components/FindMap";
 import FindBtn from "../components/FindBtn";
+import FindSideBtn from "../components/FindSideBtn";
 
 const FindTogether = (missingNo: number) => {
 	const navigation = useNavigation();
@@ -168,6 +169,7 @@ const FindTogether = (missingNo: number) => {
 					startSession={() => Alert.alert("강아지를 찾아봅시다")}
 					endSession={() => Alert.alert("이걸 못찾네")}
 				/>
+				<FindSideBtn />
 			</CommonLayout>
 		</>
 	);
