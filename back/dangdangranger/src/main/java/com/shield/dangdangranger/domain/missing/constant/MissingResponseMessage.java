@@ -9,7 +9,8 @@ public enum MissingResponseMessage {
 	READ_ALL_MISSING("실종견 정보 리스트 조회 성공"),
 	DELETE_FORBIDDEN("삭제 권한이 없습니다."),
 	DELETE_SUCCESS("실종견 삭제 완료"),
-	UPDATE_SUCCESS("실종견 수정 완료");
+	UPDATE_SUCCESS("실종견 수정 완료"), 
+	GET_RECENT_MISSING_IMAGES_SUCCESS("최근 실종견 사진 조회 성공");
 	
 	private final String message;
 
