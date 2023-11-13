@@ -20,4 +20,6 @@ public interface SearchReportService {
 	SearchReportInfoResponseDto selectOne(Integer searchReportNo);
 
 	void updateSearchReport(Integer userNo, SearchReportUpdateRequestDto searchReportUpdateRequestDto);
+
+	void deleteSearchReport(Integer userNo, Integer searchReportNo);
 }

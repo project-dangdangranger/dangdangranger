@@ -155,4 +155,27 @@ public class SearchReportServiceImpl implements SearchReportService {
 		searchReportRepository.save(searchReport);
 	}
 
+	@Override
+	public void deleteSearchReport(Integer userNo, Integer searchReportNo) {
+		
+		SearchReport searchReport = searchReportRepository.findOneBySearchReportNoAndCanceled(
+				searchReportNo, BaseConstant.NOTCANCELED)
+				.orElseThrow(() -> new NotFoundException(
+						SeachReportResponseMessage.SEARCH_REPORT_NOT_FOUND_EXCEPTION.message()));
+		
+		if (!searchReport.getUserNo().equals(userNo)) throw new ForbiddenException(
+				SeachReportResponseMessage.SEARCH_REPORT_FORBIDDEN_EXCEPTION.message());
+		
+		searchReport.setCanceled(BaseConstant.CANCELED);
+		
+		// 이미지 리스트 삭제
+        List<Image> list = imageRepository.findAllByImageTypeNoAndParentNoAndCanceled(
+        		ImageType.FOUND.value(), searchReportNo, NOTCANCELED);
+        for(Image image : list){
+            image.setCanceled(CANCELED);
+            imageRepository.save(image);
+        }
+        searchReportRepository.save(searchReport);
+	}
+
 }
