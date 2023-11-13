@@ -6,9 +6,10 @@ import {
 	PermissionsAndroid,
 	Dimensions,
 	Platform,
+	Image,
 } from "react-native";
 import { Buffer } from "buffer";
-import MapboxGL from "@rnmapbox/maps";
+import MapboxGL, { snapshotManager } from "@rnmapbox/maps";
 import { MAPBOX_ACCESSTOKEN } from "@env";
 import Geolocation from "react-native-geolocation-service";
 import { S3 } from "aws-sdk";
@@ -65,11 +66,11 @@ const GoogleMap = (props: Props) => {
 	const [locationTrail, setLocationTrail] = useState<LocationCoordinates[]>([]);
 	const watchIdRef = useRef<number | null>(null);
 
-	// const s3 = new S3({
-	// 	accessKeyId: AWS_ACCESS_KEY,
-	// 	secretAccessKey: AWS_SECRET_ACCESS_KEY,
-	// 	region: AWS_REGION,
-	// });
+	const s3 = new S3({
+		accessKeyId: AWS_ACCESS_KEY,
+		secretAccessKey: AWS_SECRET_ACCESS_KEY,
+		region: AWS_REGION,
+	});
 
 	const clearLocationWatch = () => {
 		if (watchIdRef.current !== null) {
@@ -78,16 +79,16 @@ const GoogleMap = (props: Props) => {
 		}
 	};
 
-	// const stopAndReset = () => {
-	// 	setPatrolLogDate("");
-	// 	setPatrolLogLat(0);
-	// 	setPatrolLogLng(0);
-	// 	setPatrolLogTotalTime(0);
-	// 	setIsInitialLocationSet(false);
-	// 	setLocationTrail([]);
-	// 	setCurrentLocation(undefined);
-	// 	setPatrolLogTotalDistance(0);
-	// };
+	const stopAndReset = () => {
+		setPatrolLogDate("");
+		setPatrolLogLat(0);
+		setPatrolLogLng(0);
+		setPatrolLogTotalTime(0);
+		setIsInitialLocationSet(false);
+		setLocationTrail([]);
+		setCurrentLocation(undefined);
+		setPatrolLogTotalDistance(0);
+	};
 
 	useEffect(() => {
 		MapboxGL.setTelemetryEnabled(false);
@@ -115,8 +116,37 @@ const GoogleMap = (props: Props) => {
 			clearLocationWatch();
 			console.log("중지 했습니다.!");
 			// saveAndUploadMapSnapshot();
+			testSnapshot();
 		}
 	}, [props.start, props.patrol]);
+	const [imageUri, setImageUri] = useState<string>("");
+
+	// 간단한 스냅샷 캡처 및 로그 출력 테스트
+	const testSnapshot = async () => {
+		try {
+			const snapshotUri = await snapshotManager.takeSnap({
+				centerCoordinate: [-74.12641, 40.797968],
+				width: 300,
+				height: 500,
+				zoomLevel: 14,
+				pitch: 0,
+				heading: 0,
+				styleURL: MapboxGL.StyleURL.Dark,
+				writeToDisk: false, // Base64 결과 반환
+			});
+			setImageUri(`data:image/png;base64,${snapshotUri}`);
+			console.log("Snapshot URI:", snapshotUri);
+
+			// Base64 인코딩된 데이터 확인 (예시)
+			if (snapshotUri.startsWith("data:image/png;base64,")) {
+				console.log("Base64 encoded image confirmed");
+			} else {
+				console.log("Snapshot is not a Base64 encoded image");
+			}
+		} catch (error) {
+			console.error("Snapshot test failed:", error);
+		}
+	};
 
 	const requestLocationPermission = async () => {
 		if (Platform.OS === "android") {
@@ -142,7 +172,13 @@ const GoogleMap = (props: Props) => {
 	}, [isInitialLocationSet]);
 
 	useEffect(() => {
+		// patrolLogTotalDistance가 변할때마다 콘솔
+		console.log("patrolLogTotalDistance: ", patrolLogTotalDistance);
+	}, [patrolLogTotalDistance]);
+
+	useEffect(() => {
 		if (currentLocation) {
+			// Set the camera once the current location is available
 			setCamera({
 				...camera,
 				centerCoordinate: [currentLocation.longitude, currentLocation.latitude],
@@ -167,7 +203,7 @@ const GoogleMap = (props: Props) => {
 				setPatrolLogLng(position.coords.longitude);
 				setIsInitialLocationSet(true);
 
-				// getAddressCode(position.coords.latitude, position.coords.longitude);
+				getAddressCode(position.coords.latitude, position.coords.longitude);
 
 				// if (mapRef.current) {
 				// 	mapRef.current.animateToRegion(newLocation, 1000);
@@ -180,20 +216,20 @@ const GoogleMap = (props: Props) => {
 		);
 	};
 
-	// const getAddressCode = async (latitude: number, longitude: number) => {
-	// 	try {
-	// 		const response = await Axios.get(
-	// 			`https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&language=ko&key=${GEOCODING_API_KEY}`,
-	// 		);
-	// 		const formattedAddress = response.data.results[0].formatted_address;
-	// 		const addressParts = formattedAddress.split(" ");
-	// 		const address = `${addressParts[1]} ${addressParts[2]} ${addressParts[3]}`;
-	// 		setAddress(address);
-	// 		console.log("address : ", address);
-	// 	} catch (error) {
-	// 		console.error("An error occurred while fetching the dong code:", error);
-	// 	}
-	// };
+	const getAddressCode = async (latitude: number, longitude: number) => {
+		try {
+			const response = await Axios.get(
+				`https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&language=ko&key=${GEOCODING_API_KEY}`,
+			);
+			const formattedAddress = response.data.results[0].formatted_address;
+			const addressParts = formattedAddress.split(" ");
+			const address = `${addressParts[1]} ${addressParts[2]} ${addressParts[3]}`;
+			setAddress(address);
+			console.log("address : ", address);
+		} catch (error) {
+			console.error("An error occurred while fetching the dong code:", error);
+		}
+	};
 
 	const startWatchingLocation = () => {
 		return Geolocation.watchPosition(
@@ -236,51 +272,59 @@ const GoogleMap = (props: Props) => {
 		);
 	};
 
-	// const saveAndUploadMapSnapshot = async () => {
-	// 	if (mapRef.current) {
-	// 		const snapshot = await mapRef.current.takeSnapshot({
-	// 			width: mapWidth,
-	// 			height: mapHeight,
-	// 			format: "png",
-	// 			quality: 1,
-	// 			result: "base64",
-	// 		});
-	// 		await uploadImage(snapshot);
-	// 	}
-	// };
+	const saveAndUploadMapSnapshot = async () => {
+		try {
+			const snapshotUri = await snapshotManager.takeSnap({
+				// centerCoordinate: [props.longitude, props.latitude], // 현재 위치의 좌표
+				centerCoordinate: [-74.12641, 40.797968],
+				width: mapWidth,
+				height: mapHeight,
+				zoomLevel: 14, // 예시 줌 레벨
+				pitch: 0,
+				heading: 0,
+				writeToDisk: false, // 결과를 Base64로 반환
+			});
+			console.log("Snapshot saved to:", snapshotUri);
+			if (snapshotUri) {
+				await uploadImage(snapshotUri);
+			}
+		} catch (error) {
+			console.error("Snapshot failed:", error);
+		}
+	};
 
-	// const uploadImage = async (imageBase64: string) => {
-	// 	const blob = Buffer.from(imageBase64, "base64");
-	// 	const random = Math.floor(Math.random() * 100000000);
-	// 	const filename = `map_${new Date().toISOString()}_${random}.png`;
-	// 	const params = {
-	// 		Bucket: AWS_BUCKET,
-	// 		Key: filename,
-	// 		Body: blob,
-	// 		ContentType: "image/png",
-	// 	};
+	const uploadImage = async (imageBase64: string) => {
+		const blob = Buffer.from(imageBase64, "base64");
+		const random = Math.floor(Math.random() * 100000000);
+		const filename = `map_${new Date().toISOString()}_${random}.png`;
+		const params = {
+			Bucket: AWS_BUCKET,
+			Key: filename,
+			Body: blob,
+			ContentType: "image/png",
+		};
 
-	// 	try {
-	// 		const data = await s3.upload(params).promise();
-	// 		console.log("File uploaded:", data);
-	// 		console.log(data.Location);
-	// 		// 현재 위치가 어떤 동인지, 어떤 거리인지 알아야함
-	// 		const res = {
-	// 			address,
-	// 			patrolLogDate,
-	// 			patrolLogTotalDistance,
-	// 			patrolLogTotalTime: patrolLogTotalTime / 60,
-	// 			patrolLogImageUrl: data.Location,
-	// 			patrolLogLat,
-	// 			patrolLogLng,
-	// 		};
-	// 		console.log(res);
-	// 		await axios.post("/log", res);
-	// 	} catch (err) {
-	// 		console.error("Upload failed:", err);
-	// 	}
-	// 	stopAndReset();
-	// };
+		try {
+			const data = await s3.upload(params).promise();
+			console.log("File uploaded:", data);
+			console.log(data.Location);
+			// 현재 위치가 어떤 동인지, 어떤 거리인지 알아야함
+			const res = {
+				address,
+				patrolLogDate,
+				patrolLogTotalDistance,
+				patrolLogTotalTime: patrolLogTotalTime / 60,
+				patrolLogImageUrl: data.Location,
+				patrolLogLat,
+				patrolLogLng,
+			};
+			console.log(res);
+			await axios.post("/log", res);
+		} catch (err) {
+			console.error("Upload failed:", err);
+		}
+		stopAndReset();
+	};
 
 	const renderAnnotations = () => {
 		return (
@@ -307,6 +351,10 @@ const GoogleMap = (props: Props) => {
 
 	return (
 		<View style={styles.page}>
+			{imageUri && (
+				<Image source={{ uri: imageUri }} style={{ width: 300, height: 500 }} />
+			)}
+
 			<MapboxGL.MapView style={styles.map} ref={mapRef}>
 				{currentLocation && (
 					<MapboxGL.Camera
