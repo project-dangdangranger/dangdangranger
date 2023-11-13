@@ -55,9 +55,9 @@ const MyHorizontalScrollView = ({ imgList, location }) => {
 					return (
 						<View key={img.id} style={styles.viewStyle}>
 							<Image style={styles.viewStyle} source={{ uri: img }} />
-							<View style={styles.textView}>
+							{/* <View style={styles.textView}>
 								<Text style={styles.text}>{location}</Text>
-							</View>
+							</View> */}
 						</View>
 					);
 				})}

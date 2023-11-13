@@ -1,49 +1,44 @@
 import React, { useState, useRef } from "react";
-import { ScrollView, View, Image, Text, StyleSheet } from "react-native";
+import {
+	ScrollView,
+	View,
+	Image,
+	Text,
+	StyleSheet,
+	TouchableOpacity,
+} from "react-native";
 import {
 	responsiveHeight,
 	responsiveWidth,
 } from "react-native-responsive-dimensions";
-import Img1 from "../../assets/images/photo-ex-img2.png";
-import Img2 from "../../assets/images/photo-ex-img3.png";
-import Img3 from "../../assets/images/photo-ex-img4.png";
+import axios from "../utils/axios";
+import { useFocusEffect } from "@react-navigation/native";
 
 const MyHorizontalScrollView = () => {
 	const [currentIndex, setCurrentIndex] = useState(0);
 	const scrollViewRef = useRef(null);
 
-	const imgs = [
-		{
-			id: 1,
-			src: Img1,
-			location: "서울특별시 역삼동",
-		},
-		{
-			id: 2,
-			src: Img2,
-			location: "서울특별시 역삼동",
-		},
-		{
-			id: 3,
-			src: Img3,
-			location: "서울특별시 역삼동",
-		},
-	];
+	const [imgList, setImgList] = useState([]);
+	useFocusEffect(
+		React.useCallback(() => {
+			axios.get("/missing/recent_missing_images").then((res) => {
+				console.log("도그사진들: ", res.data.data);
+				setImgList(res.data.data);
+			});
+		}, []),
+	);
 
-	// 페이지가 변경될 때 호출됩니다.
 	const handleScroll = (event: any) => {
 		const contentOffsetX = event.nativeEvent.contentOffset.x;
-		const newIndex = Math.floor(contentOffsetX / responsiveWidth(80)); // '80'은 각 이미지 뷰의 너비입니다.
+		const newIndex = Math.round(contentOffsetX / responsiveWidth(80));
 		if (newIndex !== currentIndex) {
 			setCurrentIndex(newIndex);
 		}
 	};
-
-	// 페이지 인디케이터를 렌더링합니다.
 	const renderPagination = () => {
 		return (
 			<View style={styles.paginationWrapper}>
-				{[...Array(imgs.length).keys()].map((key, index) => (
+				{[...Array(imgList.length).keys()].map((key, index) => (
 					<View
 						key={key}
 						style={[
@@ -67,23 +62,22 @@ const MyHorizontalScrollView = () => {
 				showsHorizontalScrollIndicator={false}
 				style={styles.scrollViewStyle}
 			>
-				{imgs.map((img, index) => {
+				{imgList?.map((img, index) => {
 					return (
-						<View key={img.id} style={styles.viewStyle}>
-							<Image style={styles.viewStyle} source={img.src} />
-							<View style={styles.textView}>
-								<Text style={styles.text}>{img.location}</Text>
-							</View>
+						<View key={img.missingNo} style={styles.viewStyle}>
+							<Image style={styles.viewStyle} source={{ uri: img.imageUrl }} />
+
+							<TouchableOpacity
+								onPress={() => {
+									console.log("이동할 No:", img.missingNo);
+								}}
+								style={styles.textView}
+							>
+								<Text style={styles.text}>이동하기</Text>
+							</TouchableOpacity>
 						</View>
 					);
 				})}
-
-				<View style={styles.viewStyle}>
-					<Image style={styles.viewStyle} source={Img1} />
-					<View style={styles.textView}>
-						<Text style={styles.text}>서울특별시 역삼동</Text>
-					</View>
-				</View>
 			</ScrollView>
 			{renderPagination()}
 		</View>

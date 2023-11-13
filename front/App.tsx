@@ -19,10 +19,9 @@ import GoogleMap from "./src/screens/GoogleMap";
 import PatrolMap from "./src/screens/PatrolMap";
 import PatrolLog from "./src/screens/PatrolLog";
 import PatrolDiary from "./src/screens/PatrolDiary";
-import PatrolDiaryWrite from "./src/screens/PatrolDiaryWrite";
+import PatrolDiaryWrite from "./src/screens/CreatePatrolDiary";
 import MissingMain from "./src/screens/MissingMain";
 import MissingFind from "./src/screens/MissingFind";
-import MissingRegist from "./src/screens/MissingRegist";
 import MissingDetail from "./src/screens/MissingDetail";
 import CreateMissingDog from "./src/screens/CreateMissingDog";
 import Login from "./src/screens/Login";
@@ -36,11 +35,10 @@ import UpdateInfo from "./src/screens/UpdateInfo";
 import PatrolReportDetail from "./src/screens/PatrolReportDetail";
 import FindTogether from "./src/screens/FindTogether";
 import { TextEncoder, TextDecoder } from "text-encoding";
-
 global.TextEncoder = TextEncoder;
 global.TextDecoder = TextDecoder;
 import ManualMain from "./src/screens/ManualMain";
-import ManualSub1 from "./src/components/Manual/ManualSub1";
+import CreateMissingMyDog from "./src/screens/CreateMissingMyDog";
 
 const App = () => {
 	const Stack = createNativeStackNavigator();
@@ -76,7 +74,6 @@ const App = () => {
 					<Stack.Screen name="PatrolDiaryWrite" component={PatrolDiaryWrite} />
 					<Stack.Screen name="MissingMain" component={MissingMain} />
 					<Stack.Screen name="MissingFind" component={MissingFind} />
-					<Stack.Screen name="MissingRegist" component={MissingRegist} />
 					<Stack.Screen name="MissingDetail" component={MissingDetail} />
 					<Stack.Screen name="CreateMissingDog" component={CreateMissingDog} />
 					<Stack.Screen name="Login" component={Login} />
@@ -93,6 +90,10 @@ const App = () => {
 					/>
 					<Stack.Screen name="FindTogether" component={FindTogether} />
 					<Stack.Screen name="ManualMain" component={ManualMain} />
+					<Stack.Screen
+						name="CreateMissingMyDog"
+						component={CreateMissingMyDog}
+					/>
 				</Stack.Navigator>
 			</NavigationContainer>
 		</RecoilRoot>

@@ -6,7 +6,7 @@ import {
 
 const PatrolDiaryWriteLayout = StyleSheet.create({
 	container: {
-		marginTop: -responsiveHeight(3),
+		marginTop: responsiveHeight(2),
 		// height: responsiveHeight(84),
 		alignItems: "center",
 	},
@@ -94,6 +94,24 @@ const PatrolDiaryWriteLayout = StyleSheet.create({
 	},
 	deleteText: {
 		fontSize: 15,
+	},
+	dateInput: {
+		width: responsiveWidth(85),
+		borderWidth: 1,
+		borderColor: "#9D9D9D",
+		marginBottom: responsiveHeight(2),
+		borderRadius: 2,
+		justifyContent: "center",
+		height: 36,
+		// alignItems: "center",
+		// flexDirection: "row",
+	},
+	dateImg: {
+		width: 20,
+		height: 20,
+		marginRight: 10,
+		position: "absolute",
+		marginHorizontal: responsiveWidth(2),
 	},
 });
 

@@ -9,6 +9,10 @@ import { useNavigation } from "@react-navigation/native";
 import { Client } from "@stomp/stompjs";
 import EncryptedStorage from "react-native-encrypted-storage";
 import axios from "../utils/axios";
+import GoogleMap from "./GoogleMap";
+import FindMap from "../components/FindMap";
+import FindBtn from "../components/FindBtn";
+import FindSideBtn from "../components/FindSideBtn";
 
 const FindTogether = (missingNo: number) => {
 	const navigation = useNavigation();
@@ -19,6 +23,12 @@ const FindTogether = (missingNo: number) => {
 	const [myLatitude, setMyLatitude] = useState(123);
 	const [myLongitude, setMyLongitude] = useState(345);
 	const topicId: any = useRef();
+
+	const findingList = [
+		{ userNo: 1, lat: 37.501, lng: 127.0386 },
+		{ userNo: 2, lat: 37.5024, lng: 127.0392 },
+		{ userNo: 3, lat: 37.4998, lng: 127.0372 },
+	];
 
 	useEffect(() => {
 		//return leavePage();
@@ -146,7 +156,7 @@ const FindTogether = (missingNo: number) => {
 		<>
 			<CommonLayout>
 				<ColorHeader title="함께 찾기" />
-				<TouchableOpacity onPress={() => findWith()}>
+				{/*<TouchableOpacity onPress={() => findWith()}>
 					<Text>방 입장</Text>
 				</TouchableOpacity>
 				<View>
@@ -159,7 +169,18 @@ const FindTogether = (missingNo: number) => {
 				</View>
 				<TouchableOpacity onPress={() => disconnectServer()}>
 					<Text>나가기</Text>
-				</TouchableOpacity>
+					</TouchableOpacity>*/}
+				<FindMap
+					missingNo={9}
+					missingLat={37.5}
+					missingLng={127.03}
+					findingList={findingList}
+				/>
+				<FindBtn
+					startSession={() => Alert.alert("강아지를 찾아봅시다")}
+					endSession={() => Alert.alert("이걸 못찾네")}
+				/>
+				<FindSideBtn />
 			</CommonLayout>
 		</>
 	);
