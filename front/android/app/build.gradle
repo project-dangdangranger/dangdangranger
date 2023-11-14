@@ -89,7 +89,7 @@ android {
         buildConfigField "String", "KAKAO_MAP_API_HASH_KEY", "\"${kakaoMapApiHashKey}\""
         manifestPlaceholders = [kakaoNativeAppKey: kakaoNativeAppKey]
         resValue "string", "mapbox_access_token", localProperties['mapbox.accessToken']
-        versionCode 6
+        versionCode 7
         versionName "1.0.1"
 
         // apk version 관리용 네이밍 설정
