@@ -11,6 +11,8 @@ import GoogleMap from "./GoogleMap";
 import FindMap from "../components/FindMap";
 import FindBtn from "../components/FindBtn";
 import FindSideBtn from "../components/FindSideBtn";
+import Geolocation from "@react-native-community/geolocation";
+
 // const PatrolReportDetail = ({ route }: any) => {
 //     // console.log("라우트!!!!!!", route.params);
 //     const { navigate } = useNavigation();
@@ -33,7 +35,8 @@ const FindTogether = ({ route }: any) => {
 
 	const navigation = useNavigation();
 	const stompClient: any = useRef({});
-	const [intervalId, setIntervalId] = useState<NodeJS.Timeout>();
+	// const [intervalId.current, setintervalId.current] = useState<NodeJS.Timeout>();
+	const intervalId = useRef();
 	// 같이 찾는 사람들의 위치 정보 저장
 	const [positions, setPositions] = useState(new Map());
 	const [myLatitude, setMyLatitude] = useState(123);
@@ -52,6 +55,7 @@ const FindTogether = ({ route }: any) => {
 
 	useEffect(() => {
 		getDetailMissingDog(item.missingNo);
+		leavePage();
 	}, []);
 
 	useEffect(() => {
@@ -130,11 +134,13 @@ const FindTogether = ({ route }: any) => {
 
 	const startSending = () => {
 		console.log(`startSending`);
-		if (intervalId) return;
+		if (intervalId.current) return;
 		if (stompClient.current === undefined || !stompClient.current.connected)
 			return;
+		console.log("여기가 찍히나요 ? ? ? ");
 
 		const id = setInterval(() => {
+			console.log("우우아아아아아");
 			stompClient.current.send(
 				"/pub/finddog",
 				{},
@@ -147,10 +153,28 @@ const FindTogether = ({ route }: any) => {
 						longitude: myLongitude,
 					},
 				}),
+				// 본인 현재위치정보를 넣어야한다. (공유)
 			);
 		}, 5000);
 
-		setIntervalId(id);
+		// setintervalId.current(id);
+		intervalId.current = id;
+		console.log(
+			"TestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTest",
+		);
+	};
+
+	const getGeoLocation = () => {
+		Geolocation.getCurrentPosition(
+			(position) => {
+				const latitude = JSON.stringify(position.coords.latitude);
+				const longitude = JSON.stringify(position.coords.longitude);
+			},
+			(error) => {
+				console.log(error.code, error.message);
+			},
+			{ enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 },
+		);
 	};
 
 	// 상대방 위치 업데이트
@@ -163,12 +187,15 @@ const FindTogether = ({ route }: any) => {
 			new Map(positions).set(userNo, { lat: latitude, lng: longitude }),
 		);
 	};
-
 	// topic 구독 취소 및 세션 나가기: 함께 찾기 종료
 	const disconnectServer = () => {
-		if (intervalId) {
-			clearInterval(intervalId);
-			setIntervalId(undefined);
+		console.log("intervalId.current 188line : ", intervalId.current);
+		// false
+		if (intervalId.current) {
+			console.log("intervalId.current : ", intervalId.current);
+			clearInterval(intervalId.current);
+			// setintervalId.current(undefined);
+			intervalId.current = undefined;
 		}
 
 		if (stompClient.current === undefined || !stompClient.current.connected)
