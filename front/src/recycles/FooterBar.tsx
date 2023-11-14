@@ -44,13 +44,13 @@ const FooterBar = () => {
 						onPress={() => toMove("Main")}
 					>
 						<Image source={HomePng} style={styles.btnImg} />
-						<Text>Home</Text>
+						<Text style={styles.btnText}>Home</Text>
 					</TouchableOpacity>
 				</View>
 				<View>
 					<TouchableOpacity onPress={() => toMove("PatrolMain")}>
 						<Image source={PatrolPng} style={styles.btnImg} />
-						<Text>순찰</Text>
+						<Text style={styles.btnText}> 순찰</Text>
 					</TouchableOpacity>
 				</View>
 				<View>
@@ -59,7 +59,7 @@ const FooterBar = () => {
 						onPress={() => toMove("MissingMain")}
 					>
 						<Image source={MingcuteSearchPng} style={styles.btnImg} />
-						<Text>실종견</Text>
+						<Text style={styles.btnText}>실종견</Text>
 					</TouchableOpacity>
 				</View>
 				<View>
@@ -68,7 +68,7 @@ const FooterBar = () => {
 						onPress={() => toMove("Profile")}
 					>
 						<Image source={ProfilePng} style={styles.btnImg} />
-						<Text>프로필</Text>
+						<Text style={styles.btnText}>프로필</Text>
 					</TouchableOpacity>
 				</View>
 			</View>
@@ -95,7 +95,12 @@ const styles = StyleSheet.create({
 		justifyContent: "center",
 	},
 	btnImg: {
-		height: 35,
-		width: 35,
+		height: 25,
+		width: 25,
+		resizeMode: "cover",
+		marginBottom: 5,
+	},
+	btnText: {
+		fontSize: 12,
 	},
 });

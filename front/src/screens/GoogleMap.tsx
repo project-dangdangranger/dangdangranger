@@ -348,11 +348,11 @@ const styles = StyleSheet.create({
 	},
 	map: {
 		flex: 1,
-		position: "absolute",
+		// position: "absolute",
 		width: Dimensions.get("window").width,
 		height: Dimensions.get("window").height,
-		opacity: 0,
-		left: -Dimensions.get("window").width,
+		// opacity: 0,
+		// left: -Dimensions.get("window").width,
 	},
 });
 
