@@ -24,7 +24,7 @@ const MyHorizontalScrollView = () => {
 	useFocusEffect(
 		React.useCallback(() => {
 			axios.get("/missing/recent_missing_images").then((res) => {
-				console.log("도그사진들: ", res.data.data);
+				// console.log("도그사진들: ", res.data.data);
 				setImgList(res.data.data);
 			});
 		}, []),

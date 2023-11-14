@@ -43,25 +43,11 @@ const PatrolDiaryWrite = () => {
 		console.log(missingDate);
 	};
 
-	const logs = [
-		{ logNo: 0, imgSrc: img, date: "22-02-02" },
-		{ logNo: 1, imgSrc: img, date: "22-02-02" },
-		{ logNo: 2, imgSrc: img, date: "22-02-02" },
-		{ logNo: 3, imgSrc: img, date: "22-02-02" },
-		{ logNo: 4, imgSrc: img, date: "22-02-02" },
-	];
-
 	const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
 	const [selectedImg, setSelectedImg] = useState(null);
 	const [patrolReportTitle, setPatrolReportTitle] = useState("");
 	const [patrolReportContent, setPatrolReportContent] = useState("");
 	const [missingDate, setMissingDate] = useState("");
-
-	const [patrolReportImageList, setPatrolReportImageList] = useState([
-		"https://dangdangranger.s3.ap-northeast-2.amazonaws.com/map_2023-11-03T07%3A02%3A19.564Z_1072956.png",
-	]);
-	const [patrolLogNo, setPatrolLogNo] = useState(1);
-
 	const [patrolImgList, setPatrolImgList] = useState([]);
 
 	const s3 = new S3({

@@ -11,15 +11,10 @@ import ColorHeader from "../recycles/ColorHeader";
 import CommonLayout from "../recycles/CommonLayout";
 import FooterBar from "../recycles/FooterBar";
 import PatrolDiaryWriteLayout from "../styles/patrolDiaryWriteLayout";
-
-import img from "../../assets/images/debug-dog.png";
-import PatrolLogCarousel from "../recycles/PatrolLogCarousel";
-import AddPlusIcon from "../../assets/images/add-plus-icon.png";
 import CustomSubButton from "../recycles/CustomSubBtn";
 import { useEffect, useState } from "react";
 import axios from "../utils/axios";
 import { useNavigation } from "@react-navigation/native";
-import EditImage from "../recycles/ReportEditImg";
 import {
 	responsiveHeight,
 	responsiveWidth,
@@ -41,7 +36,12 @@ const PatrolDiaryWrite = () => {
 		const year = date.getFullYear().toString();
 		const month = (date.getMonth() + 1).toString().padStart(2, "0");
 		const day = date.getDate().toString().padStart(2, "0");
-		setMissingDate(year + "-" + month + "-" + day + "T00:00:00");
+		const hour = date.getHours().toString().padStart(2, "0");
+		const minute = date.getMinutes().toString().padStart(2, "0");
+		const second = date.getSeconds().toString().padStart(2, "0");
+		setMissingDate(
+			year + "-" + month + "-" + day + "T" + hour + ":" + minute + ":" + second,
+		);
 		hideDatePicker();
 		console.log(missingDate);
 	};
@@ -50,7 +50,7 @@ const PatrolDiaryWrite = () => {
 	useFocusEffect(
 		React.useCallback(() => {
 			axios.get("/dog").then((res) => {
-				console.log("도그: ", res.data.data);
+				// console.log("도그: ", res.data.data);
 				setDogList(res.data.data);
 			});
 		}, []),
@@ -129,13 +129,11 @@ const PatrolDiaryWrite = () => {
 			});
 		});
 
-		console.log("hello:::", patrolReportTitle);
-
 		try {
 			// 모든 프로미스가 완료될 때까지 기다립니다.
 			const uploadedImages = await Promise.all(uploadPromises);
 
-			console.log("도그넘버:", dogNo);
+			// console.log("도그넘버:", dogNo);
 
 			axios
 				.post("/missing", {
@@ -143,21 +141,20 @@ const PatrolDiaryWrite = () => {
 					missingTitle: patrolReportTitle,
 					missingContent: patrolReportContent,
 					missingDate: missingDate,
-					missingLat: 37.123,
-					missingLng: 127.123,
+					missingLat: missinglat,
+					missingLng: missinglong,
 					missingImages: uploadedImages,
 					dogNo: dogNo,
 					missingAddress: address,
 				})
 				.then((res) => {
 					console.log("성공:", res.data);
-					if (res.data.message === "실종견(신고) 등록 성공") {
+					if (res.data.message === "실종견 등록 성공") {
 						Alert.alert(
 							"실종견(신고) 등록 성공",
-							"실종 화면 디테일로 이동합니다.",
+							"실종견 리스트로 넘어갑니다.",
 						);
-						// 있어야 함
-						// navigation.navigate("PatrolDiary");
+						navigation.navigate("MissingFind");
 					}
 				})
 				.catch((err) => {
@@ -198,11 +195,18 @@ const PatrolDiaryWrite = () => {
 		setScrollEnabled(!scrollEnabled);
 	};
 
+	const [missinglat, setMissinglat] = useState(0);
+	const [missinglong, setMissinglong] = useState(0);
+
 	return (
 		<>
 			<CommonLayout>
 				<ColorHeader title="신고하기" />
-				<GeoLocationAPI setAddress={setAddress} />
+				<GeoLocationAPI
+					setAddress={setAddress}
+					setMissinglat={setMissinglat}
+					setMissinglong={setMissinglong}
+				/>
 				<CustomText
 					mainText="실종견을 위해"
 					emphasizedText="등록 정보"
@@ -253,6 +257,23 @@ const PatrolDiaryWrite = () => {
 								);
 							})}
 						</View>
+
+						<View style={{ marginBottom: 20 }}>
+							<Text
+								style={{
+									textAlign: "center",
+									fontSize: 15,
+									fontWeight: "bold",
+									marginBottom: 10,
+									color: "#3E6DCA",
+								}}
+							>
+								{" "}
+								현재 위치{" "}
+							</Text>
+							<Text>{address}</Text>
+						</View>
+
 						<TextInput
 							style={PatrolDiaryWriteLayout.formInput}
 							value={patrolReportTitle}

@@ -23,7 +23,7 @@ import MultiPicture from "../recycles/MultiPicture";
 import CustomButton from "../recycles/CustomBtn";
 
 const PatrolReportDetail = ({ route }: any) => {
-	console.log("라우트!!!!!!", route.params);
+	// console.log("라우트!!!!!!", route.params);
 	const { navigate } = useNavigation();
 	const { missingNo, imageUrl } = route.params;
 

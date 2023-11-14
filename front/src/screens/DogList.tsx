@@ -37,7 +37,7 @@ const Profile = () => {
 	useFocusEffect(
 		React.useCallback(() => {
 			axios.get("/dog").then((res) => {
-				console.log("도그: ", res.data.data);
+				// console.log("도그: ", res.data.data);
 				setDogList(res.data.data);
 			});
 		}, []),
