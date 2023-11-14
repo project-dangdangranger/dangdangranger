@@ -29,6 +29,7 @@ const Profile = ({ route }) => {
 	const [dogBirth, setDogBirth] = useState(null);
 	const [dogAge, setDogAge] = useState<string>("");
 	const [dogCreateDate, setDogCreateDate] = useState(null);
+	const [randomScript, setRandomScript] = useState<string>("");
 
 	useEffect(() => {
 		console.log("dog detail:", route);
@@ -40,6 +41,11 @@ const Profile = ({ route }) => {
 			setDogBirth(res.data.data.dogBirth.split("T")[0]);
 			setDogAge(calculateAge(res.data.data.dogBirth.split("T")[0]));
 			setDogCreateDate(res.data.data.createDate.split("T")[0]);
+		});
+
+		axios.get(`/dog/script`).then((res) => {
+			console.log("렌덤 대사 : ", res.data.data.scriptContent);
+			setRandomScript(res.data.data.scriptContent);
 		});
 	}, []);
 
@@ -129,9 +135,11 @@ const Profile = ({ route }) => {
 						</View>
 
 						<View>
-							<Text style={styles.randomText}>
-								랜덤한 댕댕레인저 대사가 여기에 나옵니다.
-							</Text>
+							<Text></Text>
+						</View>
+
+						<View style={{ marginBottom: responsiveHeight(4) }}>
+							<Text>{randomScript}</Text>
 						</View>
 					</View>
 				</View>
@@ -171,6 +179,7 @@ const styles = StyleSheet.create({
 		fontSize: 30,
 		fontWeight: "bold",
 		marginTop: responsiveHeight(3),
+		marginHorizontal: responsiveWidth(10),
 	},
 	line: {
 		width: responsiveWidth(90),
@@ -185,8 +194,7 @@ const styles = StyleSheet.create({
 	},
 	dogItemCenter: {
 		justifyContent: "center",
-		// alignItems: "center",
-		// marginTop: responsiveHeight(1),
+		marginHorizontal: responsiveWidth(10),
 	},
 
 	imgcontainer: {
@@ -259,9 +267,6 @@ const styles = StyleSheet.create({
 		marginRight: responsiveWidth(5),
 	},
 	dogDataText: { fontSize: 18, fontWeight: "bold" },
-	randomText: {
-		marginTop: responsiveHeight(3),
-		marginBottom: responsiveHeight(20),
-	},
+
 	subBtnLocation: {},
 });
