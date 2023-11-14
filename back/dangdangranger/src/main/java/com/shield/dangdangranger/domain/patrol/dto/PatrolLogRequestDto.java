@@ -12,6 +12,7 @@ public class PatrolLogRequestDto {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class PatrolLogSaveRequestDto {
+        private String postalCode;
         private String address;
         private LocalDateTime patrolLogDate;
         private Double patrolLogTotalDistance;
