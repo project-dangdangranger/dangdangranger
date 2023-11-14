@@ -25,7 +25,9 @@ import CustomButton from "../recycles/CustomBtn";
 const PatrolReportDetail = ({ route }: any) => {
 	console.log("라우트!!!!!!", route.params);
 	const { navigate } = useNavigation();
-	const { missingNo, imgUrl } = route.params;
+	const { missingNo, imageUrl } = route.params;
+
+	console.log("헬로우", imageUrl);
 
 	const [missingData, setMissingData] = useState({});
 	const [elapsedTime, setElapsedTime] = useState("00일 00시간 00분 00초");
@@ -94,7 +96,7 @@ const PatrolReportDetail = ({ route }: any) => {
 					style={{ width: responsiveWidth(100), height: responsiveHeight(30) }}
 				>
 					<MultiPicture
-						imgList={[route.params.thumbnailUrl]}
+						imgList={[imageUrl]}
 						location={route.params.missingAddress}
 					/>
 				</View>
@@ -115,7 +117,6 @@ const PatrolReportDetail = ({ route }: any) => {
 							<Text style={styles.missingDateText2}>실종 장소</Text>
 							<Text>{missingData?.missingAddress?.slice(0, 20)}</Text>
 						</View>
-
 						<View style={styles.missingtitle}>
 							<Text style={styles.missingDateText1}>실종 시간</Text>
 							<Text style={styles.missingDateText}>

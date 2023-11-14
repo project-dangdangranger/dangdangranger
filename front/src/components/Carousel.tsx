@@ -13,8 +13,10 @@ import {
 } from "react-native-responsive-dimensions";
 import axios from "../utils/axios";
 import { useFocusEffect } from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
 
 const MyHorizontalScrollView = () => {
+	const navigation = useNavigation();
 	const [currentIndex, setCurrentIndex] = useState(0);
 	const scrollViewRef = useRef(null);
 
@@ -70,6 +72,7 @@ const MyHorizontalScrollView = () => {
 							<TouchableOpacity
 								onPress={() => {
 									console.log("이동할 No:", img.missingNo);
+									navigation.navigate("MissingCarouselDetail", img);
 								}}
 								style={styles.textView}
 							>
