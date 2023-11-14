@@ -94,7 +94,7 @@ const CreateDog = ({ navigation }: any) => {
 
 	// IPFS 업로드
 	const uploadToIPFS = async (data: any) => {
-		console.log("여기왔니?1");
+		console.log("upload to ipfs 함수!!");
 		// console.log(data);
 		await axios
 			// .post("http://10.0.2.2:3000/blockchain/uploadIpfs", {
