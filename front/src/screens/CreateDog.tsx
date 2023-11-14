@@ -52,8 +52,8 @@ const CreateDog = ({ navigation }: any) => {
 	const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
 	const [walletAddress, setWalletAddress] = useState<string>();
 	const [walletPrivateKey, setWalletPrivateKey] = useState<string>();
-	const [petName, setPetName] = useState<string | "">();
-	const [petSpecies, setPetSpecies] = useState<string | null>();
+	const [petName, setPetName] = useState<string | "">("");
+	const [petSpecies, setPetSpecies] = useState<string | null>("");
 	const [petGender, setPetGender] = useState<string | null>("M");
 	const [petBirth, setPetBirth] = useState<string | null>(
 		new Date().getFullYear() +
@@ -135,7 +135,12 @@ const CreateDog = ({ navigation }: any) => {
 					checkPolygon({ POLYGON_KEY, receiptHash, imageOrigin });
 				}
 
-				console.log("끝ㄴ!!");
+				console.log("강아지 NFT 민팅 성공!");
+				setIsLoading(false);
+			})
+			.catch(async (err) => {
+				console.log("민팅 오류 !!", err);
+				await setIsLoading(false);
 			});
 	};
 
@@ -183,7 +188,7 @@ const CreateDog = ({ navigation }: any) => {
 										"외부 디지털 지갑에서 확인하려면 최대 1일까지도 소요될 수 있습니다.",
 									);
 									await setIsLoading(false);
-									await navigation.navigate("DogList");
+									await navigation.navigate("DogList", {});
 								} else {
 									await setIsLoading(false);
 									alert("프로필 생성 실패, 관리자에게 문의하세요.");
@@ -204,7 +209,7 @@ const CreateDog = ({ navigation }: any) => {
 	// imagepicker 이용
 	const uploadImage = async (imageUri: string) => {
 		console.log("img", imageUri);
-
+		setIsLoading(true);
 		/**
 		 * 1. image -> base64
 		 * 2. base64 기반 강아지 object detect
@@ -219,6 +224,7 @@ const CreateDog = ({ navigation }: any) => {
 			setClicked(false);
 			Alert.alert("강아지가 포함된 이미지를 등록해야 합니다");
 			setClicked(false);
+			setIsLoading(false);
 			return;
 		}
 
@@ -245,6 +251,7 @@ const CreateDog = ({ navigation }: any) => {
 					uploadToIPFS(data);
 				} catch (err) {
 					console.log(err);
+					setIsLoading(false);
 				}
 			}
 		});
@@ -496,6 +503,7 @@ const CreateDog = ({ navigation }: any) => {
 						<View style={CreateProfileLayout.formButtonWrap}>
 							{isLoading ? (
 								<TouchableOpacity activeOpacity={0.7}>
+									<WalletLoading title="방범대원증 발급중.. 잠시만 기다려주세요" />
 									<View style={CreateProfileLayout.submitInactiveButton}>
 										<Text style={CreateProfileLayout.submitInactiveButtonText}>
 											프로필 생성하기
