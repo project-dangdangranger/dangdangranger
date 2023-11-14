@@ -39,8 +39,8 @@ const FindTogether = ({ route }: any) => {
 	const intervalId = useRef();
 	// 같이 찾는 사람들의 위치 정보 저장
 	const [positions, setPositions] = useState(new Map());
-	const [myLatitude, setMyLatitude] = useState(123);
-	const [myLongitude, setMyLongitude] = useState(345);
+	const [myLatitude, setMyLatitude] = useState();
+	const [myLongitude, setMyLongitude] = useState();
 	const [detailMissingDog, setDetailMissingDog] = useState({});
 	const [isPressed, setIsPressed] = useState(false);
 	// const [topicId, setTopicId] = useState("");
@@ -137,38 +137,40 @@ const FindTogether = ({ route }: any) => {
 		if (intervalId.current) return;
 		if (stompClient.current === undefined || !stompClient.current.connected)
 			return;
-		console.log("여기가 찍히나요 ? ? ? ");
 
 		const id = setInterval(() => {
-			console.log("우우아아아아아");
-			stompClient.current.send(
-				"/pub/finddog",
-				{},
-				JSON.stringify({
-					code: "SHARE_COORDINATE",
-					userNo: 12,
-					topicId: topicId.current,
-					param: {
-						latitude: myLatitude,
-						longitude: myLongitude,
-					},
-				}),
-				// 본인 현재위치정보를 넣어야한다. (공유)
-			);
-		}, 5000);
+			console.log("Getting location...");
+			getGeoLocation((latitude, longitude) => {
+				console.log("myLatitude : ", latitude);
+				console.log("myLongitude : ", longitude);
 
-		// setintervalId.current(id);
+				stompClient.current.send(
+					"/pub/finddog",
+					{},
+					JSON.stringify({
+						code: "SHARE_COORDINATE",
+						userNo: 12,
+						topicId: topicId.current,
+						param: {
+							latitude: latitude,
+							longitude: longitude,
+						},
+					}),
+				);
+			});
+		}, 2000);
+
 		intervalId.current = id;
-		console.log(
-			"TestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTest",
-		);
 	};
 
-	const getGeoLocation = () => {
+	const getGeoLocation = (callback) => {
 		Geolocation.getCurrentPosition(
 			(position) => {
 				const latitude = JSON.stringify(position.coords.latitude);
 				const longitude = JSON.stringify(position.coords.longitude);
+				setMyLatitude(latitude);
+				setMyLongitude(longitude);
+				callback(latitude, longitude); // 콜백 호출
 			},
 			(error) => {
 				console.log(error.code, error.message);
@@ -246,6 +248,8 @@ const FindTogether = ({ route }: any) => {
 					missingLat={37.5}
 					missingLng={127.03}
 					findingList={findingList}
+					myLatitude={myLatitude}
+					myLongitude={myLongitude}
 				/>
 				<FindBtn
 					startSession={() => Alert.alert("강아지를 찾아봅시다")}
