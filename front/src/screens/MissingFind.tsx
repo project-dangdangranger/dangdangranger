@@ -22,7 +22,6 @@ const MissingFind = ({ navigation }: any) => {
 	useFocusEffect(
 		React.useCallback(() => {
 			axios.get("/missing").then((res) => {
-				console.log("도그사진들: ", res.data.data);
 				const reverseData = res.data.data.reverse();
 				setData(reverseData);
 			});

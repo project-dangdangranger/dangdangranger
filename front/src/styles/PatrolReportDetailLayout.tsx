@@ -268,6 +268,16 @@ const PatrolReportDetailLayout = StyleSheet.create({
 	missingaddress: {
 		marginLeft: responsiveWidth(20),
 	},
+
+	dateIng: {
+		marginHorizontal: responsiveWidth(15),
+		marginBottom: responsiveHeight(5),
+	},
+	missingDateText3: {
+		fontSize: 22,
+		fontWeight: "bold",
+		color: "#FF6A6A",
+	},
 });
 
 export default PatrolReportDetailLayout;

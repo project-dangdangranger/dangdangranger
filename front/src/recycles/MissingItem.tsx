@@ -12,7 +12,7 @@ import {
 } from "react-native-responsive-dimensions";
 
 const MissingItem = ({ item, navigation }: any) => {
-	console.log("아이템!:", item);
+	// console.log("아이템!:", item);
 	return (
 		<TouchableOpacity
 			onPress={() => navigation.navigate("MissingDetail", item)}

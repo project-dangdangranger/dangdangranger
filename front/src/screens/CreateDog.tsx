@@ -214,6 +214,8 @@ const CreateDog = ({ navigation }: any) => {
 		// console.log("upload image - 강아지 포함 여부 : ", isDog);
 
 		if (!isDog) {
+			console.log("DOG:", isDog);
+			setClicked(false);
 			Alert.alert("강아지가 포함된 이미지를 등록해야 합니다");
 			setClicked(false);
 			return;
@@ -329,16 +331,16 @@ const CreateDog = ({ navigation }: any) => {
 		uploadImage(selectedImg);
 	};
 
-	const uploadIpfs = async () => {
-		try {
-			await setIsLoading(true);
+	// const uploadIpfs = async () => {
+	// 	try {
+	// 		await setIsLoading(true);
 
-			await uploadImage(imageUri);
-		} catch (err) {
-			await setIsLoading(false);
-			alert("민팅 생성 에러, 관리자에게 문의하세요.");
-		}
-	};
+	// 		await uploadImage(imageUri);
+	// 	} catch (err) {
+	// 		await setIsLoading(false);
+	// 		alert("민팅 생성 에러, 관리자에게 문의하세요.");
+	// 	}
+	// };
 
 	useEffect(() => {
 		const getWalletInfoFromStore = async () => {
