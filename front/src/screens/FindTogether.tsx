@@ -5,14 +5,32 @@ import SockJS from "sockjs-client";
 import { BASE_URL, SERVER_URL } from "../constants/constants";
 import { Stomp } from "@stomp/stompjs";
 import { Alert, Text, TouchableOpacity, View } from "react-native";
-import { useNavigation } from "@react-navigation/native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import axios from "../utils/axios";
 import GoogleMap from "./GoogleMap";
 import FindMap from "../components/FindMap";
 import FindBtn from "../components/FindBtn";
 import FindSideBtn from "../components/FindSideBtn";
+// const PatrolReportDetail = ({ route }: any) => {
+//     // console.log("라우트!!!!!!", route.params);
+//     const { navigate } = useNavigation();
+//     const { missingNo, imgUrl } = route.params;
 
-const FindTogether = (missingNo: number) => {
+const FindTogether = ({ route }: any) => {
+	const { navigate } = useNavigation();
+	// const { missingNo, imgUrl } = route.params;
+	// weoqirqwopejqwioasd {
+	// "item": {"dogNo": 10,
+	// "missingAddress": "1650 Amphitheatre Pkwy, Mountain View, CA 94043 미국",
+	// "missingDate": "2023-11-08T03:31:00",
+	// "missingLat": 37.422,
+	// "missingLng": -122.084,
+	// "missingNo": 66,
+	// "missingTitle": "어떻게 해야 하나요..",
+	// "missingTypeNo": 1,
+	// "thumbnailUrl": "https://dangdangranger.s3.ap-northeast-2.amazonaws.com/profile_2023-11-14T04%3A25%3A57.900Z_68946969.png"}
+	// }
+
 	const navigation = useNavigation();
 	const stompClient: any = useRef({});
 	const [intervalId, setIntervalId] = useState<NodeJS.Timeout>();
@@ -20,7 +38,10 @@ const FindTogether = (missingNo: number) => {
 	const [positions, setPositions] = useState(new Map());
 	const [myLatitude, setMyLatitude] = useState(123);
 	const [myLongitude, setMyLongitude] = useState(345);
+	const [detailMissingDog, setDetailMissingDog] = useState({});
+	const [isPressed, setIsPressed] = useState(false);
 	const topicId: any = useRef();
+	const { item } = route.params;
 
 	const findingList = [
 		{ userNo: 1, lat: 37.501, lng: 127.0386 },
@@ -29,8 +50,26 @@ const FindTogether = (missingNo: number) => {
 	];
 
 	useEffect(() => {
-		//return leavePage();
+		getDetailMissingDog(item.missingNo);
 	}, []);
+
+	useEffect(() => {
+		if (detailMissingDog && isPressed) {
+			console.log("detailMissingDog : ", detailMissingDog);
+			console.log("토픽 아이디 : ", detailMissingDog.topicId);
+			if (detailMissingDog.topicId === null) {
+				console.log("토픽아이디 널값인 상태임");
+				getTopicId();
+			}
+		}
+	}, [detailMissingDog, isPressed]);
+
+	const getTopicId = async () => {};
+
+	const getDetailMissingDog = async (missingNo: number) => {
+		const response = await axios.get(`/missing/${missingNo}`);
+		setDetailMissingDog(response.data.data);
+	};
 
 	// 서버 연결 및 구독 시작: 함께 찾기 시작
 	const connectServer = async () => {
@@ -75,7 +114,7 @@ const FindTogether = (missingNo: number) => {
 				code: "ENTER",
 				userNo: 12,
 				topicId: topicId.current,
-				param: {},
+				param: {}, // 좌표주고받을때 씀, 위경도를. 현재 자기위치도 보내야함
 			}),
 		);
 		console.log("완료");
@@ -177,6 +216,8 @@ const FindTogether = (missingNo: number) => {
 				<FindBtn
 					startSession={() => Alert.alert("강아지를 찾아봅시다")}
 					endSession={() => Alert.alert("이걸 못찾네")}
+					isPressed={isPressed}
+					setIsPressed={setIsPressed}
 				/>
 				<FindSideBtn />
 			</CommonLayout>

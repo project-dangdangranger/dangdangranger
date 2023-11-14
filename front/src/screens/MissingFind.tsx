@@ -19,14 +19,24 @@ import { useFocusEffect } from "@react-navigation/native";
 const MissingFind = ({ navigation }: any) => {
 	const [data, setData] = useState([]);
 
-	useFocusEffect(
-		React.useCallback(() => {
-			axios.get("/missing").then((res) => {
-				const reverseData = res.data.data.reverse();
-				setData(reverseData);
-			});
-		}, []),
-	);
+	// useFocusEffect(
+	// 	React.useCallback(() => {
+	// 		const data = await getMissingDogs();
+	// 		console.log(data)
+	// 	}, []),
+	// );
+
+	useEffect(() => {
+		getMissingDogs();
+		console.log(data);
+	}, []);
+
+	const getMissingDogs = async () => {
+		axios.get("/missing").then((res) => {
+			const reverseData = res.data.data.reverse();
+			setData(reverseData);
+		});
+	};
 
 	return (
 		<>

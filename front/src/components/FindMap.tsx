@@ -149,8 +149,9 @@ const FindMap = (props: Props) => {
 
 	// *** 실종견 마커 팝업 ***
 	const handlePopUp = () => {
-		//setShowPopUp(!showPopUp);
-		Alert.alert("팝업 띄우고 싶다");
+		setShowPopUp(!showPopUp);
+		console.log("");
+		// Alert.alert("팝업 띄우고 싶다");
 	};
 
 	const handleRegionChange = () => {
@@ -210,7 +211,7 @@ const styles = StyleSheet.create({
 		position: "absolute",
 		top: 50,
 		left: 50,
-		backgroundColor: "red",
+		backgroundColor: "black",
 		padding: 10,
 		borderRadius: 6,
 		shadowOpacity: 0.3,
