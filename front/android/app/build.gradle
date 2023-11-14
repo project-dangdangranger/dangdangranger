@@ -89,8 +89,11 @@ android {
         buildConfigField "String", "KAKAO_MAP_API_HASH_KEY", "\"${kakaoMapApiHashKey}\""
         manifestPlaceholders = [kakaoNativeAppKey: kakaoNativeAppKey]
         resValue "string", "mapbox_access_token", localProperties['mapbox.accessToken']
-        versionCode 1
-        versionName "1.0"
+        versionCode 6
+        versionName "1.0.1"
+
+        // apk version 관리용 네이밍 설정
+        archivesBaseName = "dang-v${versionName}(${versionCode})"
     }
     signingConfigs {
         debug {
