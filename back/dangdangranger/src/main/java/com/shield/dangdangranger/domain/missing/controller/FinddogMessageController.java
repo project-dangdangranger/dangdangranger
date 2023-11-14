@@ -4,6 +4,7 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.stereotype.Controller;
 
 import com.shield.dangdangranger.domain.missing.message.FinddogMessage;
+import com.shield.dangdangranger.domain.missing.message.FinddogMessage.Code;
 import com.shield.dangdangranger.domain.missing.service.FinddogService;
 
 import lombok.RequiredArgsConstructor;

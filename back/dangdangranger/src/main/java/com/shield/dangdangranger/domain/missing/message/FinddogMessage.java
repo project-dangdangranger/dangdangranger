@@ -22,7 +22,8 @@ public class FinddogMessage implements Serializable {
 	public enum Code {
 		ENTER,
 		SHARE_COORDINATE,
-		EXIT
+		EXIT, 
+		END_SESSION
 	}
 	
 	private Code code;

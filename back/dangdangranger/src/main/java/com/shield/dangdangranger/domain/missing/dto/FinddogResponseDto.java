@@ -14,4 +14,11 @@ public class FinddogResponseDto {
         private String topicId;
         
     }
+	
+	@Getter
+    @AllArgsConstructor
+    @Builder
+    public static class FinddogParticipantsCountResponseDto {
+        private Integer participantsCount;
+    }
 }

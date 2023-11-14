@@ -4,14 +4,17 @@ import com.shield.dangdangranger.domain.dog.dto.DogRequestDto.*;
 import com.shield.dangdangranger.domain.dog.dto.DogResponseDto.*;
 import com.shield.dangdangranger.domain.dog.entity.Breed;
 import com.shield.dangdangranger.domain.dog.entity.Dog;
+import com.shield.dangdangranger.domain.dog.entity.Script;
 import com.shield.dangdangranger.domain.dog.repo.BreedRepository;
 import com.shield.dangdangranger.domain.dog.repo.DogRepository;
+import com.shield.dangdangranger.domain.dog.repo.ScriptRepository;
 import com.shield.dangdangranger.global.constant.BaseConstant;
 import com.shield.dangdangranger.global.error.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 import static com.shield.dangdangranger.domain.dog.constant.DogResponseMessage.BREED_NOT_FOUND_EXCEPTION;
@@ -23,6 +26,7 @@ import static com.shield.dangdangranger.domain.dog.constant.DogResponseMessage.D
 public class DogServiceImpl implements DogService{
     private final DogRepository dogRepository;
     private final BreedRepository breedRepository;
+    private final ScriptRepository scriptRepository;
 
     @Override
     public Dog registDog(Integer userNo, DogRegistRequestDto dogRegistRequestDto) {
@@ -70,5 +74,12 @@ public class DogServiceImpl implements DogService{
         }
 
         return breedList;
+    }
+
+    @Override
+    public RandomScriptResponseDto selectRandomScript() {
+        return RandomScriptResponseDto.builder()
+                .scriptContent(scriptRepository.findRandomScript().get().getScriptContent())
+                .build();
     }
 }

@@ -8,6 +8,13 @@ import lombok.Getter;
 import lombok.Setter;
 
 public class MissingResponseDto {
+	
+	@Getter
+    @AllArgsConstructor
+    @Builder
+    public static class MissingSaveResponseDto {
+		private Integer missingNo;
+	}
 
 	@Getter
     @AllArgsConstructor
@@ -25,6 +32,7 @@ public class MissingResponseDto {
         private Double missingLng;
         @Setter
         private String topicId;
+        private String missingAddress;
 	}
 	
 	@Getter
@@ -37,6 +45,8 @@ public class MissingResponseDto {
         private LocalDateTime missingDate;
         private Double missingLat;
         private Double missingLng;
-        
+        private String thumbnailUrl;
+        private String missingAddress;
+        private Integer dogNo;
     }
 }
