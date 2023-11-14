@@ -40,6 +40,7 @@ const FindTogether = ({ route }: any) => {
 	const [myLongitude, setMyLongitude] = useState(345);
 	const [detailMissingDog, setDetailMissingDog] = useState({});
 	const [isPressed, setIsPressed] = useState(false);
+	// const [topicId, setTopicId] = useState("");
 	const topicId: any = useRef();
 	const { item } = route.params;
 
@@ -61,10 +62,16 @@ const FindTogether = ({ route }: any) => {
 				console.log("토픽아이디 널값인 상태임");
 				getTopicId();
 			}
+			connectServer();
 		}
 	}, [detailMissingDog, isPressed]);
 
-	const getTopicId = async () => {};
+	const getTopicId = async () => {
+		const response = await axios.post("/finddog", {
+			missingNo: detailMissingDog.missingNo,
+		});
+		topicId.current = response.data.data.topicId;
+	};
 
 	const getDetailMissingDog = async (missingNo: number) => {
 		const response = await axios.get(`/missing/${missingNo}`);
@@ -91,12 +98,12 @@ const FindTogether = ({ route }: any) => {
 		});
 	};
 
-	const findWith = async () => {
-		const response = await axios.post("/finddog", { missingNo: 12 });
-		console.log(response.data.data.topicId);
-		topicId.current = response.data.data.topicId;
-		await connectServer();
-	};
+	// const findWith = async () => {
+	// 	const response = await axios.post("/finddog", { missingNo: 12 });
+	// 	console.log(response.data.data.topicId);
+	// 	topicId.current = response.data.data.topicId;
+	// 	await connectServer();
+	// };
 
 	// topic 구독 내부 함수
 	const connectRoom = async () => {
