@@ -13,14 +13,21 @@ import {
 	responsiveHeight,
 	responsiveWidth,
 } from "react-native-responsive-dimensions";
+import FindMenuModal from "./FindMenuModal";
 
 const FindSideBtn = () => {
+	const [modalVisible, setModalVisible] = useState(false);
+
+	const clickPlusMenu = () => {
+		setModalVisible(true);
+	};
+
 	return (
 		<>
 			<View style={styles.container}>
 				<TouchableOpacity
 					style={styles.btnContainer}
-					onPress={() => Alert.alert("실종견 정보가 나올거임  ")}
+					onPress={() => clickPlusMenu()}
 				>
 					<Image source={TopIcon} style={styles.img}></Image>
 				</TouchableOpacity>
@@ -30,6 +37,12 @@ const FindSideBtn = () => {
 				>
 					<Image source={BottomIcon} style={styles.img}></Image>
 				</TouchableOpacity>
+			</View>
+			<View>
+				<FindMenuModal
+					modalVisible={modalVisible}
+					setModalVisible={setModalVisible}
+				/>
 			</View>
 		</>
 	);

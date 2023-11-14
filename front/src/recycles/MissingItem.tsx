@@ -14,7 +14,8 @@ import {
 const MissingItem = ({ item, navigation }: any) => {
 	return (
 		<TouchableOpacity
-			onPress={() => navigation.navigate("MissingDetail", item)}
+			// onPress={() => navigation.navigate("MissingDetail", item)}
+			onPress={() => navigation.navigate("FindTogether")}
 		>
 			<View style={styles.dogItem}>
 				<Image source={{ uri: item.thumbnailUrl }} style={styles.dogImg} />

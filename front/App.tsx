@@ -89,7 +89,7 @@ const App = () => {
 						name="PatrolReportDetail"
 						component={PatrolReportDetail}
 					/>
-					{/* <Stack.Screen name="FindTogether" component={FindTogether} /> */}
+					<Stack.Screen name="FindTogether" component={FindTogether} />
 					<Stack.Screen name="ManualMain" component={ManualMain} />
 					<Stack.Screen
 						name="CreateMissingMyDog"
