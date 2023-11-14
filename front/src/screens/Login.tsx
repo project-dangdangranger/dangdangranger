@@ -38,7 +38,12 @@ const Login = () => {
 			webClientId: WEB_CLIENT_ID,
 			offlineAccess: true,
 		});
+
+		if (islogged) {
+			navigation.replace("Main");
+		}
 	}, []);
+
 	const handleGoogleLogin = async () => {
 		try {
 			await GoogleSignin.hasPlayServices();

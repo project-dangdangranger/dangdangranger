@@ -53,9 +53,9 @@ export default PatrolDiaryCard;
 
 const style = StyleSheet.create({
 	cardWrap: {
-		marginHorizontal: responsiveWidth(2),
+		// marginHorizontal: responsiveWidth(2),
 		marginVertical: responsiveHeight(1),
-		width: responsiveWidth(40),
+		width: responsiveWidth(39),
 		height: responsiveHeight(30),
 		borderRadius: 20,
 		borderColor: "#D3D3D3",
@@ -89,6 +89,7 @@ const style = StyleSheet.create({
 	iconLocation: {
 		width: 15,
 		height: 15,
+		resizeMode: "contain",
 	},
 
 	textTitleWrap: {
@@ -96,7 +97,6 @@ const style = StyleSheet.create({
 	},
 
 	textTitle: {
-		height: 22,
 		fontWeight: "900",
 		fontSize: 20,
 		color: "black",
@@ -105,14 +105,13 @@ const style = StyleSheet.create({
 	textRowWrap: {
 		flexDirection: "row",
 		justifyContent: "space-between",
+		paddingBottom: responsiveHeight(0.5),
 	},
 
 	textRowWrapName: {
 		width: responsiveWidth(13),
-		height: 15,
 	},
 	textRowWrapViewCount: {
 		width: responsiveWidth(6),
-		height: 15,
 	},
 });

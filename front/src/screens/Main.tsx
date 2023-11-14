@@ -20,16 +20,20 @@ import axios from "../utils/axios";
 import { useFocusEffect } from "@react-navigation/native";
 import { useRecoilState } from "recoil";
 import { isLogged } from "../atoms/atoms";
+import { StackNavigationProp } from "@react-navigation/stack";
+import EncryptedStorage from "react-native-encrypted-storage";
 
 const Main = () => {
-	useEffect(() => {
-		console.log("isLogged:", islogged);
-	}, []);
+	const navigation = useNavigation<StackNavigationProp<any>>();
 
-	const LoginStore = {
-		isLogged: true,
-	};
-	const navigation = useNavigation();
+	async function getAccessToken() {
+		const accessToken = await EncryptedStorage.getItem("accessToken");
+		console.log("accessToken: ", accessToken);
+		if (accessToken !== null) {
+			setIsLogged(true);
+		}
+	}
+
 	const [islogged, setIsLogged] = useRecoilState(isLogged);
 
 	const authHandling = (pageName: string) => {
@@ -45,10 +49,14 @@ const Main = () => {
 
 	useFocusEffect(
 		React.useCallback(() => {
-			axios.get("/patrol/people").then((data) => {
-				setPatrolPeople(data.data.data.patrolPeopleCnt);
-				// console.log("현재 순찰중인 사람 데이터:", data.data);
-			});
+			if (!islogged) {
+				navigation.replace("Login");
+			} else {
+				axios.get("/patrol/people").then((data) => {
+					setPatrolPeople(data.data.data.patrolPeopleCnt);
+					// console.log("현재 순찰중인 사람 데이터:", data.data);
+				});
+			}
 		}, []),
 	);
 
@@ -79,7 +87,7 @@ const Main = () => {
 					text="지역 순찰하기"
 					onPress={() => authHandling("PatrolGo")}
 				/>
-				{LoginStore.isLogged ? null : (
+				{islogged ? null : (
 					<View style={MainLayout.mainTextWrap}>
 						<TouchableOpacity onPress={() => authHandling("Login연결해줘")}>
 							<Text style={MainLayout.walkBoldText}>회원이 아니신가요?</Text>

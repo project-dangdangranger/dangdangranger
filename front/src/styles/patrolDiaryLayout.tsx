@@ -75,9 +75,9 @@ const PatrolDiaryLayout = StyleSheet.create({
 	},
 
 	patrolRowWrap: {
-		width: responsiveWidth(88),
 		flexDirection: "row",
 		justifyContent: "space-between",
+		marginHorizontal: responsiveWidth(8),
 		marginTop: responsiveHeight(2),
 		flexWrap: "wrap",
 	},

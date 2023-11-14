@@ -19,7 +19,10 @@ import { useEffect, useState } from "react";
 import axios from "../utils/axios";
 import { useNavigation } from "@react-navigation/native";
 import EditImage from "../recycles/ReportEditImg";
-import { responsiveWidth } from "react-native-responsive-dimensions";
+import {
+	responsiveHeight,
+	responsiveWidth,
+} from "react-native-responsive-dimensions";
 import { S3 } from "aws-sdk";
 
 const PatrolDiaryWrite = () => {
@@ -170,6 +173,23 @@ const PatrolDiaryWrite = () => {
 							activeOpacity={0.7}
 							// onPress={pickImage}
 						>
+							<View
+								style={{
+									justifyContent: "center",
+									marginLeft: responsiveWidth(20),
+									marginTop: responsiveHeight(2),
+								}}
+							>
+								<Text style={{ fontSize: 15 }}>
+									<Text style={{ color: "#FF6A6A" }}>순찰 기록 장소:</Text>
+									{detailLogs.patrolLogAddress}
+								</Text>
+
+								<Text style={{ fontSize: 15 }}>
+									<Text style={{ color: "#3D6CC9" }}>순찰 기록 날짜:</Text>
+									{detailLogs.patrolLogDate}
+								</Text>
+							</View>
 							<View style={{ width: responsiveWidth(100) }}>
 								<EditImage
 									selectedImg={selectedImg}
