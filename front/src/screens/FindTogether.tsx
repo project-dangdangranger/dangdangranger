@@ -6,8 +6,6 @@ import { BASE_URL, SERVER_URL } from "../constants/constants";
 import { Stomp } from "@stomp/stompjs";
 import { Alert, Text, TouchableOpacity, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { Client } from "@stomp/stompjs";
-import EncryptedStorage from "react-native-encrypted-storage";
 import axios from "../utils/axios";
 import GoogleMap from "./GoogleMap";
 import FindMap from "../components/FindMap";
