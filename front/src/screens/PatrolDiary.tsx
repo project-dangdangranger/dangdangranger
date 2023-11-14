@@ -66,7 +66,7 @@ const PatrolDiary = () => {
 					.get("/patrol")
 					.then((res) => {
 						if (res.data.message === "모든 순찰일지 리스트 조회 완료") {
-							console.log(res);
+							console.log(res.data);
 							setPatrolDiaryList(res.data.data);
 						}
 					})

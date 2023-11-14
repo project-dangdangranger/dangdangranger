@@ -12,10 +12,10 @@ import {
 } from "react-native-responsive-dimensions";
 
 const MissingItem = ({ item, navigation }: any) => {
-	// console.log("아이템!:", item);
 	return (
 		<TouchableOpacity
-			onPress={() => navigation.navigate("MissingDetail", item)}
+			// onPress={() => navigation.navigate("MissingDetail", item)}
+			onPress={() => navigation.navigate("FindTogether")}
 		>
 			<View style={styles.dogItem}>
 				<Image source={{ uri: item.thumbnailUrl }} style={styles.dogImg} />

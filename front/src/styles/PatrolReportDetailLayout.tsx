@@ -266,7 +266,7 @@ const PatrolReportDetailLayout = StyleSheet.create({
 		marginLeft: responsiveWidth(15),
 	},
 	missingaddress: {
-		marginLeft: responsiveWidth(20),
+		marginLeft: responsiveWidth(15),
 	},
 
 	dateIng: {
