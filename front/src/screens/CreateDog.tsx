@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import {
 	View,
 	Text,
@@ -44,8 +44,19 @@ import CreateProfileLayout from "../styles/createProfileLayout";
 import DatePickerIcon from "../../assets/images/date-picker-icon.png";
 import WalletLoading from "../components/WalletLoading";
 import EditImage from "../recycles/EditImage";
+import { useFocusEffect } from "@react-navigation/native";
 
 const CreateDog = ({ navigation }: any) => {
+	useFocusEffect(
+		React.useCallback(() => {
+			// 페이지에 진입할 때마다 inputValue를 초기화
+			setPetName("");
+			setPetGender("M");
+			setPetSpecies("");
+			setSelectedImg("");
+		}, []),
+	);
+
 	const [imageUri, setImageUri] = useState<any>(null);
 	// const [base64Image, setBase64Image] = useState<any>(null);
 	// const [containDog, setContainDog] = useState<boolean>(false);
@@ -428,7 +439,6 @@ const CreateDog = ({ navigation }: any) => {
 					<Text style={CreateProfileLayout.formTitle}>
 						반려견의 종을 입력해주세요.
 					</Text>
-
 					<>
 						<TextInput
 							style={CreateProfileLayout.formInput}
