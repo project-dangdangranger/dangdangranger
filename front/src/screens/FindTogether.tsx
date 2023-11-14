@@ -133,20 +133,12 @@ const FindTogether = ({ route }: any) => {
 	};
 
 	const handleEndSession = () => {
-		Alert.alert("친구 찾기 종료할 거?", "진짜 할 꺼?", [
-			{
-				text: "응 나 T야",
-				onPress: () => {
-					disconnectServer();
-					navigation.navigate("FindMissingDog", {
-						// missingNo: detailMissingDog.missingNo,
-					});
-				},
-			},
-			{
-				text: "그래 이게 F지",
-			},
-		]);
+		disconnectServer();
+		navigation.navigate("FindMissingDog", {
+			missingNo: detailMissingDog.missingNo,
+			myLatitude,
+			myLongitude,
+		});
 	};
 
 	const startSending = () => {

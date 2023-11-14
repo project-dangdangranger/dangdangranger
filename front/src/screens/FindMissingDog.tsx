@@ -26,8 +26,15 @@ import CreateProfileLayout from "../styles/createProfileLayout";
 import DatePickerIcon from "../../assets/images/date-picker-icon.png";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 
-const FindMissingDog = () => {
+const FindMissingDog = ({ route }: any) => {
 	const navigation = useNavigation();
+	const { myLatitude, myLongitude, missingNo } = route.params;
+
+	useEffect(() => {
+		console.log("missingNo:::", missingNo);
+		console.log("myLatitude:::", myLatitude);
+		console.log("myLongitude:::", myLongitude);
+	}, []);
 
 	const handleConfirm = (date: Date) => {
 		const year = date.getFullYear().toString();
@@ -78,21 +85,6 @@ const FindMissingDog = () => {
 			return;
 		}
 
-		if (patrolReportTitle.length === 0) {
-			Alert.alert("제목을 작성해주세요");
-			return;
-		}
-
-		if (patrolReportContent.length === 0) {
-			Alert.alert("내용을 작성해주세요");
-			return;
-		}
-
-		if (missingDate.length === 0) {
-			Alert.alert("신고 일자를 등록해주세요");
-			return;
-		}
-
 		const uploadPromises = patrolImgList.map(async (imageUri, index) => {
 			const response = await fetch(imageUri);
 			const blob = await response.blob();
@@ -124,39 +116,25 @@ const FindMissingDog = () => {
 
 		console.log("hello:::", patrolReportTitle);
 
-		try {
-			// 모든 프로미스가 완료될 때까지 기다립니다.
-			const uploadedImages = await Promise.all(uploadPromises);
-			axios
-				.post("/patrol", {
-					missingTypeNo: 2,
-					missingTitle: patrolReportTitle,
-					missingContent: patrolReportContent,
-					missingDate: missingDate,
-					missingLat: 37.123,
-					missingLng: 127.123,
-					missingImages: uploadedImages,
-				})
-				.then((res) => {
-					console.log("성공:", res.data);
-					if (res.data.message === "실종견(신고) 등록 성공") {
-						Alert.alert(
-							"실종견(신고) 등록 성공",
-							"실종 화면 디테일로 이동합니다.",
-						);
-						// 있어야 함
-						// navigation.navigate("PatrolDiary");
-					}
-				})
-				.catch((err) => {
-					console.log("에러;", err);
-				});
+		// 모든 프로미스가 완료될 때까지 기다립니다.
+		const uploadedImages = await Promise.all(uploadPromises);
+		const response = await axios.post("/searchreport", {
+			missingNo,
+			searchReportContent: patrolReportContent,
+			searchReportLat: myLatitude,
+			searchReportLng: myLongitude,
+			searchReportImages: uploadedImages,
+		});
 
-			// setSubmitImgList(uploadedImages);
-			console.log("uploadedImages::::::", uploadedImages);
-		} catch (error) {
-			console.error("An error occurred during the upload", error);
+		if (response.status === 200) {
+			Alert.alert("찾아주세요 신고가 완료되었습니다.");
+			navigation.navigate("MissingFind", {
+				missingNo: missingNo,
+				myLatitude: myLatitude,
+				myLongitude: myLongitude,
+			});
 		}
+		console.log("uploadedImages::::::", uploadedImages);
 	};
 
 	const removeImageFromPatrolImgList = (indexToRemove) => {
@@ -220,17 +198,17 @@ const FindMissingDog = () => {
 								);
 							})}
 						</View>
-						<TextInput
+						{/* <TextInput
 							style={PatrolDiaryWriteLayout.formInput}
 							value={patrolReportTitle}
 							onChangeText={(text) => setPatrolReportTitle(text)}
 							placeholder="제목을 작성해주세요."
 							onBlur={() => {}}
-						/>
+						/> */}
 
 						<View>
 							<Text style={PatrolDiaryWriteLayout.textAlign}>
-								순찰 일지 내용 작성
+								실종 신고 내용 작성
 							</Text>
 						</View>
 						<TextInput
@@ -242,7 +220,7 @@ const FindMissingDog = () => {
 							onChangeText={(text) => {
 								setPatrolReportContent(text);
 							}}
-							placeholder="순찰 일지 내용을 작성해주세요."
+							placeholder="실종 신고 내용을 작성해주세요."
 							multiline={true}
 							onBlur={() => {}}
 						/>
@@ -252,7 +230,7 @@ const FindMissingDog = () => {
 							onConfirm={handleConfirm}
 							onCancel={hideDatePicker}
 						/>
-						<TouchableOpacity activeOpacity={0.7} onPress={showDatePicker}>
+						{/* <TouchableOpacity activeOpacity={0.7} onPress={showDatePicker}>
 							<View style={PatrolDiaryWriteLayout.dateInput}>
 								<Image
 									style={PatrolDiaryWriteLayout.dateImg}
@@ -262,9 +240,9 @@ const FindMissingDog = () => {
 									{"       "} {missingDate}
 								</Text>
 							</View>
-						</TouchableOpacity>
+						</TouchableOpacity> */}
 						<CustomSubButton
-							text={"실종견 등록하기"}
+							text={"실종 신고 등록하기"}
 							onPress={() => {
 								uploadImage(patrolImgList);
 							}}
