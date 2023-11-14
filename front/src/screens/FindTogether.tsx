@@ -132,6 +132,23 @@ const FindTogether = ({ route }: any) => {
 		startSending();
 	};
 
+	const handleEndSession = () => {
+		Alert.alert("친구 찾기 종료할 거?", "진짜 할 꺼?", [
+			{
+				text: "응 나 T야",
+				onPress: () => {
+					disconnectServer();
+					navigation.navigate("FindMissingDog", {
+						// missingNo: detailMissingDog.missingNo,
+					});
+				},
+			},
+			{
+				text: "그래 이게 F지",
+			},
+		]);
+	};
+
 	const startSending = () => {
 		console.log(`startSending`);
 		if (intervalId.current) return;
@@ -253,7 +270,7 @@ const FindTogether = ({ route }: any) => {
 				/>
 				<FindBtn
 					startSession={() => Alert.alert("강아지를 찾아봅시다")}
-					endSession={() => Alert.alert("이걸 못찾네")}
+					endSession={() => handleEndSession()}
 					isPressed={isPressed}
 					setIsPressed={setIsPressed}
 				/>

@@ -40,6 +40,7 @@ global.TextDecoder = TextDecoder;
 import ManualMain from "./src/screens/ManualMain";
 import CreateMissingMyDog from "./src/screens/CreateMissingMyDog";
 import MissingCarouselDetail from "./src/screens/MissingCarouselDetail";
+import FindMissingDog from "./src/screens/FindMissingDog";
 
 const App = () => {
 	const Stack = createNativeStackNavigator();
@@ -99,6 +100,7 @@ const App = () => {
 						name="MissingCarouselDetail"
 						component={MissingCarouselDetail}
 					/>
+					<Stack.Screen name="FindMissingDog" component={FindMissingDog} />
 				</Stack.Navigator>
 			</NavigationContainer>
 		</RecoilRoot>
