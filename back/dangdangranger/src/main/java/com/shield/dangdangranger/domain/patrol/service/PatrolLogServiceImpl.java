@@ -16,15 +16,18 @@ import com.shield.dangdangranger.domain.patrol.repo.PatrolLogRepository;
 import com.shield.dangdangranger.domain.patrol.repo.custom.PatrolLogRepositoryCustom;
 import com.shield.dangdangranger.domain.region.entity.Dong;
 import com.shield.dangdangranger.domain.region.repo.DongRepository;
+import com.shield.dangdangranger.domain.region.repo.PostalAddressRepository;
 import com.shield.dangdangranger.domain.region.repo.custom.DongCustomRepository;
 import com.shield.dangdangranger.domain.region.vo.RegionVo.AddressVo;
 import com.shield.dangdangranger.domain.user.entity.User;
 import com.shield.dangdangranger.domain.user.repo.UserRepository;
 import com.shield.dangdangranger.global.error.ForbiddenException;
 import com.shield.dangdangranger.global.error.NotFoundException;
+
 import java.util.List;
 import java.util.StringTokenizer;
 import java.util.stream.Collectors;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -42,56 +45,57 @@ public class PatrolLogServiceImpl implements PatrolLogService {
     private final DongCustomRepository dongCustomRepository;
     private final PatrolLogRepositoryCustom patrolLogRepositoryCustom;
     private final PatrolRedisService patrolRedisService;
+    private final PostalAddressRepository postalAddressRepository;
 
     @Override
     @Transactional
     public void createPatrolLog(Integer userNo, PatrolLogSaveRequestDto patrolLogSaveRequestDto) {
         User user = userRepository.findUserByUserNoAndCanceled(userNo, NOTCANCELED)
-            .orElseThrow(() -> new NotFoundException(USER_NOT_FOUND_EXCEPTION.message()));
+                .orElseThrow(() -> new NotFoundException(USER_NOT_FOUND_EXCEPTION.message()));
 
-        AddressVo addressVo = parseAddressToVo(patrolLogSaveRequestDto.getAddress());
-        log.debug("[createPatrolLog] address: {}", addressVo);
+        String dongName = postalAddressRepository.findTopByPostalCode(patrolLogSaveRequestDto.getPostalCode()).get().getLegalDongName();
+        AddressVo addressVo = parseAddressToVo(dongName, patrolLogSaveRequestDto.getAddress());
         Dong dong = dongCustomRepository.findDongByAddress(addressVo)
-            .orElseThrow(() -> new NotFoundException(DONG_NOT_FOUND_EXCEPTION.message()));
+                .orElseThrow(() -> new NotFoundException(DONG_NOT_FOUND_EXCEPTION.message()));
 
         log.debug("[createPatrolLog] dong : {}", dong);
         patrolRedisService.deletePatrolPersonInRedis();
 
         patrolLogRepository.save(PatrolLog.builder()
-            .user(user)
-            .dong(dong)
-            .patrolLogDate(patrolLogSaveRequestDto.getPatrolLogDate())
-            .patrolLogTotalDistance(patrolLogSaveRequestDto.getPatrolLogTotalDistance())
-            .patrolLogTotalTime(patrolLogSaveRequestDto.getPatrolLogTotalTime())
-            .patrolLogImageUrl(patrolLogSaveRequestDto.getPatrolLogImageUrl())
-            .patrolLogLat(patrolLogSaveRequestDto.getPatrolLogLat())
-            .patrolLogLng(patrolLogSaveRequestDto.getPatrolLogLng())
-            .patrolLogWritten(NOT_WRITTEN.value())
-            .build());
+                .user(user)
+                .dong(dong)
+                .patrolLogDate(patrolLogSaveRequestDto.getPatrolLogDate())
+                .patrolLogTotalDistance(patrolLogSaveRequestDto.getPatrolLogTotalDistance())
+                .patrolLogTotalTime(patrolLogSaveRequestDto.getPatrolLogTotalTime())
+                .patrolLogImageUrl(patrolLogSaveRequestDto.getPatrolLogImageUrl())
+                .patrolLogLat(patrolLogSaveRequestDto.getPatrolLogLat())
+                .patrolLogLng(patrolLogSaveRequestDto.getPatrolLogLng())
+                .patrolLogWritten(NOT_WRITTEN.value())
+                .build());
     }
 
-    private AddressVo parseAddressToVo(String address) {
+    private AddressVo parseAddressToVo(String dongName, String address) {
         StringTokenizer addressTokenizer = new StringTokenizer(address);
         return AddressVo.builder()
-            .sidoName(addressTokenizer.nextToken())
-            .gugunName(addressTokenizer.nextToken())
-            .dongName(addressTokenizer.nextToken())
-            .build();
+                .sidoName(addressTokenizer.nextToken())
+                .gugunName(addressTokenizer.nextToken())
+                .dongName(dongName)
+                .build();
     }
 
     @Override
     public List<PatrolLogRoughInfoResponseDto> readAllPatrolLog(Integer userNo) {
         return patrolLogRepositoryCustom.findAllPatrolLogByUser(userNo, NOTCANCELED)
-            .stream().map(PatrolLogRoughInfoResponseDto::new).collect(Collectors.toList());
+                .stream().map(PatrolLogRoughInfoResponseDto::new).collect(Collectors.toList());
     }
 
     @Override
     public PatrolLogDetailInfoResponseDto readOnePatrolLog(Integer userNo, Integer patrolLogNo) {
         User loggedInUser = userRepository.findUserByUserNoAndCanceled(userNo, NOTCANCELED)
-            .orElseThrow(() -> new NotFoundException(USER_NOT_FOUND_EXCEPTION.message()));
+                .orElseThrow(() -> new NotFoundException(USER_NOT_FOUND_EXCEPTION.message()));
         PatrolLog patrolLog = patrolLogRepository.findPatrolLogByPatrolLogNoAndCanceled(patrolLogNo,
-                NOTCANCELED)
-            .orElseThrow(() -> new NotFoundException(PATROL_LOG_NOT_FOUND_EXCEPTION.message()));
+                        NOTCANCELED)
+                .orElseThrow(() -> new NotFoundException(PATROL_LOG_NOT_FOUND_EXCEPTION.message()));
 
         if (patrolLog.getUser() != loggedInUser) {
             throw new ForbiddenException(FORBIDDEN_EXCEPTION_MESSAGE);
@@ -108,7 +112,7 @@ public class PatrolLogServiceImpl implements PatrolLogService {
     public PatrolPeopleCntResponseDto readPatrolPeopleCnt() {
         log.debug("patrol people cnt : {}", patrolRedisService.readPatrolPeopleCntFromRedis());
         return PatrolPeopleCntResponseDto.builder()
-            .patrolPeopleCnt(patrolRedisService.readPatrolPeopleCntFromRedis())
-            .build();
+                .patrolPeopleCnt(patrolRedisService.readPatrolPeopleCntFromRedis())
+                .build();
     }
 }
