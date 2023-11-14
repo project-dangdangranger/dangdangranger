@@ -1,199 +1,187 @@
-import { useEffect, useRef, useState } from "react";
 import {
-	View,
 	Text,
+	View,
 	Image,
-	StyleSheet,
-	Platform,
 	TouchableOpacity,
+	Modal,
+	TextInput,
 } from "react-native";
-import { useNavigation } from "@react-navigation/native";
 import CommonLayout from "../recycles/CommonLayout";
+import FooterBar from "../recycles/FooterBar";
 import ColorHeader from "../recycles/ColorHeader";
-import AbsoluteVar from "../recycles/FooterBar";
+import axios from "../utils/axios";
+import React, { useEffect, useState, useRef } from "react";
+import styles from "../styles/PatrolReportDetailLayout";
+import dotIconImg from "../../assets/images/3-dot-icon.png";
+import PatrolDiaryLayout from "../styles/patrolDiaryLayout";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import {
 	responsiveHeight,
 	responsiveWidth,
 } from "react-native-responsive-dimensions";
-import CustomSubButton from "../recycles/CustomSubBtn";
-import ProfileImg from "../../assets/images/profileImg.png";
+import MultiPicture from "../recycles/MultiPicture";
+import CustomButton from "../recycles/CustomBtn";
 
-const MissingDetail = ({ route }) => {
-	const navigation = useNavigation();
-	const [data, setDate] = useState(route.params);
+const PatrolReportDetail = ({ route }: any) => {
+	console.log("라우트!!!!!!", route.params);
+	const { navigate } = useNavigation();
+
+	const [missingData, setMissingData] = useState({});
+
+	useFocusEffect(
+		React.useCallback(() => {
+			axios
+				.get(`/missing/${route.params.missingNo}`)
+				.then((res) => {
+					console.log("받았냐고", res.data.data);
+					setMissingData(res.data.data);
+				})
+				.catch((err) => {
+					console.log(err);
+				});
+		}, []),
+	);
+
+	const [data, setData] = useState({});
+	const { patrolNo } = route.params;
+	const [userData, setUserData] = useState({});
+	const [modalVisible, setModalVisible] = useState(false);
+	const [modalPosition, setModalPosition] = useState({ top: 0, left: 0 });
+	const threedotRef = useRef(null);
+	const handlePressThreedot = () => {
+		threedotRef.current.measure((fx, fy, width, height, px, py) => {
+			px = responsiveWidth(45);
+			setModalPosition({ top: py + height + 10, left: px });
+			setModalVisible(true);
+		});
+	};
+
+	const [dataVersion, setDataVersion] = useState(0);
+	const [commentList, setCommentList] = useState(data?.patrolComments);
+	const [commentsubmittext, setCommentSubmitText] = useState("");
+	const commentSubmit = () => {
+		// axios
+		// 	.post("/patrolcomment", {
+		// 		patrolNo: patrolNo,
+		// 		userNo: userData?.userNo,
+		// 		patrolCommentContent: commentsubmittext,
+		// 	})
+		// 	.then((res) => {
+		// 		setDataVersion((prevVersion) => prevVersion + 1);
+		// 		setCommentSubmitText("");
+		// 	})
+		// 	.catch((err) => {
+		// 		console.log(err);
+		// 	});
+	};
+
 	useEffect(() => {
-		console.log("라우트:", route);
-		setDate({ ...data, dogImg: ProfileImg });
+		// const fetchData = async () => {
+		// 	try {
+		// 		const response = await axios.get(`/patrol/${patrolNo}`);
+		// 		if (response.data.message === "순찰일지 상세조회 완료") {
+		// 			setData(response.data.data);
+		// 			console.log(response.data.data);
+		// 		}
+		// 	} catch (error) {
+		// 		console.log(error);
+		// 	}
+		// };
+		// fetchData();
+	}, [dataVersion]);
+
+	useEffect(() => {
+		// axios
+		// 	.get(`/patrol/${patrolNo}`)
+		// 	.then((res) => {
+		// 		if (res.data.message === "순찰일지 상세조회 완료") {
+		// 			setData(res.data.data);
+		// 			console.log(res.data.data);
+		// 		}
+		// 	})
+		// 	.catch((err) => {
+		// 		console.log(err);
+		// 	});
 	}, []);
+
+	useEffect(() => {
+		// axios
+		// 	.get("/user")
+		// 	.then((res) => {
+		// 		setUserData(res.data.data);
+		// 		// console.log(res.data.data);
+		// 	})
+		// 	.catch((err) => {
+		// 		console.log(err);
+		// 	});
+	}, []);
+
+	if (missingData) {
+		console.log(111111111111);
+		console.log("missingData:", missingData);
+		console.log(2222222222222);
+	}
 
 	return (
 		<>
 			<CommonLayout>
-				<ColorHeader title="실종견 정보" />
+				<ColorHeader title={"신고견 상세"} />
 
-				{/* <Image source={ProfileImg} style={styles.mainImg} />
+				{/* <Image
+					source={{ uri: data?.patrolFirstImg }}
+					style={styles.img}
+				></Image> */}
 
-				<View style={styles.mainTextContainer}>
-					<Text style={styles.mainText}>강아지 이름 </Text>
-					<View style={styles.line} />
+				<View
+					style={{ width: responsiveWidth(100), height: responsiveHeight(30) }}
+				>
+					<MultiPicture
+						imgList={[route.params.thumbnailUrl]}
+						location={route.params.missingAddress}
+					/>
 				</View>
-				<View style={styles.dogContainer}>
-					<View style={styles.dogItemCenter}>
-						<View style={styles.dogItemContentRow}>
-							<View style={styles.dogItemStyle}>
-								<Text>나이</Text>
-								<Text style={styles.dogItemMainText}>{data.dogNo}14</Text>
-							</View>
-							<View style={styles.dogItemStyle}>
-								<Text>성별</Text>
-								<Text style={styles.dogItemMainText}>{data.dogSex}ddd</Text>
-							</View>
-							<View style={styles.dogItemStyle}>
-								<Text>견종</Text>
-								<Text
-									style={styles.dogItemBreedText}
-									numberOfLines={1}
-									ellipsizeMode="clip"
-								>
-									{data.dogBreed}ddddd
-								</Text>
-							</View>
-							<View style={styles.dogItemStyle}>
-								<Text>발급 일자</Text>
-								<Text style={styles.dogDataText}>2023.10.19</Text>
-							</View>
-						</View>
-						<View>
-							<Text style={styles.randomText}>
-								랜덤한 댕댕레인저 대사가 여기에 나옵니다.
-							</Text>
+
+				<View style={styles.mainContainer}>
+					<View style={styles.contentContainer}>
+						<View style={styles.mainTextContainer}>
+							<Text style={styles.mainText}>{missingData?.missingTitle}</Text>
 						</View>
 					</View>
-				</View>
 
-				<View style={styles.subBtnLocation}>
-					<CustomSubButton
-						text={"실종견 등록하기"}
-						onPress={() => navigation.navigate("CreateDog")}
-						color={"#70C8EE"}
+					<View style={styles.addresscontainer}>
+						<View style={styles.missingtitle}>
+							<Text style={styles.missingDateText1}>발견 시간</Text>
+							<Text style={styles.missingDateText}>
+								{missingData?.missingDate?.slice(0, 10)}
+							</Text>
+						</View>
+						<View style={styles.missingaddress}>
+							<Text style={styles.missingDateText2}>실종 장소</Text>
+							<Text>{missingData?.missingAddress?.slice(0, 20)}</Text>
+						</View>
+					</View>
+
+					<View style={styles.contentcontainer}>
+						<View style={styles.contentText}>
+							<Text style={styles.contenttext}>
+								{missingData?.missingContent}
+							</Text>
+						</View>
+						<View style={styles.editContainer}></View>
+					</View>
+
+					<CustomButton
+						text={"실종견 신고하기"}
+						onPress={() => {
+							console.log("실종견??!!");
+							// navigate("PatrolReport")
+						}}
 					/>
-				</View> */}
+				</View>
 			</CommonLayout>
-			<AbsoluteVar />
+			<FooterBar />
 		</>
 	);
 };
 
-export default MissingDetail;
-
-const styles = StyleSheet.create({
-	mainImg: {
-		position: "relative",
-		width: responsiveWidth(100),
-		height: responsiveHeight(30),
-	},
-	mainTextContainer: {
-		position: "absolute",
-		top: responsiveHeight(30),
-		backgroundColor: "#fff",
-		width: responsiveWidth(100),
-		height: responsiveHeight(120),
-		// justifyContent: "center",
-		alignItems: "center",
-		borderRadius: 25,
-	},
-	mainText: {
-		fontSize: 30,
-		fontWeight: "bold",
-		marginTop: responsiveHeight(3),
-	},
-	line: {
-		width: responsiveWidth(90),
-		height: 1,
-		backgroundColor: "#E8E8E8",
-		marginVertical: responsiveHeight(1.5),
-	},
-	dogContainer: {
-		justifyContent: "center",
-		alignItems: "center",
-		// marginRight: responsiveWidth(10),
-	},
-	dogItemCenter: {
-		justifyContent: "center",
-		// alignItems: "center",
-		// marginTop: responsiveHeight(1),
-	},
-
-	imgcontainer: {
-		flexDirection: "row",
-		justifyContent: "center",
-		alignItems: "center",
-		marginTop: responsiveHeight(3),
-	},
-	imgRow: {
-		flexDirection: "row",
-		justifyContent: "space-between",
-		alignItems: "center",
-		width: responsiveWidth(90),
-	},
-	BadgeImg: {
-		height: 80,
-		width: 60,
-	},
-	viewcontainer: {
-		justifyContent: "center",
-		alignItems: "center",
-		marginTop: responsiveHeight(0),
-	},
-	viewtext: {
-		marginVertical: responsiveHeight(1),
-		fontSize: 12,
-		fontWeight: "bold",
-	},
-	dogcontainer: {
-		flexDirection: "column",
-		justifyContent: "space-between",
-		alignItems: "center",
-		marginTop: responsiveHeight(3),
-	},
-
-	dogItemText: {
-		fontSize: 15,
-		fontWeight: "900",
-	},
-	dogItemContentRow: {
-		marginTop: responsiveHeight(4),
-		width: responsiveWidth(70),
-		flexDirection: "row",
-		justifyContent: "space-between",
-		alignItems: "center",
-		paddingBottom: responsiveHeight(2),
-	},
-	dogItemStyle: {
-		justifyContent: "center",
-		// alignItems: "center",
-	},
-	dogItemMainText: {
-		fontSize: 18,
-		fontWeight: "bold",
-		marginRight: responsiveWidth(5),
-	},
-	dogItemSexText: {
-		fontSize: 18,
-		fontWeight: "bold",
-		marginRight: responsiveWidth(5),
-	},
-	dogItemBreedText: {
-		width: responsiveWidth(16),
-		fontSize: 18,
-		fontWeight: "bold",
-		overflow: "visible",
-		marginRight: responsiveWidth(5),
-	},
-	dogDataText: { fontSize: 18, fontWeight: "bold" },
-	randomText: {
-		marginTop: responsiveHeight(5),
-		marginBottom: responsiveHeight(20),
-	},
-	subBtnLocation: {},
-});
+export default PatrolReportDetail;

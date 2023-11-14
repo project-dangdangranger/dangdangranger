@@ -1,4 +1,5 @@
 import { Image, Text, View, ScrollView } from "react-native";
+import React, { useEffect, useState } from "react";
 import ColorHeader from "../recycles/ColorHeader";
 import CommonLayout from "../recycles/CommonLayout";
 import FooterBar from "../recycles/FooterBar";
@@ -7,15 +8,32 @@ import PatrolLogLayout from "../styles/patrolLogLayout";
 import { responsiveWidth } from "react-native-responsive-dimensions";
 import img from "../../assets/images/debug-dog.png";
 import DetailBtn from "../components/DetailBtn";
+import PatrolLogCarousel from "../recycles/PatrolLogCarousel";
+import axios from "../utils/axios";
 
 const PatrolLog = () => {
-	const logs = [
-		{ logNo: 0, imgSrc: img, date: "22-02-02" },
-		{ logNo: 1, imgSrc: img, date: "22-02-02" },
-		{ logNo: 2, imgSrc: img, date: "22-02-02" },
-		{ logNo: 3, imgSrc: img, date: "22-02-02" },
-		{ logNo: 4, imgSrc: img, date: "22-02-02" },
-	];
+	const [logs, setLogs] = useState([]);
+
+	useEffect(() => {
+		getLogs();
+	}, []);
+
+	const getLogs = async () => {
+		try {
+			const response = await axios.get("/log");
+			console.log(response.data);
+
+			const transformedLogs = response.data.data.map((log) => ({
+				logNo: log.patrolLogNo,
+				imgSrc: { uri: log.patrolLogImageUrl },
+				date: log.patrolLogDate.split("T")[0],
+			}));
+
+			setLogs(transformedLogs);
+		} catch (error) {
+			console.error("Error fetching logs:", error);
+		}
+	};
 
 	return (
 		<>
@@ -24,21 +42,8 @@ const PatrolLog = () => {
 				<Image source={LogMapImg} style={PatrolLogLayout.imgWrap} />
 				<View style={PatrolLogLayout.textWrap}>
 					<Text style={PatrolLogLayout.textTitle}>내 순찰 기록</Text>
-					<Text style={PatrolLogLayout.textDate}>23.10.09 ~ 23.10.16</Text>
 				</View>
-				<View style={PatrolLogLayout.scrollWrap}>
-					<ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-						{logs.map((log, index) => {
-							return (
-								<View key={log.logNo} style={PatrolLogLayout.cardWrap}>
-									<Image source={log.imgSrc} style={PatrolLogLayout.cardImg} />
-									<Text style={PatrolLogLayout.cardTextDate}>{log.date}</Text>
-									<DetailBtn />
-								</View>
-							);
-						})}
-					</ScrollView>
-				</View>
+				<PatrolLogCarousel logs={logs} />
 			</CommonLayout>
 			<FooterBar />
 		</>

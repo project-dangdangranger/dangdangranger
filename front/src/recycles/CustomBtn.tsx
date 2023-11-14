@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
 	container: {
 		// justifyContent: "center",
 		alignItems: "center",
-		marginBottom: responsiveHeight(5),
+		marginBottom: responsiveHeight(6),
 	},
 	button: {
 		width: responsiveWidth(85),

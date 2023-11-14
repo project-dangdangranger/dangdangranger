@@ -1,10 +1,6 @@
 import { Text, View, Image, Alert, TouchableOpacity } from "react-native";
 import CommonLayout from "../recycles/CommonLayout";
 import MainHeader from "../recycles/MainHeader";
-import {
-	responsiveHeight,
-	responsiveWidth,
-} from "react-native-responsive-dimensions";
 import MainCount from "../components/MainCount";
 import MainLayout from "../styles/mainLayout";
 import Page from "../../assets/images/mainPage.png";
@@ -18,34 +14,52 @@ import PatrolSubImg from "../../assets/images/main-patrol.png";
 import MissingSubImg from "../../assets/images/main-missing.png";
 import ChatBotSubImg from "../../assets/images/main-chatbot.png";
 import FooterBar from "../recycles/FooterBar";
-import { useEffect, useState } from "react";
-// import { NativeModules } from "react-native";
+import React, { useEffect, useState } from "react";
+import { useNavigation } from "@react-navigation/native";
+import axios from "../utils/axios";
+import { useFocusEffect } from "@react-navigation/native";
+import { useRecoilState } from "recoil";
+import { isLogged } from "../atoms/atoms";
 
-// const { KakaoMapModule } = NativeModules;
+const Main = () => {
+	useEffect(() => {
+		console.log("isLogged:", islogged);
+	}, []);
 
-const Main = ({ navigation }: any) => {
 	const LoginStore = {
 		isLogged: true,
 	};
+	const navigation = useNavigation();
+	const [islogged, setIsLogged] = useRecoilState(isLogged);
 
 	const authHandling = (pageName: string) => {
-		// if (LoginStore.isLogged) {
-		Alert.alert("로그인 후 이용 가능합니다.");
-		// } else {
-		// alert("해당 서비스는 로그인 후 이용가능합니다.");
-		// }
+		if (islogged === true) {
+			navigation.navigate(pageName);
+		} else {
+			Alert.alert("로그인 후 이용 가능합니다.");
+		}
 	};
 
-	const [patrol, setPatrol] = useState(0);
-	const [missing, setMissing] = useState(0);
+	const [patrolPeople, setPatrolPeople] = useState(0);
+	const [missingPeople, setMissingPeople] = useState(0);
+
+	useFocusEffect(
+		React.useCallback(() => {
+			axios.get("/patrol/people").then((data) => {
+				setPatrolPeople(data.data.data.patrolPeopleCnt);
+				// console.log("현재 순찰중인 사람 데이터:", data.data);
+			});
+		}, []),
+	);
 
 	return (
 		<>
 			<></>
 			<CommonLayout>
 				<MainHeader></MainHeader>
+				{/* <Test /> */}
 				<View style={MainLayout.walkMainWrap}>
-					<MainCount patrol={patrol} missing={missing} />
+					<MainCount patrol={patrolPeople} missing={missingPeople} />
 					<Text style={MainLayout.walkMainTitle}>
 						<Text style={MainLayout.walkBoldText}>댕댕레인저</Text>와 함께{" "}
 						{"\n"}
@@ -54,7 +68,7 @@ const Main = ({ navigation }: any) => {
 					</Text>
 
 					<Text style={MainLayout.walkMainDesc}>
-						서비스 이름은 내 반려견의 프로필을 NFT화하여{"\n"}
+						댕댕레인저는 내 반려견의 프로필을 NFT화하여{"\n"}
 						방범대원으로 활동할 수 있도록 도와주는 플랫폼입니다.
 					</Text>
 				</View>
@@ -63,7 +77,7 @@ const Main = ({ navigation }: any) => {
 				</View>
 				<CustomButton
 					text="지역 순찰하기"
-					onPress={() => navigation.navigate("GoogleMap")}
+					onPress={() => authHandling("PatrolGo")}
 				/>
 				{LoginStore.isLogged ? null : (
 					<View style={MainLayout.mainTextWrap}>

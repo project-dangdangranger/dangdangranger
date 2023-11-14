@@ -16,10 +16,7 @@ const SideMenuIcon = ({ title, imageIcon, movePage }: any) => {
 	};
 	return (
 		<>
-			<TouchableOpacity
-				activeOpacity={0.7}
-				onPress={authHandling}
-			>
+			<TouchableOpacity activeOpacity={0.7} onPress={authHandling}>
 				<View style={styles.iconWrap}>
 					<Image source={imageIcon} style={styles.sideMenuIcon} />
 					<Text style={styles.text}>{title}</Text>
@@ -32,11 +29,13 @@ const SideMenuIcon = ({ title, imageIcon, movePage }: any) => {
 const styles = StyleSheet.create({
 	iconWrap: {
 		marginHorizontal: responsiveWidth(4),
+		marginVertical: responsiveWidth(4),
 		marginTop: 25,
 	},
 	sideMenuIcon: {
 		width: 44,
 		height: 44,
+		resizeMode: "contain",
 	},
 	text: {
 		fontSize: 10,

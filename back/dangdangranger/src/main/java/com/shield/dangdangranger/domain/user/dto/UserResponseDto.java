@@ -25,6 +25,7 @@ public class UserResponseDto {
         private String userProfileImg;
         private String userAddress;
         private String userDongCode;
+        private String userWalletAddress;
     }
 
     @Getter
@@ -34,5 +35,13 @@ public class UserResponseDto {
 
         private TokenInfo tokenInfo;
         private String signInUp;
+    }
+
+    @Getter
+    @AllArgsConstructor
+    @Builder
+    public static class UserWalletAddressResponseDto {
+
+        private String userWalletAddress;
     }
 }

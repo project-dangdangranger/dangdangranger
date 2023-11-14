@@ -17,14 +17,10 @@ const DogItem = ({ item, navigation }: any) => {
 			onPress={() => navigation.navigate("DogDetail", { item })}
 		>
 			<View style={styles.dogItem}>
-				<Image source={item.dogImg} style={styles.dogImg} />
+				<Image source={{ uri: item.dogImg }} style={styles.dogImg} />
 				<View style={styles.dogItemContentContainer}>
 					<Text style={styles.dogTitle}>{item.dogName}</Text>
 					<View style={styles.dogItemContentRow}>
-						<View style={styles.dogItemStyle}>
-							<Text>나이</Text>
-							<Text style={styles.dogItemMainText}>{item.dogNo}</Text>
-						</View>
 						<View style={styles.dogItemStyle}>
 							<Text>성별</Text>
 							<Text style={styles.dogItemMainText}>{item.dogSex}</Text>
@@ -36,7 +32,7 @@ const DogItem = ({ item, navigation }: any) => {
 								numberOfLines={1}
 								ellipsizeMode="clip"
 							>
-								{item.dogBreed}ddddddddddd
+								{item.dogBreed}
 							</Text>
 						</View>
 					</View>
@@ -111,7 +107,7 @@ const styles = StyleSheet.create({
 		fontWeight: "bold",
 	},
 	dogItemBreedText: {
-		width: responsiveWidth(16),
+		width: responsiveWidth(30),
 		fontSize: 15,
 		fontWeight: "bold",
 		overflow: "visible",

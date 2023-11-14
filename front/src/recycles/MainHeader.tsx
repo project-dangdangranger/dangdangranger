@@ -7,16 +7,21 @@ import {
 	Animated,
 } from "react-native";
 import { useEffect, useState } from "react";
-import DDRangers from "../../assets/images/DDR_logo.png";
+import DDRangers from "../../assets/images/Logo.png";
 import HamburgerMenu from "../../assets/images/hamburger_menu_icon.png";
+import ManualIcon from "../../assets/images/manual-icon.png";
 import SideMenu from "./SideMenu";
 import {
 	responsiveWidth,
 	responsiveHeight,
 } from "react-native-responsive-dimensions";
+import { useNavigation } from "@react-navigation/native";
+import { StackNavigation } from "../../App";
 
 const MainHeader = () => {
 	const [activeSideMenu, setActiveSideMenu] = useState(false);
+	const { navigate } = useNavigation<StackNavigation>();
+
 	const sideMenuPosition = useState(
 		new Animated.Value(-responsiveWidth(100)),
 	)[0];
@@ -62,6 +67,12 @@ const MainHeader = () => {
 				</View>
 				<Text style={styles.logo}>댕댕레인저</Text>
 
+				<TouchableOpacity
+					activeOpacity={0.7}
+					onPress={() => navigate("ManualMain")}
+				>
+					<Image source={ManualIcon} style={styles.menuIcon} />
+				</TouchableOpacity>
 				<TouchableOpacity activeOpacity={0.7} onPress={clickHamburger}>
 					<Image source={HamburgerMenu} style={styles.menuIcon} />
 				</TouchableOpacity>
@@ -84,7 +95,7 @@ const styles = StyleSheet.create({
 		fontSize: 25,
 		fontWeight: "700",
 		color: "#3E6DCA",
-		paddingRight: 120,
+		paddingRight: 70,
 	},
 	ddrangerslogo: {
 		width: 50,

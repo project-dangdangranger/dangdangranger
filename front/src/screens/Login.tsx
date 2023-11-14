@@ -4,7 +4,7 @@ import {
 	Image,
 	Alert,
 	TouchableOpacity,
-	Button,
+	Animated,
 } from "react-native";
 import CommonLayout from "../recycles/CommonLayout";
 import MainHeader from "../recycles/MainHeader";
@@ -18,9 +18,22 @@ import axios from "axios";
 import EncryptedStorage from "react-native-encrypted-storage";
 import { BASE_URL, CONTENT_TYPE, TIMEOUT } from "../constants/constants";
 import React, { useEffect } from "react";
+import LottieView from "lottie-react-native";
+import LoginLottie from "../../assets/jsons/Login.json";
+import {
+	responsiveHeight,
+	responsiveWidth,
+} from "react-native-responsive-dimensions";
+import { isLogged } from "../atoms/atoms";
+import { useRecoilState } from "recoil";
+import { useNavigation } from "@react-navigation/native";
 
-const Login = ({ navigation }: any) => {
+const Login = () => {
+	const [islogged, setIsLogged] = useRecoilState(isLogged);
+	const navigation = useNavigation();
+
 	useEffect(() => {
+		console.log(WEB_CLIENT_ID);
 		GoogleSignin.configure({
 			webClientId: WEB_CLIENT_ID,
 			offlineAccess: true,
@@ -57,11 +70,12 @@ const Login = ({ navigation }: any) => {
 			console.log("accessToken: ", accessToken);
 			console.log("refreshToken: ", refreshToken);
 			if (responseCheckUserInfo.data.data.signInUp === "회원가입 성공") {
-				console.log("회원가입 성공했습니다. 추가정보를 입력해야합니다.");
-				// navigation.navigate("AddInfo"); 그에 대한 로직이 필요함
+				Alert.alert("구글 로그인 성공", "추가 정보를 입력해야 합니다.");
+				navigation.navigate("Register");
 			} else if (responseCheckUserInfo.data.data.signInUp === "로그인 성공") {
 				console.log("로그인 성공했습니다. 메인페이지로 이동합니다.");
-				// navigation.navigate("Main"); 그에 대한 로직이 필요함
+				navigation.navigate("Main");
+				setIsLogged(true);
 			}
 		} catch (error) {
 			console.error(error);
@@ -85,7 +99,19 @@ const Login = ({ navigation }: any) => {
 					<Image source={LoginImg} style={LoginLayout.Img1} />
 				</View>
 
-				<Button title="Google 로그아웃" onPress={GoogleSignin.signOut} />
+				{/* <Button title="Google 로그아웃" onPress={GoogleSignin.signOut} /> */}
+				{/* <Animated.View>
+					<LottieView
+						autoPlay={true}
+						loop={true}
+						source={LoginLottie}
+						style={{
+							right: responsiveWidth(26),
+							height: responsiveHeight(20),
+							top: responsiveHeight(-1),
+						}}
+					/>
+				</Animated.View> */}
 				<TouchableOpacity
 					style={LoginLayout.BtnContainer}
 					onPress={handleGoogleLogin}
@@ -106,7 +132,6 @@ const Login = ({ navigation }: any) => {
 					</Text>
 				</View>
 			</CommonLayout>
-			<FooterBar />
 		</>
 	);
 };

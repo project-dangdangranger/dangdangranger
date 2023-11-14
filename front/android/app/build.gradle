@@ -88,8 +88,9 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         buildConfigField "String", "KAKAO_MAP_API_HASH_KEY", "\"${kakaoMapApiHashKey}\""
         manifestPlaceholders = [kakaoNativeAppKey: kakaoNativeAppKey]
-        versionCode 4
-        versionName "1.0.0"
+        resValue "string", "mapbox_access_token", localProperties['mapbox.accessToken']
+        versionCode 6
+        versionName "1.0.1"
 
         // apk version 관리용 네이밍 설정
         archivesBaseName = "dang-v${versionName}(${versionCode})"
@@ -145,6 +146,8 @@ dependencies {
     } else {
         implementation jscFlavor
     }
+
+
 }
 
 apply from: file("../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesAppBuildGradle(project)

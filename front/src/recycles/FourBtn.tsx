@@ -10,7 +10,7 @@ import Btn4 from "../../assets/images/btn4.png";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigation } from "../../App";
 
-const FourBtn = () => {
+const FourBtn = ({ ProfileData }: any | null) => {
 	const { navigate } = useNavigation<StackNavigation>();
 	return (
 		<>
@@ -27,7 +27,10 @@ const FourBtn = () => {
 					</TouchableOpacity>
 					<TouchableOpacity
 						style={styles.btn}
-						onPress={() => navigate("EditProfile")}
+						onPress={
+							() => navigate("UpdateInfo", ProfileData)
+							// () => navigate("Register")
+						}
 					>
 						<Image source={Btn2} style={styles.btnImg} />
 						<Text style={styles.btnText2}>프로필 관리</Text>
@@ -43,10 +46,10 @@ const FourBtn = () => {
 					</TouchableOpacity>
 					<TouchableOpacity
 						style={styles.btn}
-						onPress={() => navigate("MyWrite")}
+						onPress={() => navigate("ManualMain")}
 					>
 						<Image source={Btn4} style={styles.btnImg} />
-						<Text style={styles.btnText4}>내가 쓴 글</Text>
+						<Text style={styles.btnText4}>QnA</Text>
 					</TouchableOpacity>
 				</View>
 			</View>
