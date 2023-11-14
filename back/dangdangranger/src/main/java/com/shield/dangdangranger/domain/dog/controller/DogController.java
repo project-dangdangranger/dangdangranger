@@ -4,6 +4,7 @@ import com.shield.dangdangranger.domain.dog.constant.DogResponseMessage;
 import com.shield.dangdangranger.domain.dog.dto.DogRequestDto.*;
 import com.shield.dangdangranger.domain.dog.dto.DogResponseDto.*;
 import com.shield.dangdangranger.domain.dog.entity.Breed;
+import com.shield.dangdangranger.domain.dog.entity.Script;
 import com.shield.dangdangranger.domain.dog.service.DogService;
 import com.shield.dangdangranger.global.dto.ResponseDto;
 import lombok.RequiredArgsConstructor;
@@ -13,8 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static com.shield.dangdangranger.domain.dog.constant.DogResponseMessage.READ_ALL_BREED;
-import static com.shield.dangdangranger.domain.dog.constant.DogResponseMessage.READ_ALL_BREED_BY_KEYWORD;
+import static com.shield.dangdangranger.domain.dog.constant.DogResponseMessage.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -55,5 +55,11 @@ public class DogController {
         List<Breed> breedList = dogService.selectAllBreedsByKeyword(keyword);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ResponseDto.create(READ_ALL_BREED_BY_KEYWORD.getMessage(), breedList));
+    }
+
+    @GetMapping("/script")
+    public ResponseEntity<ResponseDto<RandomScriptResponseDto>> getRandomScript() {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ResponseDto.create(READ_RANDOM_SCRIPT_SUCCESS.getMessage(), dogService.selectRandomScript()));
     }
 }
