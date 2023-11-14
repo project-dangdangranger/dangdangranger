@@ -50,6 +50,7 @@ public class PatrolLogServiceImpl implements PatrolLogService {
             .orElseThrow(() -> new NotFoundException(USER_NOT_FOUND_EXCEPTION.message()));
 
         AddressVo addressVo = parseAddressToVo(patrolLogSaveRequestDto.getAddress());
+        log.debug("[createPatrolLog] address: {}", addressVo);
         Dong dong = dongCustomRepository.findDongByAddress(addressVo)
             .orElseThrow(() -> new NotFoundException(DONG_NOT_FOUND_EXCEPTION.message()));
 
