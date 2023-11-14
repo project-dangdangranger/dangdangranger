@@ -78,17 +78,16 @@ const Profile = () => {
 						</View>
 					</View>
 				</View>
-
-				<View style={styles.dogcontainer}>
-					{dogList?.map((item, index) => {
-						return <DogItem key={index} item={item} navigation={navigation} />;
-					})}
-				</View>
 				<CustomSubButton
 					text={"NFT 발급하기"}
 					onPress={() => navigation.navigate("CreateDog")}
 					color={"#70C8EE"}
 				/>
+				<View style={styles.dogcontainer}>
+					{dogList?.map((item, index) => {
+						return <DogItem key={index} item={item} navigation={navigation} />;
+					})}
+				</View>
 			</CommonLayout>
 			<AbsoluteVar />
 		</>
