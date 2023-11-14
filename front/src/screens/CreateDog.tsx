@@ -215,6 +215,7 @@ const CreateDog = ({ navigation }: any) => {
 
 		if (!isDog) {
 			Alert.alert("강아지가 포함된 이미지를 등록해야 합니다");
+			setClicked(false);
 			return;
 		}
 
