@@ -33,7 +33,12 @@ const PatrolDiaryWrite = () => {
 		const year = date.getFullYear().toString();
 		const month = (date.getMonth() + 1).toString().padStart(2, "0");
 		const day = date.getDate().toString().padStart(2, "0");
-		setMissingDate(year + "-" + month + "-" + day + "T00:00:00");
+		const hour = date.getDate().toString().padStart(2, "0");
+		const minute = date.getDate().toString().padStart(2, "0");
+		const second = date.getDate().toString().padStart(2, "0");
+		setMissingDate(
+			year + "-" + month + "-" + day + "T" + hour + ":" + minute + ":" + second,
+		);
 		hideDatePicker();
 		console.log(missingDate);
 	};

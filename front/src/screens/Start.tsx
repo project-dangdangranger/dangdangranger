@@ -26,7 +26,7 @@ const Start = () => {
 					navigation.navigate("Main");
 				}
 			});
-		}, []),
+		}, [islogged]),
 	);
 
 	return (
