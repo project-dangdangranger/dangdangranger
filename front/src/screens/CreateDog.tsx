@@ -60,7 +60,8 @@ const CreateDog = ({ navigation }: any) => {
 			"-" +
 			("0" + Number(1 + Number(new Date().getMonth()))).slice(-2) +
 			"-" +
-			("0" + new Date().getDate()).slice(-2),
+			("0" + new Date().getDate()).slice(-2) +
+			"T00:00:00",
 	);
 	const [speciesList, setSpeciesList] = useState<any[]>([]);
 	const [hashId, setHashId] = useState<any>();
