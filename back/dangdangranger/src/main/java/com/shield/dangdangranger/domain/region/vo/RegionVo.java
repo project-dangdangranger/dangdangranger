@@ -5,6 +5,7 @@ import com.shield.dangdangranger.domain.region.entity.Gugun;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.ToString;
 
 public class RegionVo {
     @Getter
@@ -36,6 +37,7 @@ public class RegionVo {
     @Getter
     @AllArgsConstructor
     @Builder
+    @ToString
     public static class AddressVo {
         private String sidoName;
         private String gugunName;
