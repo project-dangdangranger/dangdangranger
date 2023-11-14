@@ -104,6 +104,8 @@ const PatrolReportDetailLayout = StyleSheet.create({
 	patrollocationText: {
 		fontSize: 15,
 		fontWeight: "bold",
+		// 범위 지나면 다음 줄
+		width: responsiveWidth(25),
 	},
 	contentcontainer: {
 		marginHorizontal: responsiveWidth(5),
