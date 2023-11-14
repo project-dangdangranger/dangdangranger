@@ -11,7 +11,6 @@ import ColorHeader from "../recycles/ColorHeader";
 import FooterBar from "../recycles/FooterBar";
 import CustomText from "../recycles/CustomText";
 import Carousel from "../components/Carousel";
-import MissingImg from "../../assets/images/profileImg.png";
 import MissingItem from "../recycles/MissingItem";
 import axios from "../utils/axios";
 import { useFocusEffect } from "@react-navigation/native";
