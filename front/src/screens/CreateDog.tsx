@@ -215,6 +215,7 @@ const CreateDog = ({ navigation }: any) => {
 
 		if (!isDog) {
 			Alert.alert("강아지가 포함된 이미지를 등록해야 합니다");
+			setClicked(false);
 			return;
 		}
 
@@ -363,6 +364,13 @@ const CreateDog = ({ navigation }: any) => {
 
 		const getWalletAddress = async () => {
 			const myWalletAddress = await EncryptedStorage.getItem("walletAddress");
+			console.log("내 지갑 주소 : ", myWalletAddress);
+			if (myWalletAddress === null) {
+				Alert.alert(
+					"디지털 지갑이 없습니다. \n지갑을 생성 페이지로 이동합니다.",
+				);
+				navigation.navigate("MakeWallet1");
+			}
 			setMyWalletAddress(String(myWalletAddress));
 		};
 
