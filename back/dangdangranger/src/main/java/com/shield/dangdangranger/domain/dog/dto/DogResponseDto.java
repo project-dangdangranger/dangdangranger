@@ -42,4 +42,11 @@ public class DogResponseDto {
         private String dogImg;
         private LocalDateTime createDate;
     }
+
+    @Getter
+    @AllArgsConstructor
+    @Builder
+    public static class RandomScriptResponseDto {
+        private String scriptContent;
+    }
 }
