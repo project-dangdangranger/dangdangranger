@@ -21,8 +21,8 @@ const GeoLocationAPI = (props: Props) => {
 				const latitude = JSON.stringify(position.coords.latitude);
 				const longitude = JSON.stringify(position.coords.longitude);
 				getAddressCode(Number(latitude), Number(longitude));
-				props.setMissingLat(Number(latitude));
-				props.setMissingLong(Number(longitude));
+				props.setMissinglat(Number(latitude));
+				props.setMissinglong(Number(longitude));
 			},
 			(error) => {
 				console.log(error.code, error.message);

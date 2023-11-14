@@ -39,6 +39,7 @@ global.TextEncoder = TextEncoder;
 global.TextDecoder = TextDecoder;
 import ManualMain from "./src/screens/ManualMain";
 import CreateMissingMyDog from "./src/screens/CreateMissingMyDog";
+import MissingCarouselDetail from "./src/screens/MissingCarouselDetail";
 
 const App = () => {
 	const Stack = createNativeStackNavigator();
@@ -93,6 +94,10 @@ const App = () => {
 					<Stack.Screen
 						name="CreateMissingMyDog"
 						component={CreateMissingMyDog}
+					/>
+					<Stack.Screen
+						name="MissingCarouselDetail"
+						component={MissingCarouselDetail}
 					/>
 				</Stack.Navigator>
 			</NavigationContainer>
