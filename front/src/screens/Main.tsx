@@ -155,13 +155,13 @@ const Main = () => {
 							desc="반려견 순찰증 NFT"
 							title="대원증 제작"
 							iconImage={NFTSubImg}
-							movePage="NFT"
+							movePage="CreateDog"
 						/>
 						<IconButton
 							desc="대원 순찰 다이어리"
 							title="순찰 기록"
 							iconImage={PatrolSubImg}
-							movePage="Patrol"
+							movePage="PatrolDiary"
 						/>
 					</View>
 					<View style={MainLayout.flexButtonWrap}>
@@ -169,13 +169,13 @@ const Main = () => {
 							desc="실종견 등록 & 찾기"
 							title="실종견"
 							iconImage={MissingSubImg}
-							movePage="Missing"
+							movePage="MissingFind"
 						/>
 						<IconButton
 							desc="서비스 도우미"
-							title="챗봇"
+							title="사용자 가이드"
 							iconImage={ChatBotSubImg}
-							movePage="ChatBot"
+							movePage="ManualMain"
 						/>
 					</View>
 				</View>

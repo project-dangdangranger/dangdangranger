@@ -8,16 +8,8 @@ const IconButton = ({ desc, title, iconImage, movePage }: any) => {
 	// const {LoginStore} = IndexStore();
 
 	const authHandling = (pageName: string) => {
-		if (pageName === "Three") {
-			navigation.navigate(pageName);
-			return;
-		}
-
-		// if(LoginStore.isLogged){
-		//   navigation.navigate(pageName);
-		// }else{
-		//   alert("해당 서비스는 로그인 후 이용 가능합니다.");
-		// }
+		navigation.navigate(pageName);
+		return;
 	};
 	return (
 		<>
