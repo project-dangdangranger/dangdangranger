@@ -132,36 +132,24 @@ const PatrolDiaryWrite = () => {
 		try {
 			// 모든 프로미스가 완료될 때까지 기다립니다.
 			const uploadedImages = await Promise.all(uploadPromises);
+			const response = await axios.post("/missing", {
+				missingTypeNo: 1,
+				missingTitle: patrolReportTitle,
+				missingContent: patrolReportContent,
+				missingDate: missingDate,
+				missingLat: missinglat,
+				missingLng: missinglong,
+				missingImages: uploadedImages,
+				dogNo: dogNo,
+				missingAddress: address,
+			});
 
-			// console.log("도그넘버:", dogNo);
-
-			axios
-				.post("/missing", {
-					missingTypeNo: 1,
-					missingTitle: patrolReportTitle,
-					missingContent: patrolReportContent,
-					missingDate: missingDate,
-					missingLat: missinglat,
-					missingLng: missinglong,
-					missingImages: uploadedImages,
-					dogNo: dogNo,
-					missingAddress: address,
-				})
-				.then((res) => {
-					console.log("성공:", res.data);
-					if (res.data.message === "실종견 등록 성공") {
-						Alert.alert(
-							"실종견(신고) 등록 성공",
-							"실종견 리스트로 넘어갑니다.",
-						);
-						navigation.navigate("MissingFind");
-					}
-				})
-				.catch((err) => {
-					console.log("에러;", err.message);
-				});
-
-			// setSubmitImgList(uploadedImages);
+			if (response.status === 200) {
+				console.log("response.data : ", response.data);
+				console.log("성공");
+				Alert.alert("실종견(신고) 등록 성공", "실종견 리스트로 넘어갑니다.");
+				navigation.navigate("MissingFind");
+			}
 			console.log("uploadedImages::::::", uploadedImages);
 		} catch (error) {
 			console.error("An error occurred during the upload", error);
@@ -208,8 +196,8 @@ const PatrolDiaryWrite = () => {
 					setMissinglong={setMissinglong}
 				/>
 				<CustomText
-					mainText="실종견을 위해"
-					emphasizedText="등록 정보"
+					mainText="강아지를 찾기 위해"
+					emphasizedText="정보"
 					emphasizedColor="#FF6A6A"
 					finalText="를 작성해주세요."
 				/>
@@ -268,8 +256,7 @@ const PatrolDiaryWrite = () => {
 									color: "#3E6DCA",
 								}}
 							>
-								{" "}
-								현재 위치{" "}
+								잃어버린 위치
 							</Text>
 							<Text>{address}</Text>
 						</View>
@@ -284,7 +271,7 @@ const PatrolDiaryWrite = () => {
 
 						<View>
 							<Text style={PatrolDiaryWriteLayout.textAlign}>
-								순찰 일지 내용 작성
+								강아지 정보 작성
 							</Text>
 						</View>
 						<TextInput
@@ -296,7 +283,7 @@ const PatrolDiaryWrite = () => {
 							onChangeText={(text) => {
 								setPatrolReportContent(text);
 							}}
-							placeholder="순찰 일지 내용을 작성해주세요."
+							placeholder="강아지 정보를 작성해주세요."
 							multiline={true}
 							onBlur={() => {}}
 						/>
