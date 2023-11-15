@@ -12,6 +12,7 @@ import FindMap from "../components/FindMap";
 import FindBtn from "../components/FindBtn";
 import FindSideBtn from "../components/FindSideBtn";
 import Geolocation from "@react-native-community/geolocation";
+import DetailModal from "../components/DetailModal";
 
 // const PatrolReportDetail = ({ route }: any) => {
 //     // console.log("라우트!!!!!!", route.params);
@@ -20,6 +21,7 @@ import Geolocation from "@react-native-community/geolocation";
 
 const FindTogether = ({ route }: any) => {
 	const { navigate } = useNavigation();
+	const [modalVisible, setModalVisible] = useState(false);
 	// const { missingNo, imgUrl } = route.params;
 	// weoqirqwopejqwioasd {
 	// "item": {"dogNo": 10,
@@ -42,6 +44,7 @@ const FindTogether = ({ route }: any) => {
 	const [myLatitude, setMyLatitude] = useState();
 	const [myLongitude, setMyLongitude] = useState();
 	const [detailMissingDog, setDetailMissingDog] = useState({});
+	const [dogInfo, setDogInfo] = useState({});
 	const [isPressed, setIsPressed] = useState(false);
 	// const [topicId, setTopicId] = useState("");
 	const topicId: any = useRef();
@@ -60,7 +63,9 @@ const FindTogether = ({ route }: any) => {
 
 
 	useEffect(() => {
+		console.log("item is : ", item);
 		getDetailMissingDog(item.missingNo);
+		getDogInfo(item.dogNo);
 		leavePage();
 	}, []);
 
@@ -86,6 +91,11 @@ const FindTogether = ({ route }: any) => {
 	const getDetailMissingDog = async (missingNo: number) => {
 		const response = await axios.get(`/missing/${missingNo}`);
 		setDetailMissingDog(response.data.data);
+	};
+
+	const getDogInfo = async (dogNo: number) => {
+		const response = await axios.get(`/dog/${dogNo}`);
+		setDogInfo(response.data.data);
 	};
 
 	// 서버 연결 및 구독 시작: 함께 찾기 시작
@@ -310,7 +320,17 @@ const FindTogether = ({ route }: any) => {
 					isPressed={isPressed}
 					setIsPressed={setIsPressed}
 				/>
-				<FindSideBtn />
+				<FindSideBtn
+					endSession={handleEndSession}
+					isFinding={isPressed}
+					setMissingModal={setModalVisible}
+				/>
+				<DetailModal
+					modalVisible={modalVisible}
+					setModalVisible={setModalVisible}
+					missingInfo={detailMissingDog}
+					dogInfo={dogInfo}
+				/>
 			</CommonLayout>
 		</>
 	);

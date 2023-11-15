@@ -15,7 +15,7 @@ import {
 } from "react-native-responsive-dimensions";
 import FindMenuModal from "./FindMenuModal";
 
-const FindSideBtn = () => {
+const FindSideBtn = ({ endSession, isFinding, setMissingModal }: any) => {
 	const [modalVisible, setModalVisible] = useState(false);
 
 	const clickPlusMenu = () => {
@@ -42,6 +42,9 @@ const FindSideBtn = () => {
 				<FindMenuModal
 					modalVisible={modalVisible}
 					setModalVisible={setModalVisible}
+					endSession={endSession}
+					disabled={!isFinding}
+					setMissingModal={setMissingModal}
 				/>
 			</View>
 		</>
