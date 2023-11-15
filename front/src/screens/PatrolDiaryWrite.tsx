@@ -36,6 +36,7 @@ const PatrolDiaryWrite = () => {
 	]);
 	const [patrolLogNo, setPatrolLogNo] = useState(1);
 	const [detailLogs, setDetailLogs] = useState({
+		patrolLogNo: 0,
 		patrolLogAddress: "",
 		patrolLogDate: "",
 		patrolLogTotalDistance: 0,
@@ -54,18 +55,20 @@ const PatrolDiaryWrite = () => {
 	}, []);
 
 	useEffect(() => {
-		console.log(detailLogs);
+		console.log("detailLogs : ", detailLogs);
+		setPatrolLogNo(detailLogs.patrolLogNo);
 	}, [detailLogs]);
 
 	const getLogs = async () => {
 		try {
 			const response = await axios.get("/log");
 
-			const transformedLogs = response.data.data.map((log) => ({
+			const transformedLogs = response.data.data.map((log: any) => ({
 				logNo: log.patrolLogNo,
 				imgSrc: { uri: log.patrolLogImageUrl },
 				date: log.patrolLogDate.split("T")[0],
 			}));
+			console.log("transformedLogs : ", transformedLogs);
 
 			setLogs(transformedLogs);
 		} catch (error) {
@@ -89,34 +92,36 @@ const PatrolDiaryWrite = () => {
 			return;
 		}
 
-		const uploadPromises = patrolImgList.map(async (imageUri, index) => {
-			const response = await fetch(imageUri);
-			const blob = await response.blob();
-			const type = blob.type;
-			const random = Math.floor(Math.random() * 100000000);
-			const filename = `profile_${new Date().toISOString()}_${random}.png`;
-			const params = {
-				Bucket: process.env.AWS_BUCKET,
-				Key: filename,
-				Body: blob,
-				ContentType: type,
-			};
+		const uploadPromises = patrolImgList.map(
+			async (imageUri: string, index: any) => {
+				const response = await fetch(imageUri);
+				const blob = await response.blob();
+				const type = blob.type;
+				const random = Math.floor(Math.random() * 100000000);
+				const filename = `profile_${new Date().toISOString()}_${random}.png`;
+				const params = {
+					Bucket: process.env.AWS_BUCKET,
+					Key: filename,
+					Body: blob,
+					ContentType: type,
+				};
 
-			return new Promise((resolve, reject) => {
-				s3.upload(params, (err, data) => {
-					if (err) {
-						console.log(
-							"Error occured while trying to upload to S3 bucket",
-							err,
-						);
-						reject(err);
-					} else {
-						console.log("Upload success:", data);
-						resolve(data.Location);
-					}
+				return new Promise((resolve, reject) => {
+					s3.upload(params, (err, data) => {
+						if (err) {
+							console.log(
+								"Error occured while trying to upload to S3 bucket",
+								err,
+							);
+							reject(err);
+						} else {
+							console.log("Upload success:", data);
+							resolve(data.Location);
+						}
+					});
 				});
-			});
-		});
+			},
+		);
 
 		try {
 			// 모든 프로미스가 완료될 때까지 기다립니다.

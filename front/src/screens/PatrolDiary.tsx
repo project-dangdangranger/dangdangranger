@@ -29,7 +29,7 @@ import { useFocusEffect } from "@react-navigation/native";
 
 const PatrolDiary = () => {
 	const { navigate } = useNavigation<StackNavigation>();
-	const [selectedOption, setSelectedOption] = useState("내동네");
+	const [selectedOption, setSelectedOption] = useState("");
 	const [patrolDiaryList, setPatrolDiaryList] = useState([]);
 	const [modalVisible, setModalVisible] = useState(false);
 	// 모달 설정
