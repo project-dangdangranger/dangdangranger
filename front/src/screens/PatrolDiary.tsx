@@ -52,6 +52,7 @@ const PatrolDiary = () => {
 				axios
 					.get("/patrol/mine")
 					.then((res) => {
+						console.log("res.data : ", res.data);
 						if (res.data.message === "사용자의 순찰일지 리스트 조회 완료") {
 							setPatrolDiaryList(res.data.data);
 						}
@@ -127,17 +128,23 @@ const PatrolDiary = () => {
 					</View>
 
 					<View style={PatrolDiaryLayout.patrolRowWrap}>
-						{patrolDiaryList?.map((patrolDiary) => {
-							return (
-								<>
-									<PatrolDiaryCard
-										imgSrc={{ uri: patrolDiary.patrolFirstImg }}
-										patrolDiaryInfo={patrolDiary}
-										key={patrolDiary.patrolNo}
-									/>
-								</>
-							);
-						})}
+						{patrolDiaryList.length ? (
+							patrolDiaryList.map((patrolDiary) => {
+								return (
+									<>
+										<PatrolDiaryCard
+											imgSrc={{ uri: patrolDiary.patrolFirstImg }}
+											patrolDiaryInfo={patrolDiary}
+											key={patrolDiary.patrolNo}
+										/>
+									</>
+								);
+							})
+						) : (
+							<View>
+								<Text>순찰일지가 없습니다.</Text>
+							</View>
+						)}
 					</View>
 				</View>
 				<TouchableOpacity
