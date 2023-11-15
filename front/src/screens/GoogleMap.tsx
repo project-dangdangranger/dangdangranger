@@ -108,7 +108,7 @@ const GoogleMap = (props: Props) => {
 			watchIdRef.current = startWatchingLocation();
 			const interval = setInterval(() => {
 				setPatrolLogTotalTime((prev) => prev + 1);
-			}, 1000);
+			}, 60000);
 			return () => clearInterval(interval);
 		}
 	}, [props.start, props.patrol]);
