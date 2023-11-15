@@ -31,6 +31,8 @@ const Main = () => {
 		console.log("accessToken: ", accessToken);
 		if (accessToken !== null) {
 			setIsLogged(true);
+		} else {
+			setIsLogged(false);
 		}
 	}
 
@@ -49,14 +51,17 @@ const Main = () => {
 
 	useFocusEffect(
 		React.useCallback(() => {
-			if (!islogged) {
-				navigation.replace("Login");
-			} else {
-				axios.get("/patrol/people").then((data) => {
-					setPatrolPeople(data.data.data.patrolPeopleCnt);
-					// console.log("현재 순찰중인 사람 데이터:", data.data);
-				});
-			}
+			getAccessToken().then(() => {
+				console.log("아니 뭐하세여:", islogged);
+				if (!islogged) {
+					navigation.replace("Login");
+				} else {
+					axios.get("/patrol/people").then((data) => {
+						setPatrolPeople(data.data.data.patrolPeopleCnt);
+						// console.log("현재 순찰중인 사람 데이터:", data.data);
+					});
+				}
+			});
 		}, []),
 	);
 
