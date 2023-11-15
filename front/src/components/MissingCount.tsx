@@ -3,11 +3,11 @@ import MainCountLayout from "../styles/mainCountLayout";
 import { useState } from "react";
 
 const MissingCount = ({
-	patrol,
-	missing,
+	missingTogether,
+	missingDog,
 }: {
-	patrol: number;
-	missing: number;
+	missingTogether: number;
+	missingDog: number;
 }) => {
 	return (
 		<>
@@ -21,7 +21,7 @@ const MissingCount = ({
 								MainCountLayout.NumberPatrol,
 							]}
 						>
-							{patrol}
+							{missingTogether}
 						</Text>
 					</View>
 					<View>
@@ -37,7 +37,7 @@ const MissingCount = ({
 								MainCountLayout.NumberMissing,
 							]}
 						>
-							{missing}
+							{missingDog}
 						</Text>
 					</View>
 					<View>
