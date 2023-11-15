@@ -25,6 +25,7 @@ const FindMenuModal = ({
 	endSession,
 	disabled,
 	setMissingModal,
+	disconnectServer,
 }: any) => {
 	const navigation = useNavigation();
 
@@ -45,7 +46,7 @@ const FindMenuModal = ({
 
 	const quitFinding = () => {
 		setModalVisible(!setModalVisible);
-		Alert.alert("함께 찾기의 모든 기능에서 나가질 거에요");
+		disconnectServer();
 	};
 	return (
 		<>
