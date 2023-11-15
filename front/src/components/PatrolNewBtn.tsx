@@ -1,4 +1,4 @@
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, View, Alert } from "react-native";
 import { useEffect, useState } from "react";
 import {
 	responsiveHeight,
@@ -18,20 +18,19 @@ const PatrolNewBtn = () => {
 	}, [patrol]);
 
 	const [isActive, setIsActive] = useState(false);
+	const handleEndConfirm = () => {
+		setPatrol(false);
+		setStart(false);
+		setIsActive(!isActive);
+		Alert.alert("오늘도 순찰해주셔서 감사합니다!");
+	};
 
 	return (
 		<>
 			<View style={styles.container}>
 				<View style={{ zIndex: 99, position: "absolute", top: 10 }}>
 					{isActive ? (
-						<CustomPatrolEndBtn
-							text="end"
-							onPress={() => {
-								setPatrol(false);
-								setStart(false);
-								setIsActive(!isActive);
-							}}
-						/>
+						<CustomPatrolEndBtn text="end" onPress={handleEndConfirm} />
 					) : (
 						<CustomPatrolBtn
 							text="start"
