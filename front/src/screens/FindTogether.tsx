@@ -47,11 +47,17 @@ const FindTogether = ({ route }: any) => {
 	const topicId: any = useRef();
 	const { item } = route.params;
 
-	const findingList = [
-		{ userNo: 1, lat: 37.501, lng: 127.0386 },
-		{ userNo: 2, lat: 37.5024, lng: 127.0392 },
-		{ userNo: 3, lat: 37.4998, lng: 127.0372 },
-	];
+	// 사용자 데이터 조회
+	const [ProfileData, setProfileData] = useState<any>([]);
+	const findingList = useRef(new Map());
+	
+	useEffect(() => {
+		axios.get("/user").then((data) => {
+			setProfileData(data.data.data);
+			// console.log("유저들어가:", data);
+		});
+	}, []);
+
 
 	useEffect(() => {
 		getDetailMissingDog(item.missingNo);
@@ -60,21 +66,21 @@ const FindTogether = ({ route }: any) => {
 
 	useEffect(() => {
 		if (detailMissingDog && isPressed) {
-			console.log("detailMissingDog : ", detailMissingDog);
-			console.log("토픽 아이디 : ", detailMissingDog.topicId);
-			if (detailMissingDog.topicId === null) {
-				console.log("토픽아이디 널값인 상태임");
-				getTopicId();
-			}
 			connectServer();
 		}
 	}, [detailMissingDog, isPressed]);
 
 	const getTopicId = async () => {
-		const response = await axios.post("/finddog", {
-			missingNo: detailMissingDog.missingNo,
-		});
-		topicId.current = response.data.data.topicId;
+		console.log("detailMissingDog : ", detailMissingDog);
+		console.log("토픽 아이디 : ", detailMissingDog.topicId);
+		topicId.current = detailMissingDog.topicId;
+		if (detailMissingDog.topicId === null) {
+			console.log("토픽아이디 널값인 상태임");
+			const response = await axios.post("/finddog", {
+				missingNo: detailMissingDog.missingNo,
+			});
+			topicId.current = response.data.data.topicId;
+		}
 	};
 
 	const getDetailMissingDog = async (missingNo: number) => {
@@ -84,6 +90,8 @@ const FindTogether = ({ route }: any) => {
 
 	// 서버 연결 및 구독 시작: 함께 찾기 시작
 	const connectServer = async () => {
+		await getTopicId();
+
 		if (stompClient.current !== undefined && stompClient.current.connected)
 			return;
 		let socket = new SockJS(`${SERVER_URL}/ws-stomp`);
@@ -91,8 +99,6 @@ const FindTogether = ({ route }: any) => {
 			return new SockJS(`${SERVER_URL}/ws-stomp`);
 		});
 		console.log(`${SERVER_URL}/ws-stomp`);
-
-		console.log("end server");
 
 		await stompClient.current.connect({}, () => {
 			setTimeout(function () {
@@ -123,8 +129,10 @@ const FindTogether = ({ route }: any) => {
 			{},
 			JSON.stringify({
 				code: "ENTER",
-				userNo: 12,
+				userNo: ProfileData.userNo,
+				userName: ProfileData.userName,
 				topicId: topicId.current,
+				missingNo: detailMissingDog.missingNo,
 				param: {}, // 좌표주고받을때 씀, 위경도를. 현재 자기위치도 보내야함
 			}),
 		);
@@ -152,14 +160,17 @@ const FindTogether = ({ route }: any) => {
 			getGeoLocation((latitude, longitude) => {
 				console.log("myLatitude : ", latitude);
 				console.log("myLongitude : ", longitude);
+				console.log(topicId.current);
 
 				stompClient.current.send(
 					"/pub/finddog",
 					{},
 					JSON.stringify({
 						code: "SHARE_COORDINATE",
-						userNo: 12,
+						userNo: ProfileData.userNo,
+						userName: ProfileData.userName,
 						topicId: topicId.current,
+						missingNo: detailMissingDog.missingNo,
 						param: {
 							latitude: latitude,
 							longitude: longitude,
@@ -167,7 +178,7 @@ const FindTogether = ({ route }: any) => {
 					}),
 				);
 			});
-		}, 2000);
+		}, 3000);
 
 		intervalId.current = id;
 	};
@@ -175,10 +186,11 @@ const FindTogether = ({ route }: any) => {
 	const getGeoLocation = (callback) => {
 		Geolocation.getCurrentPosition(
 			(position) => {
-				const latitude = JSON.stringify(position.coords.latitude);
-				const longitude = JSON.stringify(position.coords.longitude);
+				const latitude = Number(JSON.stringify(position.coords.latitude));
+				const longitude = Number(JSON.stringify(position.coords.longitude));
 				setMyLatitude(latitude);
 				setMyLongitude(longitude);
+				console.log('getGeoLocation: ', latitude, longitude);
 				callback(latitude, longitude); // 콜백 호출
 			},
 			(error) => {
@@ -191,23 +203,42 @@ const FindTogether = ({ route }: any) => {
 	// 상대방 위치 업데이트
 	const receivedMessage = (message: any) => {
 		const parsedMessage = JSON.parse(message.body);
+		const code = parsedMessage.code;
 		const userNo = parsedMessage.userNo;
-		const latitude = parsedMessage.param.latitude;
-		const longitude = parsedMessage.param.longitude;
-		setPositions(
-			new Map(positions).set(userNo, { lat: latitude, lng: longitude }),
-		);
+		const userName = parsedMessage.userName;
+		const latitude = Number(parsedMessage.param.latitude);
+		const longitude = Number(parsedMessage.param.longitude);
+		console.log('receivedMessage : ', parsedMessage);
+		
+		switch(code) {
+		case "ENTER":
+			break;
+		case "SHARE_COORDINATE":
+			findingList.current.set(userNo, {
+				"userNo": userNo,
+				"userName": userName,
+				"lat": latitude,
+				"lng": longitude
+			});
+			break;
+		case "EXIT":
+			findingList.current.delete(userNo);
+			break;
+		}
 	};
 	// topic 구독 취소 및 세션 나가기: 함께 찾기 종료
-	const disconnectServer = () => {
-		console.log("intervalId.current 188line : ", intervalId.current);
-		// false
+	const disconnectServer = (message:any) => {
 		if (intervalId.current) {
-			console.log("intervalId.current : ", intervalId.current);
 			clearInterval(intervalId.current);
-			// setintervalId.current(undefined);
 			intervalId.current = undefined;
 		}
+
+		// 종료 메시지 전송
+		stompClient.current.send(
+			"/pub/finddog",
+			{},
+			message,
+		);
 
 		if (stompClient.current === undefined || !stompClient.current.connected)
 			return;
@@ -215,15 +246,29 @@ const FindTogether = ({ route }: any) => {
 		stompClient.current.disconnect();
 	};
 
+	// const [testData, setTestData] = useState({
+	// 	code,
+	// 	userNo,
+	// 	userName,
+	// 	topicId,
+	// 	missingNo,
+	// });
 	// 페이지 벗어날 시 경고창
 	const leavePage = () => {
 		navigation.addListener("beforeRemove", (e) => {
+			// let data = {};
+			// data.code = "EXIT";
+			// data.userNo = ProfileData.userNo;
+			// data.userName = ProfileData.userName;
+			// data.topicId = topicId.current;
+			// data.missingNo = detailMissingDog.missingNo;
+			// console.log(data);
 			e.preventDefault();
 			Alert.alert("친구 찾기 종료할 거?", "진짜 할 꺼?", [
 				{
 					text: "응 나 T야",
 					onPress: () => {
-						disconnectServer();
+						disconnectServer(JSON.stringify(data));
 						navigation.dispatch(e.data.action);
 					},
 				},
@@ -256,9 +301,8 @@ const FindTogether = ({ route }: any) => {
 					missingNo={9}
 					missingLat={37.5}
 					missingLng={127.03}
-					findingList={findingList}
-					myLatitude={myLatitude}
-					myLongitude={myLongitude}
+					myUserNo={ProfileData.userNo}
+					findingList={findingList.current}
 				/>
 				<FindBtn
 					startSession={() => Alert.alert("강아지를 찾아봅시다")}
