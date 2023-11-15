@@ -28,7 +28,6 @@ const FindTogether = ({ route }: any) => {
 	// const [topicId, setTopicId] = useState("");
 	const topicId: any = useRef();
 	const { item } = route.params;
-	const [modalVisible, setModalVisible] = useState(false);
 
 	// 사용자 데이터 조회
 	const [ProfileData, setProfileData] = useState<any>([]);
