@@ -1,3 +1,4 @@
+import React, { useEffect } from "react";
 import {
 	Image,
 	Text,
@@ -12,10 +13,15 @@ import {
 } from "react-native-responsive-dimensions";
 
 const MissingItem = ({ item, navigation }: any) => {
+	// useEffect(() => {
+	// 	console.log("Item : ", item);
+	// 	console.log("navigation : ", navigation);
+	// }, []);
+
 	return (
 		<TouchableOpacity
 			// onPress={() => navigation.navigate("MissingDetail", item)}
-			onPress={() => navigation.navigate("FindTogether")}
+			onPress={() => navigation.navigate("FindTogether", { item })}
 		>
 			<View style={styles.dogItem}>
 				<Image source={{ uri: item.thumbnailUrl }} style={styles.dogImg} />

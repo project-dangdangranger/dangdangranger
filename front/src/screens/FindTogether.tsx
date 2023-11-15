@@ -5,22 +5,47 @@ import SockJS from "sockjs-client";
 import { BASE_URL, SERVER_URL } from "../constants/constants";
 import { Stomp } from "@stomp/stompjs";
 import { Alert, Text, TouchableOpacity, View } from "react-native";
-import { useNavigation } from "@react-navigation/native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import axios from "../utils/axios";
 import GoogleMap from "./GoogleMap";
 import FindMap from "../components/FindMap";
 import FindBtn from "../components/FindBtn";
 import FindSideBtn from "../components/FindSideBtn";
+import Geolocation from "@react-native-community/geolocation";
 
-const FindTogether = (missingNo: number) => {
+// const PatrolReportDetail = ({ route }: any) => {
+//     // console.log("라우트!!!!!!", route.params);
+//     const { navigate } = useNavigation();
+//     const { missingNo, imgUrl } = route.params;
+
+const FindTogether = ({ route }: any) => {
+	const { navigate } = useNavigation();
+	// const { missingNo, imgUrl } = route.params;
+	// weoqirqwopejqwioasd {
+	// "item": {"dogNo": 10,
+	// "missingAddress": "1650 Amphitheatre Pkwy, Mountain View, CA 94043 미국",
+	// "missingDate": "2023-11-08T03:31:00",
+	// "missingLat": 37.422,
+	// "missingLng": -122.084,
+	// "missingNo": 66,
+	// "missingTitle": "어떻게 해야 하나요..",
+	// "missingTypeNo": 1,
+	// "thumbnailUrl": "https://dangdangranger.s3.ap-northeast-2.amazonaws.com/profile_2023-11-14T04%3A25%3A57.900Z_68946969.png"}
+	// }
+
 	const navigation = useNavigation();
 	const stompClient: any = useRef({});
-	const [intervalId, setIntervalId] = useState<NodeJS.Timeout>();
+	// const [intervalId.current, setintervalId.current] = useState<NodeJS.Timeout>();
+	const intervalId = useRef();
 	// 같이 찾는 사람들의 위치 정보 저장
 	const [positions, setPositions] = useState(new Map());
-	const [myLatitude, setMyLatitude] = useState(123);
-	const [myLongitude, setMyLongitude] = useState(345);
+	const [myLatitude, setMyLatitude] = useState();
+	const [myLongitude, setMyLongitude] = useState();
+	const [detailMissingDog, setDetailMissingDog] = useState({});
+	const [isPressed, setIsPressed] = useState(false);
+	// const [topicId, setTopicId] = useState("");
 	const topicId: any = useRef();
+	const { item } = route.params;
 
 	const findingList = [
 		{ userNo: 1, lat: 37.501, lng: 127.0386 },
@@ -29,8 +54,33 @@ const FindTogether = (missingNo: number) => {
 	];
 
 	useEffect(() => {
-		//return leavePage();
+		getDetailMissingDog(item.missingNo);
+		leavePage();
 	}, []);
+
+	useEffect(() => {
+		if (detailMissingDog && isPressed) {
+			console.log("detailMissingDog : ", detailMissingDog);
+			console.log("토픽 아이디 : ", detailMissingDog.topicId);
+			if (detailMissingDog.topicId === null) {
+				console.log("토픽아이디 널값인 상태임");
+				getTopicId();
+			}
+			connectServer();
+		}
+	}, [detailMissingDog, isPressed]);
+
+	const getTopicId = async () => {
+		const response = await axios.post("/finddog", {
+			missingNo: detailMissingDog.missingNo,
+		});
+		topicId.current = response.data.data.topicId;
+	};
+
+	const getDetailMissingDog = async (missingNo: number) => {
+		const response = await axios.get(`/missing/${missingNo}`);
+		setDetailMissingDog(response.data.data);
+	};
 
 	// 서버 연결 및 구독 시작: 함께 찾기 시작
 	const connectServer = async () => {
@@ -52,12 +102,12 @@ const FindTogether = (missingNo: number) => {
 		});
 	};
 
-	const findWith = async () => {
-		const response = await axios.post("/finddog", { missingNo: 12 });
-		console.log(response.data.data.topicId);
-		topicId.current = response.data.data.topicId;
-		await connectServer();
-	};
+	// const findWith = async () => {
+	// 	const response = await axios.post("/finddog", { missingNo: 12 });
+	// 	console.log(response.data.data.topicId);
+	// 	topicId.current = response.data.data.topicId;
+	// 	await connectServer();
+	// };
 
 	// topic 구독 내부 함수
 	const connectRoom = async () => {
@@ -75,36 +125,67 @@ const FindTogether = (missingNo: number) => {
 				code: "ENTER",
 				userNo: 12,
 				topicId: topicId.current,
-				param: {},
+				param: {}, // 좌표주고받을때 씀, 위경도를. 현재 자기위치도 보내야함
 			}),
 		);
 		console.log("완료");
 		startSending();
 	};
 
+	const handleEndSession = () => {
+		disconnectServer();
+		navigation.navigate("FindMissingDog", {
+			missingNo: detailMissingDog.missingNo,
+			myLatitude,
+			myLongitude,
+		});
+	};
+
 	const startSending = () => {
 		console.log(`startSending`);
-		if (intervalId) return;
+		if (intervalId.current) return;
 		if (stompClient.current === undefined || !stompClient.current.connected)
 			return;
 
 		const id = setInterval(() => {
-			stompClient.current.send(
-				"/pub/finddog",
-				{},
-				JSON.stringify({
-					code: "SHARE_COORDINATE",
-					userNo: 12,
-					topicId: topicId.current,
-					param: {
-						latitude: myLatitude,
-						longitude: myLongitude,
-					},
-				}),
-			);
-		}, 5000);
+			console.log("Getting location...");
+			getGeoLocation((latitude, longitude) => {
+				console.log("myLatitude : ", latitude);
+				console.log("myLongitude : ", longitude);
 
-		setIntervalId(id);
+				stompClient.current.send(
+					"/pub/finddog",
+					{},
+					JSON.stringify({
+						code: "SHARE_COORDINATE",
+						userNo: 12,
+						topicId: topicId.current,
+						param: {
+							latitude: latitude,
+							longitude: longitude,
+						},
+					}),
+				);
+			});
+		}, 2000);
+
+		intervalId.current = id;
+	};
+
+	const getGeoLocation = (callback) => {
+		Geolocation.getCurrentPosition(
+			(position) => {
+				const latitude = JSON.stringify(position.coords.latitude);
+				const longitude = JSON.stringify(position.coords.longitude);
+				setMyLatitude(latitude);
+				setMyLongitude(longitude);
+				callback(latitude, longitude); // 콜백 호출
+			},
+			(error) => {
+				console.log(error.code, error.message);
+			},
+			{ enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 },
+		);
 	};
 
 	// 상대방 위치 업데이트
@@ -117,12 +198,15 @@ const FindTogether = (missingNo: number) => {
 			new Map(positions).set(userNo, { lat: latitude, lng: longitude }),
 		);
 	};
-
 	// topic 구독 취소 및 세션 나가기: 함께 찾기 종료
 	const disconnectServer = () => {
-		if (intervalId) {
-			clearInterval(intervalId);
-			setIntervalId(undefined);
+		console.log("intervalId.current 188line : ", intervalId.current);
+		// false
+		if (intervalId.current) {
+			console.log("intervalId.current : ", intervalId.current);
+			clearInterval(intervalId.current);
+			// setintervalId.current(undefined);
+			intervalId.current = undefined;
 		}
 
 		if (stompClient.current === undefined || !stompClient.current.connected)
@@ -173,10 +257,14 @@ const FindTogether = (missingNo: number) => {
 					missingLat={37.5}
 					missingLng={127.03}
 					findingList={findingList}
+					myLatitude={myLatitude}
+					myLongitude={myLongitude}
 				/>
 				<FindBtn
 					startSession={() => Alert.alert("강아지를 찾아봅시다")}
-					endSession={() => Alert.alert("이걸 못찾네")}
+					endSession={() => handleEndSession()}
+					isPressed={isPressed}
+					setIsPressed={setIsPressed}
 				/>
 				<FindSideBtn />
 			</CommonLayout>
