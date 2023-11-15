@@ -24,12 +24,13 @@ const FindMenuModal = ({
 	setModalVisible,
 	endSession,
 	disabled,
+	setMissingModal,
 }: any) => {
 	const navigation = useNavigation();
 
 	const showMisiingDetail = () => {
 		setModalVisible(!setModalVisible);
-		Alert.alert("실종견의 정보가 있는 모달이 펼쳐질꺼에요");
+		setMissingModal(true);
 	};
 
 	const showReports = () => {

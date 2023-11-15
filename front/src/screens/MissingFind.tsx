@@ -55,9 +55,6 @@ const MissingFind = ({ navigation }: any) => {
 						);
 					})}
 				</View>
-				<TouchableOpacity onPress={() => navigation.navigate("FindTogether")}>
-					<Text>지도가 나올 지도?</Text>
-				</TouchableOpacity>
 			</CommonLayout>
 			<FooterBar />
 		</>
