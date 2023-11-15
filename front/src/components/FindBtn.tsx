@@ -7,9 +7,12 @@ import {
 	responsiveWidth,
 } from "react-native-responsive-dimensions";
 
-const FindBtn = ({ startSession, endSession }: any) => {
-	const [isPressed, setIsPressed] = useState(false);
-
+const FindBtn = ({
+	startSession,
+	endSession,
+	isPressed,
+	setIsPressed,
+}: any) => {
 	const handlePressBtn = () => {
 		if (isPressed) {
 			endSession();
