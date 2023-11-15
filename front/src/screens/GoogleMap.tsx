@@ -24,6 +24,7 @@ import {
 import axios from "../utils/axios";
 import Axios from "axios";
 import haversine from "haversine";
+import { responsiveHeight } from "react-native-responsive-dimensions";
 
 MapboxGL.setWellKnownTileServer("Mapbox");
 MapboxGL.setAccessToken(MAPBOX_ACCESSTOKEN);
@@ -347,10 +348,11 @@ const styles = StyleSheet.create({
 		backgroundColor: "#F5FCFF",
 	},
 	map: {
+		// marginTop: responsiveHeight(10),
 		flex: 1,
 		// position: "absolute",
 		width: Dimensions.get("window").width,
-		height: Dimensions.get("window").height,
+		height: responsiveHeight(40),
 		// opacity: 0,
 		// left: -Dimensions.get("window").width,
 	},
