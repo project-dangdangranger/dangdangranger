@@ -119,7 +119,7 @@ const Main = () => {
 							</Text>
 							<TouchableOpacity
 								activeOpacity={0.7}
-								onPress={() => authHandling("Profile")}
+								onPress={() => authHandling("CreateDog")}
 							>
 								<View style={MainLayout.createProfileButton}>
 									<Text style={MainLayout.createProfileButtonText}>
