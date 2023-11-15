@@ -17,10 +17,10 @@ public class PostalAddress {
     @Column(name = "postal_code")
     private String postalCode;
 
-    private String legalDongName;
+    private String legalDongCode;
 
     @Builder
-    public PostalAddress(String legalDongName) {
-        this.legalDongName = legalDongName;
+    public PostalAddress(String legalDongCode) {
+        this.legalDongCode = legalDongCode;
     }
 }
