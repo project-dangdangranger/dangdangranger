@@ -69,7 +69,7 @@ const MainLayout = StyleSheet.create({
 	},
 	traceMainImg: {
 		width: responsiveWidth(40),
-		height: responsiveHeight(40),
+		height: responsiveHeight(30),
 	},
 	traceInfo: {
 		marginLeft: responsiveWidth(5),

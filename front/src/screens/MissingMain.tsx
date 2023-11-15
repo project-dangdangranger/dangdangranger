@@ -16,8 +16,8 @@ import { useFocusEffect } from "@react-navigation/native";
 import MultiPicture from "../components/Carousel";
 
 const MissingMain = () => {
-	const [patrol, setPatrol] = useState(0);
-	const [missing, setMissing] = useState(0);
+	const [missingTogether, setMissingTogether] = useState(0);
+	const [missingDog, setMissingDog] = useState(0);
 
 	const [imgList, setImgList] = useState([]);
 	useFocusEffect(
@@ -25,6 +25,29 @@ const MissingMain = () => {
 			axios.get("/missing/recent_missing_images").then((res) => {
 				setImgList(res.data.data);
 			});
+
+			axios
+				.get("/finddog/participants_count")
+				.then((res) => {
+					console.log(
+						"현재 실종견 찾기 참여자수 : ",
+						res.data.data.participantsCount,
+					);
+					setMissingTogether(res.data.data.participantsCount);
+				})
+				.catch((err) => {
+					console.log("카운팅 에러!! :", err);
+				});
+
+			axios
+				.get("/missing/count")
+				.then((res) => {
+					console.log("현재 실종견 마리수 : ", res.data.data);
+					setMissingDog(res.data.data);
+				})
+				.catch((err) => {
+					console.log("카운팅 에러!! :", err);
+				});
 		}, []),
 	);
 
@@ -33,7 +56,10 @@ const MissingMain = () => {
 			<CommonLayout>
 				<ColorHeader title="실종" />
 				<View style={MainLayout.walkMainWrap}>
-					<MissingCount patrol={patrol} missing={missing} />
+					<MissingCount
+						missingTogether={missingTogether}
+						missingDog={missingDog}
+					/>
 					<MultiPicture imgList={imgList} />
 				</View>
 				<MissingTwoBtn />

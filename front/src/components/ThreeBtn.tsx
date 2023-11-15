@@ -27,7 +27,13 @@ const ThreeBtn = () => {
 	const [sirenOn, setSirenOn] = useState(false);
 
 	const siren = () => {
-		KakaoMapModule.playSound();
+		if (sirenOn) {
+			setSirenOn(false);
+			KakaoMapModule.stopSound();
+		} else {
+			setSirenOn(true);
+			KakaoMapModule.playSound();
+		}
 	};
 
 	const callPolice = () => {

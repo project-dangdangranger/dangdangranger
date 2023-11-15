@@ -5,7 +5,7 @@ import MainCount from "../components/MainCount";
 import MainLayout from "../styles/mainLayout";
 import Page from "../../assets/images/mainPage.png";
 import CustomButton from "../recycles/CustomBtn";
-import templogo from "../../assets/images/templogo.png";
+import yundungNFT from "../../assets/images/yundungNFT.png";
 import IconButton from "../recycles/IconButton";
 import Footer from "../recycles/Footer";
 import MissingDogImg from "../../assets/images/main-missing-banner.png";
@@ -103,7 +103,7 @@ const Main = () => {
 				<View style={MainLayout.randingButtonWrap}>
 					<View style={MainLayout.traceWrap}>
 						<View>
-							<Image source={templogo} style={MainLayout.traceMainImg} />
+							<Image source={yundungNFT} style={MainLayout.traceMainImg} />
 						</View>
 						<View style={MainLayout.traceInfo}>
 							<Text style={MainLayout.traceTitle}>
@@ -119,7 +119,7 @@ const Main = () => {
 							</Text>
 							<TouchableOpacity
 								activeOpacity={0.7}
-								onPress={() => authHandling("Profile")}
+								onPress={() => authHandling("CreateDog")}
 							>
 								<View style={MainLayout.createProfileButton}>
 									<Text style={MainLayout.createProfileButtonText}>
@@ -146,7 +146,7 @@ const Main = () => {
 						</Text>
 						<TouchableOpacity
 							activeOpacity={0.7}
-							onPress={() => authHandling("Profile")}
+							onPress={() => authHandling("MissingFind")}
 						>
 							<View style={MainLayout.findMissingDogButton}>
 								<Text style={MainLayout.findMissingDogButtonText}>
@@ -157,10 +157,7 @@ const Main = () => {
 					</View>
 
 					<View style={MainLayout.serviceWrap}>
-						<Text>
-							<Text style={MainLayout.boldServiceText}>김싸피</Text> 님을 위한
-							댕댕레인저 서비스
-						</Text>
+						<Text>댕댕레인저 서비스를 소개합니다</Text>
 					</View>
 
 					<View style={MainLayout.flexButtonWrap}>
