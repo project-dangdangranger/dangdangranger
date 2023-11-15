@@ -18,6 +18,7 @@ const FindTogether = ({ route }: any) => {
 	const stompClient: any = useRef({});
 	// const [intervalId.current, setintervalId.current] = useState<NodeJS.Timeout>();
 	const intervalId = useRef();
+	const renderIntervalId = useRef();
 	// 같이 찾는 사람들의 위치 정보 저장
 	const [positions, setPositions] = useState(new Map());
 	const [myLatitude, setMyLatitude] = useState();
@@ -45,14 +46,6 @@ const FindTogether = ({ route }: any) => {
 				console.log("detailMissingDog.missingNo", detailMissingDog.missingNo);
 				console.log("ProfileData.userNo", ProfileData.userNo);
 				console.log("ProfileData.userName", ProfileData.userName);
-
-				const message = JSON.stringify({
-					code: "EXIT",
-					userNo: ProfileData.userNo,
-					userName: ProfileData.userName,
-					topicId: topicId.current,
-					missingNo: detailMissingDog.missingNo,
-				});
 
 				disconnectServer();
 			};
@@ -191,10 +184,14 @@ const FindTogether = ({ route }: any) => {
 					}),
 				);
 			});
-			setRender((prev) => !prev);
 		}, 3000);
-
 		intervalId.current = id;
+
+		const renderId = setInterval(() => {
+			setRender((prev) => !prev);
+		}, 2000);
+
+		renderIntervalId.current = renderId;
 	};
 
 	const getGeoLocation = (callback) => {
@@ -245,6 +242,10 @@ const FindTogether = ({ route }: any) => {
 		if (intervalId.current) {
 			clearInterval(intervalId.current);
 			intervalId.current = undefined;
+		}
+		if (renderIntervalId.current) {
+			clearInterval(renderIntervalId.current);
+			renderIntervalId.current = undefined;
 		}
 
 		const message = JSON.stringify({
