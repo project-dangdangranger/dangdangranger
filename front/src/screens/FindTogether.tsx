@@ -35,6 +35,8 @@ const FindTogether = ({ route }: any) => {
 
 	const [modalVisible, setModalVisible] = useState(false);
 
+	const [render, setRender] = useState(true);
+
 	useFocusEffect(
 		useCallback(() => {
 			return () => {
@@ -52,7 +54,7 @@ const FindTogether = ({ route }: any) => {
 					missingNo: detailMissingDog.missingNo,
 				});
 
-				disconnectServer(message);
+				disconnectServer();
 			};
 		}, [ProfileData, detailMissingDog]),
 	);
@@ -187,6 +189,7 @@ const FindTogether = ({ route }: any) => {
 					}),
 				);
 			});
+			setRender((prev) => !prev);
 		}, 3000);
 
 		intervalId.current = id;
@@ -212,12 +215,12 @@ const FindTogether = ({ route }: any) => {
 	// 상대방 위치 업데이트
 	const receivedMessage = (message: any) => {
 		const parsedMessage = JSON.parse(message.body);
+		console.log("receivedMessage : ", parsedMessage);
 		const code = parsedMessage.code;
 		const userNo = parsedMessage.userNo;
 		const userName = parsedMessage.userName;
 		const latitude = Number(parsedMessage.param.latitude);
 		const longitude = Number(parsedMessage.param.longitude);
-		console.log("receivedMessage : ", parsedMessage);
 
 		switch (code) {
 			case "ENTER":
@@ -236,15 +239,19 @@ const FindTogether = ({ route }: any) => {
 		}
 	};
 	// topic 구독 취소 및 세션 나가기: 함께 찾기 종료
-	const disconnectServer = (message: any) => {
-		console.log(
-			"disconnectServerdisconnectServerdisconnectServerdisconnectServerdisconnectServer",
-			message,
-		);
+	const disconnectServer = () => {
 		if (intervalId.current) {
 			clearInterval(intervalId.current);
 			intervalId.current = undefined;
 		}
+
+		const message = JSON.stringify({
+			code: "EXIT",
+			userNo: ProfileData.userNo,
+			userName: ProfileData.userName,
+			topicId: topicId.current,
+			missingNo: detailMissingDog.missingNo,
+		});
 
 		// 종료 메시지 전송
 		if (stompClient.current === undefined || !stompClient.current.connected)
@@ -252,6 +259,8 @@ const FindTogether = ({ route }: any) => {
 		stompClient.current.send("/pub/finddog", {}, message);
 		stompClient.current.unsubscribe("/sub/finddog/" + topicId.current);
 		stompClient.current.disconnect();
+		findingList.current.clear();
+		setIsPressed(!isPressed);
 	};
 
 	return (
@@ -289,6 +298,7 @@ const FindTogether = ({ route }: any) => {
 					endSession={handleEndSession}
 					isFinding={isPressed}
 					setMissingModal={setModalVisible}
+					disconnectServer={disconnectServer}
 				/>
 				<DetailModal
 					modalVisible={modalVisible}
