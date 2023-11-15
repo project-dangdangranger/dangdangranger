@@ -171,6 +171,8 @@ const FindTogether = ({ route }: any) => {
 				console.log("myLongitude : ", longitude);
 				console.log(topicId.current);
 
+				if (stompClient.current === undefined || !stompClient.current.connected) return;
+				
 				stompClient.current.send(
 					"/pub/finddog",
 					{},
@@ -205,7 +207,7 @@ const FindTogether = ({ route }: any) => {
 			(error) => {
 				console.log(error.code, error.message);
 			},
-			{ enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 },
+			{ enableHighAccuracy: true, timeout: 15000, maximumAge: 1000 },
 		);
 	};
 
