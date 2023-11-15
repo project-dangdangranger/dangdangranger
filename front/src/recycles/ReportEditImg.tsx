@@ -8,6 +8,7 @@ import {
 } from "react-native-responsive-dimensions";
 import { useState } from "react";
 import { launchImageLibrary } from "react-native-image-picker";
+import Noimg from "../../assets/images/noimage.png";
 
 const EditImage = ({
 	selectedImg,
@@ -41,7 +42,7 @@ const EditImage = ({
 		<>
 			<View style={styles.profileWrap}>
 				<Image
-					source={selectedImg ? { uri: selectedImg } : TempProfileImg}
+					source={selectedImg ? { uri: selectedImg } : Noimg}
 					style={styles.userPhoto}
 				/>
 				{patrolImgList.length < 3 && (
