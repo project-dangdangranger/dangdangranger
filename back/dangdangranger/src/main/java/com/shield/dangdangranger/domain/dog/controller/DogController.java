@@ -3,6 +3,8 @@ package com.shield.dangdangranger.domain.dog.controller;
 import com.shield.dangdangranger.domain.dog.constant.DogResponseMessage;
 import com.shield.dangdangranger.domain.dog.dto.DogRequestDto.*;
 import com.shield.dangdangranger.domain.dog.dto.DogResponseDto.*;
+import com.shield.dangdangranger.domain.dog.entity.Breed;
+import com.shield.dangdangranger.domain.dog.entity.Script;
 import com.shield.dangdangranger.domain.dog.service.DogService;
 import com.shield.dangdangranger.global.dto.ResponseDto;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +13,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
+import static com.shield.dangdangranger.domain.dog.constant.DogResponseMessage.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -37,5 +41,25 @@ public class DogController {
         DogInfoResponseDto dogInfoResponseDto = dogService.getDogInfo(dogNo);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ResponseDto.create(DogResponseMessage.DOG_INFO_READ_SUCCESS.getMessage(), dogInfoResponseDto));
+    }
+
+    @GetMapping("/breed")
+    public ResponseEntity<ResponseDto<List<Breed>>> getALLBreeds() {
+        List<Breed> breedList = dogService.selectAllBreeds();
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ResponseDto.create(READ_ALL_BREED.getMessage(), breedList));
+    }
+
+    @GetMapping("/breed/{keyword}")
+    public ResponseEntity<ResponseDto<List<Breed>>> getALLBreedsByKeyword(@PathVariable String keyword) {
+        List<Breed> breedList = dogService.selectAllBreedsByKeyword(keyword);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ResponseDto.create(READ_ALL_BREED_BY_KEYWORD.getMessage(), breedList));
+    }
+
+    @GetMapping("/script")
+    public ResponseEntity<ResponseDto<RandomScriptResponseDto>> getRandomScript() {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ResponseDto.create(READ_RANDOM_SCRIPT_SUCCESS.getMessage(), dogService.selectRandomScript()));
     }
 }

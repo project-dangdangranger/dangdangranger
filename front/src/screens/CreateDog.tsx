@@ -6,8 +6,6 @@ import {
 	StyleSheet,
 	TouchableOpacity,
 	TextInput,
-	Alert,
-	Platform,
 } from "react-native";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { Picker } from "@react-native-picker/picker";
@@ -420,21 +418,11 @@ const CreateDog = ({ navigation }: any) => {
 				></EditImage>
 
 				<View>
-					{imageUri && (
-						<Image
-							source={{ uri: imageUri }}
-							style={CreateProfileLayout.selectedImage}
-						/>
-					)}
-				</View>
-				<View style={CreateProfileLayout.formWrap}>
-					<Text style={CreateProfileLayout.formTitle}>
-						반려견의 이름을 입력해주세요.
-					</Text>
-					<TextInput
-						style={CreateProfileLayout.formInput}
-						onChangeText={(text) => setPetName(text)}
-						value={petName}
+					<CustomText
+						mainText="방범대원증을"
+						emphasizedText="NFT"
+						emphasizedColor="#3D6CC9"
+						finalText="로 등록해보세요"
 					/>
 					<Text style={CreateProfileLayout.formTitle}>
 						반려견의 종을 입력해주세요.
@@ -488,23 +476,53 @@ const CreateDog = ({ navigation }: any) => {
 						onValueChange={(itemValue, itemIndex) => setPetGender(itemValue)}
 						style={CreateProfileLayout.formInput}
 					>
-						<Picker.Item label="M" value="M" />
-						<Picker.Item label="F" value="F" />
-					</Picker>
-					<Text style={CreateProfileLayout.formTitle}>
-						반려견의 생일을 입력해주세요.
-					</Text>
-					<TouchableOpacity activeOpacity={0.7} onPress={showDatePicker}>
-						<View style={CreateProfileLayout.dateFormWrap}>
-							<Image source={DatePickerIcon} />
-							<Text style={CreateProfileLayout.dateFormText}>{petBirth}</Text>
+						<View style={styles.imageUploadWrap}>
+							<Image source={AddPlusIcon} />
+							<Text>사진 등록하기</Text>
 						</View>
 					</TouchableOpacity>
-					<DateTimePickerModal
-						isVisible={isDatePickerVisible}
-						mode="date"
-						onConfirm={handleConfirm}
-						onCancel={hideDatePicker}
+					<View>
+						<Text style={styles.textAlign}>반려견의 이름을 입력해주세요.</Text>
+					</View>
+					<TextInput
+						style={styles.formInput}
+						// value={petSpecies || ""}
+						onChangeText={() => {}}
+						placeholder="반려견 이름을 입력해주세요."
+						onBlur={() => {}}
+					/>
+
+					<View>
+						<Text style={styles.textAlign}>반려견의 종을 입력해주세요.</Text>
+					</View>
+					<TextInput
+						style={styles.formInput}
+						// value={petSpecies || ""}
+						onChangeText={() => {}}
+						placeholder="반려견 종을 입력해주세요."
+						onBlur={() => {}}
+					/>
+
+					<View>
+						<Text style={styles.textAlign}>반려견의 이름을 입력해주세요.</Text>
+					</View>
+					<TextInput
+						style={[styles.formInput]}
+						// value={petSpecies || ""}
+						onChangeText={() => {}}
+						placeholder="종을 검색해 아래를 클릭하세요"
+						onBlur={() => {}}
+					/>
+
+					<View>
+						<Text style={styles.textAlign}>반려견의 생일을 입력해주세요.</Text>
+					</View>
+					<TextInput
+						style={[styles.formInput, { marginBottom: responsiveHeight(2) }]}
+						// value={petSpecies || ""}
+						onChangeText={() => {}}
+						placeholder="종을 검색해 아래를 클릭하세요"
+						onBlur={() => {}}
 					/>
 				</View>
 				{dropdownVIsible ? (
@@ -575,26 +593,12 @@ const CreateDog = ({ navigation }: any) => {
 							</TouchableOpacity>
 						)}
 
-						<TouchableOpacity
-							activeOpacity={0.7}
-							onPress={() => navigation.navigate("Profile")}
-						>
-							<View style={CreateProfileLayout.cancelButton}>
-								<Text style={CreateProfileLayout.cancelButtonText}>
-									취소하기
-								</Text>
-							</View>
-						</TouchableOpacity>
-					</View>
-				)}
-
-				{/* <Footer /> */}
+						// navigation.navigate("MakeDogProfile")
+					}
+					color={"#70C8EE"}
+				/>
 			</CommonLayout>
-			{isLoading ? (
-				<WalletLoading title="프로필을 생성하는데 10초 이상 소요될 수 있습니다." />
-			) : (
-				<></>
-			)}
+			<AbsoluteVar />
 		</>
 	);
 };

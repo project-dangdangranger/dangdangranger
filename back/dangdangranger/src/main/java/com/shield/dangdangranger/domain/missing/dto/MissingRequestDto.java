@@ -9,6 +9,14 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 public class MissingRequestDto {
+	
+	@Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Builder
+    public static class MissingStatusUpdateRequestDto {
+		private Integer missingNo;
+	}
 
 	@Data
     @AllArgsConstructor
@@ -23,6 +31,7 @@ public class MissingRequestDto {
 		private Double missingLat;
 		private Double missingLng;
 		private List<String> missingImages;
+		private String missingAddress;
 	}
 	
 	@Data
@@ -33,6 +42,10 @@ public class MissingRequestDto {
         private Integer missingNo;
         private String missingTitle;
         private String missingContent;
-        private List<String> missingImageList;
+		private LocalDateTime missingDate;
+		private Double missingLat;
+		private Double missingLng;
+        private List<String> missingImages;
+        private String missingAddress;
     }
 }
