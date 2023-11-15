@@ -108,6 +108,7 @@ const GoogleMap = (props: Props) => {
 			watchIdRef.current = startWatchingLocation();
 			const interval = setInterval(() => {
 				setPatrolLogTotalTime((prev) => prev + 1);
+				console.log("몇분 됐지??? : ", patrolLogTotalTime);
 			}, 60000);
 			return () => clearInterval(interval);
 		}
@@ -226,7 +227,7 @@ const GoogleMap = (props: Props) => {
 						longitude: position.coords.longitude,
 					};
 					const distance = haversine(start, end, { unit: "meter" });
-					const distanceInKilometers = distance / 1000;
+					const distanceInKilometers = distance / 10000;
 					setPatrolLogTotalDistance(
 						(prevDistance) => prevDistance + distanceInKilometers,
 					);
@@ -298,7 +299,7 @@ const GoogleMap = (props: Props) => {
 			postalCode,
 			patrolLogDate,
 			patrolLogTotalDistance,
-			patrolLogTotalTime: patrolLogTotalTime % 60,
+			patrolLogTotalTime: patrolLogTotalTime,
 			patrolLogImageUrl: data.Location,
 			patrolLogLat,
 			patrolLogLng,
