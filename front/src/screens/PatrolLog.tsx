@@ -3,16 +3,20 @@ import React, { useEffect, useState } from "react";
 import ColorHeader from "../recycles/ColorHeader";
 import CommonLayout from "../recycles/CommonLayout";
 import FooterBar from "../recycles/FooterBar";
-import LogMapImg from "../../assets/images/log-map-img.png";
+import defaultLogImg from "../../assets/images/patrol-log-default-img.png";
 import PatrolLogLayout from "../styles/patrolLogLayout";
 import { responsiveWidth } from "react-native-responsive-dimensions";
 import img from "../../assets/images/debug-dog.png";
 import DetailBtn from "../components/DetailBtn";
 import PatrolLogCarousel from "../recycles/PatrolLogCarousel";
 import axios from "../utils/axios";
+import CustomBtn from "../recycles/CustomBtn";
+import { useNavigation } from "@react-navigation/native";
 
 const PatrolLog = () => {
+	const navigation = useNavigation();
 	const [logs, setLogs] = useState([]);
+	const [firstImg, setFirstImg] = useState(defaultLogImg);
 
 	useEffect(() => {
 		getLogs();
@@ -29,6 +33,7 @@ const PatrolLog = () => {
 				date: log.patrolLogDate.split("T")[0],
 			}));
 
+			setFirstImg(transformedLogs[0].imgSrc);
 			setLogs(transformedLogs);
 		} catch (error) {
 			console.error("Error fetching logs:", error);
@@ -39,7 +44,12 @@ const PatrolLog = () => {
 		<>
 			<CommonLayout>
 				<ColorHeader title="내 순찰 기록" />
-				<Image source={LogMapImg} style={PatrolLogLayout.imgWrap} />
+				<Image source={firstImg} style={PatrolLogLayout.imgWrap} />
+				<Text></Text>
+				<CustomBtn
+					text={"순찰하러 가기"}
+					onPress={() => navigation.navigate("PatrolGo")}
+				></CustomBtn>
 				<View style={PatrolLogLayout.textWrap}>
 					<Text style={PatrolLogLayout.textTitle}>내 순찰 기록</Text>
 				</View>

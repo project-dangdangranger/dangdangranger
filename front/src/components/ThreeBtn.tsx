@@ -56,7 +56,7 @@ const ThreeBtn = () => {
 								<Image source={Btn1} style={styles.btnImg} />
 							</TouchableOpacity>
 							<Text style={styles.btnTextTitle}>신고 등록</Text>
-							<Text style={styles.btnTextDesc}>주의 사항을 알리세요</Text>
+							<Text style={styles.btnTextDesc}>실종견을 신고해주세요</Text>
 						</View>
 						<View style={styles.btncontainer}>
 							<TouchableOpacity
@@ -77,7 +77,7 @@ const ThreeBtn = () => {
 							</TouchableOpacity>
 							<Text style={styles.btnTextTitle}>긴급 상황 신고</Text>
 							<Text style={styles.btnTextDesc}>
-								3초간 눌러 경찰에 신고하세요
+								긴급전화로 도움을 요청하세요
 							</Text>
 						</View>
 					</View>
