@@ -45,6 +45,7 @@ const PatrolLog = () => {
 			<CommonLayout>
 				<ColorHeader title="내 순찰 기록" />
 				<Image source={firstImg} style={PatrolLogLayout.imgWrap} />
+				<Text></Text>
 				<CustomBtn
 					text={"순찰하러 가기"}
 					onPress={() => navigation.navigate("PatrolGo")}
