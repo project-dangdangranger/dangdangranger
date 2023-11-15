@@ -13,6 +13,7 @@ import axios from "../utils/axios";
 
 const PatrolLog = () => {
 	const [logs, setLogs] = useState([]);
+	const [firstImg, setFirstImg] = useState("");
 
 	useEffect(() => {
 		getLogs();
@@ -29,6 +30,7 @@ const PatrolLog = () => {
 				date: log.patrolLogDate.split("T")[0],
 			}));
 
+			setFirstImg(transformedLogs[0].imgSrc);
 			setLogs(transformedLogs);
 		} catch (error) {
 			console.error("Error fetching logs:", error);
@@ -39,7 +41,7 @@ const PatrolLog = () => {
 		<>
 			<CommonLayout>
 				<ColorHeader title="내 순찰 기록" />
-				<Image source={LogMapImg} style={PatrolLogLayout.imgWrap} />
+				<Image source={firstImg} style={PatrolLogLayout.imgWrap} />
 				<View style={PatrolLogLayout.textWrap}>
 					<Text style={PatrolLogLayout.textTitle}>내 순찰 기록</Text>
 				</View>
