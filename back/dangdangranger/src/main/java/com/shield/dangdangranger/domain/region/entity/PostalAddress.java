@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "postal_address")
+@Table(name = "postal_address_new")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 public class PostalAddress {
