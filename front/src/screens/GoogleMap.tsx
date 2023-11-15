@@ -55,7 +55,7 @@ const GoogleMap = (props: Props) => {
 	const [currentLocation, setCurrentLocation] = useState<
 		LocationCoordinates | undefined
 	>();
-	const [address, setAddress] = useState<string>("");
+	const [postalCode, setPostalCode] = useState<string>("");
 	const [patrolLogDate, setPatrolLogDate] = useState<string>("");
 	const [patrolLogLat, setPatrolLogLat] = useState<number>(0);
 	const [patrolLogLng, setPatrolLogLng] = useState<number>(0);
@@ -190,14 +190,16 @@ const GoogleMap = (props: Props) => {
 
 	const getAddressCode = async (latitude: number, longitude: number) => {
 		try {
+			console.log("지도다!!!");
+
 			const response = await Axios.get(
 				`https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&location_type=ROOFTOP&result_type=street_address&language=ko&key=${GEOCODING_API_KEY}`,
 			);
-			const formattedAddress = response.data.results[0].formatted_address;
-			const addressParts = formattedAddress.split(" ");
-			const address = `${addressParts[1]} ${addressParts[2]} ${addressParts[3]}`;
-			setAddress(address);
-			console.log("address : ", address);
+			setPostalCode(response.data.results[0].address_components[5].long_name);
+			console.log(
+				"우편번호: ",
+				response.data.results[0].address_components[5].long_name,
+			);
 		} catch (error) {
 			console.error("An error occurred while fetching the dong code:", error);
 		}
@@ -292,7 +294,7 @@ const GoogleMap = (props: Props) => {
 		console.log("File uploaded:", data);
 		console.log(data.Location);
 		const res = {
-			address,
+			postalCode,
 			patrolLogDate,
 			patrolLogTotalDistance,
 			patrolLogTotalTime: patrolLogTotalTime % 60,
