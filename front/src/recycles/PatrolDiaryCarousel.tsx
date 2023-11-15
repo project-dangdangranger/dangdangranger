@@ -15,9 +15,10 @@ import React, { useState, useEffect } from "react";
 import axios from "../utils/axios";
 
 const PatrolDiaryCarousel = ({ logs, setDetailLogs }: any) => {
-	const handleLogClick = async (logNo) => {
+	const handleLogClick = async (logNo: any) => {
 		const response = await axios.get(`/log/${logNo}`);
 		setDetailLogs({
+			patrolLogNo: response.data.data.patrolLogNo,
 			patrolLogTotalDistance: response.data.data.patrolLogTotalDistance,
 			patrolLogDate: response.data.data.patrolLogDate.split("T")[0],
 			patrolLogAddress: response.data.data.patrolLogAddress,

@@ -25,12 +25,11 @@ MapboxGL.setWellKnownTileServer("Mapbox");
 MapboxGL.setAccessToken(MAPBOX_ACCESSTOKEN);
 
 type Props = {
+	myUserNo: number;
 	missingNo: number;
 	missingLat: number;
 	missingLng: number;
-	findingList: Array<{ userNo: number; lat: number; lng: number }>;
-	myLongitude: number;
-	myLatitude: number;
+	findingList: Map<number, {userNo: number, userName: string; lat: number; lng: number }>;
 };
 
 const FindMap = (props: Props) => {
@@ -93,11 +92,11 @@ const FindMap = (props: Props) => {
 				animationMode={"flyTo"}
 				animationDuration={camera.animationDuration}
 			/>
-			{props.myLatitude && props.myLongitude && (
+			{/* {props.myLatitude && props.myLongitude && (
 				<MapboxGL.MarkerView coordinate={[props.myLongitude, props.myLatitude]}>
 					<Image source={rangerIcon} style={styles.icon} />
 				</MapboxGL.MarkerView>
-			)}
+			)} */}
 
 			<MapboxGL.MarkerView coordinate={missingLocation}>
 				<TouchableOpacity onPress={handlePopUp}>
@@ -109,10 +108,10 @@ const FindMap = (props: Props) => {
 					<Text>실종견 간단 정보입니다.</Text>
 				</View>
 			)}
-			{props.findingList.map((location, index) => (
+			{Array.from(props.findingList).map((location, index) => (
 				<MapboxGL.MarkerView
-					coordinate={[location.lng, location.lat]}
-					key={location.userNo}
+					coordinate={[location[1].lng, location[1].lat]}
+					key={index}
 				>
 					<Image source={rangerIcon} style={styles.icon} />
 				</MapboxGL.MarkerView>
