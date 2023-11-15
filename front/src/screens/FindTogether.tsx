@@ -251,6 +251,10 @@ const FindTogether = ({ route }: any) => {
 			userName: ProfileData.userName,
 			topicId: topicId.current,
 			missingNo: detailMissingDog.missingNo,
+			param: {
+				latitude: 0,
+				longitude: 0,
+			},
 		});
 
 		// 종료 메시지 전송
