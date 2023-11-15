@@ -33,6 +33,8 @@ const FindTogether = ({ route }: any) => {
 	const [ProfileData, setProfileData] = useState<any>([]);
 	const findingList = useRef(new Map());
 
+	const [modalVisible, setModalVisible] = useState(false);
+
 	useFocusEffect(
 		useCallback(() => {
 			return () => {
