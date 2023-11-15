@@ -3,6 +3,7 @@ package com.shield.dangdangranger.domain.patrol.service;
 import static com.shield.dangdangranger.domain.patrol.constant.PatrolLogExceptionMessage.PATROL_LOG_NOT_FOUND_EXCEPTION;
 import static com.shield.dangdangranger.domain.patrol.constant.PatrolWritten.NOT_WRITTEN;
 import static com.shield.dangdangranger.domain.region.constant.RegionErrorMessage.DONG_NOT_FOUND_EXCEPTION;
+import static com.shield.dangdangranger.domain.region.constant.RegionErrorMessage.POSTAL_ADDRESS_NOT_FOUND_EXCEPTION;
 import static com.shield.dangdangranger.domain.user.constant.UserExceptionMessage.USER_NOT_FOUND_EXCEPTION;
 import static com.shield.dangdangranger.global.constant.BaseConstant.FORBIDDEN_EXCEPTION_MESSAGE;
 import static com.shield.dangdangranger.global.constant.BaseConstant.NOTCANCELED;
@@ -15,6 +16,7 @@ import com.shield.dangdangranger.domain.patrol.entity.PatrolLog;
 import com.shield.dangdangranger.domain.patrol.repo.PatrolLogRepository;
 import com.shield.dangdangranger.domain.patrol.repo.custom.PatrolLogRepositoryCustom;
 import com.shield.dangdangranger.domain.region.entity.Dong;
+import com.shield.dangdangranger.domain.region.entity.PostalAddress;
 import com.shield.dangdangranger.domain.region.repo.DongRepository;
 import com.shield.dangdangranger.domain.region.repo.PostalAddressRepository;
 import com.shield.dangdangranger.domain.region.repo.custom.DongCustomRepository;
@@ -53,9 +55,9 @@ public class PatrolLogServiceImpl implements PatrolLogService {
         User user = userRepository.findUserByUserNoAndCanceled(userNo, NOTCANCELED)
                 .orElseThrow(() -> new NotFoundException(USER_NOT_FOUND_EXCEPTION.message()));
 
-        String dongName = postalAddressRepository.findTopByPostalCode(patrolLogSaveRequestDto.getPostalCode()).get().getLegalDongName();
-        AddressVo addressVo = parseAddressToVo(dongName, patrolLogSaveRequestDto.getAddress());
-        Dong dong = dongCustomRepository.findDongByAddress(addressVo)
+        PostalAddress postalAddress = postalAddressRepository.findTopByPostalCode(patrolLogSaveRequestDto.getPostalCode())
+                .orElseThrow(() -> new NotFoundException(POSTAL_ADDRESS_NOT_FOUND_EXCEPTION.message()));
+        Dong dong = dongRepository.findDongByDongCode(postalAddress.getLegalDongCode())
                 .orElseThrow(() -> new NotFoundException(DONG_NOT_FOUND_EXCEPTION.message()));
 
         log.debug("[createPatrolLog] dong : {}", dong);
@@ -72,15 +74,6 @@ public class PatrolLogServiceImpl implements PatrolLogService {
                 .patrolLogLng(patrolLogSaveRequestDto.getPatrolLogLng())
                 .patrolLogWritten(NOT_WRITTEN.value())
                 .build());
-    }
-
-    private AddressVo parseAddressToVo(String dongName, String address) {
-        StringTokenizer addressTokenizer = new StringTokenizer(address);
-        return AddressVo.builder()
-                .sidoName(addressTokenizer.nextToken())
-                .gugunName(addressTokenizer.nextToken())
-                .dongName(dongName)
-                .build();
     }
 
     @Override
