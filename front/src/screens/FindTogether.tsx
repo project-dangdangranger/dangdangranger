@@ -226,6 +226,8 @@ const FindTogether = ({ route }: any) => {
 			case "ENTER":
 				break;
 			case "SHARE_COORDINATE":
+				const latitude = Number(parsedMessage.param.latitude);
+				const longitude = Number(parsedMessage.param.longitude);
 				findingList.current.set(userNo, {
 					userNo: userNo,
 					userName: userName,
