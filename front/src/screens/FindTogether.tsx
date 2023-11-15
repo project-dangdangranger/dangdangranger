@@ -219,8 +219,6 @@ const FindTogether = ({ route }: any) => {
 		const code = parsedMessage.code;
 		const userNo = parsedMessage.userNo;
 		const userName = parsedMessage.userName;
-		const latitude = Number(parsedMessage.param.latitude);
-		const longitude = Number(parsedMessage.param.longitude);
 
 		switch (code) {
 			case "ENTER":
@@ -253,10 +251,6 @@ const FindTogether = ({ route }: any) => {
 			userName: ProfileData.userName,
 			topicId: topicId.current,
 			missingNo: detailMissingDog.missingNo,
-			param: {
-				latitude: 0,
-				longitude: 0,
-			},
 		});
 
 		// 종료 메시지 전송
