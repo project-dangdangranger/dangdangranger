@@ -19,21 +19,27 @@ import GoogleMap from "./src/screens/GoogleMap";
 import PatrolMap from "./src/screens/PatrolMap";
 import PatrolLog from "./src/screens/PatrolLog";
 import PatrolDiary from "./src/screens/PatrolDiary";
-import PatrolDiaryWrite from "./src/screens/PatrolDiaryWrite";
+import PatrolDiaryWrite from "./src/screens/CreatePatrolDiary";
 import MissingMain from "./src/screens/MissingMain";
 import MissingFind from "./src/screens/MissingFind";
-import MissingRegist from "./src/screens/MissingRegist";
 import MissingDetail from "./src/screens/MissingDetail";
 import CreateMissingDog from "./src/screens/CreateMissingDog";
 import Login from "./src/screens/Login";
 import Register from "./src/screens/Register";
-import Start from "./src/screens/Start";
 import PatrolLogDetail from "./src/screens/PatrolLogDetail";
 import WalletMine from "./src/screens/WalletMine";
 import CreateDog from "./src/screens/CreateDog";
 import PrivateKey from "./src/screens/PrivateKey";
 import UpdateInfo from "./src/screens/UpdateInfo";
 import PatrolReportDetail from "./src/screens/PatrolReportDetail";
+import FindTogether from "./src/screens/FindTogether";
+import { TextEncoder, TextDecoder } from "text-encoding";
+global.TextEncoder = TextEncoder;
+global.TextDecoder = TextDecoder;
+import ManualMain from "./src/screens/ManualMain";
+import CreateMissingMyDog from "./src/screens/CreateMissingMyDog";
+import MissingCarouselDetail from "./src/screens/MissingCarouselDetail";
+import FindMissingDog from "./src/screens/FindMissingDog";
 
 const App = () => {
 	const Stack = createNativeStackNavigator();
@@ -42,7 +48,7 @@ const App = () => {
 		<RecoilRoot>
 			<NavigationContainer>
 				<Stack.Navigator
-					initialRouteName="Start"
+					initialRouteName="Main"
 					screenOptions={{
 						headerShown: false,
 						// cardStyle: { backgroundColor: "white" },
@@ -62,19 +68,17 @@ const App = () => {
 					<Stack.Screen name="ReportDorList" component={ReportDorList} />
 					<Stack.Screen name="PatrolMain" component={PatrolMain} />
 					<Stack.Screen name="PatrolGo" component={PatrolGo} />
-					<Stack.Screen name="GoogleMap" component={GoogleMap} />
+					{/* <Stack.Screen name="GoogleMap" component={GoogleMap} /> */}
 					<Stack.Screen name="PatrolMap" component={PatrolMap} />
 					<Stack.Screen name="PatrolLog" component={PatrolLog} />
 					<Stack.Screen name="PatrolDiary" component={PatrolDiary} />
 					<Stack.Screen name="PatrolDiaryWrite" component={PatrolDiaryWrite} />
 					<Stack.Screen name="MissingMain" component={MissingMain} />
 					<Stack.Screen name="MissingFind" component={MissingFind} />
-					<Stack.Screen name="MissingRegist" component={MissingRegist} />
 					<Stack.Screen name="MissingDetail" component={MissingDetail} />
 					<Stack.Screen name="CreateMissingDog" component={CreateMissingDog} />
 					<Stack.Screen name="Login" component={Login} />
 					<Stack.Screen name="Register" component={Register} />
-					<Stack.Screen name="Start" component={Start} />
 					<Stack.Screen name="PatrolLogDetail" component={PatrolLogDetail} />
 					<Stack.Screen name="WalletMine" component={WalletMine} />
 					<Stack.Screen name="CreateDog" component={CreateDog} />
@@ -84,6 +88,17 @@ const App = () => {
 						name="PatrolReportDetail"
 						component={PatrolReportDetail}
 					/>
+					<Stack.Screen name="FindTogether" component={FindTogether} />
+					<Stack.Screen name="ManualMain" component={ManualMain} />
+					<Stack.Screen
+						name="CreateMissingMyDog"
+						component={CreateMissingMyDog}
+					/>
+					<Stack.Screen
+						name="MissingCarouselDetail"
+						component={MissingCarouselDetail}
+					/>
+					<Stack.Screen name="FindMissingDog" component={FindMissingDog} />
 				</Stack.Navigator>
 			</NavigationContainer>
 		</RecoilRoot>

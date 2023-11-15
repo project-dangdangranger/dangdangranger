@@ -1,3 +1,4 @@
+import React, { useEffect } from "react";
 import {
 	Image,
 	Text,
@@ -12,23 +13,30 @@ import {
 } from "react-native-responsive-dimensions";
 
 const MissingItem = ({ item, navigation }: any) => {
+	// useEffect(() => {
+	// 	console.log("Item : ", item);
+	// 	console.log("navigation : ", navigation);
+	// }, []);
+
 	return (
 		<TouchableOpacity
-			onPress={() => navigation.navigate("MissingDetail", { item })}
+			// onPress={() => navigation.navigate("MissingDetail", item)}
+			onPress={() => navigation.navigate("FindTogether", { item })}
 		>
 			<View style={styles.dogItem}>
-				<Image source={item.dogImg} style={styles.dogImg} />
+				<Image source={{ uri: item.thumbnailUrl }} style={styles.dogImg} />
 				<View style={styles.dogItemContentContainer}>
-					<Text style={styles.dogTitle}>{item.dogName}</Text>
 					<View style={styles.dogItemContentRow}>
 						<View style={styles.dogItemStyle}>
-							<Text>실종된 위치</Text>
+							<Text style={styles.emphasizedText2}>실종 장소 </Text>
+							<Text>{item.missingAddress?.slice(0, 48)}</Text>
 							{/* <Text style={styles.dogItemMainText}>{item.dogSex}</Text> */}
 						</View>
 					</View>
 					<View style={styles.dogItemContentRow}>
 						<View style={styles.dogItemStyle}>
-							<Text>실종시간</Text>
+							<Text style={styles.emphasizedText1}>실종 시간</Text>
+							<Text>{item.missingDate}</Text>
 							{/* <Text
 								style={styles.dogItemBreedText}
 								numberOfLines={1}
@@ -87,14 +95,15 @@ const styles = StyleSheet.create({
 		flexDirection: "column",
 		justifyContent: "space-between",
 		alignItems: "flex-start",
-		paddingVertical: responsiveHeight(2),
+		paddingVertical: responsiveHeight(1),
 	},
 	dogItemContentRow: {
 		width: responsiveWidth(40),
 		flexDirection: "row",
 		justifyContent: "space-between",
 		alignItems: "center",
-		paddingBottom: responsiveHeight(2),
+		// paddingBottom: responsiveHeight(2),
+		padding: 2,
 	},
 	dogItemStyle: {
 		justifyContent: "center",
@@ -113,5 +122,15 @@ const styles = StyleSheet.create({
 		fontSize: 15,
 		fontWeight: "bold",
 		overflow: "visible",
+	},
+	emphasizedText1: {
+		fontWeight: "bold",
+		fontSize: 15,
+		color: "#3E6DCA",
+	},
+	emphasizedText2: {
+		fontWeight: "bold",
+		fontSize: 15,
+		color: "#FF6A6A",
 	},
 });

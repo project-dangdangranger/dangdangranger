@@ -75,9 +75,9 @@ const PatrolDiaryLayout = StyleSheet.create({
 	},
 
 	patrolRowWrap: {
-		width: responsiveWidth(88),
 		flexDirection: "row",
 		justifyContent: "space-between",
+		marginHorizontal: responsiveWidth(8),
 		marginTop: responsiveHeight(2),
 		flexWrap: "wrap",
 	},
@@ -87,14 +87,18 @@ const PatrolDiaryLayout = StyleSheet.create({
 		height: 30,
 	},
 	modalContainer: {
-		flex: 1,
+		// position: "absolute",
+		// width: "100%", // You might want to adjust this
+		// height: "100%", // You might want to adjust this
+		// justifyContent: "flex-start",
+		// alignItems: "flex-start",
 	},
 	modalView: {
 		width: responsiveWidth(40),
-		top: responsiveHeight(28),
-		left: responsiveWidth(50),
-		marginHorizontal: responsiveWidth(5),
-		height: responsiveHeight(8),
+		// top: responsiveHeight(50),
+		// left: responsiveWidth(50),
+		// marginHorizontal: responsiveWidth(5),
+		// height: responsiveHeight(5),
 		backgroundColor: "white",
 		borderRadius: 10,
 		shadowColor: "#000",

@@ -13,6 +13,7 @@ const Profile = ({ route, navigation }: any) => {
 	useEffect(() => {
 		axios.get("/user").then((data) => {
 			setProfileData(data.data.data);
+			// console.log("유저들어가:", data);
 		});
 	}, []);
 
@@ -20,6 +21,7 @@ const Profile = ({ route, navigation }: any) => {
 		if (route.params?.updated) {
 			axios.get("/user").then((data) => {
 				setProfileData(data.data.data);
+				// console.log("유저들어가:", data);
 			});
 		}
 	}, [route.params]);
@@ -41,9 +43,6 @@ const Profile = ({ route, navigation }: any) => {
 							<Text style={AlbumLayout.userContainerText}>
 								{ProfileData.userName} 님
 							</Text>
-							<TouchableOpacity style={AlbumLayout.btnCSS1}>
-								<Text style={AlbumLayout.userContainerText1}>정보 검색</Text>
-							</TouchableOpacity>
 						</View>
 						<View style={AlbumLayout.userContainer}>
 							<Text style={AlbumLayout.userContainerText2}>

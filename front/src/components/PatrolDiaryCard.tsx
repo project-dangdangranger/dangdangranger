@@ -8,6 +8,8 @@ import { useNavigation } from "@react-navigation/native";
 
 const PatrolDiaryCard = ({ imgSrc, patrolDiaryInfo }: any) => {
 	const navigation = useNavigation();
+
+	console.log(patrolDiaryInfo);
 	return (
 		<>
 			<TouchableOpacity
@@ -24,7 +26,9 @@ const PatrolDiaryCard = ({ imgSrc, patrolDiaryInfo }: any) => {
 					<View style={style.textWrap}>
 						<View style={style.textLocationWrap}>
 							<Image source={locationIcon} style={style.iconLocation} />
-							<Text style={style.textLocation}>{patrolDiaryInfo.location}</Text>
+							<Text style={style.textLocation}>
+								{patrolDiaryInfo.patrolLogAddress}
+							</Text>
 						</View>
 						<View style={style.textTitleWrap}>
 							<Text style={style.textTitle}>{patrolDiaryInfo.patrolTitle}</Text>
@@ -49,9 +53,9 @@ export default PatrolDiaryCard;
 
 const style = StyleSheet.create({
 	cardWrap: {
-		marginHorizontal: responsiveWidth(2),
+		// marginHorizontal: responsiveWidth(2),
 		marginVertical: responsiveHeight(1),
-		width: responsiveWidth(40),
+		width: responsiveWidth(39),
 		height: responsiveHeight(30),
 		borderRadius: 20,
 		borderColor: "#D3D3D3",
@@ -63,7 +67,8 @@ const style = StyleSheet.create({
 	img: {
 		width: responsiveWidth(39),
 		height: responsiveHeight(20),
-		resizeMode: "stretch",
+		// resizeMode: "cover",
+		borderRadius: 20,
 	},
 
 	textWrap: {
@@ -78,10 +83,13 @@ const style = StyleSheet.create({
 		alignItems: "center",
 		alignContent: "center",
 	},
-	textLocation: {},
+	textLocation: {
+		fontSize: 11,
+	},
 	iconLocation: {
 		width: 15,
 		height: 15,
+		resizeMode: "contain",
 	},
 
 	textTitleWrap: {
@@ -89,7 +97,6 @@ const style = StyleSheet.create({
 	},
 
 	textTitle: {
-		height: 22,
 		fontWeight: "900",
 		fontSize: 20,
 		color: "black",
@@ -98,14 +105,13 @@ const style = StyleSheet.create({
 	textRowWrap: {
 		flexDirection: "row",
 		justifyContent: "space-between",
+		paddingBottom: responsiveHeight(0.5),
 	},
 
 	textRowWrapName: {
 		width: responsiveWidth(13),
-		height: 15,
 	},
 	textRowWrapViewCount: {
 		width: responsiveWidth(6),
-		height: 15,
 	},
 });

@@ -1,4 +1,11 @@
-import { Text, View, Image, Alert, TouchableOpacity } from "react-native";
+import {
+	Text,
+	View,
+	Image,
+	Alert,
+	TouchableOpacity,
+	Animated,
+} from "react-native";
 import CommonLayout from "../recycles/CommonLayout";
 import MainHeader from "../recycles/MainHeader";
 import FooterBar from "../recycles/FooterBar";
@@ -11,14 +18,32 @@ import axios from "axios";
 import EncryptedStorage from "react-native-encrypted-storage";
 import { BASE_URL, CONTENT_TYPE, TIMEOUT } from "../constants/constants";
 import React, { useEffect } from "react";
+import LottieView from "lottie-react-native";
+import LoginLottie from "../../assets/jsons/Login.json";
+import {
+	responsiveHeight,
+	responsiveWidth,
+} from "react-native-responsive-dimensions";
+import { isLogged } from "../atoms/atoms";
+import { useRecoilState } from "recoil";
+import { useNavigation } from "@react-navigation/native";
 
-const Login = ({ navigation }: any) => {
+const Login = () => {
+	const [islogged, setIsLogged] = useRecoilState(isLogged);
+	const navigation = useNavigation();
+
 	useEffect(() => {
+		console.log(WEB_CLIENT_ID);
 		GoogleSignin.configure({
 			webClientId: WEB_CLIENT_ID,
 			offlineAccess: true,
 		});
+
+		if (islogged) {
+			navigation.replace("Main");
+		}
 	}, []);
+
 	const handleGoogleLogin = async () => {
 		try {
 			await GoogleSignin.hasPlayServices();
@@ -55,6 +80,7 @@ const Login = ({ navigation }: any) => {
 			} else if (responseCheckUserInfo.data.data.signInUp === "로그인 성공") {
 				console.log("로그인 성공했습니다. 메인페이지로 이동합니다.");
 				navigation.navigate("Main");
+				setIsLogged(true);
 			}
 		} catch (error) {
 			console.error(error);
@@ -79,6 +105,18 @@ const Login = ({ navigation }: any) => {
 				</View>
 
 				{/* <Button title="Google 로그아웃" onPress={GoogleSignin.signOut} /> */}
+				{/* <Animated.View>
+					<LottieView
+						autoPlay={true}
+						loop={true}
+						source={LoginLottie}
+						style={{
+							right: responsiveWidth(26),
+							height: responsiveHeight(20),
+							top: responsiveHeight(-1),
+						}}
+					/>
+				</Animated.View> */}
 				<TouchableOpacity
 					style={LoginLayout.BtnContainer}
 					onPress={handleGoogleLogin}
@@ -99,7 +137,6 @@ const Login = ({ navigation }: any) => {
 					</Text>
 				</View>
 			</CommonLayout>
-			<FooterBar />
 		</>
 	);
 };

@@ -46,10 +46,10 @@ const FourBtn = ({ ProfileData }: any | null) => {
 					</TouchableOpacity>
 					<TouchableOpacity
 						style={styles.btn}
-						onPress={() => navigate("MyWrite")}
+						onPress={() => navigate("ManualMain")}
 					>
 						<Image source={Btn4} style={styles.btnImg} />
-						<Text style={styles.btnText4}>내가 쓴 글</Text>
+						<Text style={styles.btnText4}>QnA</Text>
 					</TouchableOpacity>
 				</View>
 			</View>

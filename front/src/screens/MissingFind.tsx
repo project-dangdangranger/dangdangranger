@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState } from "react";
-import { View, StyleSheet } from "react-native";
+import React, { useEffect, useRef, useState } from "react";
+import { View, StyleSheet, TouchableOpacity, Text } from "react-native";
 import {
 	responsiveHeight,
 	responsiveWidth,
@@ -11,28 +11,31 @@ import ColorHeader from "../recycles/ColorHeader";
 import FooterBar from "../recycles/FooterBar";
 import CustomText from "../recycles/CustomText";
 import Carousel from "../components/Carousel";
-import MissingImg from "../../assets/images/profileImg.png";
 import MissingItem from "../recycles/MissingItem";
+import axios from "../utils/axios";
+import { useFocusEffect } from "@react-navigation/native";
 
 const MissingFind = ({ navigation }: any) => {
-	const data = [
-		{
-			dogNo: "0",
-			dogName: "윤둥이",
-			dogBreed: "폼피트",
-			dogSex: "M",
-			dogTokenId: "123",
-			dogImg: MissingImg,
-		},
-		{
-			dogNo: "0",
-			dogName: "방방이",
-			dogBreed: "말티즈",
-			dogSex: "F",
-			dogTokenId: "123",
-			dogImg: MissingImg,
-		},
-	];
+	const [data, setData] = useState([]);
+
+	// useFocusEffect(
+	// 	React.useCallback(() => {
+	// 		const data = await getMissingDogs();
+	// 		console.log(data)
+	// 	}, []),
+	// );
+
+	useEffect(() => {
+		getMissingDogs();
+		console.log(data);
+	}, []);
+
+	const getMissingDogs = async () => {
+		axios.get("/missing").then((res) => {
+			const reverseData = res.data.data.reverse();
+			setData(reverseData);
+		});
+	};
 
 	return (
 		<>
@@ -44,7 +47,7 @@ const MissingFind = ({ navigation }: any) => {
 					emphasizedColor="#3E6DCA"
 					finalText="을 주세요"
 				/>
-				<Carousel></Carousel>
+				<Carousel />
 				<View style={styles.dogcontainer}>
 					{data.map((item, index) => {
 						return (
@@ -52,6 +55,9 @@ const MissingFind = ({ navigation }: any) => {
 						);
 					})}
 				</View>
+				<TouchableOpacity onPress={() => navigation.navigate("FindTogether")}>
+					<Text>지도가 나올 지도?</Text>
+				</TouchableOpacity>
 			</CommonLayout>
 			<FooterBar />
 		</>

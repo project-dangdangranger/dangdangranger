@@ -63,6 +63,7 @@ const handleResponseError = async (error: AxiosError) => {
 	if (!error.response) return Promise.reject(error);
 	const { status, config } = error.response;
 	console.log("status :", status);
+	console.log(error);
 
 	switch (status) {
 		case 400:
@@ -72,6 +73,7 @@ const handleResponseError = async (error: AxiosError) => {
 			return await refreshAccessTokenAndRetry(config);
 		case 409:
 			alert("동일한 이름의 반려견이 이미 등록되어 있습니다.");
+			break;
 		case 500:
 			alert("시스템 에러, 관리자에게 문의 바랍니다.");
 			break;

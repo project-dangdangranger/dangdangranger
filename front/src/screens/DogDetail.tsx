@@ -6,6 +6,7 @@ import {
 	StyleSheet,
 	Platform,
 	TouchableOpacity,
+	ScrollView,
 } from "react-native";
 // import GestureFlipView from "../components/GestureFlipView";
 import CommonLayout from "../recycles/CommonLayout";
@@ -18,31 +19,78 @@ import {
 	responsiveWidth,
 } from "react-native-responsive-dimensions";
 import CustomSubButton from "../recycles/CustomSubBtn";
-import Badge1 from "../../assets/images/badge-01.png";
-import Badge2 from "../../assets/images/badge-02.png";
-import Badge3 from "../../assets/images/badge-03.png";
-import Badges from "../constants/Badges";
-import CustomTwinButton from "../recycles/CustomTwinBtn";
 import ProfileImg from "../../assets/images/profileImg.png";
 import { useNavigation } from "@react-navigation/native";
+import axios from "../utils/axios";
 
 const Profile = ({ route }) => {
 	const navigation = useNavigation();
-	const [data, setDate] = useState(route.params);
+	const [dogData, setDogData] = useState(route.params);
+	const [dogBirth, setDogBirth] = useState(null);
+	const [dogAge, setDogAge] = useState<string>("");
+	const [dogCreateDate, setDogCreateDate] = useState(null);
+	const [randomScript, setRandomScript] = useState<string>("");
+
 	useEffect(() => {
-		console.log("라우트:", route);
-		setDate({ ...data, dogImg: ProfileImg });
+		console.log("dog detail:", route);
+		axios.get(`/dog/${route.params.item.dogNo}`).then((res) => {
+			setDogData(res.data.data);
+			console.log("dog detail response: ", res.data);
+			console.log("dog birth : ", res.data.data.dogBirth);
+
+			setDogBirth(res.data.data.dogBirth.split("T")[0]);
+			setDogAge(calculateAge(res.data.data.dogBirth.split("T")[0]));
+			setDogCreateDate(res.data.data.createDate.split("T")[0]);
+		});
+
+		axios.get(`/dog/script`).then((res) => {
+			console.log("렌덤 대사 : ", res.data.data.scriptContent);
+			setRandomScript(res.data.data.scriptContent);
+		});
 	}, []);
+
+	const calculateAge = (dogBirth: any) => {
+		const currentDate = new Date();
+		console.log("오늘 날짜: ", currentDate);
+
+		const birth = new Date(dogBirth);
+		console.log("강아지 생일 : ", birth);
+
+		let ageYears = currentDate.getFullYear() - birth.getFullYear();
+		let ageMonths = currentDate.getMonth() - birth.getMonth();
+
+		if (
+			currentDate.getDate() < birth.getDate() ||
+			currentDate.getDate() === birth.getDate()
+		) {
+			ageMonths--;
+		}
+
+		// 생일이 지났을 경우 1살 추가
+		if (
+			currentDate.getFullYear() < birth.getFullYear() &&
+			currentDate.getMonth() >= birth.getMonth() &&
+			currentDate.getDate() >= birth.getDate()
+		) {
+			ageYears++;
+		}
+
+		if (ageYears >= 1) {
+			return `${ageYears}세`;
+		} else {
+			return `${ageMonths}개월`;
+		}
+	};
 
 	return (
 		<>
 			<CommonLayout>
 				<ColorHeader title="강아지 정보" />
 
-				<Image source={ProfileImg} style={styles.mainImg} />
+				<Image source={{ uri: dogData?.dogImg }} style={styles.mainImg} />
 
 				<View style={styles.mainTextContainer}>
-					<Text style={styles.mainText}>강아지 이름 </Text>
+					<Text style={styles.mainText}>{dogData?.dogName} </Text>
 					<View style={styles.line} />
 				</View>
 				<View style={styles.dogContainer}>
@@ -50,31 +98,48 @@ const Profile = ({ route }) => {
 						<View style={styles.dogItemContentRow}>
 							<View style={styles.dogItemStyle}>
 								<Text>나이</Text>
-								<Text style={styles.dogItemMainText}>{data.dogNo}14</Text>
+								<Text style={styles.dogItemMainText}>{dogAge}</Text>
 							</View>
 							<View style={styles.dogItemStyle}>
 								<Text>성별</Text>
-								<Text style={styles.dogItemMainText}>{data.dogSex}ddd</Text>
+								<Text style={styles.dogItemMainText}>{dogData?.dogSex}</Text>
 							</View>
+
+							<View style={styles.dogItemStyle}>
+								<Text>생일</Text>
+								<Text style={styles.dogDataText}>{dogBirth}</Text>
+							</View>
+						</View>
+
+						<View>
 							<View style={styles.dogItemStyle}>
 								<Text>견종</Text>
+
 								<Text
 									style={styles.dogItemBreedText}
 									numberOfLines={1}
 									ellipsizeMode="clip"
 								>
-									{data.dogBreed}ddddd
+									{dogData?.dogBreed}
 								</Text>
 							</View>
-							<View style={styles.dogItemStyle}>
-								<Text>발급 일자</Text>
-								<Text style={styles.dogDataText}>2023.10.19</Text>
-							</View>
 						</View>
+
 						<View>
-							<Text style={styles.randomText}>
-								랜덤한 댕댕레인저 대사가 여기에 나옵니다.
-							</Text>
+							<Text></Text>
+						</View>
+
+						<View style={styles.dogCreateDateStyle}>
+							<Text>발급 일자</Text>
+							<Text style={styles.dogDataText}>{dogCreateDate}</Text>
+						</View>
+
+						<View>
+							<Text></Text>
+						</View>
+
+						<View style={{ marginBottom: responsiveHeight(4) }}>
+							<Text>{randomScript}</Text>
 						</View>
 					</View>
 				</View>
@@ -98,11 +163,11 @@ const styles = StyleSheet.create({
 	mainImg: {
 		position: "relative",
 		width: responsiveWidth(100),
-		height: responsiveHeight(30),
+		height: responsiveHeight(50),
 	},
 	mainTextContainer: {
 		position: "absolute",
-		top: responsiveHeight(30),
+		top: responsiveHeight(50),
 		backgroundColor: "#fff",
 		width: responsiveWidth(100),
 		height: responsiveHeight(120),
@@ -114,6 +179,7 @@ const styles = StyleSheet.create({
 		fontSize: 30,
 		fontWeight: "bold",
 		marginTop: responsiveHeight(3),
+		marginHorizontal: responsiveWidth(10),
 	},
 	line: {
 		width: responsiveWidth(90),
@@ -128,8 +194,7 @@ const styles = StyleSheet.create({
 	},
 	dogItemCenter: {
 		justifyContent: "center",
-		// alignItems: "center",
-		// marginTop: responsiveHeight(1),
+		marginHorizontal: responsiveWidth(10),
 	},
 
 	imgcontainer: {
@@ -181,6 +246,10 @@ const styles = StyleSheet.create({
 		justifyContent: "center",
 		// alignItems: "center",
 	},
+	dogCreateDateStyle: {
+		justifyContent: "center",
+		// alignItems: "center",
+	},
 	dogItemMainText: {
 		fontSize: 18,
 		fontWeight: "bold",
@@ -192,16 +261,12 @@ const styles = StyleSheet.create({
 		marginRight: responsiveWidth(5),
 	},
 	dogItemBreedText: {
-		width: responsiveWidth(16),
 		fontSize: 18,
 		fontWeight: "bold",
 		overflow: "visible",
 		marginRight: responsiveWidth(5),
 	},
 	dogDataText: { fontSize: 18, fontWeight: "bold" },
-	randomText: {
-		marginTop: responsiveHeight(5),
-		marginBottom: responsiveHeight(20),
-	},
+
 	subBtnLocation: {},
 });

@@ -14,3 +14,8 @@ export const walletAddress = atom({
 	key: "walletAddress",
 	default: [],
 });
+
+export const isLogged = atom({
+	key: "isLogged",
+	default: false,
+});

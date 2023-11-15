@@ -1,8 +1,10 @@
 import CommonLayout from "../recycles/CommonLayout";
 import ColorHeader from "../recycles/ColorHeader";
-import FourBtn from "../recycles/PetrolBtn";
+import FourBtn from "../recycles/PetrolFourBtn";
 import AbsoluteBar from "../recycles/FooterBar";
-import Carousel from "../recycles/MultiPicture";
+import Carousel from "../components/Carousel";
+import { View, Text } from "react-native";
+import { responsiveHeight } from "react-native-responsive-dimensions";
 
 const PatrolMain = () => {
 	return (

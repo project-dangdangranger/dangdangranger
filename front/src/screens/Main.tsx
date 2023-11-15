@@ -1,10 +1,6 @@
 import { Text, View, Image, Alert, TouchableOpacity } from "react-native";
 import CommonLayout from "../recycles/CommonLayout";
 import MainHeader from "../recycles/MainHeader";
-import {
-	responsiveHeight,
-	responsiveWidth,
-} from "react-native-responsive-dimensions";
 import MainCount from "../components/MainCount";
 import MainLayout from "../styles/mainLayout";
 import Page from "../../assets/images/mainPage.png";
@@ -18,34 +14,65 @@ import PatrolSubImg from "../../assets/images/main-patrol.png";
 import MissingSubImg from "../../assets/images/main-missing.png";
 import ChatBotSubImg from "../../assets/images/main-chatbot.png";
 import FooterBar from "../recycles/FooterBar";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
-// import { NativeModules } from "react-native";
+import axios from "../utils/axios";
+import { useFocusEffect } from "@react-navigation/native";
+import { useRecoilState } from "recoil";
+import { isLogged } from "../atoms/atoms";
+import { StackNavigationProp } from "@react-navigation/stack";
+import EncryptedStorage from "react-native-encrypted-storage";
 
 const Main = () => {
-	const LoginStore = {
-		isLogged: true,
-	};
-	const navigation = useNavigation();
+	const navigation = useNavigation<StackNavigationProp<any>>();
+
+	async function getAccessToken() {
+		const accessToken = await EncryptedStorage.getItem("accessToken");
+		console.log("accessToken: ", accessToken);
+		if (accessToken !== null) {
+			setIsLogged(true);
+		} else {
+			setIsLogged(false);
+		}
+	}
+
+	const [islogged, setIsLogged] = useRecoilState(isLogged);
 
 	const authHandling = (pageName: string) => {
-		// if (LoginStore.isLogged) {
-		Alert.alert("로그인 후 이용 가능합니다.");
-		// } else {
-		// alert("해당 서비스는 로그인 후 이용가능합니다.");
-		// }
+		if (islogged === true) {
+			navigation.navigate(pageName);
+		} else {
+			Alert.alert("로그인 후 이용 가능합니다.");
+		}
 	};
 
-	const [patrol, setPatrol] = useState(0);
-	const [missing, setMissing] = useState(0);
+	const [patrolPeople, setPatrolPeople] = useState(0);
+	const [missingPeople, setMissingPeople] = useState(0);
+
+	useFocusEffect(
+		React.useCallback(() => {
+			getAccessToken().then(() => {
+				console.log("아니 뭐하세여:", islogged);
+				if (!islogged) {
+					navigation.replace("Login");
+				} else {
+					axios.get("/patrol/people").then((data) => {
+						setPatrolPeople(data.data.data.patrolPeopleCnt);
+						// console.log("현재 순찰중인 사람 데이터:", data.data);
+					});
+				}
+			});
+		}, []),
+	);
 
 	return (
 		<>
 			<></>
 			<CommonLayout>
 				<MainHeader></MainHeader>
+				{/* <Test /> */}
 				<View style={MainLayout.walkMainWrap}>
-					<MainCount patrol={patrol} missing={missing} />
+					<MainCount patrol={patrolPeople} missing={missingPeople} />
 					<Text style={MainLayout.walkMainTitle}>
 						<Text style={MainLayout.walkBoldText}>댕댕레인저</Text>와 함께{" "}
 						{"\n"}
@@ -63,9 +90,9 @@ const Main = () => {
 				</View>
 				<CustomButton
 					text="지역 순찰하기"
-					onPress={() => navigation.navigate("GoogleMap")}
+					onPress={() => authHandling("PatrolGo")}
 				/>
-				{LoginStore.isLogged ? null : (
+				{islogged ? null : (
 					<View style={MainLayout.mainTextWrap}>
 						<TouchableOpacity onPress={() => authHandling("Login연결해줘")}>
 							<Text style={MainLayout.walkBoldText}>회원이 아니신가요?</Text>
@@ -141,13 +168,13 @@ const Main = () => {
 							desc="반려견 순찰증 NFT"
 							title="대원증 제작"
 							iconImage={NFTSubImg}
-							movePage="NFT"
+							movePage="CreateDog"
 						/>
 						<IconButton
 							desc="대원 순찰 다이어리"
 							title="순찰 기록"
 							iconImage={PatrolSubImg}
-							movePage="Patrol"
+							movePage="PatrolDiary"
 						/>
 					</View>
 					<View style={MainLayout.flexButtonWrap}>
@@ -155,13 +182,13 @@ const Main = () => {
 							desc="실종견 등록 & 찾기"
 							title="실종견"
 							iconImage={MissingSubImg}
-							movePage="Missing"
+							movePage="MissingFind"
 						/>
 						<IconButton
 							desc="서비스 도우미"
-							title="챗봇"
+							title="사용자 가이드"
 							iconImage={ChatBotSubImg}
-							movePage="ChatBot"
+							movePage="ManualMain"
 						/>
 					</View>
 				</View>

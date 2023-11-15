@@ -1,4 +1,11 @@
-import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
+import {
+	View,
+	Text,
+	StyleSheet,
+	Image,
+	TouchableOpacity,
+	Alert,
+} from "react-native";
 import {
 	responsiveHeight,
 	responsiveWidth,
@@ -11,12 +18,20 @@ import MingcuteSearchFillPng from "../../assets/images/mingcute_search_fill.png"
 import TempPng from "../../assets/images/Home.png";
 import ProfilePng from "../../assets/images/Profile.png";
 import ProfileFillPng from "../../assets/images/Profile_fill.png";
+import PatrolPng from "../../assets/images/dog.png";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigation } from "../../App";
+import { useRecoilValue } from "recoil";
+import { isLogged } from "../atoms/atoms";
 
 const FooterBar = () => {
 	const { navigate } = useNavigation<StackNavigation>();
-	const authHandling = (pageName: string) => {
+	const islogged = useRecoilValue(isLogged);
+	const toMove = (pageName: string) => {
+		if (!islogged) {
+			Alert.alert("로그인 필요", "로그인해주세요.");
+			return;
+		}
 		navigate(pageName);
 	};
 
@@ -26,34 +41,34 @@ const FooterBar = () => {
 				<View>
 					<TouchableOpacity
 						style={styles.btnCenter}
-						onPress={() => navigate("Main")}
+						onPress={() => toMove("Main")}
 					>
 						<Image source={HomePng} style={styles.btnImg} />
-						<Text>Home</Text>
+						<Text style={styles.btnText}>Home</Text>
 					</TouchableOpacity>
 				</View>
 				<View>
-					<TouchableOpacity onPress={() => authHandling("PatrolMain")}>
-						<Image source={MingcuteSearchPng} style={styles.btnImg} />
-						<Text>순찰</Text>
+					<TouchableOpacity onPress={() => toMove("PatrolMain")}>
+						<Image source={PatrolPng} style={styles.btnImg} />
+						<Text style={styles.btnText}> 순찰</Text>
 					</TouchableOpacity>
 				</View>
 				<View>
 					<TouchableOpacity
 						style={styles.btnCenter}
-						onPress={() => navigate("MissingMain")}
+						onPress={() => toMove("MissingMain")}
 					>
-						<Image source={TempPng} style={styles.btnImg} />
-						<Text>실종견</Text>
+						<Image source={MingcuteSearchPng} style={styles.btnImg} />
+						<Text style={styles.btnText}>실종견</Text>
 					</TouchableOpacity>
 				</View>
 				<View>
 					<TouchableOpacity
 						style={styles.btnCenter}
-						onPress={() => navigate("Profile")}
+						onPress={() => toMove("Profile")}
 					>
 						<Image source={ProfilePng} style={styles.btnImg} />
-						<Text>프로필</Text>
+						<Text style={styles.btnText}>프로필</Text>
 					</TouchableOpacity>
 				</View>
 			</View>
@@ -80,7 +95,12 @@ const styles = StyleSheet.create({
 		justifyContent: "center",
 	},
 	btnImg: {
-		height: 35,
-		width: 35,
+		height: 25,
+		width: 25,
+		resizeMode: "cover",
+		marginBottom: 5,
+	},
+	btnText: {
+		fontSize: 12,
 	},
 });

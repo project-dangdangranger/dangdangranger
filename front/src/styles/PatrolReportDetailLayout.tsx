@@ -9,6 +9,14 @@ const PatrolReportDetailLayout = StyleSheet.create({
 		backgroundColor: "#fff",
 		// marginHorizontal: responsiveWidth(10),
 	},
+	commentImg: {
+		marginLeft: responsiveWidth(1),
+		marginVertical: responsiveHeight(1),
+		position: "absolute",
+		width: responsiveWidth(14),
+		height: responsiveHeight(7),
+		borderRadius: 100,
+	},
 	img: {
 		width: responsiveWidth(100),
 		height: responsiveWidth(60),
@@ -94,8 +102,10 @@ const PatrolReportDetailLayout = StyleSheet.create({
 	},
 	patrollication: {},
 	patrollocationText: {
-		fontSize: 18,
+		fontSize: 15,
 		fontWeight: "bold",
+		// 범위 지나면 다음 줄
+		width: responsiveWidth(25),
 	},
 	contentcontainer: {
 		marginHorizontal: responsiveWidth(5),
@@ -109,6 +119,7 @@ const PatrolReportDetailLayout = StyleSheet.create({
 		// backgroundColor: "#E8E8E8",
 		width: responsiveWidth(80),
 		height: responsiveHeight(20),
+		marginLeft: responsiveWidth(10),
 	},
 	editContainer: {
 		// backgroundColor: "red",
@@ -233,6 +244,41 @@ const PatrolReportDetailLayout = StyleSheet.create({
 		color: "#fff",
 		fontSize: 17,
 		fontWeight: "bold",
+	},
+	missingDateText: {
+		fontSize: 15,
+		// fontWeight: "bold",
+	},
+	missingDateText1: {
+		fontSize: 15,
+		fontWeight: "bold",
+		color: "#3D6CC9",
+	},
+	missingDateText2: {
+		fontSize: 15,
+		fontWeight: "bold",
+		color: "#FF6A6A",
+	},
+	addresscontainer: {
+		flexDirection: "row",
+		alignItems: "center",
+		marginBottom: responsiveHeight(5),
+	},
+	missingtitle: {
+		marginLeft: responsiveWidth(15),
+	},
+	missingaddress: {
+		marginLeft: responsiveWidth(15),
+	},
+
+	dateIng: {
+		marginHorizontal: responsiveWidth(15),
+		marginBottom: responsiveHeight(5),
+	},
+	missingDateText3: {
+		fontSize: 22,
+		fontWeight: "bold",
+		color: "#FF6A6A",
 	},
 });
 

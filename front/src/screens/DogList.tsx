@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
 	View,
 	Text,
@@ -26,26 +26,22 @@ import Badges from "../constants/Badges";
 import CustomTwinButton from "../recycles/CustomTwinBtn";
 import ProfileImg from "../../assets/images/profileImg.png";
 import DogItem from "../recycles/DogItem";
+import { useNavigation } from "@react-navigation/native";
+import axios from "../utils/axios";
+import { useFocusEffect } from "@react-navigation/native";
 
-const Profile = ({ navigation }: any) => {
-	const data = [
-		{
-			dogNo: "0",
-			dogName: "개이름",
-			dogBreed: "말티즈",
-			dogSex: "M",
-			dogTokenId: "123",
-			dogImg: ProfileImg,
-		},
-		{
-			dogNo: "0",
-			dogName: "개이름",
-			dogBreed: "말티즈",
-			dogSex: "M",
-			dogTokenId: "123",
-			dogImg: ProfileImg,
-		},
-	];
+const Profile = () => {
+	const navigation = useNavigation();
+	const [dogList, setDogList] = useState([]);
+
+	useFocusEffect(
+		React.useCallback(() => {
+			axios.get("/dog").then((res) => {
+				// console.log("도그: ", res.data.data);
+				setDogList(res.data.data);
+			});
+		}, []),
+	);
 
 	return (
 		<>
@@ -82,17 +78,16 @@ const Profile = ({ navigation }: any) => {
 						</View>
 					</View>
 				</View>
-
-				<View style={styles.dogcontainer}>
-					{data.map((item, index) => {
-						return <DogItem key={index} item={item} navigation={navigation} />;
-					})}
-				</View>
 				<CustomSubButton
 					text={"NFT 발급하기"}
 					onPress={() => navigation.navigate("CreateDog")}
 					color={"#70C8EE"}
 				/>
+				<View style={styles.dogcontainer}>
+					{dogList?.map((item, index) => {
+						return <DogItem key={index} item={item} navigation={navigation} />;
+					})}
+				</View>
 			</CommonLayout>
 			<AbsoluteVar />
 		</>

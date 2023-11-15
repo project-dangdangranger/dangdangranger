@@ -2,27 +2,38 @@ import Main from "./Main";
 import Login from "./Login";
 import EncryptedStorage from "react-native-encrypted-storage";
 import React, { useEffect, useState } from "react";
+import { isLogged } from "../atoms/atoms";
+import { useRecoilState } from "recoil";
+import { useNavigation } from "@react-navigation/native";
+import { useFocusEffect } from "@react-navigation/native";
 
 const Start = () => {
-	const [tokn, setToken] = useState("");
-	async function retrieveToken() {
-		try {
-			const token = await EncryptedStorage.getItem("accessToken");
-			if (token !== undefined) {
-				setToken(token);
-				return token;
-			}
-		} catch (error) {
-			// 에러가 발생했습니다.
-			console.log(error);
+	const [islogged, setIsLogged] = useRecoilState(isLogged);
+	const navigation = useNavigation();
+
+	async function getAccessToken() {
+		const accessToken = await EncryptedStorage.getItem("accessToken");
+		console.log("accessToken: ", accessToken);
+		if (accessToken !== null) {
+			setIsLogged(true);
 		}
 	}
 
-	useEffect(() => {
-		retrieveToken();
-	}, []);
+	useFocusEffect(
+		React.useCallback(() => {
+			getAccessToken().then(() => {
+				if (islogged === true) {
+					navigation.navigate("Main");
+				}
+			});
+		}, []),
+	);
 
-	return <>{tokn ? <Main /> : <Login />}</>;
+	return (
+		<>
+			<Login />
+		</>
+	);
 };
 
 export default Start;

@@ -1,73 +1,139 @@
-import React, { useRef, useState } from "react";
-import { View, ScrollView, Text, Dimensions, StyleSheet } from "react-native";
+import React, { useState, useRef } from "react";
+import {
+	ScrollView,
+	View,
+	Image,
+	Text,
+	StyleSheet,
+	TouchableOpacity,
+} from "react-native";
+import {
+	responsiveHeight,
+	responsiveWidth,
+} from "react-native-responsive-dimensions";
+import axios from "../utils/axios";
+import { useFocusEffect } from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
 
-const Carousel = () => {
-	const [activeIndex, setActiveIndex] = useState(0);
+const MyHorizontalScrollView = () => {
+	const navigation = useNavigation();
+	const [currentIndex, setCurrentIndex] = useState(0);
 	const scrollViewRef = useRef(null);
-	const windowWidth = Dimensions.get("window").width;
 
-	const data = ["Slide 1", "Slide 2", "Slide 3"];
+	const [imgList, setImgList] = useState([]);
+	useFocusEffect(
+		React.useCallback(() => {
+			axios.get("/missing/recent_missing_images").then((res) => {
+				setImgList(res.data.data);
+			});
+		}, []),
+	);
 
 	const handleScroll = (event: any) => {
-		const scrollPosition = event.nativeEvent.contentOffset.x;
-		const activeIndex = Math.floor(scrollPosition / windowWidth);
-		setActiveIndex(activeIndex);
+		const contentOffsetX = event.nativeEvent.contentOffset.x;
+		const newIndex = Math.round(contentOffsetX / responsiveWidth(80));
+		if (newIndex !== currentIndex) {
+			setCurrentIndex(newIndex);
+		}
+	};
+	const renderPagination = () => {
+		return (
+			<View style={styles.paginationWrapper}>
+				{[...Array(imgList.length).keys()].map((key, index) => (
+					<View
+						key={key}
+						style={[
+							styles.paginationDot,
+							{ opacity: currentIndex === index ? 1 : 0.5 },
+						]}
+					/>
+				))}
+			</View>
+		);
 	};
 
 	return (
 		<View style={styles.container}>
 			<ScrollView
+				ref={scrollViewRef}
 				horizontal
 				pagingEnabled
-				showsHorizontalScrollIndicator={false}
 				onScroll={handleScroll}
 				scrollEventThrottle={16}
-				ref={scrollViewRef}
+				showsHorizontalScrollIndicator={false}
+				style={styles.scrollViewStyle}
 			>
-				{data.map((item, index) => (
-					<View style={[styles.slide, { width: windowWidth }]} key={index}>
-						<Text>{item}</Text>
-					</View>
-				))}
+				{imgList?.map((img, index) => {
+					return (
+						<View key={img.missingNo} style={styles.viewStyle}>
+							<Image style={styles.viewStyle} source={{ uri: img.imageUrl }} />
+
+							<TouchableOpacity
+								onPress={() => {
+									console.log("이동할 No:", img.missingNo);
+									navigation.navigate("MissingCarouselDetail", img);
+								}}
+								style={styles.textView}
+							>
+								<Text style={styles.text}>이동하기</Text>
+							</TouchableOpacity>
+						</View>
+					);
+				})}
 			</ScrollView>
-			<View style={styles.pagination}>
-				{data.map((_, index) => (
-					<View
-						key={index}
-						style={[styles.dot, index === activeIndex ? styles.activeDot : {}]}
-					/>
-				))}
-			</View>
+			{renderPagination()}
 		</View>
 	);
 };
 
 const styles = StyleSheet.create({
 	container: {
-		flex: 1,
-	},
-	slide: {
 		justifyContent: "center",
 		alignItems: "center",
-		backgroundColor: "lightgray",
-		height: 200,
+		marginHorizontal: responsiveWidth(10),
 	},
-	pagination: {
-		flexDirection: "row",
+	scrollViewStyle: {
+		width: responsiveWidth(80),
+	},
+	viewStyle: {
+		position: "relative",
+		width: responsiveWidth(80),
+		height: responsiveHeight(30),
+		borderRadius: 10,
+		resizeMode: "cover",
+	},
+	paginationWrapper: {
 		position: "absolute",
 		bottom: 10,
-		alignSelf: "center",
+		left: 0,
+		right: 0,
+		justifyContent: "center",
+		alignItems: "center",
+		flexDirection: "row",
 	},
-	dot: {
-		width: 8,
-		height: 8,
-		borderRadius: 4,
-		backgroundColor: "gray",
-		marginHorizontal: 4,
+	paginationDot: {
+		width: 10,
+		height: 10,
+		borderRadius: 5,
+		backgroundColor: "black",
+		margin: 3,
 	},
-	activeDot: {
-		backgroundColor: "blue",
+	text: {
+		color: "white",
+		fontSize: 20,
+		fontWeight: "bold",
+	},
+	textView: {
+		backgroundColor: "rgba(0,0,0,0.5)",
+		paddingHorizontal: responsiveWidth(3),
+		paddingVertical: responsiveHeight(1),
+		marginTop: responsiveHeight(0.5),
+		right: responsiveWidth(1),
+		borderRadius: 20,
+		zIndex: 20,
+		position: "absolute",
+		top: 0,
 	},
 });
 
-export default Carousel;
+export default MyHorizontalScrollView;

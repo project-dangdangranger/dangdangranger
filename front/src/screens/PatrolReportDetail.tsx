@@ -12,7 +12,6 @@ import ColorHeader from "../recycles/ColorHeader";
 import axios from "../utils/axios";
 import { useEffect, useState, useRef } from "react";
 import styles from "../styles/PatrolReportDetailLayout";
-import exImg from "../../assets/images/photo-ex-img1.png";
 import ReportUserInfo from "../components/ReportUserInfo";
 import dotIconImg from "../../assets/images/3-dot-icon.png";
 import PatrolDiaryLayout from "../styles/patrolDiaryLayout";
@@ -21,13 +20,13 @@ import {
 	responsiveHeight,
 	responsiveWidth,
 } from "react-native-responsive-dimensions";
+import MultiPicture from "../recycles/MultiPicture";
 
 const PatrolReportDetail = ({ route }: any) => {
 	const { navigate } = useNavigation();
 	const [data, setData] = useState({});
 	const { patrolNo } = route.params;
 	const [userData, setUserData] = useState({});
-
 	const [modalVisible, setModalVisible] = useState(false);
 	const [modalPosition, setModalPosition] = useState({ top: 0, left: 0 });
 	const threedotRef = useRef(null);
@@ -64,6 +63,7 @@ const PatrolReportDetail = ({ route }: any) => {
 				const response = await axios.get(`/patrol/${patrolNo}`);
 				if (response.data.message === "순찰일지 상세조회 완료") {
 					setData(response.data.data);
+					console.log(response.data.data);
 				}
 			} catch (error) {
 				console.log(error);
@@ -104,8 +104,19 @@ const PatrolReportDetail = ({ route }: any) => {
 			<CommonLayout>
 				<ColorHeader title={"순찰 상세 기록"} />
 
-				{/* {uri: data?.patrolLogImageUr} */}
-				<Image source={exImg} style={styles.img}></Image>
+				{/* <Image
+					source={{ uri: data?.patrolFirstImg }}
+					style={styles.img}
+				></Image> */}
+
+				<View
+					style={{ width: responsiveWidth(100), height: responsiveHeight(30) }}
+				>
+					<MultiPicture
+						imgList={data?.patrolReportImages}
+						location={data?.patrolLogAddress}
+					/>
+				</View>
 
 				<View style={styles.mainContainer}>
 					<View style={styles.contentContainer}>
@@ -182,6 +193,12 @@ const PatrolReportDetail = ({ route }: any) => {
 
 								return (
 									<View key={item.patrolCommentNo} style={styles.commentDetail}>
+										<View style={styles.centerimg}>
+											<Image
+												style={styles.commentImg}
+												source={{ uri: item.userProfileImg }}
+											></Image>
+										</View>
 										<View style={styles.commentCol}>
 											<View style={styles.commentTitle}>
 												<Text>{item.userName}</Text>

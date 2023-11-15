@@ -8,27 +8,9 @@ import Img1 from "../../assets/images/photo-ex-img2.png";
 import Img2 from "../../assets/images/photo-ex-img3.png";
 import Img3 from "../../assets/images/photo-ex-img4.png";
 
-const MyHorizontalScrollView = () => {
+const MyHorizontalScrollView = ({ imgList, location }) => {
 	const [currentIndex, setCurrentIndex] = useState(0);
 	const scrollViewRef = useRef(null);
-
-	const imgs = [
-		{
-			id: 1,
-			src: Img1,
-			location: "서울특별시 역삼동",
-		},
-		{
-			id: 2,
-			src: Img2,
-			location: "서울특별시 역삼동",
-		},
-		{
-			id: 3,
-			src: Img3,
-			location: "서울특별시 역삼동",
-		},
-	];
 
 	// 페이지가 변경될 때 호출됩니다.
 	const handleScroll = (event: any) => {
@@ -43,7 +25,7 @@ const MyHorizontalScrollView = () => {
 	const renderPagination = () => {
 		return (
 			<View style={styles.paginationWrapper}>
-				{[...Array(imgs.length).keys()].map((key, index) => (
+				{[...Array(imgList?.length).keys()].map((key, index) => (
 					<View
 						key={key}
 						style={[
@@ -67,23 +49,13 @@ const MyHorizontalScrollView = () => {
 				showsHorizontalScrollIndicator={false}
 				style={styles.scrollViewStyle}
 			>
-				{imgs.map((img, index) => {
+				{imgList?.map((img, index) => {
 					return (
-						<View key={img.id} style={styles.viewStyle}>
-							<Image style={styles.viewStyle} source={img.src} />
-							<View style={styles.textView}>
-								<Text style={styles.text}>{img.location}</Text>
-							</View>
+						<View key={index} style={styles.viewStyle}>
+							<Image style={styles.viewStyle} source={{ uri: img }} />
 						</View>
 					);
 				})}
-
-				<View style={styles.viewStyle}>
-					<Image style={styles.viewStyle} source={Img1} />
-					<View style={styles.textView}>
-						<Text style={styles.text}>서울특별시 역삼동</Text>
-					</View>
-				</View>
 			</ScrollView>
 			{renderPagination()}
 		</View>
@@ -94,14 +66,13 @@ const styles = StyleSheet.create({
 	container: {
 		justifyContent: "center",
 		alignItems: "center",
-		marginHorizontal: responsiveWidth(10),
+		// marginHorizontal: responsiveWidth(10),
 	},
 	scrollViewStyle: {
-		width: responsiveWidth(80),
+		width: responsiveWidth(100),
 	},
 	viewStyle: {
-		position: "relative",
-		width: responsiveWidth(80),
+		width: responsiveWidth(100),
 		height: responsiveHeight(30),
 		borderRadius: 10,
 		resizeMode: "cover",

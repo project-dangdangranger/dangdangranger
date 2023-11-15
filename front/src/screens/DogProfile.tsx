@@ -10,7 +10,7 @@ import ColorHeader from "../recycles/ColorHeader";
 import AlbumLayout from "../styles/albumLayout";
 import TempProfileImg from "../../assets/images/dog1.jpg";
 import WhitePenIcon from "../../assets/images/pen-icon.png";
-import FourBtn from "../recycles/PetrolBtn";
+import FourBtn from "../recycles/PetrolFourBtn";
 import AbsoluteVar from "../recycles/FooterBar";
 import CustomText from "../recycles/CustomText";
 import PetrolImg from "../../assets/images/Patrol-license.png";
@@ -24,7 +24,8 @@ const Profile = ({ navigation }: any) => {
 	const [dogList, setDogList] = useState([]);
 	useEffect(() => {
 		axios.get("/dog").then((res) => {
-			// console.log("도그: ", res.data.data);
+			console.log("도그: ", res.data.data);
+			setDogList(res.data.data);
 		});
 	}, []);
 
