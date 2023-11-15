@@ -19,7 +19,12 @@ import modalIcon2 from "../../assets/images/modal-quit-icon.png";
 import modalIcon3 from "../../assets/images/modal-board-icon.png";
 import modalIcon4 from "../../assets/images/modal-siren-icon.png";
 
-const FindMenuModal = ({ modalVisible, setModalVisible }: any) => {
+const FindMenuModal = ({
+	modalVisible,
+	setModalVisible,
+	endSession,
+	disabled,
+}: any) => {
 	const navigation = useNavigation();
 
 	const showMisiingDetail = () => {
@@ -34,7 +39,7 @@ const FindMenuModal = ({ modalVisible, setModalVisible }: any) => {
 
 	const writeReport = () => {
 		setModalVisible(!setModalVisible);
-		Alert.alert("신고하기 페이지로 이동할 거에요");
+		endSession();
 	};
 
 	const quitFinding = () => {
@@ -69,21 +74,24 @@ const FindMenuModal = ({ modalVisible, setModalVisible }: any) => {
 								<Text style={styles.modalTextDesc}>실종견 상세보기</Text>
 							</TouchableOpacity>
 							<TouchableOpacity
-								style={styles.modalComponent}
+								disabled={disabled}
+								style={[styles.modalComponent, disabled && styles.disabled]}
 								onPress={showReports}
 							>
 								<Image source={modalIcon3} style={styles.modalImg} />
 								<Text style={styles.modalTextDesc}>찾기 현황</Text>
 							</TouchableOpacity>
 							<TouchableOpacity
-								style={styles.modalComponent}
+								disabled={disabled}
+								style={[styles.modalComponent, disabled && styles.disabled]}
 								onPress={writeReport}
 							>
 								<Image source={modalIcon4} style={styles.modalImg} />
 								<Text style={styles.modalTextDesc}>신고하기</Text>
 							</TouchableOpacity>
 							<TouchableOpacity
-								style={styles.modalComponent}
+								disabled={disabled}
+								style={[styles.modalComponent, disabled && styles.disabled]}
 								onPress={quitFinding}
 							>
 								<Image source={modalIcon2} style={styles.modalImg} />
@@ -129,6 +137,9 @@ const styles = StyleSheet.create({
 		position: "absolute",
 		top: 15,
 		right: 15,
+	},
+	disabled: {
+		opacity: 0.5,
 	},
 	button: {
 		width: responsiveWidth(70),

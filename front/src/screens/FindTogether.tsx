@@ -266,7 +266,7 @@ const FindTogether = ({ route }: any) => {
 					isPressed={isPressed}
 					setIsPressed={setIsPressed}
 				/>
-				<FindSideBtn />
+				<FindSideBtn endSession={handleEndSession} isFinding={isPressed} />
 			</CommonLayout>
 		</>
 	);
