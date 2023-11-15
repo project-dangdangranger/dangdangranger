@@ -46,14 +46,6 @@ const FindTogether = ({ route }: any) => {
 				console.log("ProfileData.userNo", ProfileData.userNo);
 				console.log("ProfileData.userName", ProfileData.userName);
 
-				const message = JSON.stringify({
-					code: "EXIT",
-					userNo: ProfileData.userNo,
-					userName: ProfileData.userName,
-					topicId: topicId.current,
-					missingNo: detailMissingDog.missingNo,
-				});
-
 				disconnectServer();
 			};
 		}, [ProfileData, detailMissingDog]),
