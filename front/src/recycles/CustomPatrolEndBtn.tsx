@@ -47,7 +47,7 @@ const styles = StyleSheet.create({
 		borderRadius: 10,
 	},
 	text: {
-		fontSize: 30,
+		fontSize: 25,
 		fontWeight: "900",
 		color: "#FFFFFF",
 	},

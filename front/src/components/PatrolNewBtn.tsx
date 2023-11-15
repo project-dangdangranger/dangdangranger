@@ -30,10 +30,10 @@ const PatrolNewBtn = () => {
 			<View style={styles.container}>
 				<View style={{ zIndex: 99, position: "absolute", top: 10 }}>
 					{isActive ? (
-						<CustomPatrolEndBtn text="end" onPress={handleEndConfirm} />
+						<CustomPatrolEndBtn text="순찰 종료" onPress={handleEndConfirm} />
 					) : (
 						<CustomPatrolBtn
-							text="start"
+							text="순찰 시작"
 							onPress={() => {
 								setPatrol(true);
 								setIsActive(!isActive);
