@@ -28,6 +28,7 @@ const FindTogether = ({ route }: any) => {
 	// const [topicId, setTopicId] = useState("");
 	const topicId: any = useRef();
 	const { item } = route.params;
+	const [modalVisible, setModalVisible] = useState(false);
 
 	// 사용자 데이터 조회
 	const [ProfileData, setProfileData] = useState<any>([]);
@@ -187,7 +188,7 @@ const FindTogether = ({ route }: any) => {
 					}),
 				);
 			});
-		}, 3000);
+		}, 1000);
 
 		intervalId.current = id;
 	};
@@ -215,14 +216,14 @@ const FindTogether = ({ route }: any) => {
 		const code = parsedMessage.code;
 		const userNo = parsedMessage.userNo;
 		const userName = parsedMessage.userName;
-		const latitude = Number(parsedMessage.param.latitude);
-		const longitude = Number(parsedMessage.param.longitude);
 		console.log("receivedMessage : ", parsedMessage);
-
+		
 		switch (code) {
 			case "ENTER":
 				break;
 			case "SHARE_COORDINATE":
+				const latitude = Number(parsedMessage.param.latitude);
+				const longitude = Number(parsedMessage.param.longitude);
 				findingList.current.set(userNo, {
 					userNo: userNo,
 					userName: userName,
