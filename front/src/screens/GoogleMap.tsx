@@ -392,7 +392,7 @@ const GoogleMap = (props: Props) => {
 					>
 						<MapboxGL.LineLayer
 							id="linelayer1"
-							style={{ lineWidth: 5, lineColor: "blue" }}
+							style={{ lineWidth: 5, lineColor: "#3E6DCA" }}
 						/>
 					</MapboxGL.ShapeSource>
 				</MapboxGL.MapView>
