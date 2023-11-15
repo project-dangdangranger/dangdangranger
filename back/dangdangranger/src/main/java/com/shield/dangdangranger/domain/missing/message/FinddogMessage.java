@@ -28,6 +28,7 @@ public class FinddogMessage implements Serializable {
 	
 	private Code code;
 	private Integer userNo;
+	private String userName;
 	private Integer missingNo;
 	private String topicId;
 	private Object param;
