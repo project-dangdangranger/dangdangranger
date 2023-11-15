@@ -15,16 +15,11 @@ const CustomPatrolBtn: React.FC<CustomButtonProps> = ({ text, onPress }) => {
 	return (
 		<View style={styles.container}>
 			<TouchableOpacity activeOpacity={0.7} onPress={onPress}>
-				<LinearGradient
-					style={styles.button}
-					start={{ x: 0, y: 0 }}
-					end={{ x: 1, y: 1 }}
-					colors={["#3E6DCA", "#70C8EE"]}
-				>
+				<View style={styles.button}>
 					<View>
 						<Text style={styles.text}>{text}</Text>
 					</View>
-				</LinearGradient>
+				</View>
 			</TouchableOpacity>
 		</View>
 	);
@@ -39,7 +34,7 @@ const styles = StyleSheet.create({
 	},
 	button: {
 		width: responsiveWidth(35),
-		backgroundColor: "#EE8A72",
+		backgroundColor: "#3E6DCA",
 		height: 80,
 		// display: "flex",
 		justifyContent: "center",
