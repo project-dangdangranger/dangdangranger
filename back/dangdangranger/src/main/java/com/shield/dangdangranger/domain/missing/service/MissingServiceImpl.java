@@ -121,6 +121,13 @@ public class MissingServiceImpl implements MissingService {
 		User user = userRepository.findById(missing.getUserNo())
 				.orElseThrow(() -> new NotFoundException(UserExceptionMessage.USER_NOT_FOUND_EXCEPTION.message()));
 		
+		List<String> imageUrls = new ArrayList<>();
+		
+		imageRepository.findAllByImageTypeNoAndParentNoAndCanceled(
+				ImageType.MISSING.value(), missingNo, BaseConstant.NOTCANCELED).forEach((image) -> {
+					imageUrls.add(image.getImageUrl());
+				});
+		
 		MissingInfoResponseDto missingInfoResponseDto = MissingInfoResponseDto.builder()
 				.userName(user.getUserName())
 				.missingNo(missingNo)
@@ -132,6 +139,7 @@ public class MissingServiceImpl implements MissingService {
 				.missingLng(missing.getMissingLng())
 				.missingAddress(missing.getMissingAddress())
 				.dogNo(missing.getDogNo())
+				.missingImages(imageUrls)
 				.build();
 		
 		// 함께찾기 topicId 등록
