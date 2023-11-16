@@ -7,6 +7,8 @@ import {
 	Platform,
 	TouchableOpacity,
 	ScrollView,
+	ImageBackground,
+	Animated,
 } from "react-native";
 // import GestureFlipView from "../components/GestureFlipView";
 import CommonLayout from "../recycles/CommonLayout";
@@ -22,6 +24,8 @@ import CustomSubButton from "../recycles/CustomSubBtn";
 import ProfileImg from "../../assets/images/profileImg.png";
 import { useNavigation } from "@react-navigation/native";
 import axios from "../utils/axios";
+import nftImg from "../../assets/images/emptyNFT.png";
+import FlipCard from "../components/FlipCard";
 
 const Profile = ({ route }) => {
 	const navigation = useNavigation();
@@ -32,22 +36,24 @@ const Profile = ({ route }) => {
 	const [randomScript, setRandomScript] = useState<string>("");
 
 	useEffect(() => {
-		console.log("dog detail:", route);
+		initFunction();
+	}, []);
+
+	const initFunction = () => {
 		axios.get(`/dog/${route.params.item.dogNo}`).then((res) => {
 			setDogData(res.data.data);
-			console.log("dog detail response: ", res.data);
-			console.log("dog birth : ", res.data.data.dogBirth);
-
+			console.log("dogdata", dogData);
 			setDogBirth(res.data.data.dogBirth.split("T")[0]);
 			setDogAge(calculateAge(res.data.data.dogBirth.split("T")[0]));
-			setDogCreateDate(res.data.data.createDate.split("T")[0]);
+			setDogCreateDate(
+				res.data.data.createDate.split("T")[0].replace(/-/gi, "."),
+			);
 		});
-
 		axios.get(`/dog/script`).then((res) => {
 			console.log("렌덤 대사 : ", res.data.data.scriptContent);
 			setRandomScript(res.data.data.scriptContent);
 		});
-	}, []);
+	};
 
 	const calculateAge = (dogBirth: any) => {
 		const currentDate = new Date();
@@ -82,74 +88,139 @@ const Profile = ({ route }) => {
 		}
 	};
 
+	// *** flip card 관련 ***
+	const [isFlipped, setIsFlipped] = useState(false);
+	const animatedValue = useRef(new Animated.Value(0)).current;
+
+	const frontInterpolate = animatedValue.interpolate({
+		inputRange: [0, 180],
+		outputRange: ["0deg", "180deg"],
+	});
+
+	const backInterpolate = animatedValue.interpolate({
+		inputRange: [0, 180],
+		outputRange: ["180deg", "360deg"],
+	});
+
+	const frontAnimatedStyle = {
+		transform: [{ rotateY: frontInterpolate }],
+	};
+
+	const backAnimatedStyle = {
+		transform: [{ rotateY: backInterpolate }],
+	};
+
+	const flipCard = () => {
+		if (isFlipped) {
+			Animated.timing(animatedValue, {
+				toValue: 0,
+				duration: 800,
+				useNativeDriver: true,
+			}).start();
+		} else {
+			Animated.timing(animatedValue, {
+				toValue: 180,
+				duration: 800,
+				useNativeDriver: true,
+			}).start();
+		}
+		setIsFlipped(!isFlipped);
+	};
+
+	// *** ***
+
 	return (
 		<>
 			<CommonLayout>
 				<ColorHeader title="강아지 정보" />
+				<View style={styles.container}>
+					<TouchableOpacity onPress={flipCard}>
+						{/* *** 카드 앞면 *** */}
+						<Animated.View style={[styles.card, frontAnimatedStyle]}>
+							<View style={styles.shadowview}>
+								<Image source={nftImg} style={styles.imgBackground} />
+								<Image source={{ uri: dogData.dogImg }} style={styles.dogImg} />
+								<View style={styles.dogNameContainer}>
+									<Text style={styles.dogName}>{dogData?.dogName}</Text>
+								</View>
+								<View style={styles.dogDate}>
+									<Text style={styles.dogDateText}>{dogCreateDate}</Text>
+								</View>
 
-				<Image source={{ uri: dogData?.dogImg }} style={styles.mainImg} />
-
-				<View style={styles.mainTextContainer}>
-					<Text style={styles.mainText}>{dogData?.dogName} </Text>
-					<View style={styles.line} />
-				</View>
-				<View style={styles.dogContainer}>
-					<View style={styles.dogItemCenter}>
-						<View style={styles.dogItemContentRow}>
-							<View style={styles.dogItemStyle}>
-								<Text>나이</Text>
-								<Text style={styles.dogItemMainText}>{dogAge}</Text>
+								<View style={styles.dogcontent}>
+									<Text style={styles.dogDateText}>
+										위 요원은 댕댕레인저임을 임명합니다.
+									</Text>
+								</View>
 							</View>
-							<View style={styles.dogItemStyle}>
-								<Text>성별</Text>
-								<Text style={styles.dogItemMainText}>{dogData?.dogSex}</Text>
+						</Animated.View>
+						{/* *** 카드 뒷면 *** */}
+						<Animated.View
+							style={[styles.card, backAnimatedStyle, styles.cardBack]}
+						>
+							<View style={styles.dogContainer}>
+								<Image
+									source={{ uri: dogData.dogImg }}
+									style={styles.dogInfoImg}
+								/>
+								<View style={styles.dogItemCenter}>
+									<View style={styles.dogItemContentRow}>
+										<View style={styles.dogItemStyle}>
+											<Text>나이</Text>
+											<Text style={styles.dogItemMainText}>{dogAge}</Text>
+										</View>
+										<View style={styles.dogItemStyle}>
+											<Text>성별</Text>
+											<Text style={styles.dogItemMainText}>
+												{dogData?.dogSex}
+											</Text>
+										</View>
+
+										<View style={styles.dogItemStyle}>
+											<Text>생일</Text>
+											<Text style={styles.dogDataText}>{dogBirth}</Text>
+										</View>
+									</View>
+
+									<View>
+										<View style={styles.dogItemStyle}>
+											<Text>견종</Text>
+
+											<Text
+												style={styles.dogItemBreedText}
+												numberOfLines={1}
+												ellipsizeMode="clip"
+											>
+												{dogData?.dogBreed}
+											</Text>
+										</View>
+									</View>
+
+									<View>
+										<Text></Text>
+									</View>
+
+									<View style={styles.dogCreateDateStyle}>
+										<Text>발급 일자</Text>
+										<Text style={styles.dogDataText}>{dogCreateDate}</Text>
+									</View>
+
+									<View>
+										<Text></Text>
+									</View>
+
+									<View style={{ marginBottom: responsiveHeight(4) }}>
+										<Text>{randomScript}</Text>
+									</View>
+									<CustomSubButton
+										text={"실종견 등록하기"}
+										onPress={() => navigation.navigate("CreateDog")}
+										color={"#70C8EE"}
+									/>
+								</View>
 							</View>
-
-							<View style={styles.dogItemStyle}>
-								<Text>생일</Text>
-								<Text style={styles.dogDataText}>{dogBirth}</Text>
-							</View>
-						</View>
-
-						<View>
-							<View style={styles.dogItemStyle}>
-								<Text>견종</Text>
-
-								<Text
-									style={styles.dogItemBreedText}
-									numberOfLines={1}
-									ellipsizeMode="clip"
-								>
-									{dogData?.dogBreed}
-								</Text>
-							</View>
-						</View>
-
-						<View>
-							<Text></Text>
-						</View>
-
-						<View style={styles.dogCreateDateStyle}>
-							<Text>발급 일자</Text>
-							<Text style={styles.dogDataText}>{dogCreateDate}</Text>
-						</View>
-
-						<View>
-							<Text></Text>
-						</View>
-
-						<View style={{ marginBottom: responsiveHeight(4) }}>
-							<Text>{randomScript}</Text>
-						</View>
-					</View>
-				</View>
-
-				<View style={styles.subBtnLocation}>
-					<CustomSubButton
-						text={"실종견 등록하기"}
-						onPress={() => navigation.navigate("CreateDog")}
-						color={"#70C8EE"}
-					/>
+						</Animated.View>
+					</TouchableOpacity>
 				</View>
 			</CommonLayout>
 			<AbsoluteVar />
@@ -269,4 +340,78 @@ const styles = StyleSheet.create({
 	dogDataText: { fontSize: 18, fontWeight: "bold" },
 
 	subBtnLocation: {},
+
+	container: {
+		alignItems: "center",
+	},
+	imgBackground: {
+		zIndex: 5,
+		height: responsiveHeight(80),
+		width: responsiveWidth(90),
+		borderRadius: 15,
+	},
+	shadowview: {
+		height: responsiveHeight(80),
+		width: responsiveWidth(90),
+		elevation: 15,
+		alignItems: "center",
+	},
+	dogImg: {
+		zIndex: 1,
+		position: "absolute",
+		height: responsiveWidth(50),
+		width: responsiveWidth(50),
+		resizeMode: "contain",
+		bottom: responsiveHeight(37),
+		borderRadius: 100,
+	},
+	card: {
+		height: responsiveHeight(80),
+		width: responsiveWidth(90),
+		alignItems: "center",
+		justifyContent: "center",
+		backfaceVisibility: "hidden",
+		// elevation: 1,
+	},
+	cardBack: {
+		position: "absolute",
+		top: 0,
+		//borderWidth: 1,
+		//borderColor: "gray",
+		borderRadius: 15,
+		backgroundColor: "white",
+		elevation: 10,
+	},
+	dogInfoImg: {
+		width: responsiveWidth(90),
+		height: responsiveHeight(34),
+		borderTopLeftRadius: 15,
+		borderTopRightRadius: 15,
+
+		// zIndex: -1,
+		// resizeMode: "stretch",
+	},
+	dogName: {
+		fontSize: 20,
+		color: "#fff",
+	},
+	dogNameContainer: {
+		position: "absolute",
+		zIndex: 10,
+		bottom: responsiveHeight(29),
+	},
+	dogDate: {
+		position: "absolute",
+		zIndex: 11,
+		bottom: responsiveHeight(13.2),
+	},
+	dogDateText: {
+		fontSize: 20,
+		color: "#2d2d2d",
+	},
+	dogcontent: {
+		zIndex: 11,
+		position: "absolute",
+		bottom: responsiveHeight(23),
+	},
 });
