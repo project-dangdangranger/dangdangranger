@@ -1,5 +1,6 @@
 package com.shield.dangdangranger.domain.missing.dto;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import lombok.AllArgsConstructor;
@@ -26,5 +27,6 @@ public class SearchReportResponseDto {
 		private Double searchReportLat;
 		private Double searchReportLng;
 		private List<String> searchReportImages;
+		private LocalDateTime createDate;
 	}
 }
