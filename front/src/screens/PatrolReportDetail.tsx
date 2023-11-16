@@ -5,6 +5,7 @@ import {
 	TouchableOpacity,
 	Modal,
 	TextInput,
+	StyleSheet,
 } from "react-native";
 import CommonLayout from "../recycles/CommonLayout";
 import FooterBar from "../recycles/FooterBar";
@@ -110,7 +111,7 @@ const PatrolReportDetail = ({ route }: any) => {
 				></Image> */}
 
 				<View
-					style={{ width: responsiveWidth(100), height: responsiveHeight(30) }}
+					style={{ width: responsiveWidth(100), height: responsiveHeight(50) }}
 				>
 					<MultiPicture
 						imgList={data?.patrolReportImages}
