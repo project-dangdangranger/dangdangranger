@@ -126,16 +126,16 @@ const PatrolDiaryWrite = () => {
 					missingLat: missinglat,
 					missingLng: missinglong,
 					missingImages: uploadedImages,
+					missingAddress: address,
 				})
 				.then((res) => {
 					console.log("성공:", res.data);
-					if (res.data.message === "실종견(신고) 등록 성공") {
-						Alert.alert(
-							"실종견(신고) 등록 성공",
-							"실종 화면 디테일로 이동합니다.",
-						);
-						// 있어야 함
-						// navigation.navigate("PatrolDiary");
+					if (res.data.message === "실종견 등록 성공") {
+						// Alert.alert(
+						// 	"실종견(신고) 등록 성공",
+						// 	"실종 화면 디테일로 이동합니다.",
+						// );
+						navigation.navigate("MissingFind");
 					}
 				})
 				.catch((err) => {
