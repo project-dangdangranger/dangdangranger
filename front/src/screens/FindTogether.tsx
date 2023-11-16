@@ -92,6 +92,8 @@ const FindTogether = ({ route }: any) => {
 	const getDetailMissingDog = async (missingNo: number) => {
 		const response = await axios.get(`/missing/${missingNo}`);
 		setDetailMissingDog(response.data.data);
+		
+		getDogInfo(response.data.data.dogNo);
 	};
 
 	const getDogInfo = async (dogNo: number) => {
