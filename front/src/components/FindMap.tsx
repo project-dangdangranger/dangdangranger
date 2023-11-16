@@ -109,49 +109,51 @@ const FindMap = (props: Props) => {
 	};
 
 	return (
-		<MapboxGL.MapView style={styles.map} ref={mapRef}>
-			<MapboxGL.Camera
-				zoomLevel={camera.zoomLevel}
-				centerCoordinate={camera.centerCoordinate}
-				animationMode={"flyTo"}
-				animationDuration={camera.animationDuration}
-			/>
-			{/* {props.myLatitude && props.myLongitude && (
+		<View>
+			<MapboxGL.MapView style={styles.map} ref={mapRef}>
+				<MapboxGL.Camera
+					zoomLevel={camera.zoomLevel}
+					centerCoordinate={camera.centerCoordinate}
+					animationMode={"flyTo"}
+					animationDuration={camera.animationDuration}
+				/>
+				{/* {props.myLatitude && props.myLongitude && (
 				<MapboxGL.MarkerView coordinate={[props.myLongitude, props.myLatitude]}>
 					<Image source={rangerIcon} style={styles.icon} />
 				</MapboxGL.MarkerView>
 			)} */}
 
-			<MapboxGL.MarkerView coordinate={missingLocation}>
-				<TouchableOpacity onPress={handlePopUp}>
-					<Image source={missingIcon} style={styles.icon} />
-				</TouchableOpacity>
-			</MapboxGL.MarkerView>
-			{showPopUp && (
-				<View style={styles.popup}>
-					<Text>실종견 간단 정보입니다.</Text>
-				</View>
-			)}
-			{Array.from(props.findingList).map((location, index) => (
-				<MapboxGL.MarkerView
-					coordinate={[location[1].lng, location[1].lat]}
-					key={index}
-				>
-					<Image source={rangerIcon} style={styles.icon} />
-				</MapboxGL.MarkerView>
-			))}
-			{props.reportList.map((location, index) => (
-				<MapboxGL.MarkerView
-					coordinate={[location.searchReportLng, location.searchReportLat]}
-					key={index}
-				>
-					<TouchableOpacity
-						onPress={() => handleReportPopUp(location.searchReportNo)}
-					>
-						<Image source={reportIcon} style={styles.icon} />
+				<MapboxGL.MarkerView coordinate={missingLocation}>
+					<TouchableOpacity onPress={handlePopUp}>
+						<Image source={missingIcon} style={styles.icon} />
 					</TouchableOpacity>
 				</MapboxGL.MarkerView>
-			))}
+				{showPopUp && (
+					<View style={styles.popup}>
+						<Text>실종견 간단 정보입니다.</Text>
+					</View>
+				)}
+				{Array.from(props.findingList).map((location, index) => (
+					<MapboxGL.MarkerView
+						coordinate={[location[1].lng, location[1].lat]}
+						key={index}
+					>
+						<Image source={rangerIcon} style={styles.icon} />
+					</MapboxGL.MarkerView>
+				))}
+				{props.reportList.map((location, index) => (
+					<MapboxGL.MarkerView
+						coordinate={[location.searchReportLng, location.searchReportLat]}
+						key={index}
+					>
+						<TouchableOpacity
+							onPress={() => handleReportPopUp(location.searchReportNo)}
+						>
+							<Image source={reportIcon} style={styles.icon} />
+						</TouchableOpacity>
+					</MapboxGL.MarkerView>
+				))}
+			</MapboxGL.MapView>
 			{Object.keys(detailReportDog).length !== 0 ? (
 				<DetailReportModal
 					modalVisible={modalVisible}
@@ -159,7 +161,7 @@ const FindMap = (props: Props) => {
 					detailReportDog={detailReportDog}
 				/>
 			) : null}
-		</MapboxGL.MapView>
+		</View>
 	);
 };
 
