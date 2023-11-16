@@ -18,6 +18,8 @@ const MissingItem = ({ item, navigation }: any) => {
 	// 	console.log("navigation : ", navigation);
 	// }, []);
 
+	console.log("아이템 받았니?:", item);
+
 	return (
 		<TouchableOpacity
 			// onPress={() => navigation.navigate("MissingDetail", item)}
@@ -36,14 +38,10 @@ const MissingItem = ({ item, navigation }: any) => {
 					<View style={styles.dogItemContentRow}>
 						<View style={styles.dogItemStyle}>
 							<Text style={styles.emphasizedText1}>실종 시간</Text>
-							<Text>{item.missingDate}</Text>
-							{/* <Text
-								style={styles.dogItemBreedText}
-								numberOfLines={1}
-								ellipsizeMode="clip"
-							>
-								{item.dogBreed}ddddddddddd
-							</Text> */}
+							<Text>
+								{item.missingDate.slice(0, 10)} {item.missingDate.slice(11, 13)}
+								시 {item.missingDate.slice(14, 16)}분
+							</Text>
 						</View>
 					</View>
 				</View>
