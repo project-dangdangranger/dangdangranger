@@ -29,6 +29,7 @@ const FindTogether = ({ route }: any) => {
 	// const [topicId, setTopicId] = useState("");
 	const topicId: any = useRef();
 	const { item } = route.params;
+	const [isCurrentLocation, setIsCurrentLocation] = useState(false);
 
 	// 사용자 데이터 조회
 	const [ProfileData, setProfileData] = useState<any>([]);
@@ -54,7 +55,7 @@ const FindTogether = ({ route }: any) => {
 			};
 		}, [ProfileData, detailMissingDog]),
 	);
-	
+
 	useEffect(() => {
 		// 사용자 정보 조회
 		axios.get("/user").then((data) => {
@@ -65,7 +66,7 @@ const FindTogether = ({ route }: any) => {
 		getDetailMissingDog(item.missingNo);
 		// 발견 신고 조회
 		axios.get(`/searchreport?missingNo=${item.missingNo}`).then((data) => {
-			console.log('searchreport', data.data.data);
+			console.log("searchreport", data.data.data);
 			reportList.current = data.data.data;
 		});
 	}, []);
@@ -92,6 +93,8 @@ const FindTogether = ({ route }: any) => {
 	const getDetailMissingDog = async (missingNo: number) => {
 		const response = await axios.get(`/missing/${missingNo}`);
 		setDetailMissingDog(response.data.data);
+
+		getDogInfo(response.data.data.dogNo);
 	};
 
 	const getDogInfo = async (dogNo: number) => {
@@ -301,6 +304,8 @@ const FindTogether = ({ route }: any) => {
 						myUserNo={ProfileData.userNo}
 						findingList={findingList.current}
 						reportList={reportList.current}
+						isCurrentLocation={isCurrentLocation}
+						setIsCurrentLocation={setIsCurrentLocation}
 					/>
 				) : null}
 				<FindBtn
@@ -314,6 +319,7 @@ const FindTogether = ({ route }: any) => {
 					isFinding={isPressed}
 					setMissingModal={setModalVisible}
 					disconnectServer={disconnectServer}
+					setIsCurrentLocation={setIsCurrentLocation}
 				/>
 				<DetailModal
 					modalVisible={modalVisible}
