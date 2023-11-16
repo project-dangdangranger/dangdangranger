@@ -25,6 +25,8 @@ import axios from "../utils/axios";
 import Axios from "axios";
 import haversine from "haversine";
 import { responsiveHeight } from "react-native-responsive-dimensions";
+import ViewShot, { captureRef } from "react-native-view-shot";
+import RNFS from "react-native-fs";
 
 MapboxGL.setWellKnownTileServer("Mapbox");
 MapboxGL.setAccessToken(MAPBOX_ACCESSTOKEN);
@@ -44,6 +46,17 @@ type Props = {
 };
 
 const GoogleMap = (props: Props) => {
+	const viewRef = useRef();
+
+	const captureView = () => {
+		captureRef(viewRef, {
+			format: "jpg",
+			quality: 0.8,
+		}).then(
+			(uri) => console.log("Image saved to ", uri),
+			(error) => console.error("err, ", error),
+		);
+	};
 	const mapRef = useRef<MapboxGL.MapView>(null);
 	const mapWidth = Dimensions.get("window").width;
 	const mapHeight = Dimensions.get("window").height;
@@ -108,7 +121,8 @@ const GoogleMap = (props: Props) => {
 			watchIdRef.current = startWatchingLocation();
 			const interval = setInterval(() => {
 				setPatrolLogTotalTime((prev) => prev + 1);
-			}, 1000);
+				console.log("몇분 됐지??? : ", patrolLogTotalTime);
+			}, 60000);
 			return () => clearInterval(interval);
 		}
 	}, [props.start, props.patrol]);
@@ -117,6 +131,7 @@ const GoogleMap = (props: Props) => {
 		if (!props.start && !props.patrol) {
 			clearLocationWatch();
 			console.log("중지 했습니다.!");
+			captureView();
 			saveAndUploadMapSnapshot();
 		}
 	}, [props.start, props.patrol]);
@@ -226,7 +241,7 @@ const GoogleMap = (props: Props) => {
 						longitude: position.coords.longitude,
 					};
 					const distance = haversine(start, end, { unit: "meter" });
-					const distanceInKilometers = distance / 1000;
+					const distanceInKilometers = distance / 10000;
 					setPatrolLogTotalDistance(
 						(prevDistance) => prevDistance + distanceInKilometers,
 					);
@@ -249,7 +264,7 @@ const GoogleMap = (props: Props) => {
 
 	const saveAndUploadMapSnapshot = async () => {
 		try {
-			const snapshotUri = await MapboxGL.snapshotManager.takeSnap({
+			/*const snapshotUri = await MapboxGL.snapshotManager.takeSnap({
 				centerCoordinate: [
 					currentLocation?.longitude,
 					currentLocation?.latitude,
@@ -269,15 +284,24 @@ const GoogleMap = (props: Props) => {
 			// console.log("Snapshot URI:", snapshotUri);
 			if (snapshotUri.startsWith("data:image/png;base64,")) {
 				await uploadImage(snapshotUri);
-			}
+			}*/
+			captureRef(viewRef, {
+				format: "jpg",
+				quality: 0.8,
+			}).then(
+				async (uri) => {
+					await uploadImage2(uri);
+				},
+				(error) => console.error("err, ", error),
+			);
 		} catch (error) {
 			console.error("Snapshot failed:", error);
 		}
 	};
 
-	const uploadImage = async (imageBase64: string) => {
+	const uploadImage2 = async (imgPath: string) => {
 		// 접두어를 제거하고 base64 로 만들어야함
-		const base64Data = imageBase64.replace(/^data:image\/\w+;base64,/, "");
+		const base64Data = await RNFS.readFile(imgPath, "base64");
 		const buffer = Buffer.from(base64Data, "base64");
 
 		// const blob = Buffer.from(imageBase64, "base64");
@@ -308,36 +332,71 @@ const GoogleMap = (props: Props) => {
 		stopAndReset();
 	};
 
+	const uploadImage = async (imageBase64: string) => {
+		// 접두어를 제거하고 base64 로 만들어야함
+		const base64Data = imageBase64.replace(/^data:image\/\w+;base64,/, "");
+		const buffer = Buffer.from(base64Data, "base64");
+
+		// const blob = Buffer.from(imageBase64, "base64");
+		const random = Math.floor(Math.random() * 100000000);
+		const filename = `map_${new Date().toISOString()}_${random}.png`;
+		const params = {
+			Bucket: AWS_BUCKET,
+			Key: filename,
+			// Body: blob,
+			Body: buffer,
+			ContentType: "image/png",
+		};
+
+		const data = await s3.upload(params).promise();
+		console.log("File uploaded:", data);
+		console.log(data.Location);
+		const res = {
+			postalCode,
+			patrolLogDate,
+			patrolLogTotalDistance,
+			patrolLogTotalTime: patrolLogTotalTime,
+			patrolLogImageUrl: data.Location,
+			patrolLogLat,
+			patrolLogLng,
+		};
+		console.log(res);
+		await axios.post("/log", res);
+		stopAndReset();
+	};
+
 	return (
 		<View style={styles.page}>
-			<MapboxGL.MapView style={styles.map} ref={mapRef}>
-				{currentLocation && (
-					<MapboxGL.Camera
-						zoomLevel={camera.zoomLevel}
-						centerCoordinate={camera.centerCoordinate}
-						animationMode={"flyTo"}
-						animationDuration={camera.animationDuration}
-					/>
-				)}
-				<MapboxGL.ShapeSource
-					id="line1"
-					shape={{
-						type: "Feature",
-						geometry: {
-							type: "LineString",
-							coordinates: locationTrail.map((loc) => [
-								loc.longitude,
-								loc.latitude,
-							]),
-						},
-					}}
-				>
-					<MapboxGL.LineLayer
-						id="linelayer1"
-						style={{ lineWidth: 5, lineColor: "blue" }}
-					/>
-				</MapboxGL.ShapeSource>
-			</MapboxGL.MapView>
+			<ViewShot ref={viewRef} options={{ format: "jpg", quality: 0.9 }}>
+				<MapboxGL.MapView style={styles.map} ref={mapRef}>
+					{currentLocation && (
+						<MapboxGL.Camera
+							zoomLevel={camera.zoomLevel}
+							centerCoordinate={camera.centerCoordinate}
+							animationMode={"flyTo"}
+							animationDuration={camera.animationDuration}
+						/>
+					)}
+					<MapboxGL.ShapeSource
+						id="line1"
+						shape={{
+							type: "Feature",
+							geometry: {
+								type: "LineString",
+								coordinates: locationTrail.map((loc) => [
+									loc.longitude,
+									loc.latitude,
+								]),
+							},
+						}}
+					>
+						<MapboxGL.LineLayer
+							id="linelayer1"
+							style={{ lineWidth: 5, lineColor: "#3E6DCA" }}
+						/>
+					</MapboxGL.ShapeSource>
+				</MapboxGL.MapView>
+			</ViewShot>
 		</View>
 	);
 };

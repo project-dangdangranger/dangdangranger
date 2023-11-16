@@ -49,15 +49,18 @@ const MissingFind = ({ navigation }: any) => {
 				/>
 				<Carousel />
 				<View style={styles.dogcontainer}>
-					{data.map((item, index) => {
-						return (
-							<MissingItem key={index} item={item} navigation={navigation} />
-						);
-					})}
+					{data.length ? (
+						data.map((item, index) => {
+							return (
+								<MissingItem key={index} item={item} navigation={navigation} />
+							);
+						})
+					) : (
+						<View>
+							<Text>데이터가 없습니다.</Text>
+						</View>
+					)}
 				</View>
-				<TouchableOpacity onPress={() => navigation.navigate("FindTogether")}>
-					<Text>지도가 나올 지도?</Text>
-				</TouchableOpacity>
 			</CommonLayout>
 			<FooterBar />
 		</>

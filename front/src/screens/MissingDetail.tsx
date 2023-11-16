@@ -73,7 +73,7 @@ const PatrolReportDetail = ({ route }: any) => {
 		// axios
 		// 	.post("/patrolcomment", {
 		// 		patrolNo: patrolNo,
-		// 		userNo: userData?.userNo,
+		// 		userName: userData?.userName,
 		// 		patrolCommentContent: commentsubmittext,
 		// 	})
 		// 	.then((res) => {

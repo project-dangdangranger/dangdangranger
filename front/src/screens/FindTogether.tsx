@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import ColorHeader from "../recycles/ColorHeader";
 import CommonLayout from "../recycles/CommonLayout";
 import SockJS from "sockjs-client";
@@ -7,74 +7,86 @@ import { Stomp } from "@stomp/stompjs";
 import { Alert, Text, TouchableOpacity, View } from "react-native";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import axios from "../utils/axios";
-import GoogleMap from "./GoogleMap";
 import FindMap from "../components/FindMap";
 import FindBtn from "../components/FindBtn";
 import FindSideBtn from "../components/FindSideBtn";
 import Geolocation from "@react-native-community/geolocation";
-
-// const PatrolReportDetail = ({ route }: any) => {
-//     // console.log("라우트!!!!!!", route.params);
-//     const { navigate } = useNavigation();
-//     const { missingNo, imgUrl } = route.params;
+import DetailModal from "../components/DetailModal";
 
 const FindTogether = ({ route }: any) => {
-	const { navigate } = useNavigation();
-	// const { missingNo, imgUrl } = route.params;
-	// weoqirqwopejqwioasd {
-	// "item": {"dogNo": 10,
-	// "missingAddress": "1650 Amphitheatre Pkwy, Mountain View, CA 94043 미국",
-	// "missingDate": "2023-11-08T03:31:00",
-	// "missingLat": 37.422,
-	// "missingLng": -122.084,
-	// "missingNo": 66,
-	// "missingTitle": "어떻게 해야 하나요..",
-	// "missingTypeNo": 1,
-	// "thumbnailUrl": "https://dangdangranger.s3.ap-northeast-2.amazonaws.com/profile_2023-11-14T04%3A25%3A57.900Z_68946969.png"}
-	// }
-
 	const navigation = useNavigation();
 	const stompClient: any = useRef({});
 	// const [intervalId.current, setintervalId.current] = useState<NodeJS.Timeout>();
 	const intervalId = useRef();
+	const renderIntervalId = useRef();
 	// 같이 찾는 사람들의 위치 정보 저장
 	const [positions, setPositions] = useState(new Map());
 	const [myLatitude, setMyLatitude] = useState();
 	const [myLongitude, setMyLongitude] = useState();
 	const [detailMissingDog, setDetailMissingDog] = useState({});
+	const [dogInfo, setDogInfo] = useState({});
 	const [isPressed, setIsPressed] = useState(false);
 	// const [topicId, setTopicId] = useState("");
 	const topicId: any = useRef();
 	const { item } = route.params;
 
-	const findingList = [
-		{ userNo: 1, lat: 37.501, lng: 127.0386 },
-		{ userNo: 2, lat: 37.5024, lng: 127.0392 },
-		{ userNo: 3, lat: 37.4998, lng: 127.0372 },
-	];
+	// 사용자 데이터 조회
+	const [ProfileData, setProfileData] = useState<any>([]);
+	// 찾는 사용자 리스트
+	const findingList = useRef(new Map());
+	// 신고 현황 리스트
+	const reportList = useRef(new Array());
 
+	const [modalVisible, setModalVisible] = useState(false);
+
+	const [render, setRender] = useState(true);
+
+	useFocusEffect(
+		useCallback(() => {
+			return () => {
+				console.log("useFocusEffect");
+				console.log("topicId.current", topicId.current);
+				console.log("detailMissingDog.missingNo", detailMissingDog.missingNo);
+				console.log("ProfileData.userNo", ProfileData.userNo);
+				console.log("ProfileData.userName", ProfileData.userName);
+
+				disconnectServer();
+			};
+		}, [ProfileData, detailMissingDog]),
+	);
+	
 	useEffect(() => {
+		// 사용자 정보 조회
+		axios.get("/user").then((data) => {
+			setProfileData(data.data.data);
+			// console.log("유저들어가:", data);
+		});
+		// 실종 정보 조회
 		getDetailMissingDog(item.missingNo);
-		leavePage();
+		// 발견 신고 조회
+		axios.get(`/searchreport?missingNo=${item.missingNo}`).then((data) => {
+			console.log('searchreport', data.data.data);
+			reportList.current = data.data.data;
+		});
 	}, []);
 
 	useEffect(() => {
 		if (detailMissingDog && isPressed) {
-			console.log("detailMissingDog : ", detailMissingDog);
-			console.log("토픽 아이디 : ", detailMissingDog.topicId);
-			if (detailMissingDog.topicId === null) {
-				console.log("토픽아이디 널값인 상태임");
-				getTopicId();
-			}
 			connectServer();
 		}
 	}, [detailMissingDog, isPressed]);
 
 	const getTopicId = async () => {
-		const response = await axios.post("/finddog", {
-			missingNo: detailMissingDog.missingNo,
-		});
-		topicId.current = response.data.data.topicId;
+		console.log("detailMissingDog : ", detailMissingDog);
+		console.log("토픽 아이디 : ", detailMissingDog.topicId);
+		topicId.current = detailMissingDog.topicId;
+		if (detailMissingDog.topicId === null) {
+			console.log("토픽아이디 널값인 상태임");
+			const response = await axios.post("/finddog", {
+				missingNo: detailMissingDog.missingNo,
+			});
+			topicId.current = response.data.data.topicId;
+		}
 	};
 
 	const getDetailMissingDog = async (missingNo: number) => {
@@ -82,8 +94,15 @@ const FindTogether = ({ route }: any) => {
 		setDetailMissingDog(response.data.data);
 	};
 
+	const getDogInfo = async (dogNo: number) => {
+		const response = await axios.get(`/dog/${dogNo}`);
+		setDogInfo(response.data.data);
+	};
+
 	// 서버 연결 및 구독 시작: 함께 찾기 시작
 	const connectServer = async () => {
+		await getTopicId();
+
 		if (stompClient.current !== undefined && stompClient.current.connected)
 			return;
 		let socket = new SockJS(`${SERVER_URL}/ws-stomp`);
@@ -91,8 +110,6 @@ const FindTogether = ({ route }: any) => {
 			return new SockJS(`${SERVER_URL}/ws-stomp`);
 		});
 		console.log(`${SERVER_URL}/ws-stomp`);
-
-		console.log("end server");
 
 		await stompClient.current.connect({}, () => {
 			setTimeout(function () {
@@ -123,8 +140,10 @@ const FindTogether = ({ route }: any) => {
 			{},
 			JSON.stringify({
 				code: "ENTER",
-				userNo: 12,
+				userNo: ProfileData.userNo,
+				userName: ProfileData.userName,
 				topicId: topicId.current,
+				missingNo: detailMissingDog.missingNo,
 				param: {}, // 좌표주고받을때 씀, 위경도를. 현재 자기위치도 보내야함
 			}),
 		);
@@ -152,14 +171,20 @@ const FindTogether = ({ route }: any) => {
 			getGeoLocation((latitude, longitude) => {
 				console.log("myLatitude : ", latitude);
 				console.log("myLongitude : ", longitude);
+				console.log(topicId.current);
+
+				if (stompClient.current === undefined || !stompClient.current.connected)
+					return;
 
 				stompClient.current.send(
 					"/pub/finddog",
 					{},
 					JSON.stringify({
 						code: "SHARE_COORDINATE",
-						userNo: 12,
+						userNo: ProfileData.userNo,
+						userName: ProfileData.userName,
 						topicId: topicId.current,
+						missingNo: detailMissingDog.missingNo,
 						param: {
 							latitude: latitude,
 							longitude: longitude,
@@ -167,71 +192,86 @@ const FindTogether = ({ route }: any) => {
 					}),
 				);
 			});
+		}, 3000);
+		intervalId.current = id;
+
+		const renderId = setInterval(() => {
+			setRender((prev) => !prev);
 		}, 2000);
 
-		intervalId.current = id;
+		renderIntervalId.current = renderId;
 	};
 
 	const getGeoLocation = (callback) => {
 		Geolocation.getCurrentPosition(
 			(position) => {
-				const latitude = JSON.stringify(position.coords.latitude);
-				const longitude = JSON.stringify(position.coords.longitude);
+				const latitude = Number(JSON.stringify(position.coords.latitude));
+				const longitude = Number(JSON.stringify(position.coords.longitude));
 				setMyLatitude(latitude);
 				setMyLongitude(longitude);
+				console.log("getGeoLocation: ", latitude, longitude);
 				callback(latitude, longitude); // 콜백 호출
 			},
 			(error) => {
 				console.log(error.code, error.message);
 			},
-			{ enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 },
+			{ enableHighAccuracy: true, timeout: 15000, maximumAge: 1000 },
 		);
 	};
 
 	// 상대방 위치 업데이트
 	const receivedMessage = (message: any) => {
 		const parsedMessage = JSON.parse(message.body);
+		console.log("receivedMessage : ", parsedMessage);
+		const code = parsedMessage.code;
 		const userNo = parsedMessage.userNo;
-		const latitude = parsedMessage.param.latitude;
-		const longitude = parsedMessage.param.longitude;
-		setPositions(
-			new Map(positions).set(userNo, { lat: latitude, lng: longitude }),
-		);
+		const userName = parsedMessage.userName;
+
+		switch (code) {
+			case "ENTER":
+				break;
+			case "SHARE_COORDINATE":
+				const latitude = Number(parsedMessage.param.latitude);
+				const longitude = Number(parsedMessage.param.longitude);
+				findingList.current.set(userNo, {
+					userNo: userNo,
+					userName: userName,
+					lat: latitude,
+					lng: longitude,
+				});
+				break;
+			case "EXIT":
+				findingList.current.delete(userNo);
+				break;
+		}
 	};
 	// topic 구독 취소 및 세션 나가기: 함께 찾기 종료
 	const disconnectServer = () => {
-		console.log("intervalId.current 188line : ", intervalId.current);
-		// false
 		if (intervalId.current) {
-			console.log("intervalId.current : ", intervalId.current);
 			clearInterval(intervalId.current);
-			// setintervalId.current(undefined);
 			intervalId.current = undefined;
 		}
+		if (renderIntervalId.current) {
+			clearInterval(renderIntervalId.current);
+			renderIntervalId.current = undefined;
+		}
 
+		const message = JSON.stringify({
+			code: "EXIT",
+			userNo: ProfileData.userNo,
+			userName: ProfileData.userName,
+			topicId: topicId.current,
+			missingNo: detailMissingDog.missingNo,
+		});
+
+		// 종료 메시지 전송
 		if (stompClient.current === undefined || !stompClient.current.connected)
 			return;
+		stompClient.current.send("/pub/finddog", {}, message);
 		stompClient.current.unsubscribe("/sub/finddog/" + topicId.current);
 		stompClient.current.disconnect();
-	};
-
-	// 페이지 벗어날 시 경고창
-	const leavePage = () => {
-		navigation.addListener("beforeRemove", (e) => {
-			e.preventDefault();
-			Alert.alert("친구 찾기 종료할 거?", "진짜 할 꺼?", [
-				{
-					text: "응 나 T야",
-					onPress: () => {
-						disconnectServer();
-						navigation.dispatch(e.data.action);
-					},
-				},
-				{
-					text: "그래 이게 F지",
-				},
-			]);
-		});
+		findingList.current.clear();
+		setIsPressed(!isPressed);
 	};
 
 	return (
@@ -252,21 +292,35 @@ const FindTogether = ({ route }: any) => {
 				<TouchableOpacity onPress={() => disconnectServer()}>
 					<Text>나가기</Text>
 					</TouchableOpacity>*/}
-				<FindMap
-					missingNo={9}
-					missingLat={37.5}
-					missingLng={127.03}
-					findingList={findingList}
-					myLatitude={myLatitude}
-					myLongitude={myLongitude}
-				/>
+
+				{Object.keys(detailMissingDog).length !== 0 ? (
+					<FindMap
+						missingNo={detailMissingDog.missingNo}
+						missingLat={Number(detailMissingDog.missingLat)}
+						missingLng={Number(detailMissingDog.missingLng)}
+						myUserNo={ProfileData.userNo}
+						findingList={findingList.current}
+						reportList={reportList.current}
+					/>
+				) : null}
 				<FindBtn
 					startSession={() => Alert.alert("강아지를 찾아봅시다")}
 					endSession={() => handleEndSession()}
 					isPressed={isPressed}
 					setIsPressed={setIsPressed}
 				/>
-				<FindSideBtn />
+				<FindSideBtn
+					endSession={handleEndSession}
+					isFinding={isPressed}
+					setMissingModal={setModalVisible}
+					disconnectServer={disconnectServer}
+				/>
+				<DetailModal
+					modalVisible={modalVisible}
+					setModalVisible={setModalVisible}
+					missingInfo={detailMissingDog}
+					dogInfo={dogInfo}
+				/>
 			</CommonLayout>
 		</>
 	);

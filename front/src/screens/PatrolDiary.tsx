@@ -29,7 +29,7 @@ import { useFocusEffect } from "@react-navigation/native";
 
 const PatrolDiary = () => {
 	const { navigate } = useNavigation<StackNavigation>();
-	const [selectedOption, setSelectedOption] = useState("내동네");
+	const [selectedOption, setSelectedOption] = useState("내일지");
 	const [patrolDiaryList, setPatrolDiaryList] = useState([]);
 	const [modalVisible, setModalVisible] = useState(false);
 	// 모달 설정
@@ -52,6 +52,7 @@ const PatrolDiary = () => {
 				axios
 					.get("/patrol/mine")
 					.then((res) => {
+						console.log("res.data : ", res.data);
 						if (res.data.message === "사용자의 순찰일지 리스트 조회 완료") {
 							setPatrolDiaryList(res.data.data);
 						}
@@ -127,17 +128,23 @@ const PatrolDiary = () => {
 					</View>
 
 					<View style={PatrolDiaryLayout.patrolRowWrap}>
-						{patrolDiaryList?.map((patrolDiary) => {
-							return (
-								<>
-									<PatrolDiaryCard
-										imgSrc={{ uri: patrolDiary.patrolFirstImg }}
-										patrolDiaryInfo={patrolDiary}
-										key={patrolDiary.patrolNo}
-									/>
-								</>
-							);
-						})}
+						{patrolDiaryList.length ? (
+							patrolDiaryList.map((patrolDiary) => {
+								return (
+									<>
+										<PatrolDiaryCard
+											imgSrc={{ uri: patrolDiary.patrolFirstImg }}
+											patrolDiaryInfo={patrolDiary}
+											key={patrolDiary.patrolNo}
+										/>
+									</>
+								);
+							})
+						) : (
+							<View>
+								<Text>순찰일지가 없습니다.</Text>
+							</View>
+						)}
 					</View>
 				</View>
 				<TouchableOpacity

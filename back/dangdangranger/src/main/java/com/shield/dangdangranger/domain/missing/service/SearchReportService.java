@@ -14,7 +14,7 @@ public interface SearchReportService {
 	SearchReport registSearchReport(Integer userNo, SearchReportSaveRequestDto searchReportSaveRequestDto);
 
 	// 실종견 발견 신고 리스트 조회
-	List<SearchReportInfoResponseDto> selectAll(SearchReportListRequestDto searchReportListRequestDto);
+	List<SearchReportInfoResponseDto> selectAll(Integer missingNo);
 	
 	// 실종견 발견 신고 상세 조회
 	SearchReportInfoResponseDto selectOne(Integer searchReportNo);

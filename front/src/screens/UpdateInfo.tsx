@@ -143,7 +143,7 @@ const Login = () => {
 				</View>
 				<View style={styles.pickers}>
 					<Text>현재 동네 </Text>
-					<Text>{userInfo.userAddress}</Text>
+					<Text>{userInfo?.userAddress}</Text>
 					<View style={styles.pickerRow}>
 						<Text style={styles.pickerRowText}>시</Text>
 
@@ -156,6 +156,12 @@ const Login = () => {
 								}}
 								style={styles.pickerSi}
 							>
+								<Picker.Item
+									style={styles.text}
+									label={"시/도를 선택해주세요"}
+									value={""}
+									key={"시8"}
+								/>
 								{si?.map((item, index) => {
 									return (
 										<Picker.Item
@@ -180,6 +186,12 @@ const Login = () => {
 								}}
 								style={styles.pickerSi}
 							>
+								<Picker.Item
+									style={styles.text}
+									label={"구/군을 선택해주세요"}
+									value={""}
+									key={"구8"}
+								/>
 								{guguns?.map((item, index) => {
 									return (
 										<Picker.Item
@@ -203,6 +215,12 @@ const Login = () => {
 								}
 								style={styles.pickerSi}
 							>
+								<Picker.Item
+									style={styles.text}
+									label={"동을 선택해주세요"}
+									value={""}
+									key={"나건"}
+								/>
 								{dong.map((item, index) => {
 									return (
 										<Picker.Item
@@ -301,4 +319,5 @@ const styles = StyleSheet.create({
 	customBtn: {
 		marginTop: responsiveHeight(5),
 	},
+	text: { color: "#0349A1" },
 });

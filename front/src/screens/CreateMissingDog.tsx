@@ -19,12 +19,16 @@ import { useEffect, useState } from "react";
 import axios from "../utils/axios";
 import { useNavigation } from "@react-navigation/native";
 import EditImage from "../recycles/ReportEditImg";
-import { responsiveWidth } from "react-native-responsive-dimensions";
+import {
+	responsiveHeight,
+	responsiveWidth,
+} from "react-native-responsive-dimensions";
 import { S3 } from "aws-sdk";
 import CustomText from "../recycles/CustomText";
 import CreateProfileLayout from "../styles/createProfileLayout";
 import DatePickerIcon from "../../assets/images/date-picker-icon.png";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
+import GeoLocationAPI from "../components/GeoLocationAPI";
 
 const PatrolDiaryWrite = () => {
 	const navigation = useNavigation();
@@ -114,24 +118,24 @@ const PatrolDiaryWrite = () => {
 			// 모든 프로미스가 완료될 때까지 기다립니다.
 			const uploadedImages = await Promise.all(uploadPromises);
 			axios
-				.post("/patrol", {
+				.post("/missing", {
 					missingTypeNo: 2,
 					missingTitle: patrolReportTitle,
 					missingContent: patrolReportContent,
 					missingDate: missingDate,
-					missingLat: 37.123,
-					missingLng: 127.123,
+					missingLat: missinglat,
+					missingLng: missinglong,
 					missingImages: uploadedImages,
+					missingAddress: address,
 				})
 				.then((res) => {
 					console.log("성공:", res.data);
-					if (res.data.message === "실종견(신고) 등록 성공") {
-						Alert.alert(
-							"실종견(신고) 등록 성공",
-							"실종 화면 디테일로 이동합니다.",
-						);
-						// 있어야 함
-						// navigation.navigate("PatrolDiary");
+					if (res.data.message === "실종견 등록 성공") {
+						// Alert.alert(
+						// 	"실종견(신고) 등록 성공",
+						// 	"실종 화면 디테일로 이동합니다.",
+						// );
+						navigation.navigate("MissingFind");
 					}
 				})
 				.catch((err) => {
@@ -160,13 +164,22 @@ const PatrolDiaryWrite = () => {
 		setDatePickerVisibility(false);
 	};
 
+	const [address, setAddress] = useState("");
+	const [missinglat, setMissinglat] = useState(0);
+	const [missinglong, setMissinglong] = useState(0);
+
 	return (
 		<>
 			<CommonLayout>
 				<ColorHeader title="신고하기" />
+				<GeoLocationAPI
+					setAddress={setAddress}
+					setMissinglat={setMissinglat}
+					setMissinglong={setMissinglong}
+				/>
 				<CustomText
-					mainText="실종견을 위해"
-					emphasizedText="등록 정보"
+					mainText="유기견을 위해"
+					emphasizedText="강아지 정보"
 					emphasizedColor="#FF6A6A"
 					finalText="를 작성해주세요."
 				/>
@@ -206,6 +219,20 @@ const PatrolDiaryWrite = () => {
 								);
 							})}
 						</View>
+						<View style={{ marginVertical: responsiveHeight(3) }}>
+							<Text
+								style={{
+									textAlign: "center",
+									fontSize: 15,
+									fontWeight: "bold",
+									marginBottom: 10,
+									color: "#3E6DCA",
+								}}
+							>
+								현재 위치
+							</Text>
+							<Text>{address}</Text>
+						</View>
 						<TextInput
 							style={PatrolDiaryWriteLayout.formInput}
 							value={patrolReportTitle}
@@ -216,7 +243,7 @@ const PatrolDiaryWrite = () => {
 
 						<View>
 							<Text style={PatrolDiaryWriteLayout.textAlign}>
-								순찰 일지 내용 작성
+								강아지 정보 작성
 							</Text>
 						</View>
 						<TextInput
@@ -228,7 +255,7 @@ const PatrolDiaryWrite = () => {
 							onChangeText={(text) => {
 								setPatrolReportContent(text);
 							}}
-							placeholder="순찰 일지 내용을 작성해주세요."
+							placeholder="강아지 정보를 작성해주세요."
 							multiline={true}
 							onBlur={() => {}}
 						/>
@@ -245,12 +272,12 @@ const PatrolDiaryWrite = () => {
 									source={DatePickerIcon}
 								/>
 								<Text style={CreateProfileLayout.dateFormText}>
-									{"       "} {missingDate}
+									{"       "} {missingDate.split("T")[0]}
 								</Text>
 							</View>
 						</TouchableOpacity>
 						<CustomSubButton
-							text={"실종견 등록하기"}
+							text={"유기견 신고하기"}
 							onPress={() => {
 								uploadImage(patrolImgList);
 							}}

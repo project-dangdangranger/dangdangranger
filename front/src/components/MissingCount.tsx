@@ -3,25 +3,25 @@ import MainCountLayout from "../styles/mainCountLayout";
 import { useState } from "react";
 
 const MissingCount = ({
-	patrol,
-	missing,
+	missingTogether,
+	missingDog,
 }: {
-	patrol: number;
-	missing: number;
+	missingTogether: number;
+	missingDog: number;
 }) => {
 	return (
 		<>
 			<View style={MainCountLayout.MainContainer}>
 				<View style={MainCountLayout.MaincountContainer}>
 					<View style={MainCountLayout.CountContainer}>
-						<Text style={MainCountLayout.CountText}>함께{"\n"}찾기현황</Text>
+						<Text style={MainCountLayout.CountText}>함께{"\n"}찾는중</Text>
 						<Text
 							style={[
 								MainCountLayout.CountNumber,
 								MainCountLayout.NumberPatrol,
 							]}
 						>
-							{patrol}
+							{missingTogether}
 						</Text>
 					</View>
 					<View>
@@ -37,7 +37,7 @@ const MissingCount = ({
 								MainCountLayout.NumberMissing,
 							]}
 						>
-							{missing}
+							{missingDog}
 						</Text>
 					</View>
 					<View>
