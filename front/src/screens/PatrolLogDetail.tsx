@@ -11,7 +11,10 @@ import TimeIconImg from "../../assets/images/time-icon.png";
 import React, { useEffect, useState } from "react";
 import { useRoute } from "@react-navigation/native";
 import axios from "../utils/axios";
-
+import clock from "../../assets/images/clock.png";
+import location from "../../assets/images/location.png";
+import walk from "../../assets/images/walk.png";
+import calander from "../../assets/images/calander.png";
 const PatrolLogDetail = () => {
 	const route = useRoute();
 	const { logNo } = route.params;
@@ -53,18 +56,11 @@ const PatrolLogDetail = () => {
 							>
 								{/* 이미지는 logDetail.patrolLogImageUrl */}
 								<Image
-									source={LocIconImg}
+									source={location}
 									style={patrolLogDetailLayout.iconWrap}
 								/>
 								<Text style={patrolLogDetailLayout.textWrap}>
-									{logDetail?.patrolLogAddress.split(" ").length > 2
-										? `${
-												logDetail?.patrolLogAddress.split(" ")[0]
-										  }\n${logDetail?.patrolLogAddress
-												.split(" ")
-												.slice(1)
-												.join(" ")}`
-										: logDetail?.patrolLogAddress}
+									{logDetail?.patrolLogAddress}
 								</Text>
 							</View>
 							<View
@@ -74,7 +70,7 @@ const PatrolLogDetail = () => {
 								]}
 							>
 								<Image
-									source={DateIconImg}
+									source={calander}
 									style={patrolLogDetailLayout.iconWrap}
 								/>
 								<Text style={patrolLogDetailLayout.textWrap}>
@@ -89,10 +85,7 @@ const PatrolLogDetail = () => {
 									patrolLogDetailLayout.distanceWrap,
 								]}
 							>
-								<Image
-									source={DistanceIconImg}
-									style={patrolLogDetailLayout.iconWrap}
-								/>
+								<Image source={walk} style={patrolLogDetailLayout.iconWrap} />
 								<Text style={patrolLogDetailLayout.textWrap}>
 									{logDetail?.patrolLogTotalDistance.toFixed(2)} Km
 								</Text>
@@ -103,10 +96,7 @@ const PatrolLogDetail = () => {
 									patrolLogDetailLayout.timeWrap,
 								]}
 							>
-								<Image
-									source={TimeIconImg}
-									style={patrolLogDetailLayout.iconWrap}
-								/>
+								<Image source={clock} style={patrolLogDetailLayout.iconWrap} />
 								<Text style={patrolLogDetailLayout.textWrap}>
 									{logDetail?.patrolLogTotalTime} min
 								</Text>
