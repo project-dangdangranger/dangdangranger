@@ -73,13 +73,13 @@ const styles = StyleSheet.create({
 	},
 	viewStyle: {
 		width: responsiveWidth(100),
-		height: responsiveHeight(30),
+		height: responsiveHeight(50),
 		borderRadius: 10,
 		resizeMode: "cover",
 	},
 	paginationWrapper: {
 		position: "absolute",
-		bottom: 10,
+		bottom: 50,
 		left: 0,
 		right: 0,
 		justifyContent: "center",
