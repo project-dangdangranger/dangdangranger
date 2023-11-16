@@ -18,8 +18,10 @@ import { GEOCODING_API_KEY } from "@env";
 import axios from "../utils/axios";
 import missingIcon from "../../assets/images/missing-marker.png";
 import rangerIcon from "../../assets/images/dd-ranger-icon.png";
+import reportIcon from "../../assets/images/missing-report-icon.png";
 import { Callout } from "react-native-maps";
 import { responsiveHeight } from "react-native-responsive-dimensions";
+import DetailReportModal from "./DetailReportModal";
 
 MapboxGL.setWellKnownTileServer("Mapbox");
 MapboxGL.setAccessToken(MAPBOX_ACCESSTOKEN);
@@ -29,26 +31,48 @@ type Props = {
 	missingNo: number;
 	missingLat: number;
 	missingLng: number;
-	findingList: Map<number, {userNo: number, userName: string; lat: number; lng: number }>;
+	findingList: Map<
+		number,
+		{ userNo: number; userName: string; lat: number; lng: number }
+	>;
+	reportList: Array<{
+		searchReportNo: number;
+		searchReportLat: number;
+		searchReportLng: number;
+	}>;
 };
 
 const FindMap = (props: Props) => {
 	const mapRef = useRef<MapboxGL.MapView>(null);
 	const [camera, setCamera] = useState({
-		centerCoordinate: [126.9779692, 37.566535],
-		// centerCoordinate: [props.missingLng, props.missingLat],
+		// centerCoordinate: [126.9779692, 37.566535],
+		centerCoordinate: [props.missingLng, props.missingLat],
 		zoomLevel: 15,
 		animationDuration: 0,
 	});
-
+	const [modalVisible, setModalVisible] = useState(false);
+	const [detailReportDog, setDetailReportDog] = useState({});
 	const [missingLocation, setMissingLocation] = useState([0, 0]);
 	const [showPopUp, setShowPopUp] = useState(false);
+
+	useEffect(() => {
+		console.log("props.missingLat , props.missingLng : ", props.missingLat);
+	}, []);
 
 	useEffect(() => {
 		MapboxGL.setTelemetryEnabled(false);
 		requestLocationPermission();
 		setMissingLocation([props.missingLng, props.missingLat]);
 	}, []);
+
+	const handleReportPopUp = async (searchReportNo: number) => {
+		const response = await axios.get(`/searchreport/${searchReportNo}`);
+		if (response.status === 200) {
+			setDetailReportDog(response.data.data);
+			setModalVisible(true);
+			console.log("response.data.data : ", response.data.data);
+		}
+	};
 
 	const requestLocationPermission = async () => {
 		if (Platform.OS === "android") {
@@ -116,6 +140,25 @@ const FindMap = (props: Props) => {
 					<Image source={rangerIcon} style={styles.icon} />
 				</MapboxGL.MarkerView>
 			))}
+			{props.reportList.map((location, index) => (
+				<MapboxGL.MarkerView
+					coordinate={[location.searchReportLng, location.searchReportLat]}
+					key={index}
+				>
+					<TouchableOpacity
+						onPress={() => handleReportPopUp(location.searchReportNo)}
+					>
+						<Image source={reportIcon} style={styles.icon} />
+					</TouchableOpacity>
+				</MapboxGL.MarkerView>
+			))}
+			{Object.keys(detailReportDog).length !== 0 ? (
+				<DetailReportModal
+					modalVisible={modalVisible}
+					setModalVisible={setModalVisible}
+					detailReportDog={detailReportDog}
+				/>
+			) : null}
 		</MapboxGL.MapView>
 	);
 };

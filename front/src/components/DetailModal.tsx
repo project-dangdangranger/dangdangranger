@@ -6,6 +6,7 @@ import {
 	Image,
 	Alert,
 	StyleSheet,
+	ScrollView,
 } from "react-native";
 import {
 	responsiveHeight,
@@ -77,25 +78,28 @@ const DetailModal = ({
 						>
 							<Image source={closeIcon} />
 						</TouchableOpacity>
-						<View style={styles.contentContainer}>
+						<ScrollView style={styles.contentContainer}>
 							<View style={styles.detailContainer}>
-								<Image
-									source={{ uri: dogInfo?.dogImg }}
-									style={styles.detailImg}
-								/>
-								<View style={styles.detailTextWrap}>
-									<Text style={[styles.detailText, styles.detailTitle]}>
-										{dogInfo?.dogName}
-									</Text>
-									<View style={{ flexDirection: "row", alignItems: "center" }}>
+								{missingInfo.missingImages &&
+									missingInfo.missingImages.map((imageUrl) => (
 										<Image
-											source={dogInfo.dogSex == "M" ? maleIcon : femaleIcon}
-											style={styles.sexImg}
+											source={{ uri: imageUrl }}
+											style={styles.detailImg}
 										/>
-										<Text style={styles.detailText}>{dogInfo?.dogBreed}</Text>
-									</View>
-									<Text style={styles.detailText}>{age}</Text>
+									))}
+							</View>
+							<View style={styles.detailTextWrap}>
+								<Text style={[styles.detailText, styles.detailTitle]}>
+									{dogInfo?.dogName}
+								</Text>
+								<View style={{ flexDirection: "row", alignItems: "center" }}>
+									<Image
+										source={dogInfo.dogSex == "M" ? maleIcon : femaleIcon}
+										style={styles.sexImg}
+									/>
+									<Text style={styles.detailText}>{dogInfo?.dogBreed}</Text>
 								</View>
+								<Text style={styles.detailText}>{age}</Text>
 							</View>
 							<View style={styles.missingInfo}>
 								<Text
@@ -112,13 +116,13 @@ const DetailModal = ({
 							<View style={styles.missingContainer}>
 								<Text>{missingInfo?.missingContent}</Text>
 							</View>
-							<TouchableOpacity
-								style={styles.btnContainer}
-								onPress={() => setModalVisible(!modalVisible)}
-							>
-								<Text style={styles.btnText}>같이 찾기</Text>
-							</TouchableOpacity>
-						</View>
+						</ScrollView>
+						<TouchableOpacity
+							style={styles.btnContainer}
+							onPress={() => setModalVisible(!modalVisible)}
+						>
+							<Text style={styles.btnText}>같이 찾기</Text>
+						</TouchableOpacity>
 					</View>
 				</View>
 			</Modal>
@@ -162,11 +166,11 @@ const styles = StyleSheet.create({
 		height: responsiveHeight(45),
 	},
 	detailContainer: {
-		flexDirection: "row",
+		flexDirection: "column",
 		justifyContent: "space-between",
 		alignItems: "center",
 		width: responsiveWidth(70),
-		height: responsiveHeight(15),
+		// height: responsiveHeight(15),
 		marginVertical: responsiveHeight(1.5),
 	},
 	detailImg: {

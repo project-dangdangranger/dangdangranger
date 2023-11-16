@@ -32,7 +32,10 @@ const FindTogether = ({ route }: any) => {
 
 	// 사용자 데이터 조회
 	const [ProfileData, setProfileData] = useState<any>([]);
+	// 찾는 사용자 리스트
 	const findingList = useRef(new Map());
+	// 신고 현황 리스트
+	const reportList = useRef(new Array());
 
 	const [modalVisible, setModalVisible] = useState(false);
 
@@ -51,16 +54,20 @@ const FindTogether = ({ route }: any) => {
 			};
 		}, [ProfileData, detailMissingDog]),
 	);
+	
 	useEffect(() => {
+		// 사용자 정보 조회
 		axios.get("/user").then((data) => {
 			setProfileData(data.data.data);
 			// console.log("유저들어가:", data);
 		});
-	}, []);
-
-	useEffect(() => {
-		console.log("item is : ", item);
+		// 실종 정보 조회
 		getDetailMissingDog(item.missingNo);
+		// 발견 신고 조회
+		axios.get(`/searchreport?missingNo=${item.missingNo}`).then((data) => {
+			console.log('searchreport', data.data.data);
+			reportList.current = data.data.data;
+		});
 	}, []);
 
 	useEffect(() => {
@@ -166,8 +173,9 @@ const FindTogether = ({ route }: any) => {
 				console.log("myLongitude : ", longitude);
 				console.log(topicId.current);
 
-				if (stompClient.current === undefined || !stompClient.current.connected) return;
-				
+				if (stompClient.current === undefined || !stompClient.current.connected)
+					return;
+
 				stompClient.current.send(
 					"/pub/finddog",
 					{},
@@ -284,13 +292,17 @@ const FindTogether = ({ route }: any) => {
 				<TouchableOpacity onPress={() => disconnectServer()}>
 					<Text>나가기</Text>
 					</TouchableOpacity>*/}
-				<FindMap
-					missingNo={9}
-					missingLat={37.5}
-					missingLng={127.03}
-					myUserNo={ProfileData.userNo}
-					findingList={findingList.current}
-				/>
+
+				{Object.keys(detailMissingDog).length !== 0 ? (
+					<FindMap
+						missingNo={detailMissingDog.missingNo}
+						missingLat={Number(detailMissingDog.missingLat)}
+						missingLng={Number(detailMissingDog.missingLng)}
+						myUserNo={ProfileData.userNo}
+						findingList={findingList.current}
+						reportList={reportList.current}
+					/>
+				) : null}
 				<FindBtn
 					startSession={() => Alert.alert("강아지를 찾아봅시다")}
 					endSession={() => handleEndSession()}

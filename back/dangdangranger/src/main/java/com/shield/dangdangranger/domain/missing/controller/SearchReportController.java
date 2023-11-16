@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.shield.dangdangranger.domain.missing.dto.SearchReportRequestDto.SearchReportListRequestDto;
@@ -54,17 +55,17 @@ public class SearchReportController {
 	// 실종견 신고 조회
 	@GetMapping()
 	public ResponseEntity<ResponseDto<List<SearchReportInfoResponseDto>>> getSearchReportList(
-			@RequestBody SearchReportListRequestDto searchReportListRequestDto) {
+			@RequestParam Integer missingNo) {
 		
 		return ResponseEntity.status(HttpStatus.OK)
 				.body(ResponseDto
 						.create(SeachReportResponseMessage.GET_SEARCH_REPORT_LIST_SUCCESS.message(),
-								searchReportService.selectAll(searchReportListRequestDto)));
+								searchReportService.selectAll(missingNo)));
 	}
 	
 	// 실종견 신고 조회
 	@GetMapping("/{searchReportNo}")
-	public ResponseEntity<ResponseDto<SearchReportInfoResponseDto>> getSearchReportList(
+	public ResponseEntity<ResponseDto<SearchReportInfoResponseDto>> getSearchReportDetail(
 			@PathVariable Integer searchReportNo) {
 		
 		return ResponseEntity.status(HttpStatus.OK)
