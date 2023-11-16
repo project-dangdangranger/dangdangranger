@@ -35,6 +35,8 @@ type Props = {
 		number,
 		{ userNo: number; userName: string; lat: number; lng: number }
 	>;
+	isCurrentLocation: boolean;
+	setIsCurrentLocation: (isCurrentLocation: boolean) => void;
 	reportList: Array<{
 		searchReportNo: number;
 		searchReportLat: number;
@@ -58,6 +60,30 @@ const FindMap = (props: Props) => {
 	useEffect(() => {
 		console.log("props.missingLat , props.missingLng : ", props.missingLat);
 	}, []);
+
+	useEffect(() => {
+		if (props.isCurrentLocation) {
+			// 현재 위치로 카메라 이동 로직
+			Geolocation.getCurrentPosition(
+				(position) => {
+					console.log("position", position);
+					setCamera({
+						...camera,
+						centerCoordinate: [
+							position.coords.longitude,
+							position.coords.latitude,
+						],
+						animationDuration: 2000,
+					});
+				},
+				(error) => {
+					console.log(error.code, error.message);
+				},
+				{ enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 },
+			);
+			props.setIsCurrentLocation(false);
+		}
+	}, [props.isCurrentLocation]);
 
 	useEffect(() => {
 		MapboxGL.setTelemetryEnabled(false);
