@@ -18,6 +18,7 @@ import { GEOCODING_API_KEY } from "@env";
 import axios from "../utils/axios";
 import missingIcon from "../../assets/images/missing-marker.png";
 import rangerIcon from "../../assets/images/dd-ranger-icon.png";
+import reportIcon from "../../assets/images/missing-report-icon.png"
 import { Callout } from "react-native-maps";
 import { responsiveHeight } from "react-native-responsive-dimensions";
 
@@ -33,6 +34,7 @@ type Props = {
 		number,
 		{ userNo: number; userName: string; lat: number; lng: number }
 	>;
+	reportList: Array<{ searchReportNo: number; searchReportLat: number; searchReportLng: number; }>;
 };
 
 const FindMap = (props: Props) => {
@@ -121,6 +123,14 @@ const FindMap = (props: Props) => {
 					key={index}
 				>
 					<Image source={rangerIcon} style={styles.icon} />
+				</MapboxGL.MarkerView>
+			))}
+			{props.reportList.map((location, index) => (
+				<MapboxGL.MarkerView
+					coordinate={[location.searchReportLng, location.searchReportLat]}
+					key={index}
+				>
+					<Image source={reportIcon} style={styles.icon} />
 				</MapboxGL.MarkerView>
 			))}
 		</MapboxGL.MapView>

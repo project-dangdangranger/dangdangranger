@@ -75,10 +75,10 @@ public class SearchReportServiceImpl implements SearchReportService {
 	}
 
 	@Override
-	public List<SearchReportInfoResponseDto> selectAll(SearchReportListRequestDto searchReportListRequestDto) {
+	public List<SearchReportInfoResponseDto> selectAll(Integer missingNo) {
 		
 		List<SearchReport> list = searchReportRepository.findAllByMissingNoAndCanceled(
-				searchReportListRequestDto.getMissingNo(), 
+				missingNo, 
 				BaseConstant.NOTCANCELED);
 		
 		List<SearchReportInfoResponseDto> responseDtoList = new ArrayList<>();
