@@ -42,7 +42,6 @@ const MissingMain = () => {
 			axios
 				.get("/missing/count")
 				.then((res) => {
-					console.log("현재 실종견 마리수 : ", res.data.data);
 					setMissingDog(res.data.data);
 				})
 				.catch((err) => {
