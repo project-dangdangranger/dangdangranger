@@ -29,7 +29,10 @@ type Props = {
 	missingNo: number;
 	missingLat: number;
 	missingLng: number;
-	findingList: Map<number, {userNo: number, userName: string; lat: number; lng: number }>;
+	findingList: Map<
+		number,
+		{ userNo: number; userName: string; lat: number; lng: number }
+	>;
 };
 
 const FindMap = (props: Props) => {
@@ -43,6 +46,10 @@ const FindMap = (props: Props) => {
 
 	const [missingLocation, setMissingLocation] = useState([0, 0]);
 	const [showPopUp, setShowPopUp] = useState(false);
+
+	useEffect(() => {
+		console.log("props.missingLat , props.missingLng : ", props.missingLat);
+	}, []);
 
 	useEffect(() => {
 		MapboxGL.setTelemetryEnabled(false);

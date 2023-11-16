@@ -166,8 +166,9 @@ const FindTogether = ({ route }: any) => {
 				console.log("myLongitude : ", longitude);
 				console.log(topicId.current);
 
-				if (stompClient.current === undefined || !stompClient.current.connected) return;
-				
+				if (stompClient.current === undefined || !stompClient.current.connected)
+					return;
+
 				stompClient.current.send(
 					"/pub/finddog",
 					{},
@@ -284,13 +285,16 @@ const FindTogether = ({ route }: any) => {
 				<TouchableOpacity onPress={() => disconnectServer()}>
 					<Text>나가기</Text>
 					</TouchableOpacity>*/}
-				<FindMap
-					missingNo={9}
-					missingLat={37.5}
-					missingLng={127.03}
-					myUserNo={ProfileData.userNo}
-					findingList={findingList.current}
-				/>
+
+				{Object.keys(detailMissingDog).length !== 0 ? (
+					<FindMap
+						missingNo={detailMissingDog.missingNo}
+						missingLat={Number(detailMissingDog.missingLat)}
+						missingLng={Number(detailMissingDog.missingLng)}
+						myUserNo={ProfileData.userNo}
+						findingList={findingList.current}
+					/>
+				) : null}
 				<FindBtn
 					startSession={() => Alert.alert("강아지를 찾아봅시다")}
 					endSession={() => handleEndSession()}
