@@ -6,6 +6,7 @@ import {
 	Image,
 	Alert,
 	StyleSheet,
+	ScrollView,
 } from "react-native";
 import {
 	responsiveHeight,
@@ -42,32 +43,35 @@ const DetailReportModal = ({
 						>
 							<Image source={closeIcon} />
 						</TouchableOpacity>
-						<View style={styles.contentContainer}>
+						<ScrollView style={styles.contentContainer}>
 							<View style={styles.detailContainer}>
-								<Image
-									source={{ uri: detailReportDog?.searchReportImages[0] }}
-									style={styles.detailImg}
-								/>
+								{detailReportDog.searchReportImages &&
+									detailReportDog.searchReportImages.map((imageUrl: any) => (
+										<Image
+											source={{ uri: imageUrl }}
+											style={styles.detailImg}
+										/>
+									))}
 							</View>
 							<View style={styles.missingInfo}>
 								<Text style={styles.missingText}>
 									{detailReportDog?.createDate.split("T")[0]}
-								</Text>
-								<Text style={styles.missingText}>
+									{"  "}
 									{detailReportDog?.createDate.split("T")[1]}
 								</Text>
 							</View>
 							<View style={styles.missingContainer}>
-								<Text>{detailReportDog?.searchReportContent}</Text>
+								<Text>{detailReportDog?.searchReportContent}dd</Text>
 							</View>
-							<TouchableOpacity
-								style={styles.btnContainer}
-								onPress={() => setModalVisible(!modalVisible)}
-							>
-								<Text style={styles.btnText}>같이 찾기</Text>
-							</TouchableOpacity>
-						</View>
+						</ScrollView>
 					</View>
+					{/* <TouchableOpacity
+						style={styles.xImg}
+						onPress={() => setModalVisible(false)}
+					>
+						<Image source={closeIcon} />
+						<Text>TEXTEXTXEXTXTEX</Text>  
+					</TouchableOpacity> */}
 				</View>
 			</Modal>
 		</>

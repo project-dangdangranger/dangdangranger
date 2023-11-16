@@ -80,10 +80,13 @@ const DetailModal = ({
 						</TouchableOpacity>
 						<ScrollView style={styles.contentContainer}>
 							<View style={styles.detailContainer}>
-								{missingInfo.missingImages && missingInfo.missingImages.map((imageUrl) => (<Image
-									source={{ uri: imageUrl }}
-									style={styles.detailImg}
-								/>))}
+								{missingInfo.missingImages &&
+									missingInfo.missingImages.map((imageUrl) => (
+										<Image
+											source={{ uri: imageUrl }}
+											style={styles.detailImg}
+										/>
+									))}
 							</View>
 							<View style={styles.detailTextWrap}>
 								<Text style={[styles.detailText, styles.detailTitle]}>
