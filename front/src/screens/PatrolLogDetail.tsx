@@ -11,7 +11,7 @@ import TimeIconImg from "../../assets/images/time-icon.png";
 import React, { useEffect, useState } from "react";
 import { useRoute } from "@react-navigation/native";
 import axios from "../utils/axios";
-import clock from "../../assets/images/clock.png";
+import clock from "../../assets/images/Clock.png";
 import location from "../../assets/images/location.png";
 import walk from "../../assets/images/walk.png";
 import calander from "../../assets/images/calander.png";
