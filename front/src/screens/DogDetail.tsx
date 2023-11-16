@@ -139,7 +139,10 @@ const Profile = ({ route }) => {
 						<Animated.View style={[styles.card, frontAnimatedStyle]}>
 							<View style={styles.shadowview}>
 								<Image source={nftImg} style={styles.imgBackground} />
-								<Image source={{ uri: dogData.dogImg }} style={styles.dogImg} />
+								<Image
+									source={{ uri: dogData?.dogImg }}
+									style={styles.dogImg}
+								/>
 								<View style={styles.dogNameContainer}>
 									<Text style={styles.dogName}>{dogData?.dogName}</Text>
 								</View>
@@ -349,11 +352,12 @@ const styles = StyleSheet.create({
 		height: responsiveHeight(80),
 		width: responsiveWidth(90),
 		borderRadius: 15,
+		borderColor: "#cfcfcf",
+		borderWidth: 0.5,
 	},
 	shadowview: {
 		height: responsiveHeight(80),
 		width: responsiveWidth(90),
-		elevation: 15,
 		alignItems: "center",
 	},
 	dogImg: {

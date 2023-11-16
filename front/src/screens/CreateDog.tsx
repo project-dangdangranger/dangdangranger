@@ -230,14 +230,14 @@ const CreateDog = ({ navigation }: any) => {
 		// console.log("uploadimage - base64:", base64data);
 		// console.log("upload image - 강아지 포함 여부 : ", isDog);
 
-		if (!isDog) {
+		/*if (!isDog) {
 			console.log("DOG:", isDog);
 			setClicked(false);
 			Alert.alert("강아지가 포함된 이미지를 등록해야 합니다");
 			setClicked(false);
 			setIsLoading(false);
 			return;
-		}
+		}*/
 
 		const response = await fetch(imageUri);
 		// console.log("image response : ", response);
