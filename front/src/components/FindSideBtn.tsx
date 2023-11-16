@@ -20,6 +20,7 @@ const FindSideBtn = ({
 	isFinding,
 	setMissingModal,
 	disconnectServer,
+	setIsCurrentLocation,
 }: any) => {
 	const [modalVisible, setModalVisible] = useState(false);
 
@@ -38,7 +39,7 @@ const FindSideBtn = ({
 				</TouchableOpacity>
 				<TouchableOpacity
 					style={styles.btnContainer}
-					onPress={() => Alert.alert("자기 위치로 가야됨")}
+					onPress={() => setIsCurrentLocation(true)}
 				>
 					<Image source={BottomIcon} style={styles.img}></Image>
 				</TouchableOpacity>
