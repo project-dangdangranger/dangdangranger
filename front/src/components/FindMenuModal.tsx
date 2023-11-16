@@ -76,16 +76,14 @@ const FindMenuModal = ({
 								<Text style={styles.modalTextDesc}>실종견 상세보기</Text>
 							</TouchableOpacity>
 							<TouchableOpacity
-								disabled={disabled}
-								style={[styles.modalComponent, disabled && styles.disabled]}
+								style={styles.modalComponent}
 								onPress={showReports}
 							>
 								<Image source={modalIcon3} style={styles.modalImg} />
 								<Text style={styles.modalTextDesc}>찾기 현황</Text>
 							</TouchableOpacity>
 							<TouchableOpacity
-								disabled={disabled}
-								style={[styles.modalComponent, disabled && styles.disabled]}
+								style={styles.modalComponent}
 								onPress={writeReport}
 							>
 								<Image source={modalIcon4} style={styles.modalImg} />
