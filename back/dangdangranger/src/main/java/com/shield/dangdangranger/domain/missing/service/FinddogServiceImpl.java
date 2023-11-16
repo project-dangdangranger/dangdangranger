@@ -89,7 +89,7 @@ public class FinddogServiceImpl implements FinddogService {
 	@Override
 	public void decreaseFinddogParticipants(Integer missingNo) {
 		topicParticipants.put(missingNo, topicParticipants.get(missingNo) - 1);
-		setFinddogParticipants(getFinddogParticipants() - 1);
+		setFinddogParticipants(Math.max(0, getFinddogParticipants() - 1));
 	}
 
 	@Override
