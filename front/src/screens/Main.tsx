@@ -62,6 +62,15 @@ const Main = () => {
 					});
 				}
 			});
+
+			axios
+				.get("/missing/count")
+				.then((res) => {
+					setMissingPeople(res.data.data);
+				})
+				.catch((err) => {
+					console.log("카운팅 에러!! :", err);
+				});
 		}, []),
 	);
 

@@ -14,7 +14,7 @@ const MissingCount = ({
 			<View style={MainCountLayout.MainContainer}>
 				<View style={MainCountLayout.MaincountContainer}>
 					<View style={MainCountLayout.CountContainer}>
-						<Text style={MainCountLayout.CountText}>함께{"\n"}찾기현황</Text>
+						<Text style={MainCountLayout.CountText}>함께{"\n"}찾는중</Text>
 						<Text
 							style={[
 								MainCountLayout.CountNumber,
