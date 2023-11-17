@@ -120,14 +120,16 @@ const CreateDog = ({ navigation }: any) => {
 			.then(async (data) => {
 				// console.log("express data : ", data);
 				console.log("nft data:", data.data);
-				const nftCid = data.data.imageCid;
-				const imageOrigin = "https://ipfs.io/ipfs/" + nftCid;
+				const imgCid = data.data.imageCid;
+				const nftCid = data.data.nftCid;
+				const imageOrigin = "https://ipfs.io/ipfs/" + imgCid;
 				// console.log("imageOrigin:", imageOrigin);
 				const overrides = {
 					gasPrice: ethers.parseUnits("9000", "gwei"), // gasPrice 설정 (예: 100 gwei)
 				};
 				const walletAddress = myWalletAddress;
 				console.log("walletAddress", walletAddress);
+				console.log("imgCid : ", imgCid);
 				console.log("데이터의 스테이터스는?:", data.status);
 
 				if (data.status === 200) {
@@ -284,7 +286,7 @@ const CreateDog = ({ navigation }: any) => {
 		const config = {
 			headers: {
 				"Content-Type": "application/json",
-				Authorization: OBJECT_DETECT_API_KEY,
+				Authorization: process.env.OBJECT_DETECT_API_KEY,
 			},
 		};
 
