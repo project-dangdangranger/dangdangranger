@@ -117,6 +117,7 @@ public class SearchReportServiceImpl implements SearchReportService {
 				.userNo(searchReport.getUserNo())
 				.searchReportLat(searchReport.getSearchReportLat())
 				.searchReportLng(searchReport.getSearchReportLng())
+				.searchReportContent(searchReport.getSearchReportContent())
 				.searchReportImages(imageUrls)
 				.createDate(searchReport.getCreateDate())
 				.build();
