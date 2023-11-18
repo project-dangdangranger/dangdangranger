@@ -45,6 +45,7 @@ import DatePickerIcon from "../../assets/images/date-picker-icon.png";
 import WalletLoading from "../components/WalletLoading";
 import EditImage from "../recycles/EditImage";
 import { useFocusEffect } from "@react-navigation/native";
+import * as Sentry from "@sentry/react-native";
 
 const CreateDog = ({ navigation }: any) => {
 	useFocusEffect(
@@ -58,8 +59,6 @@ const CreateDog = ({ navigation }: any) => {
 	);
 
 	const [imageUri, setImageUri] = useState<any>(null);
-	// const [base64Image, setBase64Image] = useState<any>(null);
-	// const [containDog, setContainDog] = useState<boolean>(false);
 	const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
 	const [walletAddress, setWalletAddress] = useState<string>();
 	const [walletPrivateKey, setWalletPrivateKey] = useState<string>();
@@ -71,8 +70,7 @@ const CreateDog = ({ navigation }: any) => {
 			"-" +
 			("0" + Number(1 + Number(new Date().getMonth()))).slice(-2) +
 			"-" +
-			("0" + new Date().getDate()).slice(-2) +
-			"T00:00:00",
+			("0" + new Date().getDate()).slice(-2),
 	);
 	const [speciesList, setSpeciesList] = useState<any[]>([]);
 	const [hashId, setHashId] = useState<any>();
@@ -80,6 +78,7 @@ const CreateDog = ({ navigation }: any) => {
 	const [myWalletAddress, setMyWalletAddress] = useState<string>();
 	const [searchTerm, setSearchTerm] = useState(""); // 검색어 상태
 	const [dropdownVIsible, setDropdownVisible] = useState(false);
+	const [isDog, setIsDog] = useState(false);
 
 	const showDatePicker = () => {
 		setDatePickerVisibility(true);
@@ -93,7 +92,7 @@ const CreateDog = ({ navigation }: any) => {
 		const year = date.getFullYear().toString();
 		const month = (date.getMonth() + 1).toString().padStart(2, "0");
 		const day = date.getDate().toString().padStart(2, "0");
-		setPetBirth(year + "-" + month + "-" + day + "T00:00:00");
+		setPetBirth(year + "-" + month + "-" + day);
 		hideDatePicker();
 	};
 
@@ -114,11 +113,13 @@ const CreateDog = ({ navigation }: any) => {
 				img: data.Location,
 				petName: petName,
 				petSpecies: petSpecies,
-				petBirth: petBirth,
+				petBirth: `${petBirth}T00:00:00`,
 				petGender: petGender,
 			})
 			.then(async (data) => {
 				// console.log("express data : ", data);
+				console.log(`pet birth : ${petBirth}T00:00:00`);
+
 				console.log("nft data:", data.data);
 				const imgCid = data.data.imageCid;
 				const nftCid = data.data.nftCid;
@@ -178,7 +179,7 @@ const CreateDog = ({ navigation }: any) => {
 						console.log("polygon api:", data);
 						console.log("petName:", petName);
 						console.log("petSpecies:", petSpecies);
-						console.log("petBirth:", petBirth);
+						console.log(`petBirth: ${petBirth}T00:00:00`);
 						console.log("petGender:", petGender);
 						console.log("receiptHash:", receiptHash);
 						console.log("imageOrigin:", imageOrigin);
@@ -188,7 +189,7 @@ const CreateDog = ({ navigation }: any) => {
 								dogName: petName,
 								dogBreed: petSpecies,
 								dogSex: petGender,
-								dogBirth: petBirth,
+								dogBirth: `${petBirth}T00:00:00`,
 								dogNosePrint: "비문인식예정",
 								dogImg: String(imageOrigin),
 								dogHash: String(receiptHash),
@@ -230,7 +231,7 @@ const CreateDog = ({ navigation }: any) => {
 		const base64data = await convertImageToBase64(imageUri);
 		const isDog = await detectObject(base64data);
 		// console.log("uploadimage - base64:", base64data);
-		// console.log("upload image - 강아지 포함 여부 : ", isDog);
+		console.log("upload image - 강아지 포함 여부 : ", isDog);
 
 		if (!isDog) {
 			console.log("DOG:", isDog);
@@ -300,12 +301,14 @@ const CreateDog = ({ navigation }: any) => {
 				objects.forEach((obj) => {
 					if (obj.class === "dog") {
 						isDog = true;
+						setIsDog(true);
 						return;
 					}
 				});
 				console.log("강아지 포함 여부 : ", isDog);
 			})
 			.catch((err) => {
+				Sentry.captureException("object detect err : ", err);
 				console.log("object detect err !! ", err);
 			});
 		return isDog;
@@ -515,7 +518,7 @@ const CreateDog = ({ navigation }: any) => {
 						<View style={CreateProfileLayout.formButtonWrap}>
 							{isLoading ? (
 								<TouchableOpacity activeOpacity={0.7}>
-									<WalletLoading title="방범대원증 발급중.. 잠시만 기다려주세요" />
+									{/* <WalletLoading title="방범대원증 발급중.. 잠시만 기다려주세요" /> */}
 									<View style={CreateProfileLayout.submitInactiveButton}>
 										<Text style={CreateProfileLayout.submitInactiveButtonText}>
 											프로필 생성하기
