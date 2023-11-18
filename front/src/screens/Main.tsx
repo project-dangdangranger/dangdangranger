@@ -59,18 +59,17 @@ const Main = () => {
 					axios.get("/patrol/people").then((data) => {
 						setPatrolPeople(data.data.data.patrolPeopleCnt);
 						// console.log("현재 순찰중인 사람 데이터:", data.data);
+						axios
+							.get("/missing/count")
+							.then((res) => {
+								setMissingPeople(res.data.data);
+							})
+							.catch((err) => {
+								console.log("카운팅 에러!! :", err);
+							});
 					});
 				}
 			});
-
-			axios
-				.get("/missing/count")
-				.then((res) => {
-					setMissingPeople(res.data.data);
-				})
-				.catch((err) => {
-					console.log("카운팅 에러!! :", err);
-				});
 		}, []),
 	);
 
