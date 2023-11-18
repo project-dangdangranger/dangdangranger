@@ -54,7 +54,7 @@ const Profile = ({ route }) => {
 							</View>
 							<View style={styles.dogItemStyle}>
 								<Text>성별</Text>
-								<Text style={styles.dogItemMainText}>{data?.dogSex}ddd</Text>
+								<Text style={styles.dogItemMainText}>{data?.dogSex}</Text>
 							</View>
 							<View style={styles.dogItemStyle}>
 								<Text>견종</Text>
@@ -63,7 +63,7 @@ const Profile = ({ route }) => {
 									numberOfLines={1}
 									ellipsizeMode="clip"
 								>
-									{data?.dogBreed}ddddd
+									{data?.dogBreed}
 								</Text>
 							</View>
 							<View style={styles.dogItemStyle}>

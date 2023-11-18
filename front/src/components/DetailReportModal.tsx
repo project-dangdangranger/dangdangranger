@@ -61,7 +61,7 @@ const DetailReportModal = ({
 								</Text>
 							</View>
 							<View style={styles.missingContainer}>
-								<Text>{detailReportDog?.searchReportContent}dd</Text>
+								<Text>{detailReportDog?.searchReportContent}</Text>
 							</View>
 						</ScrollView>
 					</View>
