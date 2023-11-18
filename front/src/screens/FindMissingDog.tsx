@@ -11,9 +11,6 @@ import CommonLayout from "../recycles/CommonLayout";
 import FooterBar from "../recycles/FooterBar";
 import PatrolDiaryWriteLayout from "../styles/patrolDiaryWriteLayout";
 
-import img from "../../assets/images/debug-dog.png";
-import PatrolLogCarousel from "../recycles/PatrolLogCarousel";
-import AddPlusIcon from "../../assets/images/add-plus-icon.png";
 import CustomSubButton from "../recycles/CustomSubBtn";
 import { useEffect, useRef, useState } from "react";
 import axios from "../utils/axios";
@@ -22,8 +19,6 @@ import EditImage from "../recycles/ReportEditImg";
 import { responsiveWidth } from "react-native-responsive-dimensions";
 import { S3 } from "aws-sdk";
 import CustomText from "../recycles/CustomText";
-import CreateProfileLayout from "../styles/createProfileLayout";
-import DatePickerIcon from "../../assets/images/date-picker-icon.png";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import Geolocation from "@react-native-community/geolocation";
 
@@ -69,24 +64,11 @@ const FindMissingDog = ({ route }: any) => {
 		console.log(missingDate);
 	};
 
-	const logs = [
-		{ logNo: 0, imgSrc: img, date: "22-02-02" },
-		{ logNo: 1, imgSrc: img, date: "22-02-02" },
-		{ logNo: 2, imgSrc: img, date: "22-02-02" },
-		{ logNo: 3, imgSrc: img, date: "22-02-02" },
-		{ logNo: 4, imgSrc: img, date: "22-02-02" },
-	];
-
 	const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
 	const [selectedImg, setSelectedImg] = useState(null);
 	const [patrolReportTitle, setPatrolReportTitle] = useState("");
 	const [patrolReportContent, setPatrolReportContent] = useState("");
 	const [missingDate, setMissingDate] = useState("");
-
-	const [patrolReportImageList, setPatrolReportImageList] = useState([
-		"https://dangdangranger.s3.ap-northeast-2.amazonaws.com/map_2023-11-03T07%3A02%3A19.564Z_1072956.png",
-	]);
-	const [patrolLogNo, setPatrolLogNo] = useState(1);
 
 	const [patrolImgList, setPatrolImgList] = useState([]);
 
@@ -222,14 +204,6 @@ const FindMissingDog = ({ route }: any) => {
 								);
 							})}
 						</View>
-						{/* <TextInput
-							style={PatrolDiaryWriteLayout.formInput}
-							value={patrolReportTitle}
-							onChangeText={(text) => setPatrolReportTitle(text)}
-							placeholder="제목을 작성해주세요."
-							onBlur={() => {}}
-						/> */}
-
 						<View>
 							<Text style={PatrolDiaryWriteLayout.textAlign}>
 								실종 신고 내용 작성
@@ -254,17 +228,6 @@ const FindMissingDog = ({ route }: any) => {
 							onConfirm={handleConfirm}
 							onCancel={hideDatePicker}
 						/>
-						{/* <TouchableOpacity activeOpacity={0.7} onPress={showDatePicker}>
-							<View style={PatrolDiaryWriteLayout.dateInput}>
-								<Image
-									style={PatrolDiaryWriteLayout.dateImg}
-									source={DatePickerIcon}
-								/>
-								<Text style={CreateProfileLayout.dateFormText}>
-									{"       "} {missingDate}
-								</Text>
-							</View>
-						</TouchableOpacity> */}
 						<CustomSubButton
 							text={"실종 신고 등록하기"}
 							onPress={() => {
