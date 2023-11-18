@@ -29,12 +29,12 @@ const GeoLocationAPI = (props: Props) => {
 					"++++++",
 					Number(longitude).toFixed(3),
 				);
-				console.log("플보스!ㅁ나ㅜ임이ㅓ", props);
+				console.log("실종견 등록(신고하기) 위치 props", props);
 			},
 			(error) => {
 				console.log(error.code, error.message);
 			},
-			{ enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 },
+			{ enableHighAccuracy: true, timeout: 15000 },
 		);
 	};
 
