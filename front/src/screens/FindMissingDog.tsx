@@ -15,7 +15,7 @@ import img from "../../assets/images/debug-dog.png";
 import PatrolLogCarousel from "../recycles/PatrolLogCarousel";
 import AddPlusIcon from "../../assets/images/add-plus-icon.png";
 import CustomSubButton from "../recycles/CustomSubBtn";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import axios from "../utils/axios";
 import { useNavigation } from "@react-navigation/native";
 import EditImage from "../recycles/ReportEditImg";
@@ -25,15 +25,35 @@ import CustomText from "../recycles/CustomText";
 import CreateProfileLayout from "../styles/createProfileLayout";
 import DatePickerIcon from "../../assets/images/date-picker-icon.png";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
+import Geolocation from "@react-native-community/geolocation";
 
 const FindMissingDog = ({ route }: any) => {
 	const navigation = useNavigation();
-	const { myLatitude, myLongitude, missingNo } = route.params;
+	const { myLatitude, myLongitude, missingNo, setMyLatitude, setMyLongitude } =
+		route.params;
+
+	const myPosition = useRef<any>({});
 
 	useEffect(() => {
 		console.log("missingNo:::", missingNo);
 		console.log("myLatitude:::", myLatitude);
 		console.log("myLongitude:::", myLongitude);
+
+		Geolocation.getCurrentPosition(
+			(position) => {
+				const latitude = Number(JSON.stringify(position.coords.latitude));
+				const longitude = Number(JSON.stringify(position.coords.longitude));
+				myPosition.current = {
+					latitude,
+					longitude,
+				};
+				console.log("getGeoLocation: ", latitude, longitude);
+			},
+			(error) => {
+				console.log(error.code, error.message);
+			},
+			{ enableHighAccuracy: true, timeout: 15000, maximumAge: 1000 },
+		);
 	}, []);
 
 	const handleConfirm = (date: Date) => {
@@ -118,13 +138,18 @@ const FindMissingDog = ({ route }: any) => {
 
 		// 모든 프로미스가 완료될 때까지 기다립니다.
 		const uploadedImages = await Promise.all(uploadPromises);
+		console.log(
+			`missingNo: ${missingNo}, searchReportLat: ${myPosition.current.latitude}, searchReportLng: ${myPosition.current.longitude},`,
+		);
 		const response = await axios.post("/searchreport", {
 			missingNo,
 			searchReportContent: patrolReportContent,
-			searchReportLat: myLatitude,
-			searchReportLng: myLongitude,
+			searchReportLat: myPosition.current.latitude,
+			searchReportLng: myPosition.current.longitude,
 			searchReportImages: uploadedImages,
 		});
+
+		console.log("response:", response);
 
 		if (response.status === 200) {
 			Alert.alert("찾아주세요 신고가 완료되었습니다.");

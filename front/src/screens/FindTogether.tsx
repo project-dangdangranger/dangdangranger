@@ -37,6 +37,7 @@ const FindTogether = ({ route }: any) => {
 	const findingList = useRef(new Map());
 	// 신고 현황 리스트
 	const reportList = useRef(new Array());
+	const reportIntervalId = useRef<any>();
 
 	const [modalVisible, setModalVisible] = useState(false);
 
@@ -74,6 +75,14 @@ const FindTogether = ({ route }: any) => {
 	useEffect(() => {
 		if (detailMissingDog && isPressed) {
 			connectServer();
+
+			// 발견 신고 조회
+			reportIntervalId.current = setInterval(() => {
+				axios.get(`/searchreport?missingNo=${item.missingNo}`).then((data) => {
+					console.log("searchreport", data.data.data);
+					reportList.current = data.data.data;
+				});
+			}, 3000);
 		}
 	}, [detailMissingDog, isPressed]);
 
@@ -160,6 +169,8 @@ const FindTogether = ({ route }: any) => {
 			missingNo: detailMissingDog.missingNo,
 			myLatitude,
 			myLongitude,
+			setMyLatitude,
+			setMyLongitude,
 		});
 	};
 
@@ -250,6 +261,7 @@ const FindTogether = ({ route }: any) => {
 	};
 	// topic 구독 취소 및 세션 나가기: 함께 찾기 종료
 	const disconnectServer = () => {
+		console.log("called disconnectServer");
 		if (intervalId.current) {
 			clearInterval(intervalId.current);
 			intervalId.current = undefined;
@@ -257,6 +269,12 @@ const FindTogether = ({ route }: any) => {
 		if (renderIntervalId.current) {
 			clearInterval(renderIntervalId.current);
 			renderIntervalId.current = undefined;
+		}
+
+		// 신고 현황 실시간 조회 종료
+		if (reportIntervalId.current) {
+			clearInterval(reportIntervalId.current);
+			reportIntervalId.current = undefined;
 		}
 
 		const message = JSON.stringify({
