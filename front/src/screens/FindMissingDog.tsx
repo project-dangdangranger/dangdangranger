@@ -51,7 +51,7 @@ const FindMissingDog = ({ route }: any) => {
 			(error) => {
 				console.log(error.code, error.message);
 			},
-			{ enableHighAccuracy: true, timeout: 15000, maximumAge: 1000 },
+			{ enableHighAccuracy: true, timeout: 15000 },
 		);
 	}, []);
 
