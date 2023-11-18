@@ -34,7 +34,7 @@ const DogItem = ({ item, isSelected, onSelected }: any) => {
 								numberOfLines={1}
 								ellipsizeMode="clip"
 							>
-								{item.dogBreed}ddddddddddd
+								{item.dogBreed}
 							</Text>
 						</View>
 					</View>
