@@ -27,6 +27,7 @@ declare module "@env" {
 	export const OBJECT_DETECT_API_KEY: string;
 	export const OBJECT_DETECT_URL: string;
 	export const MAPBOX_ACCESSTOKEN: string;
+	export const SENTRY_DSN: string;
 }
 
 // sockjs-client.d.ts

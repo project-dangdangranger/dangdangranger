@@ -10,7 +10,8 @@
             android:icon="@mipmap/ic_launcher"
             android:roundIcon="@mipmap/ic_launcher_round"
             android:allowBackup="false"
-            android:theme="@style/AppTheme">
+            android:usesCleartextTraffic="true"
+            android:theme="@style/AppTheme">            
             <meta-data android:name="com.google.android.geo.API_KEY"
                 android:value="{googleMapAppKey}"/>
         <meta-data android:name="com.mapbox.token" android:value="{mapbox_access_token}" />

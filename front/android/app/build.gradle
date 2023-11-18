@@ -76,6 +76,7 @@ def kakaoMapApiHashKey = localProperties['kakao.map.api.hash.key'] ?: ""
 def kakaoNativeAppKey = localProperties['kakao.native.app.key'] ?: ""
 def jscFlavor = 'org.webkit:android-jsc:+'
 
+apply from: new File(["node", "--print", "require.resolve('@sentry/react-native/package.json')"].execute().text.trim(), "../sentry.gradle")
 android {
     ndkVersion rootProject.ext.ndkVersion
 
@@ -89,7 +90,7 @@ android {
         buildConfigField "String", "KAKAO_MAP_API_HASH_KEY", "\"${kakaoMapApiHashKey}\""
         manifestPlaceholders = [kakaoNativeAppKey: kakaoNativeAppKey]
         resValue "string", "mapbox_access_token", localProperties['mapbox.accessToken']
-        versionCode 10
+        versionCode 13
         versionName "1.0.1"
 
         // apk version 관리용 네이밍 설정
@@ -116,15 +117,12 @@ android {
     buildTypes {
         debug {
             signingConfig signingConfigs.debug
+            // signingConfig signingConfigs.release
+
         }
         release {
-            // Caution! In production, you need to generate your own keystore file.
-            // see https://reactnative.dev/docs/signed-apk-android.
-            signingConfig signingConfigs.debug
-
              // keystore 설정
             signingConfig signingConfigs.release
-            
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
         }
@@ -149,5 +147,13 @@ dependencies {
 
 
 }
+
+// release ver. 디버깅 용
+// project.ext.react = [
+//     entryFile: "index.js",
+//     enableHermes: false,  // (false로 설정)
+//     bundleInRelease: false,  // (false로 설정)
+//     inlineSourceMap: true,  // (true로 설정)
+// ]
 
 apply from: file("../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesAppBuildGradle(project)

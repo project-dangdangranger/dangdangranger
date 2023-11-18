@@ -40,9 +40,20 @@ import ManualMain from "./src/screens/ManualMain";
 import CreateMissingMyDog from "./src/screens/CreateMissingMyDog";
 import MissingCarouselDetail from "./src/screens/MissingCarouselDetail";
 import FindMissingDog from "./src/screens/FindMissingDog";
+import { SENTRY_DSN } from "@env";
+import * as Sentry from "@sentry/react-native";
+
+Sentry.init({
+	dsn: "https://a49d9ecd6f110e245216e60f29d2c9c7@o4506247787118592.ingest.sentry.io/4506247788232704",
+});
 
 const App = () => {
 	const Stack = createNativeStackNavigator();
+
+	Sentry.init({
+		dsn: SENTRY_DSN,
+		tracesSampleRate: 1.0,
+	});
 
 	return (
 		<RecoilRoot>
@@ -105,7 +116,7 @@ const App = () => {
 	);
 };
 
-export default App;
+export default Sentry.wrap(App);
 
 export type RootStateParamList = Record<string, undefined>;
 export type StackNavigation = NavigationProp<RootStateParamList>;
