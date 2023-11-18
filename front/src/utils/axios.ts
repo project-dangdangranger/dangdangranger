@@ -2,6 +2,7 @@ import axios, { AxiosError, AxiosRequestConfig } from "axios";
 import { BASE_URL, CONTENT_TYPE, TIMEOUT } from "../constants/constants";
 import EncryptedStorage from "react-native-encrypted-storage";
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
+import * as Sentry from "@sentry/react-native";
 
 const instance = axios.create({
 	baseURL: BASE_URL,
@@ -51,6 +52,7 @@ const refreshAccessTokenAndRetry = async (config: AxiosRequestConfig) => {
 		return Promise.reject(response);
 	} catch (error: any) {
 		console.error(error.response.status);
+		Sentry.captureException(error);
 		if (error.response.status === 401) {
 			await handleGoogleLogout();
 			alert("토큰 갱신에 실패했습니다. 다시 로그인 해주세요.");
@@ -78,7 +80,7 @@ const handleResponseError = async (error: AxiosError) => {
 			alert("시스템 에러, 관리자에게 문의 바랍니다.");
 			break;
 		default:
-			console.error(error);
+			console.error("axios error : ", error);
 			return Promise.reject(error);
 	}
 };
