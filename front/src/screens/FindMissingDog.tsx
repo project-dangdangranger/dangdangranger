@@ -29,8 +29,7 @@ import Geolocation from "@react-native-community/geolocation";
 
 const FindMissingDog = ({ route }: any) => {
 	const navigation = useNavigation();
-	const { myLatitude, myLongitude, missingNo, setMyLatitude, setMyLongitude } =
-		route.params;
+	const { myLatitude, myLongitude, missingNo } = route.params;
 
 	const myPosition = useRef<any>({});
 

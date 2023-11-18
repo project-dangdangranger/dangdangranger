@@ -169,8 +169,6 @@ const FindTogether = ({ route }: any) => {
 			missingNo: detailMissingDog.missingNo,
 			myLatitude,
 			myLongitude,
-			setMyLatitude,
-			setMyLongitude,
 		});
 	};
 
@@ -327,7 +325,7 @@ const FindTogether = ({ route }: any) => {
 					/>
 				) : null}
 				<FindBtn
-					startSession={() => Alert.alert("강아지를 찾아봅시다")}
+					startSession={() => {}}
 					endSession={() => handleEndSession()}
 					isPressed={isPressed}
 					setIsPressed={setIsPressed}
