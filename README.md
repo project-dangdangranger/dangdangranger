@@ -27,6 +27,10 @@
 ## 🕹️ 기술 스택
 
 ### Front
+- React native
+- Recoil
+- Sock.js
+- Geolocation
 
 ### Back
 
